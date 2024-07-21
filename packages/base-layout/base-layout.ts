@@ -22,9 +22,9 @@ import {LoadCSS,RendererComponent} from 'zero-annotation';
 // })
 
 @adoptAlphaCommonStyle()
-@LoadCSS('https://cdnjs.cloudflare.com/ajax/libs/primeicons/4.1.0/primeicons.min.css')
-@LoadCSS('https://cdnjs.cloudflare.com/ajax/libs/primeng/11.0.0/themes/saga-blue/theme.css')
-@LoadCSS('https://cdnjs.cloudflare.com/ajax/libs/primeng/11.0.0/primeng.min.css')
+// @LoadCSS('https://cdnjs.cloudflare.com/ajax/libs/primeicons/4.1.0/primeicons.min.css')
+// @LoadCSS('https://cdnjs.cloudflare.com/ajax/libs/primeng/11.0.0/themes/saga-blue/theme.css')
+// @LoadCSS('https://cdnjs.cloudflare.com/ajax/libs/primeng/11.0.0/primeng.min.css')
 export class BaseLayout extends LitElement {
     static styles = componentStyles;
 

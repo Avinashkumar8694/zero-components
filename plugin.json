@@ -1,0 +1,9 @@
+{
+    "name": "zero-components",
+    "components": {
+        "selectorPrefix": "comp"
+    },
+    "modules": {
+        "idPrefix": "mod"
+    }
+}

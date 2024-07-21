@@ -1,0 +1,25 @@
+{
+    "name": "zero-components",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "alpha build",
+        "start": "alpha start",
+        "serve": "alpha serve"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "lit": "^3.1.4",
+        "typescript": "^5.2.2"
+    },
+    "dependencies": {
+        "express": "^4.19.2",
+        "@jatahworx/alpha-annotations-lib": "^1.0.3"
+    },
+    "workspaces": ["packages/*"],
+    "type": "module"
+}

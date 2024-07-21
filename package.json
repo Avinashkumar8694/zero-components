@@ -14,12 +14,18 @@
     "license": "ISC",
     "devDependencies": {
         "lit": "^3.1.4",
-        "typescript": "^5.2.2"
+        "ts-node": "^10.9.2",
+        "typescript": "^5.5.3"
     },
     "dependencies": {
+        "@angular/compiler": "^18.1.1",
+        "@jatahworx/alpha-annotations-lib": "^1.0.3",
         "express": "^4.19.2",
-        "@jatahworx/alpha-annotations-lib": "^1.0.3"
+        "primeicons": "^7.0.0",
+        "primeng": "^17.18.5"
     },
-    "workspaces": ["packages/*"],
+    "workspaces": [
+        "packages/*"
+    ],
     "type": "module"
 }

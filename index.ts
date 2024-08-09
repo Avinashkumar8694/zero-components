@@ -1,4 +1,5 @@
-import * as _cs from './public-api.ts';
+import * as componentsLib from './public-api.ts';
+
 declare global {
     interface Window {
         alpha: any;
@@ -6,81 +7,84 @@ declare global {
     }
 }
 
-const setup = () => {
-    const style = document.createElement('style');
-    document.querySelector('head')?.appendChild(style);
+// Initialize global components object
+globalThis.zeroComponents = {} as Record<string, any>;
+
+const initializeStyles = () => {
+    const styleElement = document.createElement('style');
+    document.head?.appendChild(styleElement);
 };
-/**
- * Store all the component instances in globalThis.aci
- * for testing purposes
- */
-globalThis.aci = {} as any;
-const addComponent = (name: string, { inputs, outputs }: ComponentConfig) => {
-    const customElem = document.createElement(name) as any;
+
+const createInputElement = (key: string, value: string, customElement: HTMLElement) => {
+    const inputElement = document.createElement('input');
+    inputElement.type = 'text';
+    inputElement.value = value;
+    inputElement.placeholder = key;
+    inputElement.addEventListener('change', (e) => {
+        customElement[key] = (e.target as HTMLInputElement).value;
+    });
+    return inputElement;
+};
+
+const registerComponent = (name: string, config: { inputs?: any; outputs?: any }) => {
+    const { inputs = {}, outputs = { events: ['change'] } } = config;
     const fieldSet = document.createElement('fieldset');
     const legend = document.createElement('legend');
     legend.textContent = name;
-    fieldSet.appendChild(legend);
-    const key = name.slice('alpha'.length + 1);
-    (globalThis.aci[key] = globalThis.aci[key] || []).push(customElem);
-    for (let [key, val] of Object.entries(inputs || {})) {
-        customElem[key] = val;
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.value = val;
-        input.placeholder = key;
-        input.addEventListener('change', e => {
-            customElem[key] = (e.target as any).value;
-        });
-        fieldSet.appendChild(input);
+
+    const customElement = document.createElement(name) as any;
+    const componentKey = name.substr(5);
+
+    if (!globalThis.zeroComponents[componentKey]) {
+        globalThis.zeroComponents[componentKey] = [];
     }
-    fieldSet.appendChild(customElem);
-    const outputEvents = outputs?.events || ['change'];
-    outputEvents.forEach(event => {
-        customElem.addEventListener(event, (e: any) => {
+    globalThis.zeroComponents[componentKey].push(customElement);
+
+    Object.entries(inputs).forEach(([key, value]) => {
+        fieldSet.appendChild(createInputElement(key, value, customElement));
+    });
+
+    fieldSet.appendChild(legend);
+    fieldSet.appendChild(customElement);
+
+    (outputs.events || []).forEach(event => {
+        customElement.addEventListener(event, (e: Event) => {
             console.log(`[${name}][event:${event}]`, e);
         });
     });
+
     document.body.appendChild(fieldSet);
 };
 
-const components: Record<string, ComponentConfig> = (() => {
-    console.log(_cs);
-    const comps = {};
-    for (const [_, _class] of Object.entries(_cs)) {
-        const inputs = Reflect.getMetadata('AlphaAttribute', _class.prototype);
-        const c = Reflect.getMetadata('AlphaComponent', _class.prototype);
-        const selector = `${c.selector}-${c.componentVersion}`;
-        comps[selector] = {
-            inputs: inputs.reduce((acc, { fieldMappings, defaultValue }) => {
+const loadComponents = () => {
+    const componentsConfig = extractComponentsConfig();
+    Object.entries(componentsConfig).forEach(([name, config]) => {
+        registerComponent(name, config);
+    });
+};
+
+const extractComponentsConfig = (): Record<string, any> => {
+    const components = {} as Record<string, any>;
+
+    for (const _class of Object.values(componentsLib)) {
+        const inputsMetadata = Reflect.getMetadata('ZeroAttribute', _class.prototype) || [];
+        const componentMetadata = Reflect.getMetadata('ZeroComponent', _class.prototype);
+        const selector = `${componentMetadata.selector}-${componentMetadata.version}`;
+
+        components[selector] = {
+            inputs: inputsMetadata.reduce((acc: Record<string, string>, { fieldMappings, defaultValue }) => {
                 acc[fieldMappings] = defaultValue ?? '';
                 return acc;
             }, {}),
-            outputs: {
-                events: ['change'],
-            },
+            outputs: { events: ['change'] },
         };
     }
-    return comps;
-})();
-document.addEventListener('DOMContentLoaded', async () => {
-    setup();
-    for (let [name, config] of Object.entries(components)) {
-        addComponent(name, config);
-    }
-});
 
-interface ComponentConfig {
-    class?: string;
-    inputs?: {
-        disabled?: boolean;
-        readonly?: boolean;
-        value?: any;
-        name?: any;
-        id?: any;
-        [key: string]: any;
-    };
-    outputs?: {
-        events: string[];
-    };
-}
+    return components;
+};
+
+// Event listener for DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeStyles();
+    loadComponents();
+});

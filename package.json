@@ -21,8 +21,7 @@
         "@angular/compiler": "^18.1.1",
         "@jatahworx/alpha-annotations-lib": "^1.0.3",
         "express": "^4.19.2",
-        "primeicons": "^7.0.0",
-        "primeng": "^17.18.5"
+        "zero-annotation": "1.0.4"
     },
     "workspaces": [
         "packages/*"

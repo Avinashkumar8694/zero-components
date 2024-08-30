@@ -1,7 +1,7 @@
 {
     "name": "zero-components",
     "components": {
-        "selectorPrefix": "comp"
+        "selectorPrefix": "zero"
     },
     "modules": {
         "idPrefix": "mod"

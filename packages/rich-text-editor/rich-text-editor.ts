@@ -11,12 +11,12 @@ import { property } from 'lit/decorators.js';
  * @extends {LitElement}
  */
 @RendererComponent({
-    name: 'rich-text-editor',
-    version: '1.0.0',
-    title: 'Rich text editor',
-    elementSelector: 'zero-rich-text-editor',
-    group: 'Forms',
-    iconName: 'profile-icon.png', // Replace with your icon path
+  name: 'rich-text-editor',
+  version: '1.0.0',
+  title: 'Rich text editor',
+  elementSelector: 'zero-rich-text-editor',
+  group: 'Forms',
+  iconName: 'profile-icon.png', // Replace with your icon path
 })
 @applyGlobalStyles()
 export class RichTextEditor extends LitElement {
@@ -30,7 +30,6 @@ export class RichTextEditor extends LitElement {
   static styles = css`
     :host {
       display: block;
-      /* font-family: Arial, sans-serif; */
       width: 100%;
       max-width: 600px;
       margin: auto;
@@ -137,16 +136,13 @@ export class RichTextEditor extends LitElement {
 
   firstUpdated() {
     // Ensure the initial content is set correctly
-    const editor = this.shadowRoot?.querySelector('.editor') as HTMLDivElement;
-    if (editor) {
-      editor.innerHTML = this.content || '';
-    }
+    this.updateEditorContent();
   }
 
   updated(changedProperties: Map<string | number | symbol, unknown>): void {
     super.updated(changedProperties);
     if (changedProperties.has('content') && this.editorMode) {
-      this.restoreCursor();
+      this.restoreCursor(); // Restore the cursor after the content is updated
     }
   }
 
@@ -161,8 +157,12 @@ export class RichTextEditor extends LitElement {
     if (this.selectionRange) {
       const selection = window.getSelection();
       if (selection) {
-        selection.removeAllRanges();
+        if (!this.selectionRange?.collapsed) {
+          selection.removeAllRanges();
+        }
         selection.addRange(this.selectionRange);
+        // Ensure cursor is placed correctly
+        this.selectionRange.collapse(false); // Move cursor to the end
       }
     }
   }
@@ -190,8 +190,16 @@ export class RichTextEditor extends LitElement {
     }
   }
 
+  private updateEditorContent() {
+    const editor = this.shadowRoot?.querySelector('.editor') as HTMLDivElement;
+    if (editor) {
+      editor.innerHTML = this.content || '';
+    }
+  }
+
   private handleInput(event: Event) {
     event.stopPropagation();
+    // this.storeCursor();
     this.updateContent();
   }
 
@@ -265,10 +273,10 @@ export class RichTextEditor extends LitElement {
           <button @click="${() => this.handleTextAlign('justifyLeft')}" title="Align Left" class="align-left"></button>
           <button @click="${() => this.handleTextAlign('justifyCenter')}" title="Align Center" class="align-center"></button>
           <button @click="${() => this.handleTextAlign('justifyRight')}" title="Align Right" class="align-right"></button>
-          <button @click="${() => this.handleTextAlign('justifyFull')}" title="Justify" class="align-justify"></button>
+          <button @click="${() => this.handleTextAlign('justifyFull')}" title="Align Justify" class="align-justify"></button>
           <select @change="${this.handleListTypeChange}" title="List Type">
-            <option value="unordered">Bulleted List</option>
-            <option value="ordered">Numbered List</option>
+            <option value="unordered">Bulleted</option>
+            <option value="ordered">Numbered</option>
           </select>
           <button @click="${this.handleLink}" title="Insert Link">🔗</button>
           <button @click="${this.clearFormatting}" title="Clear Formatting">🧹</button>

@@ -132,6 +132,34 @@ export class RichTextEditor extends LitElement {
     .toolbar select {
       font-size: 14px;
     }
+
+    /* Resize icon styles */
+    .image-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .resize-icon {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      width: 16px;
+      height: 16px;
+      background: url('resize-icon.png') no-repeat center center;
+      background-size: contain;
+      cursor: se-resize;
+      visibility: hidden;
+      z-index: 20;
+    }
+
+    .image-container:hover .resize-icon {
+      visibility: visible;
+    }
   `;
 
   firstUpdated() {
@@ -194,7 +222,59 @@ export class RichTextEditor extends LitElement {
     const editor = this.shadowRoot?.querySelector('.editor') as HTMLDivElement;
     if (editor) {
       editor.innerHTML = this.content || '';
+
+      // Wrap images with a container for resize icon
+      editor.querySelectorAll('img').forEach(img => {
+        if (!img.parentElement?.classList.contains('image-container')) {
+          const container = document.createElement('div');
+          container.className = 'image-container';
+          img.parentNode?.insertBefore(container, img);
+          container.appendChild(img);
+
+          const resizeIcon = document.createElement('div');
+          resizeIcon.className = 'resize-icon';
+          container.appendChild(resizeIcon);
+
+          // Add resize functionality
+          this.addResizeFunctionality(container);
+        }
+      });
     }
+  }
+
+  private addResizeFunctionality(container: HTMLDivElement) {
+    const img = container.querySelector('img') as HTMLImageElement;
+    const resizeIcon = container.querySelector('.resize-icon') as HTMLDivElement;
+
+    let startX: number;
+    let startY: number;
+    let startWidth: number;
+    let startHeight: number;
+
+    const onMouseMove = (event: MouseEvent) => {
+      const newWidth = startWidth + (event.clientX - startX);
+      const newHeight = startHeight + (event.clientY - startY);
+
+      img.style.width = `${newWidth}px`;
+      img.style.height = `${newHeight}px`;
+    };
+
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    const onMouseDown = (event: MouseEvent) => {
+      startX = event.clientX;
+      startY = event.clientY;
+      startWidth = img.offsetWidth;
+      startHeight = img.offsetHeight;
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    };
+
+    resizeIcon.addEventListener('mousedown', onMouseDown);
   }
 
   private handleInput(event: Event) {
@@ -221,72 +301,49 @@ export class RichTextEditor extends LitElement {
     this.execCommand('fontSize', select.value);
   }
 
-  private handleTextAlign(command: string) {
-    this.execCommand(command);
-  }
-
-  private handleListTypeChange(event: Event) {
+  private handleAlignChange(event: Event) {
     event.stopPropagation();
     const select = event.target as HTMLSelectElement;
-    const command = select.value === 'ordered' ? 'insertOrderedList' : 'insertUnorderedList';
-    this.execCommand(command);
+    this.execCommand('justifyLeft', select.value === 'left' ? '' : null);
+    this.execCommand('justifyCenter', select.value === 'center' ? '' : null);
+    this.execCommand('justifyRight', select.value === 'right' ? '' : null);
+    this.execCommand('justifyFull', select.value === 'justify' ? '' : null);
   }
 
-  private handleLink() {
-    const url = prompt('Enter the URL:', 'http://');
-    if (url) {
-      this.execCommand('createLink', url);
-    }
-  }
-
-  private clearFormatting() {
-    this.execCommand('removeFormat');
-  }
-
-  private undo() {
-    this.execCommand('undo');
-  }
-
-  private redo() {
-    this.execCommand('redo');
+  private toggleEditorMode() {
+    this.editorMode = !this.editorMode;
   }
 
   render() {
     return html`
-      <button class="toolbar-toggle" @click="${this.toggleToolbar}" title="Toggle Toolbar">
-        Ⓣ
+      <div class="toolbar ${this.toolbarVisible ? 'visible' : ''}">
+        <button @click="${() => this.execCommand('bold')}" title="Bold">B</button>
+        <button @click="${() => this.execCommand('italic')}" title="Italic">I</button>
+        <button @click="${() => this.execCommand('underline')}" title="Underline">U</button>
+        <button @click="${() => this.execCommand('strikethrough')}" title="Strikethrough">S</button>
+        <input type="color" @input="${this.handleColorChange}" title="Text Color">
+        <input type="color" @input="${this.handleBgColorChange}" title="Background Color">
+        <select @change="${this.handleFontSizeChange}">
+          <option value="1">Small</option>
+          <option value="3">Normal</option>
+          <option value="5">Large</option>
+          <option value="7">Huge</option>
+        </select>
+        <select @change="${this.handleAlignChange}">
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+          <option value="justify">Justify</option>
+        </select>
+        <button @click="${this.toggleEditorMode}" title="Toggle Mode">
+          ${this.editorMode ? 'Preview' : 'Edit'}
+        </button>
+      </div>
+      <button class="toolbar-toggle" @click="${this.toggleToolbar}">
+        ${this.toolbarVisible ? 'Hide Toolbar' : 'Show Toolbar'}
       </button>
-      ${this.editorMode ? html`
-        <div class="toolbar ${this.toolbarVisible ? 'visible' : ''}">
-          <button @click="${() => this.execCommand('bold')}" title="Bold" class="bold"></button>
-          <button @click="${() => this.execCommand('italic')}" title="Italic" class="italic"></button>
-          <button @click="${() => this.execCommand('underline')}" title="Underline" class="underline"></button>
-          <button @click="${() => this.execCommand('strikeThrough')}" title="Strikethrough" class="strikethrough"></button>
-          <input type="color" @input="${this.handleColorChange}" title="Text Color">
-          <input type="color" @input="${this.handleBgColorChange}" title="Background Color">
-          <select @change="${this.handleFontSizeChange}" title="Font Size">
-            <option value="1">S</option>
-            <option value="2">M</option>
-            <option value="3">L</option>
-            <option value="4">XL</option>
-          </select>
-          <button @click="${() => this.handleTextAlign('justifyLeft')}" title="Align Left" class="align-left"></button>
-          <button @click="${() => this.handleTextAlign('justifyCenter')}" title="Align Center" class="align-center"></button>
-          <button @click="${() => this.handleTextAlign('justifyRight')}" title="Align Right" class="align-right"></button>
-          <button @click="${() => this.handleTextAlign('justifyFull')}" title="Align Justify" class="align-justify"></button>
-          <select @change="${this.handleListTypeChange}" title="List Type">
-            <option value="unordered">Bulleted</option>
-            <option value="ordered">Numbered</option>
-          </select>
-          <button @click="${this.handleLink}" title="Insert Link">🔗</button>
-          <button @click="${this.clearFormatting}" title="Clear Formatting">🧹</button>
-          <button @click="${this.undo}" title="Undo">↩️</button>
-          <button @click="${this.redo}" title="Redo">↪️</button>
-        </div>
-        <div class="editor" contenteditable="true" @input="${this.handleInput}">${this.content}</div>
-      ` : html`
-        <div class="preview" @click="${this.toggleToolbar}">${this.content}</div>
-      `}
+      <div class="editor" contenteditable="${this.editorMode}" @input="${this.handleInput}"></div>
+      <div class="preview" ?hidden="${this.editorMode}"></div>
     `;
   }
 }

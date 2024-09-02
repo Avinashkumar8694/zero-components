@@ -21,8 +21,8 @@ import { property } from 'lit/decorators.js';
 @applyGlobalStyles()
 export class RichTextEditor extends LitElement {
 
-    // Define a reactive property with reflect enabled for two-way binding
-  @property({ type: String, reflect: true }) content = '';
+    @property({ type: String, reflect: true }) content = '';
+  @property({ type: Boolean }) toolbarVisible = false; // Property to control toolbar visibility
 
   static styles = css`
     :host {
@@ -34,6 +34,7 @@ export class RichTextEditor extends LitElement {
       border: 1px solid #ddd;
       border-radius: 8px;
       overflow: hidden;
+      position: relative; /* Position relative for popup positioning */
     }
     .toolbar {
       display: flex;
@@ -41,6 +42,22 @@ export class RichTextEditor extends LitElement {
       padding: 8px;
       background-color: #f5f5f5;
       border-bottom: 1px solid #ddd;
+      position: absolute; /* Position toolbar absolutely */
+      top: 40px;
+      left: 10px;
+      right: 10px;
+      z-index: 1;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+    }
+    .toolbar.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
     }
     .toolbar button {
       background: none;
@@ -59,7 +76,25 @@ export class RichTextEditor extends LitElement {
       padding: 10px;
       outline: none;
     }
+    .toolbar-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      transition: background-color 0.3s ease;
+    }
+    .toolbar-toggle:hover {
+      background-color: #e0e0e0;
+      border-radius: 50%;
+    }
   `;
+
+  private toggleToolbar() {
+    this.toolbarVisible = !this.toolbarVisible;
+  }
 
   private execCommand(command: string) {
     document.execCommand(command, false, '');
@@ -88,7 +123,8 @@ export class RichTextEditor extends LitElement {
 
   render() {
     return html`
-      <div class="toolbar">
+      <button class="toolbar-toggle" @click="${this.toggleToolbar}" title="Toggle Toolbar">☰</button>
+      <div class="toolbar ${this.toolbarVisible ? 'visible' : ''}">
         <button @click="${() => this.execCommand('bold')}" title="Bold"><b>B</b></button>
         <button @click="${() => this.execCommand('italic')}" title="Italic"><i>I</i></button>
         <button @click="${() => this.execCommand('underline')}" title="Underline"><u>U</u></button>

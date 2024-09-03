@@ -132,34 +132,34 @@ export class RichTextEditor extends LitElement {
     .toolbar select {
       font-size: 14px;
     }
-
-    /* Resize icon styles */
     .image-container {
       position: relative;
       display: inline-block;
+      border: 1px solid #ddd;
+      pointer-events: none;
     }
-
-    .image-container img {
-      max-width: 100%;
-      display: block;
-    }
-
     .resize-icon {
       position: absolute;
-      bottom: 5px;
-      right: 5px;
-      width: 16px;
-      height: 16px;
+      right: 0;
+      bottom: 0;
+      width: 24px;
+      height: 24px;
       background: url('resize-icon.png') no-repeat center center;
       background-size: contain;
-      cursor: se-resize;
+      cursor: nwse-resize;
       visibility: hidden;
-      z-index: 20;
+      
+      pointer-events: auto; 
     }
-
     .image-container:hover .resize-icon {
       visibility: visible;
     }
+
+    .image-container img {
+            pointer-events: auto; /* Allow pointer events for images */
+    }
+
+    
   `;
 
   firstUpdated() {
@@ -215,6 +215,9 @@ export class RichTextEditor extends LitElement {
         bubbles: true,
         composed: true
       }));
+      setTimeout(() => {
+        this.attachResizeHandler()
+      }, 400);
     }
   }
 
@@ -222,24 +225,35 @@ export class RichTextEditor extends LitElement {
     const editor = this.shadowRoot?.querySelector('.editor') as HTMLDivElement;
     if (editor) {
       editor.innerHTML = this.content || '';
+    }
+  }
 
-      // Wrap images with a container for resize icon
-      editor.querySelectorAll('img').forEach(img => {
-        if (!img.parentElement?.classList.contains('image-container')) {
+  attachResizeHandler() {
+    const editor = this.shadowRoot?.querySelector('.editor') as HTMLDivElement;
+    if (editor) {
+      editor.querySelectorAll('img').forEach((img) => {
+        // Check if the image is already inside a container
+        if (!img?.parentNode?.['classList']?.contains('image-container')) {
+          // Create a container for the image
           const container = document.createElement('div');
           container.className = 'image-container';
           img.parentNode?.insertBefore(container, img);
           container.appendChild(img);
 
-          const resizeIcon = document.createElement('div');
-          resizeIcon.className = 'resize-icon';
-          container.appendChild(resizeIcon);
-
-          // Add resize functionality
-          this.addResizeFunctionality(container);
+          // Check if a resize icon already exists
+          if (!container.querySelector('.resize-icon')) {
+            // Create the resize icon element
+            const resizeIcon = document.createElement('div');
+            resizeIcon.className = 'resize-icon';
+            resizeIcon.textContent = '↘'; // Text-based resize handler icon
+            resizeIcon.style.display = this.editorMode ? 'block' : 'none'; // Initially hidden
+            container.appendChild(resizeIcon);
+            this.addResizeFunctionality(container);
+          }
         }
       });
     }
+
   }
 
   private addResizeFunctionality(container: HTMLDivElement) {
@@ -314,6 +328,12 @@ export class RichTextEditor extends LitElement {
     this.editorMode = !this.editorMode;
   }
 
+  private handleFontFamilyChange(event: Event) {
+    event.stopPropagation();
+    const select = event.target as HTMLSelectElement;
+    this.execCommand('fontName', select.value);
+  }
+
   render() {
     return html`
       <div class="toolbar ${this.toolbarVisible ? 'visible' : ''}">
@@ -323,6 +343,13 @@ export class RichTextEditor extends LitElement {
         <button @click="${() => this.execCommand('strikethrough')}" title="Strikethrough">S</button>
         <input type="color" @input="${this.handleColorChange}" title="Text Color">
         <input type="color" @input="${this.handleBgColorChange}" title="Background Color">
+        <select @change="${this.handleFontFamilyChange}" title="Font Family">
+          <option value="Arial">Arial</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Verdana">Verdana</option>
+        </select>
         <select @change="${this.handleFontSizeChange}">
           <option value="1">Small</option>
           <option value="3">Normal</option>
@@ -339,9 +366,7 @@ export class RichTextEditor extends LitElement {
           ${this.editorMode ? 'Preview' : 'Edit'}
         </button>
       </div>
-      <button class="toolbar-toggle" @click="${this.toggleToolbar}">
-        ${this.toolbarVisible ? 'Hide Toolbar' : 'Show Toolbar'}
-      </button>
+      <button class="toolbar-toggle" @click="${this.toggleToolbar}" title="Toggle Toolbar">🛠️</button>
       <div class="editor" contenteditable="${this.editorMode}" @input="${this.handleInput}"></div>
       <div class="preview" ?hidden="${this.editorMode}"></div>
     `;

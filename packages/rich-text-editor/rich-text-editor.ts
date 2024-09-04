@@ -20,10 +20,22 @@ import { property } from 'lit/decorators.js';
 })
 @applyGlobalStyles()
 export class RichTextEditor extends LitElement {
-
-  @property({ type: String }) content = '';
-  @property({ type: Boolean }) toolbarVisible = false;
-  @property({ type: Boolean }) editorMode = true;
+  content = ``;
+  @property({ type: String }) 
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXTAREA,
+    displayLabel: '',
+    placeholderText: '',
+    fieldMappings: 'htmldata',
+  })
+  set htmldata(data:any){
+    this.content = data;
+    this.updateEditorContent();
+  }
+  @property({ type: Boolean, reflect: true }) toolbarVisible = false;
+  @property({ type: Boolean, reflect: true }) editorMode = true;
+  isWrapped = false
 
   private selectionRange: Range | null = null;
 
@@ -31,12 +43,19 @@ export class RichTextEditor extends LitElement {
     :host {
       display: block;
       width: 100%;
-      max-width: 600px;
       margin: auto;
-      border: 1px solid #ddd;
+      /* border: 1px solid #ddd; */
       border-radius: 8px;
       overflow: hidden;
       position: relative;
+    }
+
+    :host([editorMode]) .editor {
+      position: relative;
+    }
+    :host([editorMode]) .editor:hover {
+      border: 1px solid #ddd; /* Change this to your desired border color */
+      box-sizing: border-box;
     }
     .toolbar {
       display: flex;
@@ -94,7 +113,7 @@ export class RichTextEditor extends LitElement {
       opacity: 1;
     }
     .editor, .preview {
-      min-height: 200px;
+      height: 100%;
       padding: 10px;
       outline: none;
       position: relative;
@@ -135,8 +154,7 @@ export class RichTextEditor extends LitElement {
     .image-container {
       position: relative;
       display: inline-block;
-      border: 1px solid #ddd;
-      pointer-events: none;
+      /* border: 1px solid #ddd; */
     }
     .resize-icon {
       position: absolute;
@@ -144,22 +162,15 @@ export class RichTextEditor extends LitElement {
       bottom: 0;
       width: 24px;
       height: 24px;
-      background: url('resize-icon.png') no-repeat center center;
+      /* background: url('resize-icon.png') no-repeat center center; */
+      /* background-color: red; */
       background-size: contain;
       cursor: nwse-resize;
-      visibility: hidden;
-      
-      pointer-events: auto; 
+      visibility: visible
     }
-    .image-container:hover .resize-icon {
+    /* .image-container:hover .resize-icon {
       visibility: visible;
-    }
-
-    .image-container img {
-            pointer-events: auto; /* Allow pointer events for images */
-    }
-
-    
+    } */
   `;
 
   firstUpdated() {
@@ -172,6 +183,7 @@ export class RichTextEditor extends LitElement {
     if (changedProperties.has('content') && this.editorMode) {
       this.restoreCursor(); // Restore the cursor after the content is updated
     }
+    this.updateContent();
   }
 
   private storeCursor() {
@@ -202,7 +214,7 @@ export class RichTextEditor extends LitElement {
 
   private execCommand(command: string, value?: string) {
     this.storeCursor(); // Store cursor position before executing the command
-    document.execCommand(command, false, value);
+    document.execCommand(command, true, value);
     this.updateContent();
   }
 
@@ -215,9 +227,10 @@ export class RichTextEditor extends LitElement {
         bubbles: true,
         composed: true
       }));
-      setTimeout(() => {
-        this.attachResizeHandler()
-      }, 400);
+      console.log(this.content)
+      // setTimeout(() => {
+      //   this.attachResizeHandler()
+      // }, 400);
     }
   }
 
@@ -225,35 +238,86 @@ export class RichTextEditor extends LitElement {
     const editor = this.shadowRoot?.querySelector('.editor') as HTMLDivElement;
     if (editor) {
       editor.innerHTML = this.content || '';
+      if (!this.editorMode) {
+        editor.querySelectorAll('img').forEach((img) => {
+          this.unwrapImage(img);
+        })
+      }
+
     }
   }
 
-  attachResizeHandler() {
-    const editor = this.shadowRoot?.querySelector('.editor') as HTMLDivElement;
-    if (editor) {
+  onPaste() {
+    setTimeout(() => {
+      const editor = this.shadowRoot?.querySelector('.editor')
+      if (!this.editorMode) {
+        return;
+      }
       editor.querySelectorAll('img').forEach((img) => {
-        // Check if the image is already inside a container
-        if (!img?.parentNode?.['classList']?.contains('image-container')) {
-          // Create a container for the image
-          const container = document.createElement('div');
-          container.className = 'image-container';
-          img.parentNode?.insertBefore(container, img);
-          container.appendChild(img);
+        if (!img.classList.contains('resize-icon')) {
+          img.addEventListener('mouseenter', (event) => {
+            if (!this.editorMode) {
+              return;
+            }
+            event.stopPropagation();
+            this.wrapImage(img);
+          });
 
-          // Check if a resize icon already exists
-          if (!container.querySelector('.resize-icon')) {
-            // Create the resize icon element
-            const resizeIcon = document.createElement('div');
-            resizeIcon.className = 'resize-icon';
-            resizeIcon.textContent = '↘'; // Text-based resize handler icon
-            resizeIcon.style.display = this.editorMode ? 'block' : 'none'; // Initially hidden
-            container.appendChild(resizeIcon);
-            this.addResizeFunctionality(container);
-          }
+          img.addEventListener('mouseleave', (event) => {
+            if (!this.editorMode) {
+              return;
+            }
+            event.stopPropagation();
+            // Check if the cursor is not entering the resize icon
+            const relatedTarget = event.relatedTarget;
+            if (!relatedTarget || !relatedTarget?.['classList']?.contains('resize-icon')) {
+              this.unwrapImage(img);
+            }
+          });
         }
       });
-    }
+    }, 400);
+  }
 
+
+  wrapImage(img) {
+    if (!img.hasAttribute('data-wrapped')) {
+      // Create a container for the image
+      const container = document.createElement('div');
+      container.className = 'image-container';
+      img.parentNode?.insertBefore(container, img);
+      container.appendChild(img);
+
+      // Create the resize icon image
+      const resizeIcon = document.createElement('img');
+      resizeIcon.className = 'resize-icon';
+      resizeIcon.src = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IS0tIFVwbG9hZGVkIHRvOiBTVkcgUmVwbywgd3d3LnN2Z3JlcG8uY29tLCBHZW5lcmF0b3I6IFNWRyBSZXBvIE1peGVyIFRvb2xzIC0tPgo8c3ZnIHdpZHRoPSI4MDBweCIgaGVpZ2h0PSI4MDBweCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KPHBhdGggZD0iTTEwIDIwTDIwIDIwTDIwIDEwIiBzdHJva2U9IiMyMjIyMjIiLz4NCjxwYXRoIGQ9Ik0xMiAxN0wxNyAxN0wxNyAxMiIgc3Ryb2tlPSIjMjIyMjIyIi8+DQo8L3N2Zz4='; // Path to your resize icon image
+      resizeIcon.alt = 'Resize Icon'; // Accessibility improvement
+      container.appendChild(resizeIcon);
+
+      // Set the data attribute to indicate the image is wrapped
+      img.setAttribute('data-wrapped', 'true');
+      this.addResizeFunctionality(container); // Handle functionality for the resize icon if needed
+    }
+  }
+
+  unwrapImage(img) {
+    if (img.hasAttribute('data-wrapped')) {
+      const container = img.parentNode;
+      if (container.classList.contains('image-container')) {
+        // Remove the resize icon image
+        const resizeIcon = container.querySelector('.resize-icon');
+        if (resizeIcon) {
+          resizeIcon.remove();
+        }
+        // Move the image out of the container
+        container.parentNode?.insertBefore(img, container);
+        container.remove(); // Remove the container
+
+        // Remove the data attribute to indicate the image is no longer wrapped
+        img.removeAttribute('data-wrapped');
+      }
+    }
   }
 
   private addResizeFunctionality(container: HTMLDivElement) {
@@ -289,6 +353,14 @@ export class RichTextEditor extends LitElement {
     };
 
     resizeIcon.addEventListener('mousedown', onMouseDown);
+    resizeIcon.addEventListener('mouseleave', (event) => {
+      event.stopPropagation();
+      // Check if the cursor is not entering the resize icon
+      const relatedTarget = event.relatedTarget;
+      if (relatedTarget && relatedTarget?.['classList']?.contains('editor')) {
+        this.unwrapImage(img);
+      }
+    });
   }
 
   private handleInput(event: Event) {
@@ -326,6 +398,13 @@ export class RichTextEditor extends LitElement {
 
   private toggleEditorMode() {
     this.editorMode = !this.editorMode;
+    const editor = this.shadowRoot?.querySelector('.editor')
+
+    if (!this.editorMode) {
+      editor.querySelectorAll('img').forEach((img) => {
+        this.unwrapImage(img)
+      });
+    }
   }
 
   private handleFontFamilyChange(event: Event) {
@@ -366,9 +445,9 @@ export class RichTextEditor extends LitElement {
           ${this.editorMode ? 'Preview' : 'Edit'}
         </button>
       </div>
-      <button class="toolbar-toggle" @click="${this.toggleToolbar}" title="Toggle Toolbar">🛠️</button>
-      <div class="editor" contenteditable="${this.editorMode}" @input="${this.handleInput}"></div>
-      <div class="preview" ?hidden="${this.editorMode}"></div>
+      <button class="toolbar-toggle" @click="${this.toggleToolbar}" ?hidden="${!this.editorMode}" title="Toggle Toolbar">🛠️</button>
+      <div class="editor" contenteditable="${this.editorMode}" @input="${this.handleInput}" @paste="${this.onPaste}"></div>
+      <!-- <div class="preview" ?hidden="${this.editorMode}"></div> -->
     `;
   }
 }

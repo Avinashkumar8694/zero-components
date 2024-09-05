@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Background</title>
+    <style>
+        .background-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+        }
+
+        .background-label {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .background-options {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .background-option {
+            margin-right: 10px;
+        }
+
+        .background-details {
+            display: none;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 10px;
+        }
+
+        .background-details input,
+        .background-details select {
+            background-color: #444;
+            border: none;
+            padding: 5px;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .image-preview-container {
+            position: relative;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 5px;
+        }
+
+        .image-picker-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .image-picker-overlay:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .image-picker-overlay i {
+            font-size: 24px;
+            margin-right: 5px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 150px;
+            margin-top: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #4CAF50, #2196F3, #f44336);
+        }
+
+        .gradient-stop {
+            display: flex;
+            align-items: center;
+        }
+
+        .gradient-stop input[type="color"] {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="background-container">
+        <div class="background-label">Background</div>
+        <div class="background-options">
+            <label class="background-option">
+                <input type="radio" name="background-type" value="color" onclick="toggleBackgroundDetails('color')"> Color
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background-type" value="image" onclick="toggleBackgroundDetails('image')"> Image
+            </label>
+            <label class="background-option">
+                <input type="radio" name="background-type" value="gradient" onclick="toggleBackgroundDetails('gradient')"> Gradient
+            </label>
+        </div>
+        <div class="background-details" id="color-picker">
+            <label>Choose color:
+                <input type="color" onchange="updateBackground()">
+            </label>
+        </div>
+        <div class="background-details" id="image-picker">
+            <label>Choose image:</label>
+            <div class="image-preview-container" onclick="openImageSelector()">
+                <img id="image-preview" class="image-preview" src="#" alt="Image Preview">
+                <div class="image-picker-overlay">
+                    <i class="fas fa-upload"></i> Click to select image
+                </div>
+            </div>
+            <input type="file" accept="image/*" id="image-selector" onchange="previewImage(event)" style="display: none;">
+            <label>Image position:
+                <select onchange="updateBackground()">
+                    <option value="center">Center</option>
+                    <option value="top">Top</option>
+                    <option value="bottom">Bottom</option>
+                    <option value="left">Left</option>
+                    <option value="right">Right</option>
+                </select>
+            </label>
+            <label>Image repeat:
+                <select onchange="updateBackground()">
+                    <option value="no-repeat">No Repeat</option>
+                    <option value="repeat">Repeat</option>
+                    <option value="repeat-x">Repeat Horizontally</option>
+                    <option value="repeat-y">Repeat Vertically</option>
+                </select>
+            </label>
+        </div>
+        <div class="background-details" id="gradient-picker">
+            <canvas id="gradient-canvas"></canvas>
+            <label>Gradient type:
+                <select onchange="updateBackground()">
+                    <option value="linear">Linear</option>
+                    <option value="radial">Radial</option>
+                    <option value="conic">Conic</option>
+                </select>
+            </label>
+            <div id="gradient-stops">
+                <div class="gradient-stop">
+                    <input type="color" value="#4CAF50" onchange="updateBackground()">
+                    <input type="number" min="0" max="100" value="0" onchange="updateBackground()">%
+                </div>
+                <div class="gradient-stop">
+                    <input type="color" value="#2196F3" onchange="updateBackground()">
+                    <input type="number" min="0" max="100" value="50" onchange="updateBackground()">%
+                </div>
+                <div class="gradient-stop">
+                    <input type="color" value="#f44336" onchange="updateBackground()">
+                    <input type="number" min="0" max="100" value="100" onchange="updateBackground()">%
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script>
+        // Initial background settings
+        let backgroundType = 'color';
+
+        // Function to toggle background details based on radio button selection
+        function toggleBackgroundDetails(type) {
+            document.getElementById('color-picker').style.display = (type === 'color') ? 'flex' : 'none';
+            document.getElementById('image-picker').style.display = (type === 'image') ? 'flex' : 'none';
+            document.getElementById('gradient-picker').style.display = (type === 'gradient') ? 'flex' : 'none';
+            backgroundType = type;
+            updateBackground(); // Update background based on current selection
+        }
+
+        // Function to update background based on user inputs
+        function updateBackground() {
+            const canvas = document.getElementById('gradient-canvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Update based on background type
+            if (backgroundType === 'color') {
+                const color = document.querySelector('#color-picker input[type="color"]').value;
+                ctx.fillStyle = color;
+                ctx.fillRect(0, 0, width, height);
+            } else if (backgroundType === 'image') {
+                const imageSrc = document.getElementById('image-preview').src;
+                const imagePosition = document.querySelector('#image-picker select').value;
+                const imageRepeat = document.querySelector('#image-picker select:nth-child(3)').value;
+                const img = new Image();
+                img.onload = function() {
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.drawImage(img, 0, 0, width, height);
+                };
+                img.src = imageSrc;
+            } else if (backgroundType === 'gradient') {
+                const gradientType = document.querySelector('#gradient-picker select').value;
+                if (gradientType === 'linear') {
+                    const gradient = ctx.createLinearGradient(0, 0, width, 0);
+                    const stops = document.querySelectorAll('.gradient-stop');
+                    stops.forEach(stop => {
+                        const color = stop.querySelector('input[type="color"]').value;
+                        const position = stop.querySelector('input[type="number"]').value / 100;
+                        gradient.addColorStop(position, color);
+                    });
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, width, height);
+                } else if (gradientType === 'radial') {
+                    const gradient = ctx.createRadialGradient(width / 2, height / 2, 10, width / 2, height / 2, width / 2);
+                    const stops = document.querySelectorAll('.gradient-stop');
+                    stops.forEach(stop => {
+                        const color = stop.querySelector('input[type="color"]').value;
+                        const position = stop.querySelector('input[type="number"]').value / 100;
+                        gradient.addColorStop(position, color);
+                    });
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, width, height);
+                } else if (gradientType === 'conic') {
+                    const gradient = ctx.createConicGradient(width / 2, height / 2, 0);
+                    const stops = document.querySelectorAll('.gradient-stop');
+                    stops.forEach(stop => {
+                        const color = stop.querySelector('input[type="color"]').value;
+                        const position = stop.querySelector('input[type="number"]').value / 100;
+                        gradient.addColorStop(position, color);
+                    });
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, width, height);
+                }
+            }
+        }
+
+        // Function to open image selector
+        function openImageSelector() {
+            document.getElementById('image-selector').click();
+        }
+
+        // Function to preview selected image
+        function previewImage(event) {
+            const imagePreview = document.getElementById('image-preview');
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    document.querySelector('.image-picker-overlay').style.display = 'none';
+                    updateBackground(); // Update background on image selection
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.src = '';
+                imagePreview.style.display = 'none';
+                document.querySelector('.image-picker-overlay').style.display = 'flex';
+            }
+        }
+
+        // Initial update based on default settings
+        updateBackground();
+    </script>
+</body>
+</html>

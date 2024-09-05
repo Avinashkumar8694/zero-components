@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Wave SVG Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .wave-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 600px;
+            background-color: #444;
+            color: #fff;
+            padding: 20px;
+            border: 1px solid #555;
+            border-radius: 5px;
+        }
+
+        .wave-control-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .wave-label {
+            font-size: 14px;
+            margin-right: 10px;
+            width: 30%;
+        }
+
+        .wave-dropdown,
+        .wave-progress-bar {
+            width: 70%;
+        }
+
+        .wave-dropdown {
+            padding: 5px;
+            font-size: 14px;
+            background-color: #555;
+            color: #fff;
+            border: 1px solid #666;
+            width: 100%;
+        }
+
+        .wave-progress-bar {
+            height: 5px;
+            background-color: #555;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-right: 10px;
+            position: relative;
+        }
+
+        .wave-progress-bar input {
+            width: 100%;
+            height: 100%;
+            appearance: none;
+            background: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .wave-progress-bar input::-webkit-slider-thumb {
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .wave-progress-bar input::-moz-range-thumb {
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .wave-preview {
+            width: 100%;
+            height: 150px;
+            background-color: #333;
+            border: 1px solid #555;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wave-preview svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wave-buttons {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .wave-button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            font-size: 14px;
+            border: 1px solid #666;
+            border-radius: 3px;
+            background-color: #555;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .wave-button:hover {
+            background-color: #666;
+        }
+
+        .wave-button:active {
+            background-color: #777;
+        }
+
+        .wave-color-picker {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .wave-color-box {
+            width: 30px;
+            height: 30px;
+            margin: 0 5px;
+            cursor: pointer;
+            border: 1px solid #666;
+        }
+
+        .wave-color-box.start-color {
+            background-color: #ff5722;
+        }
+
+        .wave-color-box.end-color {
+            background-color: #ff9800;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wave-container">
+        <div class="wave-control-group">
+            <div class="wave-label">Wave Type</div>
+            <select class="wave-dropdown" id="waveType">
+                <option value="sine">Sine</option>
+                <option value="square">Square</option>
+                <option value="triangle">Triangle</option>
+            </select>
+        </div>
+        <div class="wave-control-group">
+            <div class="wave-label">Wave Height</div>
+            <div class="wave-progress-bar">
+                <input type="range" min="0" max="100" value="50" id="waveHeight">
+            </div>
+        </div>
+        <div class="wave-control-group">
+            <div class="wave-label">Number of Waves</div>
+            <div class="wave-progress-bar">
+                <input type="range" min="1" max="10" value="1" id="waveCount">
+            </div>
+        </div>
+        <div class="wave-control-group">
+            <div class="wave-label">Position</div>
+            <select class="wave-dropdown" id="wavePosition">
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+            </select>
+        </div>
+        <div class="wave-preview">
+            <svg id="wavePreview" viewBox="0 0 1000 100">
+                <!-- Wave SVG will be dynamically generated here -->
+            </svg>
+        </div>
+        <div class="wave-buttons">
+            <button class="wave-button" id="saveSvg">Save as SVG</button>
+            <button class="wave-button" id="savePng">Save as PNG</button>
+            <button class="wave-button" id="previewSvg">Preview SVG</button>
+        </div>
+        <div class="wave-color-picker">
+            <input type="color" id="startColor" value="#ff5722">
+            <input type="color" id="endColor" value="#ff9800">
+        </div>
+    </div>
+
+    <script>
+        const waveTypeSelect = document.getElementById('waveType');
+        const waveHeightRange = document.getElementById('waveHeight');
+        const waveCountRange = document.getElementById('waveCount');
+        const wavePositionSelect = document.getElementById('wavePosition');
+        const wavePreview = document.getElementById('wavePreview');
+        const saveSvgButton = document.getElementById('saveSvg');
+        const savePngButton = document.getElementById('savePng');
+        const previewSvgButton = document.getElementById('previewSvg');
+        const startColorPicker = document.getElementById('startColor');
+        const endColorPicker = document.getElementById('endColor');
+        let startColor = '#ff5722';
+        let endColor = '#ff9800';
+
+        function generateWave() {
+            const type = waveTypeSelect.value;
+            const height = waveHeightRange.value;
+            const count = waveCountRange.value;
+            const position = wavePositionSelect.value;
+            const svgWidth = wavePreview.viewBox.baseVal.width;
+            const waveWidth = svgWidth / count;
+            const waveHeight = parseFloat(height);
+
+            let pathData;
+            switch (type) {
+                case 'sine':
+                    pathData = `M0,${position === 'top' ? waveHeight : 100 - waveHeight} Q${waveWidth / 2},${position === 'top' ? waveHeight : 100 - waveHeight} ${waveWidth},${
+                        position === 'top' ? 100 - waveHeight : waveHeight}`;
+                    for (let i = 1; i < count; i++) {
+                        pathData += ` T${(i + 1) * waveWidth},${position === 'top' ? 100 - waveHeight : waveHeight}`;
+                    }
+                    pathData += ` L${count * waveWidth},0 L0,0 L0,${position === 'top' ? waveHeight : 100 - waveHeight} Z`
+                    break;
+                case 'square':
+                    pathData = `M0,${position === 'top' ? waveHeight : 100 - waveHeight} L${waveWidth / 2},${position === 'top' ? waveHeight : 100 - waveHeight} L${waveWidth},${
+                        position === 'top' ? 100 - waveHeight : waveHeight}`;
+                    for (let i = 1; i < count; i++) {
+                        pathData += ` L${(i + 0.5) * waveWidth},${position === 'top' ? 100 - waveHeight : waveHeight} L${(i + 1) * waveWidth},${position === 'top' ? waveHeight : 100 - waveHeight}`;
+                    }
+                    pathData += ` L${count * waveWidth},0 L0,0 L0,${position === 'top' ? waveHeight : 100 - waveHeight} Z`
+                    break;
+                case 'triangle':
+                    pathData = `M0,${position === 'top' ? waveHeight : 100 - waveHeight} L${waveWidth / 2},${position === 'top' ? waveHeight : 100 - waveHeight} L${waveWidth},${
+                        position === 'top' ? 100 - waveHeight : waveHeight}`;
+                    for (let i = 1; i < count; i++) {
+                        pathData += ` L${(i + 0.5) * waveWidth},${position === 'top' ? 100 - waveHeight : waveHeight} L${(i + 1) * waveWidth},${position === 'top' ? waveHeight : 100 - waveHeight}`;
+                    }
+                    break;
+            }
+
+            let gradientStart, gradientEnd;
+
+            if (position === 'top') {
+                gradientStart = '0%';
+                gradientEnd = '100%';
+            } else {
+                gradientStart = '100%';
+                gradientEnd = '0%';
+            }
+
+            wavePreview.innerHTML = `
+                <defs>
+                    <linearGradient id="waveGradient" x1="0%" y1="${gradientStart}" x2="0%" y2="${gradientEnd}">
+                        <stop offset="0%" style="stop-color:${startColor};stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:${endColor};stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <path d="${pathData}" stroke="url(#waveGradient)" fill="${position === 'top' ? "url(#waveGradient)" : "rgba(0, 0, 0, 0)"}"/>
+                <path d="${pathData}" stroke="url(#waveGradient)" fill="${position === 'top' ? "url(#waveGradient)" : "rgba(0, 0, 0, 0)"}"/>
+            `;
+        }
+
+        waveTypeSelect.addEventListener('change', generateWave);
+        waveHeightRange.addEventListener('input', generateWave);
+        waveCountRange.addEventListener('input', generateWave);
+        wavePositionSelect.addEventListener('change', generateWave);
+        startColorPicker.addEventListener('input', () => {
+            startColor = startColorPicker.value;
+            generateWave();
+        });
+        endColorPicker.addEventListener('input', () => {
+            endColor = endColorPicker.value;
+            generateWave();
+        });
+        previewSvgButton.addEventListener('click', generateWave);
+
+        saveSvgButton.addEventListener('click', () => {
+            const svgData = wavePreview.outerHTML;
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const svgUrl = URL.createObjectURL(svgBlob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = svgUrl;
+            downloadLink.download = 'wave.svg';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        });
+
+        savePngButton.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            const svgData = new XMLSerializer().serializeToString(wavePreview);
+            const img = new Image();
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const svgUrl = URL.createObjectURL(svgBlob);
+
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                context.drawImage(img, 0, 0);
+                URL.revokeObjectURL(svgUrl);
+
+                const imgUrl = canvas.toDataURL('image/png');
+                const downloadLink = document.createElement('a');
+                downloadLink.href = imgUrl;
+                downloadLink.download = 'wave.png';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            };
+
+            img.src = svgUrl;
+        });
+
+        generateWave();
+    </script>
+</body>
+
+</html>

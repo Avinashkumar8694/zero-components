@@ -34,7 +34,16 @@ export class RichTextEditor extends LitElement {
     this.updateEditorContent();
   }
   @property({ type: Boolean, reflect: true }) toolbarVisible = false;
-  @property({ type: Boolean, reflect: true }) editorMode = true;
+  @property({ type: Boolean, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: '',
+    placeholderText: '',
+    initialValue: true,
+    fieldMappings: 'editorMode',
+  }) 
+  editorMode = true;
   isWrapped = false
 
   private selectionRange: Range | null = null;
@@ -46,7 +55,7 @@ export class RichTextEditor extends LitElement {
       margin: auto;
       /* border: 1px solid #ddd; */
       border-radius: 8px;
-      overflow: hidden;
+      overflow: visible;
       position: relative;
     }
 

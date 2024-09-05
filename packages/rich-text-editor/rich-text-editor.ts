@@ -71,6 +71,7 @@ export class RichTextEditor extends LitElement {
       flex-wrap: wrap;
       justify-content: flex-start;
       padding: 8px;
+      color: #5b5f61;
       background-color: #f5f5f5;
       border-bottom: 1px solid #ddd;
       position: absolute;
@@ -450,9 +451,9 @@ export class RichTextEditor extends LitElement {
           <option value="right">Right</option>
           <option value="justify">Justify</option>
         </select>
-        <button @click="${this.toggleEditorMode}" title="Toggle Mode">
+        <!-- <button @click="${this.toggleEditorMode}" title="Toggle Mode">
           ${this.editorMode ? 'Preview' : 'Edit'}
-        </button>
+        </button> -->
       </div>
       <button class="toolbar-toggle" @click="${this.toggleToolbar}" ?hidden="${!this.editorMode}" title="Toggle Toolbar">🛠️</button>
       <div class="editor" contenteditable="${this.editorMode}" @input="${this.handleInput}" @paste="${this.onPaste}"></div>

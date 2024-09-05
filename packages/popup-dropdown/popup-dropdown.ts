@@ -130,6 +130,8 @@ export class PopupDropdown extends LitElement {
             display: block;
             opacity: 1;
             transform: translateY(0);
+            max-height: 10rem;
+            overflow-y: auto;
         }
         
         .option {

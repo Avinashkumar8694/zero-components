@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Styles</title>
+    <style>
+        /* Container styles */
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Label styles */
+        .input-label {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        /* Input field styles */
+        .input-field {
+            background-color: #444;
+            border: none;
+            padding: 10px;
+            color: #fff;
+            margin-bottom: 10px;
+            width: 300px;
+            border-radius: 4px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #555;
+        }
+
+        /* Checkbox and radio styles */
+        .input-field[type="checkbox"],
+        .input-field[type="radio"] {
+            margin-right: 5px;
+            cursor: pointer;
+        }
+
+        /* Tooltip styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Icon styles */
+        .icon {
+            margin-right: 5px;
+        }
+
+        /* Improved hover effect */
+        .input-field:hover,
+        .input-option:hover {
+            background-color: #555;
+            transition: background-color 0.3s;
+        }
+
+        /* FontAwesome Icons */
+        .fa {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="input-container">
+        <div class="input-label">Input Styles</div>
+        
+        <!-- Text Input -->
+        <label class="input-label" for="text-input">Text Input:</label>
+        <div class="tooltip">
+            <span class="icon"><i class="fa fa-info-circle"></i></span>
+            <span class="tooltiptext">Enter some text</span>
+            <input type="text" id="text-input" class="input-field" placeholder="Enter text">
+        </div>
+
+        <!-- Number Input -->
+        <label class="input-label" for="number-input">Number Input:</label>
+        <div class="tooltip">
+            <span class="icon"><i class="fa fa-info-circle"></i></span>
+            <span class="tooltiptext">Enter a number</span>
+            <input type="number" id="number-input" class="input-field" placeholder="Enter number">
+        </div>
+
+        <!-- Email Input -->
+        <label class="input-label" for="email-input">Email Input:</label>
+        <div class="tooltip">
+            <span class="icon"><i class="fa fa-info-circle"></i></span>
+            <span class="tooltiptext">Enter your email</span>
+            <input type="email" id="email-input" class="input-field" placeholder="Enter email">
+        </div>
+
+        <!-- Checkbox and Radio options -->
+        <div class="input-options">
+            <label class="input-option">
+                <input type="checkbox" class="input-field">
+                <span class="icon"><i class="fa fa-check-square"></i></span> Checkbox
+            </label>
+            <label class="input-option">
+                <input type="radio" class="input-field" name="radio-option">
+                <span class="icon"><i class="fa fa-dot-circle"></i></span> Radio
+            </label>
+        </div>
+
+        <!-- Textarea -->
+        <label class="input-label" for="textarea">Textarea:</label>
+        <textarea id="textarea" class="input-field" rows="4" placeholder="Enter text"></textarea>
+    </div>
+
+    <!-- FontAwesome Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+</body>
+</html>

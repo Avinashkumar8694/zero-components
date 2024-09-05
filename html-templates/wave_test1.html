@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave SVG Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .wave-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            background-color: #444;
+            color: #fff;
+            padding: 20px;
+            border: 1px solid #555;
+            border-radius: 5px;
+        }
+
+        .wave-control-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .wave-label {
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .wave-dropdown,
+        .wave-progress-bar,
+        .wave-color-input {
+            width: 150px;
+            margin-right: 10px;
+        }
+
+        .wave-preview {
+            width: 100%;
+            height: calc(100vh - 400px); /* Adjust height as needed */
+            background-color: #333;
+            border: 1px solid #555;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Ensure SVG doesn't overflow */
+        }
+
+        .wave-preview svg {
+            display: block; /* Ensure SVG behaves like a block element */
+            width: 100%; /* Take full width of the container */
+            height: 100%; /* Take full height of the container */
+        }
+
+        .wave-buttons {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .wave-button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            font-size: 14px;
+            border: 1px solid #666;
+            border-radius: 3px;
+            background-color: #555;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .wave-button:hover {
+            background-color: #666;
+        }
+
+        .wave-button:active {
+            background-color: #777;
+        }
+
+        .wave-color-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .wave-color-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="wave-container">
+        <div class="wave-control-group">
+            <div class="wave-label">Wave Type</div>
+            <select class="wave-dropdown" id="waveType">
+                <option value="sine">Sine</option>
+                <option value="square">Square</option>
+                <option value="triangle">Triangle</option>
+            </select>
+        </div>
+        <div class="wave-control-group">
+            <div class="wave-label">Width of Single Wave</div>
+            <div class="wave-progress-bar">
+                <input type="range" min="1" max="50" value="10" id="waveWidth">
+            </div>
+        </div>
+        <div class="wave-control-group">
+            <div class="wave-label">Height of Path (%)</div>
+            <div class="wave-progress-bar">
+                <input type="range" min="1" max="100" value="50" id="pathHeight">
+            </div>
+        </div>
+        <div class="wave-control-group">
+            <div class="wave-label">Number of Paths</div>
+            <input type="number" id="numPaths" value="1" min="1" max="10" class="wave-dropdown">
+        </div>
+        <div class="wave-control-group">
+            <div class="wave-label">Wave Direction</div>
+            <select class="wave-dropdown" id="waveDirection">
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+            </select>
+        </div>
+        <div class="wave-preview">
+            <svg id="wavePreview" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <!-- Wave SVG will be dynamically generated here -->
+            </svg>
+        </div>
+        <div class="wave-buttons">
+            <button class="wave-button" id="generatePaths">Generate Paths</button>
+            <button class="wave-button" id="saveSvg">Save as SVG</button>
+        </div>
+    </div>
+
+    <script>
+        const waveTypeSelect = document.getElementById('waveType');
+        const waveWidthRange = document.getElementById('waveWidth');
+        const pathHeightRange = document.getElementById('pathHeight');
+        const wavePreview = document.getElementById('wavePreview');
+        const saveSvgButton = document.getElementById('saveSvg');
+        const generatePathsButton = document.getElementById('generatePaths');
+        const numPathsInput = document.getElementById('numPaths');
+        const waveDirectionSelect = document.getElementById('waveDirection');
+
+        function generatePaths() {
+            const numPaths = parseInt(numPathsInput.value);
+            const type = waveTypeSelect.value;
+            const width = parseInt(waveWidthRange.value);
+            const pathHeightPercentage = parseInt(pathHeightRange.value);
+            const waveDirection = waveDirectionSelect.value;
+
+            const waveHtml = generateWaveHtml(numPaths, type, width, pathHeightPercentage, waveDirection);
+
+            wavePreview.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none">${waveHtml}</svg>`;
+        }
+
+        function generateWaveHtml(numPaths, type, width, pathHeightPercentage, waveDirection) {
+            let waveHtml = '';
+
+            for (let i = 0; i < numPaths; i++) {
+                const color1 = getRandomColor();
+                const color2 = getRandomColor();
+
+                const points = generateSmoothPathPoints(type, width, pathHeightPercentage, waveDirection);
+
+                const pathData = generatePathData(points, width, pathHeightPercentage, waveDirection);
+
+                const gradientId = `gradient-${i}`;
+
+                waveHtml += `
+                    <defs>
+                        <linearGradient id="${gradientId}" gradientUnits="userSpaceOnUse" x1="0" y1="${waveDirection === 'top' ? '0' : '100'}" x2="0" y2="${waveDirection === 'top' ? '100' : '0'}">
+                            <stop offset="0%" stop-color="${color1}" />
+                            <stop offset="100%" stop-color="${color2}" />
+                        </linearGradient>
+                    </defs>
+                    <path d="${pathData}" fill="url(#${gradientId})"/>
+                `;
+            }
+
+            return waveHtml;
+        }
+
+        function generateSmoothPathPoints(type, width, pathHeightPercentage, waveDirection) {
+            const numPoints = Math.floor(Math.random() * 20) + 100; // Random number of points between 10 and 30
+            const step = 100 / (numPoints - 1);
+            const points = [];
+            for (let i = 0; i < numPoints; i++) {
+                const x = i * step;
+                let y;
+                switch (type) {
+                    case 'sine':
+                        y = 50 + 50 * Math.sin((x / width) * 2 * Math.PI);
+                        break;
+                    case 'square':
+                        y = i % 2 === 0 ? 100 : 0;
+                        break;
+                    case 'triangle':
+                        y = 50 + 50 * (i % 2 === 0 ? 1 : -1);
+                        break;
+                    default:
+                        y = Math.random() * 100;
+                }
+                y = y * (pathHeightPercentage / 100);
+                if (waveDirection === 'bottom') {
+                    y = 100 - y;
+                }
+                points.push(`${x},${y}`);
+            }
+            return points;
+        }
+
+        function generatePathData(points, width, pathHeightPercentage, waveDirection) {
+            const pathPoints = points.map(point => {
+                const [x, y] = point.split(',');
+                let adjustedY = y;
+                if (waveDirection === 'bottom') {
+                    adjustedY = 100 - y;
+                }
+                return `${x},${adjustedY}`;
+            });
+
+            const pathStart = `M0,${waveDirection === 'top' ? '100' : '0'}`;
+            const pathEnd = `L${100},${waveDirection === 'top' ? '100' : '0'}`;
+
+            return `${pathStart} ${pathPoints.join(' ')} ${pathEnd}`;
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        generatePathsButton.addEventListener('click', generatePaths);
+        saveSvgButton.addEventListener('click', () => {
+            const svgData = wavePreview.innerHTML;
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const svgUrl = URL.createObjectURL(svgBlob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = svgUrl;
+            downloadLink.download = 'wave.svg';
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        });
+
+        generatePaths(); // Generate paths on page load
+    </script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wave SVG Builder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .controls {
+            margin-bottom: 20px;
+        }
+
+        .controls select,
+        .controls input[type="range"] {
+            margin-right: 10px;
+        }
+
+        .wave-preview {
+            position: relative;
+            border: 1px solid #ccc;
+            width: 100%;
+            height: 720px;
+            overflow: hidden;
+        }
+
+        .draggable-point {
+            fill: red;
+            stroke: black;
+            stroke-width: 2;
+            cursor: pointer;
+        }
+
+        .color-picker-container {
+            display: flex;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .color-picker-container div {
+            margin-right: 10px;
+        }
+
+        .color-picker-container input[type="color"] {
+            border: none;
+            width: 50px;
+            height: 25px;
+            padding: 0;
+        }
+
+        .color-picker-container input[type="range"] {
+            width: 80px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="controls">
+            <label for="waveType">Wave Type:</label>
+            <select id="waveType">
+                <option value="sine">Sine</option>
+                <option value="square">Square</option>
+                <option value="triangle">Triangle</option>
+            </select>
+
+            <label for="waveHeight">Wave Height:</label>
+            <input type="range" id="waveHeight" min="0" max="100" value="50">
+
+            <label for="waveCount">Wave Count:</label>
+            <input type="range" id="waveCount" min="1" max="20" value="5">
+
+            <label for="wavePosition">Wave Position:</label>
+            <select id="wavePosition">
+                <option value="top">Top</option>
+                <option value="bottom">Bottom</option>
+            </select>
+
+            <label for="wavePaths">Number of Paths:</label>
+            <input type="range" id="wavePaths" min="1" max="10" value="3">
+        </div>
+
+        <div class="wave-preview" id="wavePreviewContainer">
+            <svg id="waveSvg" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg"></svg>
+        </div>
+
+        <button onclick="copySvg()">Copy SVG</button>
+        <button onclick="saveSvg()">Save SVG</button>
+    </div>
+
+    <script>
+        const waveTypeSelect = document.getElementById('waveType');
+        const waveHeightRange = document.getElementById('waveHeight');
+        const waveCountRange = document.getElementById('waveCount');
+        const wavePositionSelect = document.getElementById('wavePosition');
+        const wavePathsRange = document.getElementById('wavePaths');
+        const colorPickersContainer = document.createElement('div');
+        colorPickersContainer.className = 'color-picker-container';
+        document.querySelector('.container').insertBefore(colorPickersContainer, document.querySelector('.wave-preview'));
+
+        let state = {
+            waveType: waveTypeSelect.value,
+            waveHeight: waveHeightRange.value,
+            waveCount: waveCountRange.value,
+            wavePosition: wavePositionSelect.value,
+            wavePaths: wavePathsRange.value,
+            colors: Array.from({ length: wavePathsRange.value }, () => ['red', 'blue', 'green']),
+            opacities: Array.from({ length: wavePathsRange.value }, () => 1),
+            drag: false
+        };
+
+        let points = [];
+
+        function generateWave() {
+            const type = state.waveType;
+            const heightPercentage = state.waveHeight / 100;
+            const waveCount = state.waveCount;
+            const wavePosition = state.wavePosition;
+            const wavePaths = state.wavePaths;
+
+            const svgWidth = 1280;
+            const svgHeight = 720;
+            let waveWidth = svgWidth / waveCount;
+            const waveHeightValue = svgHeight * heightPercentage;
+            const waveHeightIncrement = waveHeightValue / wavePaths;
+
+            let svgContent = '';
+            points = [...points];
+
+            // Generate gradients
+            let gradients = '<defs>';
+
+            for (let pathIndex = 0; pathIndex < wavePaths; pathIndex++) {
+                let pathData = '';
+                let colors = state.colors?.[pathIndex];
+                let opacity = state.opacities[pathIndex];
+                let pathPoints = [];
+                waveWidth += pathIndex * 50;
+                switch (type) {
+                    case 'sine':
+                        if (state.drag) {
+                            let _point = points[pathIndex];
+                            pathData += `M${_point[0].x},${_point[0].y} Q${waveWidth / 2},${_point[0].y} ${waveWidth},${svgHeight - waveHeightValue - pathIndex * waveHeightIncrement}`;
+                            for (let i = 1; i < waveCount; i++) {
+                                pathData += ` T${_point[i].x},${_point[i].y}`;
+                            }
+                            pathData += ` L${_point[waveCount].x},${_point[waveCount].y} Z`;
+                            break;
+                        }
+                        pathPoints.push({ x: 0, y: waveHeightValue + pathIndex * waveHeightIncrement });
+                        pathData += `M0,${waveHeightValue + pathIndex * waveHeightIncrement} Q${waveWidth / 2},${waveHeightValue + pathIndex * waveHeightIncrement} ${waveWidth},${svgHeight - waveHeightValue - pathIndex * waveHeightIncrement}`;
+                        for (let i = 1; i < waveCount; i++) {
+                            pathPoints.push({ x: (i + 1) * waveWidth, y: svgHeight - waveHeightValue - pathIndex * waveHeightIncrement });
+                            pathData += ` T${(i + 1) * waveWidth},${svgHeight - waveHeightValue - pathIndex * waveHeightIncrement}`;
+                        }
+                        pathPoints.push({ x: waveCount * waveWidth, y: svgHeight - waveHeightValue - pathIndex * waveHeightIncrement });
+                        pathData += ` L${waveCount * waveWidth},${wavePosition === 'top' ? 0 : svgHeight} L0,${wavePosition === 'top' ? 0 : svgHeight} Z`;
+                        break;
+                    case 'square':
+                        pathPoints.push({ x: 0, y: waveHeightValue + pathIndex * waveHeightIncrement });
+                        pathData += `M0,${waveHeightValue + pathIndex * waveHeightIncrement} L${waveWidth / 2},${waveHeightValue + pathIndex * waveHeightIncrement} L${waveWidth / 2},${svgHeight - waveHeightValue - pathIndex * waveHeightIncrement}`;
+                        for (let i = 1; i < waveCount; i++) {
+                            pathPoints.push({ x: (i + 0.5) * waveWidth, y: svgHeight - waveHeightValue - pathIndex * waveHeightIncrement });
+                            pathData += ` L${(i + 0.5) * waveWidth},${svgHeight - waveHeightValue - pathIndex * waveHeightIncrement}`;
+                            pathData += ` L${(i + 0.5) * waveWidth},${waveHeightValue + pathIndex * waveHeightIncrement}`;
+                        }
+                        pathPoints.push({ x: waveCount * waveWidth, y: svgHeight - waveHeightValue - pathIndex * waveHeightIncrement });
+                        pathData += ` L${waveCount * waveWidth},${wavePosition === 'top' ? 0 : svgHeight} L0,${wavePosition === 'top' ? 0 : svgHeight} Z`;
+                        break;
+                    case 'triangle':
+                        pathPoints.push({ x: 0, y: waveHeightValue + pathIndex * waveHeightIncrement });
+                        pathData += `M0,${waveHeightValue + pathIndex * waveHeightIncrement} L${waveWidth / 2},${svgHeight - waveHeightValue - pathIndex * waveHeightIncrement}`;
+                        for (let i = 1; i < waveCount; i++) {
+                            pathPoints.push({ x: i * waveWidth, y: waveHeightValue + pathIndex * waveHeightIncrement });
+                            pathData += ` L${i * waveWidth},${waveHeightValue + pathIndex * waveHeightIncrement}`;
+                            pathPoints.push({ x: (i + 0.5) * waveWidth, y: svgHeight - waveHeightValue - pathIndex * waveHeightIncrement });
+                            pathData += ` L${(i + 0.5) * waveWidth},${svgHeight - waveHeightValue - pathIndex * waveHeightIncrement}`;
+                        }
+                        pathPoints.push({ x: waveCount * waveWidth, y: svgHeight - waveHeightValue - pathIndex * waveHeightIncrement });
+                        pathData += ` L${waveCount * waveWidth},${wavePosition === 'top' ? 0 : svgHeight} L0,${wavePosition === 'top' ? 0 : svgHeight} Z`;
+                        break;
+                    default:
+                        break;
+                }
+
+                points.push(pathPoints);
+
+                // Define a unique gradient for each path
+                gradients += `
+                    <linearGradient id="grad${pathIndex}" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:${colors[0]};stop-opacity:${opacity}" />
+                        <stop offset="50%" style="stop-color:${colors[1]};stop-opacity:${opacity}" />
+                        <stop offset="100%" style="stop-color:${colors[2]};stop-opacity:${opacity}" />
+                    </linearGradient>
+                `;
+
+                svgContent += `
+                    <path d="${pathData}" fill="url(#grad${pathIndex})" opacity="${opacity}" class="draggable-path" data-path-index="${pathIndex}" />
+                `;
+            }
+
+            gradients += '</defs>';
+
+            document.getElementById('waveSvg').innerHTML = gradients + svgContent;
+
+            addDragListeners();
+        }
+
+        function addDragListeners() {
+            const paths = document.querySelectorAll('.draggable-path');
+
+            paths.forEach((path) => {
+                path.addEventListener('mousedown', (e) => {
+                    const pathIndex = e.target.getAttribute('data-path-index');
+                    const svg = document.getElementById('waveSvg');
+                    const startX = e.clientX;
+                    const startY = e.clientY;
+
+                    const onMouseMove = (e) => {
+                        const dx = e.clientX - startX;
+                        const dy = e.clientY - startY;
+
+                        const pathPoints = points[pathIndex];
+                        pathPoints.forEach(point => {
+                            point.x += dx;
+                            point.y += dy;
+                        });
+                        state.drag = true;
+                        generateWave(); // Regenerate wave with updated points
+                    };
+
+                    const onMouseUp = () => {
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('mouseup', onMouseUp);
+                        state.drag = false;
+                    };
+
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                });
+            });
+        }
+
+        function initColorPickers() {
+            colorPickersContainer.innerHTML = '';
+            for (let i = 0; i < state.wavePaths; i++) {
+                const picker = document.createElement('div');
+                picker.className = 'color-picker-container';
+                picker.innerHTML = `
+                    <input type="color" value="${state.colors?.[i]?.[0]}" />
+                    <input type="color" value="${state.colors?.[i]?.[1]}" />
+                    <input type="color" value="${state.colors?.[i]?.[2]}" />
+                    <input type="range" min="0" max="1" step="0.01" value="${state.opacities[i]}" />
+                `;
+                picker.setAttribute('data-path-index', i);
+                colorPickersContainer.appendChild(picker);
+            }
+        }
+
+        function updateWaveColors() {
+            const colorPickers = document.querySelectorAll('.color-picker-container');
+            colorPickers.forEach((picker) => {
+                const pathIndex = picker.getAttribute('data-path-index');
+                const colors = Array.from(picker.querySelectorAll('input[type="color"]')).map(input => input.value);
+                const opacity = parseFloat(picker.querySelector('input[type="range"]').value);
+                state.colors[pathIndex] = colors;
+                state.opacities[pathIndex] = opacity;
+            });
+            generateWave();
+        }
+
+        function copySvg() {
+            const svgContent = document.getElementById('waveSvg').outerHTML;
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const dummy = document.createElement('textarea');
+            document.body.appendChild(dummy);
+            dummy.value = svgContent;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+        }
+
+        function saveSvg() {
+            const svgContent = document.getElementById('waveSvg').outerHTML;
+            const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'wave.svg';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        waveTypeSelect.addEventListener('change', () => {
+            state.waveType = waveTypeSelect.value;
+            generateWave();
+        });
+
+        waveHeightRange.addEventListener('input', () => {
+            state.waveHeight = waveHeightRange.value;
+            generateWave();
+        });
+
+        waveCountRange.addEventListener('input', () => {
+            state.waveCount = waveCountRange.value;
+            generateWave();
+        });
+
+        wavePositionSelect.addEventListener('change', () => {
+            state.wavePosition = wavePositionSelect.value;
+            generateWave();
+        });
+
+        wavePathsRange.addEventListener('input', () => {
+            state.wavePaths = wavePathsRange.value;
+            initColorPickers();
+            generateWave();
+        });
+
+        colorPickersContainer.addEventListener('input', updateWaveColors);
+
+        // Initial setup
+        initColorPickers();
+        generateWave();
+    </script>
+</body>
+
+</html>

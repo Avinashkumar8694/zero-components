@@ -290,7 +290,7 @@ export class AttributeWindow extends LitElement {
     prepareAttributeWindow(componentName: string) {
         const attributewindow = this.shadowRoot?.getElementById('attributewindow-list');
         const componentConfig = {
-            inputs: this.AttributeWindowAttributes.reduce((acc: Record<string, RendererAttributeConfiguration>, { fieldMappings, ...rest }) => {
+            inputs: this.AttributeWindowAttributes.reduce((acc: Record<string, RendererAttributeConfiguration | any>, { fieldMappings, ...rest }) => {
                 acc[fieldMappings] = { ...rest };
                 return acc;
             }, {}),
@@ -312,7 +312,7 @@ export class AttributeWindow extends LitElement {
         }
     }
 
-    createInputElement(key: string, config: RendererAttributeConfiguration, customElement: HTMLElement) {
+    createInputElement(key: string, config: RendererAttributeConfiguration | any, customElement: HTMLElement) {
         const inputElement = document.createElement('div');
 
         const label = document.createElement('label');

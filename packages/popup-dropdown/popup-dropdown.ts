@@ -130,7 +130,9 @@ export class PopupDropdown extends LitElement {
             display: block;
             opacity: 1;
             transform: translateY(0);
-            max-height: 10rem;
+        }
+        .dropdown-options-list{
+            max-height: 10rem; 
             overflow-y: auto;
         }
         
@@ -183,10 +185,15 @@ export class PopupDropdown extends LitElement {
         this.requestUpdate(); // Request update to re-render based on state change
     }
 
-    private selectOption(option: DropdownOptionItem) {
+    @RendererAttribute({
+        attributeType: AttributeType.EVENT,
+        displayLabel: 'On Change',
+        eventTrigger: 'change',
+    })
+    selectOption(option) {
         this.selectedOption = option.value;
         this._isOpen = false;
-        this.dispatchEvent(new CustomEvent('option-selected', { detail: option }));
+        this.dispatchEvent(new CustomEvent('change', { detail: option }));
     }
 
     render() {
@@ -202,11 +209,13 @@ export class PopupDropdown extends LitElement {
                 <div class="dropdown-options ${this._isOpen ? 'open' : ''}">
                     <span class="message-arrow"></span>
                     <span class="message-arrow-outline"></span>
-                    ${this.options.map(option => html`
-                        <div class="option ${this.selectedOption === option.value ? 'selected' : ''}" @click=${() => this.selectOption(option)}>
-                            ${option.label}
-                        </div>
-                    `)}
+                    <div class="dropdown-options-list">
+                        ${this.options.map(option => html`
+                            <div class="option ${this.selectedOption === option.value ? 'selected' : ''}" @click=${() => this.selectOption(option)}>
+                                ${option.label}
+                            </div>
+                        `)}
+                    </div>
                 </div>
             </div>
         `;

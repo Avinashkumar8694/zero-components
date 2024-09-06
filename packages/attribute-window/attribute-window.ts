@@ -467,6 +467,16 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(datePicker);
                 break;
+            case UserInterfaceType.POPUP_DROPDOWN:
+                const popup_dropdown = document.createElement('zero-popup-dropdown-1.0.0');
+                popup_dropdown.id = key;
+                popup_dropdown['selectedOption'] = config.initialValue;
+                popup_dropdown['OptionConfig'] = config.optionItems as DropdownOptionItem[];
+                popup_dropdown.addEventListener('change', (e) => {
+                    customElement[key] = (e.target as HTMLSelectElement).value;
+                });
+                inputElement.appendChild(popup_dropdown);
+                break;
     
             // Add cases for other UserInterfaceTypes as needed
     

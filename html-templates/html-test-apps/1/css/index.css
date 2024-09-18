@@ -1,0 +1,47 @@
+:root{
+    --background-color: white;
+    --border-color: #e6e0e0;
+    --globab-font-family: "Protest Guerrilla", sans-serif;
+    --primary-btn-white: white;
+    --primary-background-color: rgb(99, 99, 241);
+}
+body{
+    margin: 0px;
+    padding: 1rem;
+}
+* {
+    font-family: var(--globab-font-family);
+}
+
+.call-to-action-main-container{
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+p{
+    margin: 0px;
+}
+
+.display-flex{
+    display: flex;
+}
+
+.call-to-action-main-content{
+    text-align: center;
+    font-size: .8rem;
+}
+
+.call-to-action-view-more-button{
+    margin-top: 1rem;
+    padding: .5rem 1rem;
+    color: var(--primary-btn-white);
+    border: none;
+    background-color: var(--primary-background-color);
+    border-radius: 1rem;
+}

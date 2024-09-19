@@ -232,6 +232,9 @@ const extractComponentsConfig = (): Record<string, any> => {
     const components = {} as Record<string, any>;
 
     for (const _class of Object.values(componentsLib)) {
+        if(!_class.prototype){
+            continue;
+        }
         const inputsMetadata = Reflect.getMetadata('ZeroAttribute', _class.prototype) || [];
         const componentMetadata = Reflect.getMetadata('ZeroComponent', _class.prototype);
         const selector = `${componentMetadata.selector}-${componentMetadata.version}`;

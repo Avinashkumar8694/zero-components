@@ -1,0 +1,8 @@
+@media screen and (min-width: 769px) {
+    .call-to-action-main-container{
+        padding-left: 20%;
+        padding-right: 20%;
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+}

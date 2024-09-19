@@ -290,7 +290,7 @@ export class AttributeWindow extends LitElement {
     prepareAttributeWindow(componentName: string) {
         const attributewindow = this.shadowRoot?.getElementById('attributewindow-list');
         const componentConfig = {
-            inputs: this.AttributeWindowAttributes.reduce((acc: Record<string, RendererAttributeConfiguration>, { fieldMappings, ...rest }) => {
+            inputs: this.AttributeWindowAttributes.reduce((acc: Record<string, RendererAttributeConfiguration | any>, { fieldMappings, ...rest }) => {
                 acc[fieldMappings] = { ...rest };
                 return acc;
             }, {}),
@@ -312,7 +312,7 @@ export class AttributeWindow extends LitElement {
         }
     }
 
-    createInputElement(key: string, config: RendererAttributeConfiguration, customElement: HTMLElement) {
+    createInputElement(key: string, config: RendererAttributeConfiguration | any, customElement: HTMLElement) {
         const inputElement = document.createElement('div');
 
         const label = document.createElement('label');
@@ -466,6 +466,16 @@ export class AttributeWindow extends LitElement {
                     customElement[key] = (e.target as HTMLInputElement).value;
                 });
                 inputElement.appendChild(datePicker);
+                break;
+            case UserInterfaceType.POPUP_DROPDOWN:
+                const popup_dropdown = document.createElement('zero-popup-dropdown-1.0.0');
+                popup_dropdown.id = key;
+                popup_dropdown['selectedOption'] = config.initialValue;
+                popup_dropdown['OptionConfig'] = config.optionItems as DropdownOptionItem[];
+                popup_dropdown.addEventListener('change', (e) => {
+                    customElement[key] = (e.target as HTMLSelectElement).value;
+                });
+                inputElement.appendChild(popup_dropdown);
                 break;
     
             // Add cases for other UserInterfaceTypes as needed

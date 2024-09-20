@@ -48,6 +48,7 @@ export class PopupDropdownDirective extends LitElement {
 
       display: inline-block;
       position: relative;
+      cursor: pointer;
     }
 
     .dropdown-menu {
@@ -210,7 +211,7 @@ export class PopupDropdownDirective extends LitElement {
         this.dispatchEvent(
             new CustomEvent('option-selected', {
                 detail: { json_data },
-                bubbles: false,
+                bubbles: true,
                 composed: true,
             })
         );

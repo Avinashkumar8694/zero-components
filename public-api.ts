@@ -3,4 +3,4 @@ export * from './packages/nrenderer/nrenderer';
 export * from './packages/rich-text-editor/rich-text-editor';
 export * from './packages/popup-dropdown/popup-dropdown';
 export * from './packages/popup-dialog/popup-dialog';
-export * from './packages/OpenPopupDirective/open-popup-directive';
+export * from './packages/open-popup-directive/open-popup-directive';

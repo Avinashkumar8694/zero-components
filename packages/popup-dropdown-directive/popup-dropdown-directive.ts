@@ -204,17 +204,18 @@ export class PopupDropdownDirective extends LitElement {
 
     // Handle option click
     handleOptionClick(e) {
-        const value = e.target.getAttribute('data-value');
-        this.selectedValue = value; // Update the selected value
+        const data = e.target.getAttribute('data-value');
+        const json_data = JSON.parse(data)
+        this.selectedValue = json_data.value; // Update the selected value
         this.dispatchEvent(
             new CustomEvent('option-selected', {
-                detail: { value },
+                detail: { json_data },
                 bubbles: false,
                 composed: true,
             })
         );
-        this.open = false; // Close after selection
-        this.toggleDropdown();
+        // this.open = false; // Close after selection
+        // this.toggleDropdown();
         
     }
 
@@ -232,7 +233,7 @@ export class PopupDropdownDirective extends LitElement {
                   ${this.options.map(
                     (opt) => html`
                       <li 
-                        data-value="${opt.value}" 
+                        data-value="${JSON.stringify(opt)}" 
                         @click="${this.handleOptionClick}" 
                         class="${this.selectedValue === opt.value ? 'selected' : ''}" 
                       >

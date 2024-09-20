@@ -25,6 +25,7 @@ export class PopupDropdownDirective extends LitElement {
         open: { type: Boolean },
         isValid: { type: Boolean },
         errorMessage: { type: String },
+        selectedValue: { type: String }, // New property for the selected value
     };
 
     static styles = css`
@@ -36,9 +37,10 @@ export class PopupDropdownDirective extends LitElement {
       --dropdown-padding: 10px;
       --dropdown-width: 200px;
       --dropdown-item-hover-bg: #f0f0f0;
+      --selected-item-bg: #e0e0e0; /* Background color for selected item */
       --notch-border-color: var(--dropdown-bg-color);
       --notch-left-offset: 20px;
-      --notch-left-offset-before: -20px;
+      --notch-left-offset-before: -10px;
       --dropdown-item-padding: 10px;
       --dropdown-z-index: 1000;
       --error-bg-color: #ffdddd;
@@ -82,8 +84,8 @@ export class PopupDropdownDirective extends LitElement {
         height: 0;
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
-        border-bottom: 10px solid var(--dropdown-border-color); /* Keep this for the border */
-        background-color: transparent; /* Ensure the background is transparent */
+        border-bottom: 10px solid var(--dropdown-border-color);
+        background-color: transparent;
         &::after{
             position: absolute;
             top: 2px; /* Adjust this value as needed */
@@ -92,7 +94,7 @@ export class PopupDropdownDirective extends LitElement {
             border-bottom: 10px solid var(--dropdown-bg-color); /* Keep this for the border */
             background-color: transparent; /* Ensure the background is transparent */
             content: '';
-            left: -10px;
+            left: var(--notch-left-offset-before);
         }
     }
 
@@ -112,6 +114,10 @@ export class PopupDropdownDirective extends LitElement {
       background-color: var(--dropdown-item-hover-bg);
     }
 
+    .dropdown-menu li.selected {
+      background-color: var(--selected-item-bg); /* Highlight selected item */
+    }
+
     .error-message {
       color: var(--error-border-color);
       font-size: 0.9em;
@@ -125,9 +131,10 @@ export class PopupDropdownDirective extends LitElement {
     set config(data) {
         this.options = data;
     }
-    @property({ type: Boolean }) open = false;
+    @property({ type: Boolean,reflect: true }) open = false;
     @property({ type: Boolean }) isValid = true;
     @property({ type: String }) errorMessage = '';
+    @property({ type: String }) selectedValue = ''; // Initialize selected value
 
     constructor() {
         super();
@@ -136,6 +143,7 @@ export class PopupDropdownDirective extends LitElement {
         this.open = false;
         this.isValid = true;
         this.errorMessage = '';
+        this.selectedValue = ''; // Default selected value
     }
 
     // Validate inputs
@@ -146,7 +154,6 @@ export class PopupDropdownDirective extends LitElement {
             return;
         }
 
-        // Check each option to ensure it has 'label' and 'value' as non-empty strings
         for (const opt of this.options) {
             if (
                 typeof opt !== 'object' ||
@@ -172,7 +179,11 @@ export class PopupDropdownDirective extends LitElement {
     toggleDropdown() {
         if (!this.isValid) return; // Prevent dropdown if invalid
         this.open = !this.open;
-        this.adjustPosition();
+        if (this.open) {
+
+            this.requestUpdate();
+            this.adjustPosition();
+        }
     }
 
     // Adjust position of the dropdown
@@ -187,28 +198,31 @@ export class PopupDropdownDirective extends LitElement {
 
             dropdown.style.top = fitsBelow ? `${rect.height + 10}px` : 'auto';
             dropdown.style.bottom = fitsBelow ? 'auto' : `${rect.height + 15}px`;
-            dropdown.style.left = fitsRight ? '0px' : `-${dropdownRect.width - rect.width}px`;
-        }, 0)
+            dropdown.style.left = fitsRight ? `0px` : `-${dropdownRect.width - rect.width}px`;
+        }, 0);
     }
 
     // Handle option click
     handleOptionClick(e) {
         const value = e.target.getAttribute('data-value');
+        this.selectedValue = value; // Update the selected value
         this.dispatchEvent(
             new CustomEvent('option-selected', {
                 detail: { value },
-                bubbles: true,
+                bubbles: false,
                 composed: true,
             })
         );
         this.open = false; // Close after selection
+        this.toggleDropdown();
+        
     }
 
     // Render the template
     render() {
         return html`
-    sdsdsd
-      <div @click="${this.toggleDropdown}">
+        
+      <div>
         <slot></slot>
         ${this.open
                 ? html`
@@ -217,7 +231,11 @@ export class PopupDropdownDirective extends LitElement {
                 <ul>
                   ${this.options.map(
                     (opt) => html`
-                      <li data-value="${opt.value}" @click="${this.handleOptionClick}">
+                      <li 
+                        data-value="${opt.value}" 
+                        @click="${this.handleOptionClick}" 
+                        class="${this.selectedValue === opt.value ? 'selected' : ''}" 
+                      >
                         ${opt.label}
                       </li>
                     `
@@ -251,6 +269,7 @@ export class PopupDropdownDirective extends LitElement {
             const config = JSON.parse(configAttr);
             this.enabled = config.enabled;
             this.options = config.options;
+            this.selectedValue = config.selectedValue || ''; // Set initial selected value from config
         }
 
         // Validate inputs from attributes
@@ -268,6 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const dropdown = document.createElement('zero-popup-dropdown-directive-1.0.0');
         dropdown['enabled'] = config.enabled;
         dropdown['options'] = config.options;
+        dropdown['selectedValue'] = config.selectedValue || ''; // Initialize selected value
         element.appendChild(dropdown);
 
         // Move the element's content into the <slot> of the dropdown

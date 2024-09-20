@@ -35,6 +35,7 @@ export class Nrenderer extends LitElement {
             <!-- Render form fields here -->
 
             <zero-popup-dropdown-directive-1.0.0 id="dropdown" enabled='true' config='[{"label": "Option 1", "value": "1"}, {"label": "Option 2", "value": "2"}]'>
+                ttt
             </zero-popup-dropdown-directive-1.0.0>
         `;
     }

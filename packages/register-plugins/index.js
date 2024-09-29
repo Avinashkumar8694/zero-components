@@ -23,6 +23,7 @@ class RegisterPluginClass {
 
         // Store the value under window.zero.modules[key]
         this.modules[key] = value;
+        this.modules[key]?.onInit();
         console.log(`Plugin registered and available as zero.modules['${key}']`);
     }
 

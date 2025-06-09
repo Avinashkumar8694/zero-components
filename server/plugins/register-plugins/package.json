@@ -1,0 +1,16 @@
+{
+  "name": "register-plugins",
+  "version": "1.0.0",
+  "description": "",
+  "main": "register-plugins.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "zero": {
+    "component": true
+  }
+}

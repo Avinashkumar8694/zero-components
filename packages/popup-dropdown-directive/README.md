@@ -15,8 +15,8 @@ A directive-based dropdown component that can be applied to any HTML element to 
 
 ## Installation
 
-```bash
-npm install popup-dropdown-directive
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/popup-dropdown-directive/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

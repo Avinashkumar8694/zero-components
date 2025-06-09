@@ -15,8 +15,8 @@ A dynamic form generator component that creates interactive attribute panels bas
 
 ## Installation
 
-```bash
-npm install attribute-window
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/attribute-window/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

@@ -16,8 +16,8 @@ A configurable range slider component with dual handles and tooltips built with 
 
 ## Installation
 
-```bash
-npm install @zero-components/zero-range-slider
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-range-slider/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

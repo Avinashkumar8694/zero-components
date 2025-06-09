@@ -15,8 +15,8 @@ A configurable password input component with show/hide functionality, strength m
 
 ## Installation
 
-```bash
-npm install zero-password-input
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-password-input/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

@@ -16,8 +16,8 @@ A comprehensive file upload component with drag-and-drop support, file previews,
 
 ## Installation
 
-```bash
-npm install @zero-components/zero-file-input
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-file-input/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

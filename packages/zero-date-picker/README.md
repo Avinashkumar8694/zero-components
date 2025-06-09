@@ -17,8 +17,8 @@ A comprehensive date picker component with calendar interface, range selection, 
 
 ## Installation
 
-```bash
-npm install @zero-components/zero-date-picker
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-date-picker/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

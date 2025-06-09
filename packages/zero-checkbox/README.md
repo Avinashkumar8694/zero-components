@@ -15,8 +15,8 @@ A configurable checkbox component with multiple styling options, indeterminate s
 
 ## Installation
 
-```bash
-npm install zero-checkbox
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-checkbox/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

@@ -17,8 +17,8 @@ A feature-rich code editor component inspired by Monaco Editor and VS Code. Prov
 
 ## Installation
 
-```bash
-npm install code-editor
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/code-editor/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

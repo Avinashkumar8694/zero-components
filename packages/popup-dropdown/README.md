@@ -15,8 +15,8 @@ A stylish dropdown component with popup-style appearance and smooth animations. 
 
 ## Installation
 
-```bash
-npm install popup-dropdown
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/popup-dropdown/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

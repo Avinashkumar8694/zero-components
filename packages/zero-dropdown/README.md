@@ -16,8 +16,8 @@ A configurable dropdown/select component with search functionality, multiple sel
 
 ## Installation
 
-```bash
-npm install zero-dropdown
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-dropdown/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

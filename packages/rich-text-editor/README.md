@@ -17,8 +17,8 @@ A powerful and feature-rich WYSIWYG (What You See Is What You Get) text editor c
 
 ## Installation
 
-```bash
-npm install @zero-components/rich-text-editor
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/rich-text-editor/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

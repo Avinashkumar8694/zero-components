@@ -15,8 +15,8 @@ A configurable textarea component with auto-resize, character/word counting, and
 
 ## Installation
 
-```bash
-npm install zero-textarea
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-textarea/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

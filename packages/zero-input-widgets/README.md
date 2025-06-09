@@ -14,8 +14,8 @@ A comprehensive form demo component that showcases all available input widget ty
 
 ## Installation
 
-```bash
-npm install zero-input-widgets
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-input-widgets/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

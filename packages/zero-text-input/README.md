@@ -13,8 +13,8 @@ A configurable text input component with global styling and comprehensive form v
 
 ## Installation
 
-```bash
-npm install zero-text-input
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-text-input/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

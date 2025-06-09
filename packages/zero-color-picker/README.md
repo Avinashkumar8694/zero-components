@@ -17,8 +17,8 @@ A comprehensive color picker component with visual color selection, preset color
 
 ## Installation
 
-```bash
-npm install @zero-components/zero-color-picker
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-color-picker/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

@@ -16,8 +16,8 @@ A configurable number input component with step controls, range validation, and 
 
 ## Installation
 
-```bash
-npm install zero-number-input
+```html
+<script src="https://plugins.zero.org.in/marketplace/components/zero-number-input/1.0.0/js" type="module"></script>
 ```
 
 ## Basic Usage

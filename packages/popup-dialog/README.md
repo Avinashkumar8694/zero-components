@@ -24,15 +24,15 @@ A flexible and customizable popup dialog component built with Lit Element. This 
 ### HTML
 ```html
 <!-- Basic Dialog -->
-<zero-popup-dialog id="myDialog">
+<zero-popup-dialog-1.0.0 id="myDialog">
     <div slot="content">
         <h2>Dialog Title</h2>
         <p>Dialog content goes here...</p>
     </div>
-</zero-popup-dialog>
+</zero-popup-dialog-1.0.0>
 
 <!-- Dialog with Custom Web Component -->
-<zero-popup-dialog 
+<zero-popup-dialog-1.0.0 
     id="componentDialog"
     .config="${{
         webComponentSelector: 'my-custom-component',
@@ -41,7 +41,7 @@ A flexible and customizable popup dialog component built with Lit Element. This 
         },
         position: 'center'
     }}">
-</zero-popup-dialog>
+</zero-popup-dialog-1.0.0>
 ```
 
 ### JavaScript

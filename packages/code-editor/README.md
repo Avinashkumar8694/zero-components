@@ -26,13 +26,13 @@ A feature-rich code editor component inspired by Monaco Editor and VS Code. Prov
 ### HTML (Simple Setup)
 
 ```html
-<zero-code-editor
+<zero-code-editor-1.0.0
     language="javascript"
     theme="dark"
     show-line-numbers="true"
     show-minimap="true"
     word-wrap="false">
-</zero-code-editor>
+</zero-code-editor-1.0.0>
 ```
 
 ### JavaScript (Advanced Configuration)
@@ -203,7 +203,7 @@ editor.toggleSearch();
 ```html
 <div class="multi-file-editor">
     <div class="file-tabs" id="fileTabs"></div>
-    <zero-code-editor id="codeEditor"></zero-code-editor>
+    <zero-code-editor-1.0.0 id="codeEditor"></zero-code-editor-1.0.0>
     <div class="file-controls">
         <button id="addFileBtn">Add File</button>
         <button id="saveBtn">Save</button>

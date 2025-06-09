@@ -44,7 +44,7 @@ A directive-based dropdown component that can be applied to any HTML element to 
 
 ```javascript
 // Create and configure the directive component
-const dropdownDirective = document.createElement('zero-popup-dropdown-directive');
+const dropdownDirective = document.createElement('zero-popup-dropdown-directive-1.0.0');
 
 // Configure dropdown options
 dropdownDirective.enabled = true;
@@ -157,7 +157,7 @@ element.addEventListener('option-selected', (event) => {
 Toggles the dropdown open/closed state and adjusts positioning.
 
 ```javascript
-const directive = document.querySelector('zero-popup-dropdown-directive');
+const directive = document.querySelector('zero-popup-dropdown-directive-1.0.0');
 directive.toggleDropdown();
 ```
 
@@ -166,7 +166,7 @@ directive.toggleDropdown();
 Validates the options array format and sets error states.
 
 ```javascript
-const directive = document.querySelector('zero-popup-dropdown-directive');
+const directive = document.querySelector('zero-popup-dropdown-directive-1.0.0');
 directive.options = [/* invalid options */];
 directive.validateInputs();
 console.log(directive.isValid, directive.errorMessage);
@@ -177,7 +177,7 @@ console.log(directive.isValid, directive.errorMessage);
 Automatically adjusts dropdown position based on viewport space.
 
 ```javascript
-const directive = document.querySelector('zero-popup-dropdown-directive');
+const directive = document.querySelector('zero-popup-dropdown-directive-1.0.0');
 directive.adjustPosition();
 ```
 
@@ -262,9 +262,8 @@ class DynamicDropdownDirective {
         this.directive = this.createDirective(initialOptions);
         this.setupEventHandlers();
     }
-    
-    createDirective(options) {
-        const directive = document.createElement('zero-popup-dropdown-directive');
+      createDirective(options) {
+        const directive = document.createElement('zero-popup-dropdown-directive-1.0.0');
         directive.enabled = true;
         directive.config = options;
         

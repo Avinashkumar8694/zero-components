@@ -24,7 +24,7 @@ A configurable textarea component with auto-resize, character/word counting, and
 ### HTML with Hardcoded Values
 
 ```html
-<zero-textarea 
+<zero-textarea-1.0.0 
     value="Sample long text content..."
     label="Description"
     placeholder="Enter your description here"
@@ -32,14 +32,14 @@ A configurable textarea component with auto-resize, character/word counting, and
     max-length="500"
     show-character-count="true"
     show-word-count="true">
-</zero-textarea>
+</zero-textarea-1.0.0>
 ```
 
 ### JavaScript/TypeScript Dynamic Configuration
 
 ```javascript
 // Get reference to the component
-const textarea = document.querySelector('zero-textarea');
+const textarea = document.querySelector('zero-textarea-1.0.0');
 
 // Configure properties dynamically
 textarea.value = 'Dynamic content here...';
@@ -123,17 +123,17 @@ The component uses the following CSS variables from the global theme:
 ### Auto-resizing Textarea with Limits
 
 ```html
-<zero-textarea 
+<zero-textarea-1.0.0 
     label="Comments"
     placeholder="Share your thoughts..."
     auto-resize="true"
     max-length="2000"
     show-character-count="true"
     show-word-count="true">
-</zero-textarea>
+</zero-textarea-1.0.0>
 
 <script>
-const textarea = document.querySelector('zero-textarea');
+const textarea = document.querySelector('zero-textarea-1.0.0');
 
 // Warn user when approaching character limit
 textarea.addEventListener('input', (event) => {
@@ -150,7 +150,7 @@ textarea.addEventListener('input', (event) => {
 ### Form Validation Example
 
 ```html
-<zero-textarea 
+<zero-textarea-1.0.0 
     id="description"
     label="Product Description"
     placeholder="Describe your product..."
@@ -160,7 +160,7 @@ textarea.addEventListener('input', (event) => {
     show-character-count="true"
     error-message="Description must be at least 50 characters"
     show-error="false">
-</zero-textarea>
+</zero-textarea-1.0.0>
 
 <script>
 const descTextarea = document.getElementById('description');
@@ -180,7 +180,7 @@ descTextarea.addEventListener('change', (event) => {
 
 ```html
 <div class="blog-editor">
-    <zero-textarea 
+    <zero-textarea-1.0.0 
         id="blogPost"
         label="Blog Post Content"
         placeholder="Start writing your blog post..."
@@ -189,7 +189,7 @@ descTextarea.addEventListener('change', (event) => {
         rows="10"
         show-character-count="true"
         show-word-count="true">
-    </zero-textarea>
+    </zero-textarea-1.0.0>
     
     <div class="editor-stats">
         <span id="readingTime">Reading time: 0 min</span>
@@ -225,14 +225,14 @@ blogTextarea.addEventListener('input', (event) => {
 ### Multi-language Support
 
 ```html
-<zero-textarea 
+<zero-textarea-1.0.0 
     id="multilangText"
     label="Content"
     placeholder="Enter content..."
     rows="8"
     max-length="1000"
     show-character-count="true">
-</zero-textarea>
+</zero-textarea-1.0.0>
 
 <select id="langSelector">
     <option value="en">English</option>

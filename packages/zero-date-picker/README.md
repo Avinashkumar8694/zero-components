@@ -26,38 +26,38 @@ A comprehensive date picker component with calendar interface, range selection, 
 ### HTML (Hardcoded Values)
 ```html
 <!-- Basic Date Picker -->
-<zero-date-picker 
+<zero-date-picker-1.0.0 
     label="Birth Date" 
     placeholder="Select your birth date"
     value="1990-05-15"
     date-format="yyyy-MM-dd"
     display-format="MMM d, yyyy">
-</zero-date-picker>
+</zero-date-picker-1.0.0>
 
 <!-- Date Range Picker -->
-<zero-date-picker 
+<zero-date-picker-1.0.0 
     label="Vacation Dates" 
     range-selection="true"
     placeholder="Select date range"
     show-today-button="true"
     show-clear-button="true">
-</zero-date-picker>
+</zero-date-picker-1.0.0>
 
 <!-- With Validation -->
-<zero-date-picker 
+<zero-date-picker-1.0.0 
     label="Event Date" 
     required="true"
     min-date="2024-01-01"
     max-date="2024-12-31"
     help-text="Select a date within 2024"
     show-week-numbers="true">
-</zero-date-picker>
+</zero-date-picker-1.0.0>
 ```
 
 ### JavaScript (Dynamic Configuration)
 ```javascript
 // Basic setup
-const datePicker = document.querySelector('zero-date-picker');
+const datePicker = document.querySelector('zero-date-picker-1.0.0');
 datePicker.label = 'Appointment Date';
 datePicker.placeholder = 'Choose appointment date';
 datePicker.required = true;
@@ -230,7 +230,7 @@ datePicker.clearError();
 
 ### Booking System Date Range
 ```javascript
-const bookingPicker = document.createElement('zero-date-picker');
+const bookingPicker = document.createElement('zero-date-picker-1.0.0');
 bookingPicker.label = 'Booking Period';
 bookingPicker.rangeSelection = true;
 bookingPicker.minDate = new Date().toISOString().split('T')[0]; // Today onwards
@@ -247,7 +247,7 @@ bookingPicker.addEventListener('change', (event) => {
 
 ### Meeting Scheduler
 ```javascript
-const meetingPicker = document.createElement('zero-date-picker');
+const meetingPicker = document.createElement('zero-date-picker-1.0.0');
 meetingPicker.label = 'Meeting Date';
 meetingPicker.firstDayOfWeek = 1; // Monday first
 meetingPicker.dateFormat = 'yyyy-MM-dd';
@@ -272,7 +272,7 @@ meetingPicker.addEventListener('change', (event) => {
 
 ### Multi-Format Date Display
 ```javascript
-const formatPicker = document.createElement('zero-date-picker');
+const formatPicker = document.createElement('zero-date-picker-1.0.0');
 formatPicker.label = 'Event Date';
 
 // Dynamic format switching
@@ -293,7 +293,7 @@ formatSelect.addEventListener('change', (event) => {
 
 ### Form Validation Integration
 ```javascript
-const birthDatePicker = document.createElement('zero-date-picker');
+const birthDatePicker = document.createElement('zero-date-picker-1.0.0');
 birthDatePicker.label = 'Date of Birth';
 birthDatePicker.required = true;
 birthDatePicker.maxDate = new Date().toISOString().split('T')[0]; // No future dates

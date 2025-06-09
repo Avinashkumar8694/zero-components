@@ -25,7 +25,7 @@ A configurable number input component with step controls, range validation, and 
 ### HTML with Hardcoded Values
 
 ```html
-<zero-number-input 
+<zero-number-input-1.0.0 
     value="25"
     label="Age"
     placeholder="Enter your age"
@@ -34,14 +34,14 @@ A configurable number input component with step controls, range validation, and 
     step="1"
     show-step-controls="true"
     unit-label="years">
-</zero-number-input>
+</zero-number-input-1.0.0>
 ```
 
 ### JavaScript/TypeScript Dynamic Configuration
 
 ```javascript
 // Get reference to the component
-const numberInput = document.querySelector('zero-number-input');
+const numberInput = document.querySelector('zero-number-input-1.0.0');
 
 // Configure properties dynamically
 numberInput.value = 50;
@@ -129,7 +129,7 @@ The component uses the following CSS variables from the global theme:
 ### Price Input with Currency
 
 ```html
-<zero-number-input 
+<zero-number-input-1.0.0 
     id="price"
     label="Product Price"
     placeholder="0.00"
@@ -138,7 +138,7 @@ The component uses the following CSS variables from the global theme:
     step="0.01"
     unit-label="USD"
     show-step-controls="true">
-</zero-number-input>
+</zero-number-input-1.0.0>
 
 <script>
 const priceInput = document.getElementById('price');
@@ -160,7 +160,7 @@ priceInput.addEventListener('change', (event) => {
 
 ```html
 <div class="temperature-converter">
-    <zero-number-input 
+    <zero-number-input-1.0.0 
         id="celsius"
         label="Celsius"
         value="0"
@@ -168,9 +168,9 @@ priceInput.addEventListener('change', (event) => {
         max="1000"
         step="0.1"
         unit-label="°C">
-    </zero-number-input>
+    </zero-number-input-1.0.0>
     
-    <zero-number-input 
+    <zero-number-input-1.0.0 
         id="fahrenheit"
         label="Fahrenheit"
         value="32"
@@ -178,7 +178,7 @@ priceInput.addEventListener('change', (event) => {
         max="1832"
         step="0.1"
         unit-label="°F">
-    </zero-number-input>
+    </zero-number-input-1.0.0>
 </div>
 
 <script>
@@ -202,7 +202,7 @@ fahrenheitInput.addEventListener('input', (event) => {
 ### Quantity Selector with Stock Validation
 
 ```html
-<zero-number-input 
+<zero-number-input-1.0.0 
     id="quantity"
     label="Quantity"
     value="1"
@@ -213,7 +213,7 @@ fahrenheitInput.addEventListener('input', (event) => {
     show-step-controls="true"
     error-message="Insufficient stock available"
     show-error="false">
-</zero-number-input>
+</zero-number-input-1.0.0>
 
 <div id="stockInfo">Stock available: 50 items</div>
 
@@ -242,7 +242,7 @@ quantityInput.addEventListener('change', (event) => {
 
 ```html
 <div class="percentage-input">
-    <zero-number-input 
+    <zero-number-input-1.0.0 
         id="percentage"
         label="Completion Percentage"
         value="0"
@@ -251,7 +251,7 @@ quantityInput.addEventListener('change', (event) => {
         step="5"
         unit-label="%"
         show-step-controls="true">
-    </zero-number-input>
+    </zero-number-input-1.0.0>
     
     <div class="progress-bar">
         <div class="progress-fill" id="progressFill"></div>
@@ -296,7 +296,7 @@ percentageInput.addEventListener('input', (event) => {
 ### Range Validator with Dynamic Limits
 
 ```html
-<zero-number-input 
+<zero-number-input-1.0.0 
     id="dynamicRange"
     label="Value"
     value="50"
@@ -304,7 +304,7 @@ percentageInput.addEventListener('input', (event) => {
     max="100"
     step="1"
     show-step-controls="true">
-</zero-number-input>
+</zero-number-input-1.0.0>
 
 <div class="range-controls">
     <label>

@@ -25,16 +25,16 @@ A configurable range slider component with dual handles and tooltips built with 
 ### HTML (Hardcoded Values)
 ```html
 <!-- Basic Range Slider -->
-<zero-range-slider 
+<zero-range-slider-1.0.0 
     label="Volume" 
     value="75" 
     min="0" 
     max="100" 
     step="5">
-</zero-range-slider>
+</zero-range-slider-1.0.0>
 
 <!-- Dual Range Slider -->
-<zero-range-slider 
+<zero-range-slider-1.0.0 
     label="Price Range" 
     dual-range="true"
     value="200" 
@@ -43,25 +43,25 @@ A configurable range slider component with dual handles and tooltips built with 
     max="1000" 
     unit="$"
     show-value-inputs="true">
-</zero-range-slider>
+</zero-range-slider-1.0.0>
 
 <!-- With Tooltips and Step Controls -->
-<zero-range-slider 
+<zero-range-slider-1.0.0 
     label="Font Size" 
-    value="16" 
+    value="16"
     min="8" 
     max="72" 
     step="2"
     unit="px"
     show-tooltip="true"
     show-step-controls="true">
-</zero-range-slider>
+</zero-range-slider-1.0.0>
 ```
 
 ### JavaScript (Dynamic Configuration)
 ```javascript
 // Basic setup
-const slider = document.querySelector('zero-range-slider');
+const slider = document.querySelector('zero-range-slider-1.0.0');
 slider.label = 'Brightness';
 slider.value = 80;
 slider.min = 0;
@@ -154,7 +154,7 @@ slider.addEventListener('change', (event) => {
 
 ### Price Range Filter
 ```javascript
-const priceSlider = document.createElement('zero-range-slider');
+const priceSlider = document.createElement('zero-range-slider-1.0.0');
 priceSlider.label = 'Price Range';
 priceSlider.dualRange = true;
 priceSlider.min = 0;
@@ -173,7 +173,7 @@ priceSlider.addEventListener('change', (event) => {
 
 ### Audio Volume Control
 ```javascript
-const volumeSlider = document.createElement('zero-range-slider');
+const volumeSlider = document.createElement('zero-range-slider-1.0.0');
 volumeSlider.label = 'Volume';
 volumeSlider.min = 0;
 volumeSlider.max = 100;
@@ -191,7 +191,7 @@ volumeSlider.addEventListener('change', (event) => {
 
 ### Form Validation with Range
 ```javascript
-const ageRangeSlider = document.createElement('zero-range-slider');
+const ageRangeSlider = document.createElement('zero-range-slider-1.0.0');
 ageRangeSlider.label = 'Age Range';
 ageRangeSlider.dualRange = true;
 ageRangeSlider.min = 18;
@@ -219,7 +219,7 @@ ageRangeSlider.addEventListener('change', validateAgeRange);
 
 ### Dynamic Range Updates
 ```javascript
-const dynamicSlider = document.createElement('zero-range-slider');
+const dynamicSlider = document.createElement('zero-range-slider-1.0.0');
 dynamicSlider.label = 'Dynamic Range';
 
 // Update range based on external data

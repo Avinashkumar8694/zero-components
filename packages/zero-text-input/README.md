@@ -22,19 +22,19 @@ A configurable text input component with global styling and comprehensive form v
 ### HTML with Hardcoded Values
 
 ```html
-<zero-text-input 
+<zero-text-input-1.0.0 
     value="Sample text"
     label="Full Name"
     placeholder="Enter your full name"
     required="true">
-</zero-text-input>
+</zero-text-input-1.0.0>
 ```
 
 ### JavaScript/TypeScript Dynamic Configuration
 
 ```javascript
 // Get reference to the component
-const textInput = document.querySelector('zero-text-input');
+const textInput = document.querySelector('zero-text-input-1.0.0');
 
 // Configure properties dynamically
 textInput.value = 'Dynamic value';
@@ -110,7 +110,7 @@ The component uses the following CSS variables from the global theme:
 ### With Validation
 
 ```html
-<zero-text-input 
+<zero-text-input-1.0.0 
     value=""
     label="Email"
     placeholder="Enter your email"
@@ -118,10 +118,10 @@ The component uses the following CSS variables from the global theme:
     max-length="100"
     error-message="Please enter a valid email address"
     show-error="false">
-</zero-text-input>
+</zero-text-input-1.0.0>
 
 <script>
-const emailInput = document.querySelector('zero-text-input');
+const emailInput = document.querySelector('zero-text-input-1.0.0');
 
 emailInput.addEventListener('blur', (event) => {
     const email = event.detail.value;
@@ -137,21 +137,21 @@ emailInput.addEventListener('blur', (event) => {
 
 ```html
 <form id="user-form">
-    <zero-text-input 
+    <zero-text-input-1.0.0 
         id="firstName"
         label="First Name"
         placeholder="Enter first name"
         required="true"
         max-length="50">
-    </zero-text-input>
+    </zero-text-input-1.0.0>
     
-    <zero-text-input 
+    <zero-text-input-1.0.0 
         id="lastName"
         label="Last Name" 
         placeholder="Enter last name"
         required="true"
         max-length="50">
-    </zero-text-input>
+    </zero-text-input-1.0.0>
     
     <button type="submit">Submit</button>
 </form>
@@ -171,12 +171,12 @@ document.getElementById('user-form').addEventListener('submit', (e) => {
 ### Real-time Character Counter
 
 ```html
-<zero-text-input 
+<zero-text-input-1.0.0 
     id="bio"
     label="Bio"
     placeholder="Tell us about yourself"
     max-length="200">
-</zero-text-input>
+</zero-text-input-1.0.0>
 <div id="counter">0 / 200 characters</div>
 
 <script>

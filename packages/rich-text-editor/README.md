@@ -27,29 +27,29 @@ A powerful and feature-rich WYSIWYG (What You See Is What You Get) text editor c
 
 ```html
 <!-- Basic rich text editor -->
-<zero-rich-text-editor 
+<zero-rich-text-editor-1.0.0 
   htmldata="<p>Welcome to the rich text editor!</p>"
   editorMode="true">
-</zero-rich-text-editor>
+</zero-rich-text-editor-1.0.0>
 
 <!-- Editor with initial formatted content -->
-<zero-rich-text-editor 
+<zero-rich-text-editor-1.0.0 
   htmldata="<h2>Sample Document</h2><p>This is a <strong>bold</strong> and <em>italic</em> text example.</p>"
   editorMode="true">
-</zero-rich-text-editor>
+</zero-rich-text-editor-1.0.0>
 
 <!-- Read-only preview mode -->
-<zero-rich-text-editor 
+<zero-rich-text-editor-1.0.0 
   htmldata="<p>This content is in preview mode only.</p>"
   editorMode="false">
-</zero-rich-text-editor>
+</zero-rich-text-editor-1.0.0>
 ```
 
 ### JavaScript (Dynamic Configuration)
 
 ```javascript
 // Create and configure rich text editor
-const editor = document.createElement('zero-rich-text-editor');
+const editor = document.createElement('zero-rich-text-editor-1.0.0');
 editor.htmldata = '<h1>Welcome</h1><p>Start typing your content here...</p>';
 editor.editorMode = true;
 
@@ -73,7 +73,7 @@ function toggleMode() {
 }
 
 // Example: Advanced initialization with custom content
-const advancedEditor = document.createElement('zero-rich-text-editor');
+const advancedEditor = document.createElement('zero-rich-text-editor-1.0.0');
 advancedEditor.htmldata = `
   <div style="text-align: center;">
     <h1 style="color: #2c3e50;">Document Title</h1>
@@ -105,7 +105,7 @@ document.body.appendChild(advancedEditor);
 ### Event Usage Examples
 
 ```javascript
-const editor = document.querySelector('zero-rich-text-editor');
+const editor = document.querySelector('zero-rich-text-editor-1.0.0');
 
 // Listen for content changes
 editor.addEventListener('content-changed', (event) => {
@@ -173,7 +173,7 @@ The rich text editor component uses CSS custom properties that can be customized
 The rich text editor provides several methods for programmatic control:
 
 ```javascript
-const editor = document.querySelector('zero-rich-text-editor');
+const editor = document.querySelector('zero-rich-text-editor-1.0.0');
 
 // Content management methods (internal)
 editor.updateEditorContent(); // Updates editor with current htmldata
@@ -198,9 +198,8 @@ editor.toggleToolbar(); // Show/hide formatting toolbar
 ### Document Editor with Auto-Save
 
 ```javascript
-class DocumentEditor {
-  constructor() {
-    this.editor = document.createElement('zero-rich-text-editor');
+class DocumentEditor {  constructor() {
+    this.editor = document.createElement('zero-rich-text-editor-1.0.0');
     this.editor.editorMode = true;
     this.setupAutoSave();
     this.loadDocument();
@@ -256,9 +255,8 @@ document.body.appendChild(docEditor.editor);
 ### Rich Text Editor with Image Upload
 
 ```javascript
-class ImageUploadEditor {
-  constructor() {
-    this.editor = document.createElement('zero-rich-text-editor');
+class ImageUploadEditor {  constructor() {
+    this.editor = document.createElement('zero-rich-text-editor-1.0.0');
     this.editor.editorMode = true;
     this.setupImageHandling();
   }
@@ -327,7 +325,7 @@ document.body.appendChild(imageEditor.editor);
 ```javascript
 class ExportEditor {
   constructor() {
-    this.editor = document.createElement('zero-rich-text-editor');
+    this.editor = document.createElement('zero-rich-text-editor-1.0.0');
     this.editor.editorMode = true;
     this.createToolbar();
   }
@@ -516,7 +514,7 @@ The rich text editor component includes comprehensive accessibility features:
 
 ```javascript
 // Add ARIA labels for better accessibility
-const editor = document.querySelector('zero-rich-text-editor');
+const editor = document.querySelector('zero-rich-text-editor-1.0.0');
 editor.setAttribute('aria-label', 'Rich text editor');
 editor.setAttribute('role', 'textbox');
 editor.setAttribute('aria-multiline', 'true');

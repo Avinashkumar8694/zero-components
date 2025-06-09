@@ -26,33 +26,33 @@ A comprehensive color picker component with visual color selection, preset color
 ### HTML (Hardcoded Values)
 ```html
 <!-- Basic Color Picker -->
-<zero-color-picker 
+<zero-color-picker-1.0.0 
     label="Theme Color" 
     value="#6c63ff"
     placeholder="Select a color">
-</zero-color-picker>
+</zero-color-picker-1.0.0>
 
 <!-- With Alpha Channel -->
-<zero-color-picker 
+<zero-color-picker-1.0.0 
     label="Background Color" 
     value="#ff6b6b"
     show-alpha="true"
     format="rgba">
-</zero-color-picker>
+</zero-color-picker-1.0.0>
 
 <!-- Custom Presets -->
-<zero-color-picker 
+<zero-color-picker-1.0.0 
     label="Brand Colors" 
     preset-colors="#ff6b6b,#4ecdc4,#45b7d1,#96ceb4,#ffeaa7,#dda0dd"
     show-presets="true"
     show-input-fields="true">
-</zero-color-picker>
+</zero-color-picker-1.0.0>
 ```
 
 ### JavaScript (Dynamic Configuration)
 ```javascript
 // Basic setup
-const colorPicker = document.querySelector('zero-color-picker');
+const colorPicker = document.querySelector('zero-color-picker-1.0.0');
 colorPicker.label = 'Theme Color';
 colorPicker.value = '#6c63ff';
 colorPicker.format = 'hex';
@@ -215,7 +215,7 @@ colorPicker.clearError();
 
 ### Theme Color Selector
 ```javascript
-const themePicker = document.createElement('zero-color-picker');
+const themePicker = document.createElement('zero-color-picker-1.0.0');
 themePicker.label = 'Primary Theme Color';
 themePicker.showAlpha = false;
 themePicker.format = 'hex';
@@ -229,8 +229,8 @@ themePicker.addEventListener('change', (event) => {
 
 ### Gradient Background Builder
 ```javascript
-const startColorPicker = document.createElement('zero-color-picker');
-const endColorPicker = document.createElement('zero-color-picker');
+const startColorPicker = document.createElement('zero-color-picker-1.0.0');
+const endColorPicker = document.createElement('zero-color-picker-1.0.0');
 
 startColorPicker.label = 'Gradient Start';
 endColorPicker.label = 'Gradient End';
@@ -252,7 +252,7 @@ endColorPicker.addEventListener('change', updateGradient);
 
 ### Color Accessibility Checker
 ```javascript
-const colorPicker = document.createElement('zero-color-picker');
+const colorPicker = document.createElement('zero-color-picker-1.0.0');
 colorPicker.label = 'Text Color';
 
 function checkContrast() {
@@ -288,7 +288,7 @@ colorPicker.addEventListener('change', checkContrast);
 
 ### Dynamic Preset Management
 ```javascript
-const colorPicker = document.createElement('zero-color-picker');
+const colorPicker = document.createElement('zero-color-picker-1.0.0');
 const savedColors = JSON.parse(localStorage.getItem('savedColors') || '[]');
 
 colorPicker.label = 'Color Picker';
@@ -329,7 +329,7 @@ colorPicker.addEventListener('change', (event) => {
 
 ### Color Palette Generator
 ```javascript
-const basePicker = document.createElement('zero-color-picker');
+const basePicker = document.createElement('zero-color-picker-1.0.0');
 basePicker.label = 'Base Color';
 
 basePicker.addEventListener('change', (event) => {

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero Components - Lit Component Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #6c63ff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+
+        .section h2 {
+            color: #4a5568;
+            margin-top: 0;
+        }
+
+        .code-snippet {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+        }
+
+        .example-container {
+            background: white;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .form-example {
+            max-width: 400px;
+        }
+
+        /* CSS Variables for the zero-checkbox component */
+        :root {
+            --primary-color: #6c63ff;
+            --primary-light: rgba(108, 99, 255, 0.2);
+            --text-primary: #333;
+            --text-secondary: #666;
+            --background-primary: #fff;
+            --border-color: #ddd;
+            --error-color: #f44336;
+            --spacing-sm: 8px;
+            --spacing-md: 12px;
+            --spacing-lg: 20px;
+            --font-size-base: 14px;
+            --font-size-sm: 12px;
+            --border-radius-sm: 4px;
+            --icon-size-sm: 18px;
+        }
+
+        .demo-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            background: #6c63ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background: #5a52d5;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .status-panel {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .status-panel h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+
+        .status-item {
+            margin: 8px 0;
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Zero Components - Lit Component Example</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 40px;">
+            This page demonstrates how to load and use the <strong>zero-checkbox</strong> Lit component in a standard HTML page.
+        </p>
+
+        <!-- Section 1: Basic Usage -->
+        <div class="section">
+            <h2>1. Basic Checkbox Usage</h2>
+            <p>Simple checkbox with default styling:</p>
+            
+            <div class="example-container">                <zero-checkbox-1.0.0 
+                    id="basicCheckbox"
+                    label="I agree to the terms and conditions"
+                    description="Please read our terms before continuing"
+                    value="terms-agreed">
+                </zero-checkbox-1.0.0>
+            </div>
+
+            <div class="code-snippet">
+&lt;zero-checkbox-1.0.0 
+    id="basicCheckbox"
+    label="I agree to the terms and conditions"
+    description="Please read our terms before continuing"
+    value="terms-agreed"&gt;
+&lt;/zero-checkbox-1.0.0&gt;
+            </div>
+        </div>
+
+        <!-- Section 2: Different Styles -->
+        <div class="section">
+            <h2>2. Different Checkbox Styles</h2>
+            <p>The component supports multiple visual styles:</p>
+            
+            <div class="example-container">
+                <div style="margin-bottom: 20px;">
+                    <h4>Default Style:</h4>
+                    <zero-checkbox 
+                        id="defaultStyle"
+                        label="Default checkbox style"
+                        checkbox-style="default"
+                        value="default-example">
+                    </zero-checkbox>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4>Rounded Style:</h4>
+                    <zero-checkbox 
+                        id="customStyle"
+                        label="Rounded checkbox style"
+                        checkbox-style="custom"
+                        value="custom-example">
+                    </zero-checkbox>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <h4>Switch Style:</h4>
+                    <zero-checkbox 
+                        id="switchStyle"
+                        label="Switch-style checkbox"
+                        checkbox-style="switch"
+                        value="switch-example">
+                    </zero-checkbox>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Interactive Form -->
+        <div class="section">
+            <h2>3. Interactive Form Example</h2>
+            <p>A complete form using multiple zero-checkbox components:</p>
+            
+            <div class="example-container">
+                <form id="userPreferences" class="form-example">
+                    <h3>User Preferences</h3>
+                    
+                    <zero-checkbox 
+                        id="emailNotifications"
+                        label="Email Notifications"
+                        description="Receive notifications via email"
+                        checkbox-style="switch"
+                        value="email-notifications">
+                    </zero-checkbox>
+                    
+                    <zero-checkbox 
+                        id="pushNotifications"
+                        label="Push Notifications"
+                        description="Receive push notifications in your browser"
+                        checkbox-style="switch"
+                        value="push-notifications">
+                    </zero-checkbox>
+                    
+                    <zero-checkbox 
+                        id="marketingEmails"
+                        label="Marketing Communications"
+                        description="Get weekly updates about our products (optional)"
+                        value="marketing-emails">
+                    </zero-checkbox>
+                    
+                    <zero-checkbox 
+                        id="requiredConsent"
+                        label="Required Consent"
+                        description="I consent to the processing of my personal data"
+                        required="true"
+                        value="data-processing"
+                        error-message="This consent is required to proceed"
+                        show-error="false">
+                    </zero-checkbox>
+
+                    <div class="demo-controls">
+                        <button type="button" id="validateForm">Validate Form</button>
+                        <button type="button" id="resetForm">Reset Form</button>
+                        <button type="button" id="fillForm">Fill Sample Data</button>
+                        <button type="submit">Submit Form</button>
+                    </div>
+                </form>
+
+                <div class="status-panel">
+                    <h3>Form Status</h3>
+                    <div id="formStatus">Ready</div>
+                    <h4>Checkbox Values:</h4>
+                    <div id="checkboxValues"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Dynamic Control -->
+        <div class="section">
+            <h2>4. Dynamic Control with JavaScript</h2>
+            <p>Programmatically control checkbox properties:</p>
+            
+            <div class="example-container">
+                <zero-checkbox 
+                    id="dynamicCheckbox"
+                    label="Dynamic Checkbox"
+                    description="This checkbox can be controlled via JavaScript"
+                    value="dynamic-example">
+                </zero-checkbox>
+
+                <div class="demo-controls">
+                    <button type="button" id="toggleChecked">Toggle Checked</button>
+                    <button type="button" id="toggleDisabled">Toggle Disabled</button>
+                    <button type="button" id="setIndeterminate">Set Indeterminate</button>
+                    <button type="button" id="changeStyle">Change Style</button>
+                    <button type="button" id="toggleError">Toggle Error</button>
+                </div>
+
+                <div class="status-panel">
+                    <h3>Dynamic Checkbox State</h3>
+                    <div id="dynamicStatus"></div>
+                </div>
+            </div>
+        </div>
+    </div>    <!-- Load the zero-checkbox component from the server -->
+    <script type="module" src="http://localhost:5555/service/plugins/zero-checkbox/zero-checkbox.js"></script>
+
+    <!-- Application JavaScript -->
+    <script>
+        // Wait for the DOM and components to be loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize form handling
+            initializeFormHandling();
+            
+            // Initialize dynamic controls
+            initializeDynamicControls();
+            
+            // Set up global event listeners for all checkboxes
+            setupGlobalCheckboxListeners();
+        });
+
+        function initializeFormHandling() {
+            const form = document.getElementById('userPreferences');
+            const validateBtn = document.getElementById('validateForm');
+            const resetBtn = document.getElementById('resetForm');
+            const fillBtn = document.getElementById('fillForm');
+            const formStatus = document.getElementById('formStatus');
+            const checkboxValues = document.getElementById('checkboxValues');
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (validateForm()) {
+                    const formData = getFormData();
+                    formStatus.innerHTML = `<div class="status-item">✅ Form submitted successfully!</div>`;
+                    console.log('Form submitted:', formData);
+                } else {
+                    formStatus.innerHTML = `<div class="status-item">❌ Form validation failed</div>`;
+                }
+            });
+
+            // Validate button
+            validateBtn.addEventListener('click', function() {
+                const isValid = validateForm();
+                formStatus.innerHTML = isValid 
+                    ? `<div class="status-item">✅ Form is valid</div>`
+                    : `<div class="status-item">❌ Form has errors</div>`;
+            });
+
+            // Reset button
+            resetBtn.addEventListener('click', function() {
+                const checkboxes = form.querySelectorAll('zero-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                    checkbox.showError = false;
+                });
+                formStatus.innerHTML = `<div class="status-item">🔄 Form reset</div>`;
+                updateFormStatus();
+            });
+
+            // Fill sample data button
+            fillBtn.addEventListener('click', function() {
+                document.getElementById('emailNotifications').checked = true;
+                document.getElementById('pushNotifications').checked = false;
+                document.getElementById('marketingEmails').checked = true;
+                document.getElementById('requiredConsent').checked = true;
+                formStatus.innerHTML = `<div class="status-item">📝 Sample data filled</div>`;
+                updateFormStatus();
+            });
+
+            // Update form status on any change
+            form.addEventListener('change', updateFormStatus);
+            updateFormStatus(); // Initial update
+        }
+
+        function validateForm() {
+            const requiredCheckboxes = document.querySelectorAll('zero-checkbox[required="true"]');
+            let isValid = true;
+
+            requiredCheckboxes.forEach(checkbox => {
+                if (!checkbox.checked) {
+                    checkbox.showError = true;
+                    isValid = false;
+                } else {
+                    checkbox.showError = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        function getFormData() {
+            const formData = {};
+            const checkboxes = document.querySelectorAll('#userPreferences zero-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                if (checkbox.value) {
+                    formData[checkbox.value] = checkbox.checked;
+                }
+            });
+            
+            return formData;
+        }
+
+        function updateFormStatus() {
+            const formData = getFormData();
+            const checkboxValues = document.getElementById('checkboxValues');
+            
+            let html = '';
+            for (const [key, value] of Object.entries(formData)) {
+                html += `<div class="status-item">${key}: ${value ? '✅' : '❌'}</div>`;
+            }
+            
+            checkboxValues.innerHTML = html;
+        }
+
+        function initializeDynamicControls() {
+            const dynamicCheckbox = document.getElementById('dynamicCheckbox');
+            const dynamicStatus = document.getElementById('dynamicStatus');
+            
+            let styleIndex = 0;
+            const styles = ['default', 'custom', 'switch'];
+
+            // Toggle checked
+            document.getElementById('toggleChecked').addEventListener('click', function() {
+                dynamicCheckbox.checked = !dynamicCheckbox.checked;
+                updateDynamicStatus();
+            });
+
+            // Toggle disabled
+            document.getElementById('toggleDisabled').addEventListener('click', function() {
+                dynamicCheckbox.disabled = !dynamicCheckbox.disabled;
+                updateDynamicStatus();
+            });
+
+            // Set indeterminate
+            document.getElementById('setIndeterminate').addEventListener('click', function() {
+                dynamicCheckbox.indeterminate = !dynamicCheckbox.indeterminate;
+                updateDynamicStatus();
+            });
+
+            // Change style
+            document.getElementById('changeStyle').addEventListener('click', function() {
+                styleIndex = (styleIndex + 1) % styles.length;
+                dynamicCheckbox.checkboxStyle = styles[styleIndex];
+                updateDynamicStatus();
+            });
+
+            // Toggle error
+            document.getElementById('toggleError').addEventListener('click', function() {
+                dynamicCheckbox.showError = !dynamicCheckbox.showError;
+                if (dynamicCheckbox.showError) {
+                    dynamicCheckbox.errorMessage = 'This is a sample error message';
+                }
+                updateDynamicStatus();
+            });
+
+            function updateDynamicStatus() {
+                const status = {
+                    checked: dynamicCheckbox.checked,
+                    disabled: dynamicCheckbox.disabled,
+                    indeterminate: dynamicCheckbox.indeterminate,
+                    style: dynamicCheckbox.checkboxStyle,
+                    showError: dynamicCheckbox.showError,
+                    value: dynamicCheckbox.value
+                };
+
+                let html = '';
+                for (const [key, value] of Object.entries(status)) {
+                    html += `<div class="status-item">${key}: ${value}</div>`;
+                }
+
+                dynamicStatus.innerHTML = html;
+            }
+
+            // Initial status update
+            updateDynamicStatus();
+
+            // Listen for changes
+            dynamicCheckbox.addEventListener('change', updateDynamicStatus);
+        }
+
+        function setupGlobalCheckboxListeners() {
+            // Add event listeners to all checkboxes for debugging
+            document.addEventListener('change', function(e) {
+                if (e.target.tagName.toLowerCase() === 'zero-checkbox') {
+                    console.log('Checkbox changed:', {
+                        id: e.target.id,
+                        checked: e.detail?.checked ?? e.target.checked,
+                        value: e.detail?.value ?? e.target.value,
+                        indeterminate: e.detail?.indeterminate ?? e.target.indeterminate
+                    });
+                }
+            });
+        }
+
+        // Global error handling
+        window.addEventListener('error', function(e) {
+            console.error('Page error:', e.error);
+        });
+
+        // Check if component loaded successfully
+        window.addEventListener('load', function() {
+            // Wait a bit for custom elements to be defined
+            setTimeout(() => {
+                if (customElements.get('zero-checkbox-1.0.0')) {
+                    console.log('✅ zero-checkbox component loaded successfully!');
+                } else {
+                    console.warn('⚠️ zero-checkbox component may not have loaded properly');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

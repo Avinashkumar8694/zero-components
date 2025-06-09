@@ -25,21 +25,21 @@ A configurable dropdown/select component with search functionality, multiple sel
 ### HTML with Hardcoded Values
 
 ```html
-<zero-dropdown 
+<zero-dropdown-1.0.0 
     value="option2"
     label="Choose Option"
     placeholder="Select an option..."
     required="true"
     searchable="true"
     custom-style="true">
-</zero-dropdown>
+</zero-dropdown-1.0.0>
 ```
 
 ### JavaScript/TypeScript Dynamic Configuration
 
 ```javascript
 // Get reference to the component
-const dropdown = document.querySelector('zero-dropdown');
+const dropdown = document.querySelector('zero-dropdown-1.0.0');
 
 // Configure properties dynamically
 dropdown.value = 'option1';
@@ -134,13 +134,13 @@ The component uses the following CSS variables from the global theme:
 ### Country Selector with Flags
 
 ```html
-<zero-dropdown 
+<zero-dropdown-1.0.0 
     id="countrySelect"
     label="Country"
     placeholder="Select your country"
     searchable="true"
     custom-style="true">
-</zero-dropdown>
+</zero-dropdown-1.0.0>
 
 <script>
 const countrySelect = document.getElementById('countrySelect');
@@ -165,14 +165,14 @@ countrySelect.addEventListener('change', (event) => {
 ### Skills Multi-Selection
 
 ```html
-<zero-dropdown 
+<zero-dropdown-1.0.0 
     id="skillsSelect"
     label="Technical Skills"
     placeholder="Select your skills"
     multiple="true"
     searchable="true"
     custom-style="true">
-</zero-dropdown>
+</zero-dropdown-1.0.0>
 
 <script>
 const skillsSelect = document.getElementById('skillsSelect');
@@ -207,22 +207,22 @@ skillsSelect.addEventListener('change', (event) => {
 
 ```html
 <div class="location-selector">
-    <zero-dropdown 
+    <zero-dropdown-1.0.0 
         id="stateSelect"
         label="State"
         placeholder="Select state"
         searchable="true"
         custom-style="true">
-    </zero-dropdown>
+    </zero-dropdown-1.0.0>
     
-    <zero-dropdown 
+    <zero-dropdown-1.0.0 
         id="citySelect"
         label="City"
         placeholder="Select city"
         disabled="true"
         searchable="true"
         custom-style="true">
-    </zero-dropdown>
+    </zero-dropdown-1.0.0>
 </div>
 
 <script>
@@ -273,7 +273,7 @@ stateSelect.addEventListener('change', (event) => {
 
 ```html
 <form id="userForm">
-    <zero-dropdown 
+    <zero-dropdown-1.0.0 
         id="roleSelect"
         label="User Role"
         placeholder="Select user role"
@@ -281,9 +281,9 @@ stateSelect.addEventListener('change', (event) => {
         custom-style="true"
         error-message="Please select a user role"
         show-error="false">
-    </zero-dropdown>
+    </zero-dropdown-1.0.0>
     
-    <zero-dropdown 
+    <zero-dropdown-1.0.0 
         id="departmentSelect"
         label="Department"
         placeholder="Select department"
@@ -292,7 +292,7 @@ stateSelect.addEventListener('change', (event) => {
         custom-style="true"
         error-message="Please select at least one department"
         show-error="false">
-    </zero-dropdown>
+    </zero-dropdown-1.0.0>
     
     <button type="submit">Create User</button>
 </form>
@@ -352,14 +352,14 @@ userForm.addEventListener('submit', (e) => {
 ### Dynamic Options Loading
 
 ```html
-<zero-dropdown 
+<zero-dropdown-1.0.0 
     id="dynamicSelect"
     label="Products"
     placeholder="Loading products..."
     searchable="true"
     custom-style="true"
     disabled="true">
-</zero-dropdown>
+</zero-dropdown-1.0.0>
 
 <button id="loadBtn">Load Products</button>
 

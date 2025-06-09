@@ -23,7 +23,7 @@ A comprehensive form demo component that showcases all available input widget ty
 ### HTML (Hardcoded Values)
 
 ```html
-<zero-zero-input-widgets
+<zero-input-widgets-1.0.0
     username="john_doe"
     password=""
     user-role="user"
@@ -35,14 +35,14 @@ A comprehensive form demo component that showcases all available input widget ty
     height="175"
     bio="I'm a web developer passionate about creating great user experiences."
     newsletter-subscribed="true">
-</zero-zero-input-widgets>
+</zero-input-widgets-1.0.0>
 ```
 
 ### JavaScript (Dynamic Configuration)
 
 ```javascript
 // Create and configure the input widgets component
-const inputWidgets = document.createElement('zero-zero-input-widgets');
+const inputWidgets = document.createElement('zero-input-widgets-1.0.0');
 
 // Set user data
 inputWidgets.username = 'jane_smith';
@@ -145,7 +145,7 @@ Handles form submission and dispatches the `onSubmit` event with complete form d
 
 ```javascript
 // Manually trigger form submission
-const inputWidgets = document.querySelector('zero-zero-input-widgets');
+const inputWidgets = document.querySelector('zero-input-widgets-1.0.0');
 inputWidgets.handleSubmit(new Event('click'));
 ```
 
@@ -154,7 +154,7 @@ inputWidgets.handleSubmit(new Event('click'));
 ### Form Validation Integration
 
 ```html
-<zero-zero-input-widgets id="userForm"></zero-zero-input-widgets>
+<zero-input-widgets-1.0.0 id="userForm"></zero-input-widgets-1.0.0>
 
 <script>
 const form = document.getElementById('userForm');
@@ -200,7 +200,7 @@ async function loadUserProfile(userId) {
     const response = await fetch(`/api/users/${userId}`);
     const userData = await response.json();
     
-    const form = document.querySelector('zero-zero-input-widgets');
+    const form = document.querySelector('zero-input-widgets-1.0.0');
     
     form.username = userData.username;
     form.userRole = userData.role;
@@ -224,7 +224,7 @@ class MultiStepFormManager {
     }
     
     setupForm() {
-        const form = document.querySelector('zero-zero-input-widgets');
+        const form = document.querySelector('zero-input-widgets-1.0.0');
         
         form.addEventListener('onSubmit', (event) => {
             this.formData = { ...this.formData, ...event.detail.formData };
@@ -253,7 +253,7 @@ class MultiStepFormManager {
 
 ```javascript
 // Sync form data with localStorage
-const form = document.querySelector('zero-zero-input-widgets');
+const form = document.querySelector('zero-input-widgets-1.0.0');
 const STORAGE_KEY = 'userProfileDraft';
 
 // Load saved data
@@ -291,7 +291,7 @@ setInterval(saveFormData, 2000);
 ### Custom Form Layout
 
 ```css
-zero-zero-input-widgets {
+zero-input-widgets-1.0.0 {
     --spacing-lg: 24px;
     --input-height: 40px;
     --border-radius-sm: 8px;
@@ -300,13 +300,13 @@ zero-zero-input-widgets {
 
 /* Two-column layout for larger screens */
 @media (min-width: 768px) {
-    zero-zero-input-widgets .form-container {
+    zero-input-widgets-1.0.0 .form-container {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: var(--spacing-lg);
     }
     
-    zero-zero-input-widgets .submit-button {
+    zero-input-widgets-1.0.0 .submit-button {
         grid-column: 1 / -1;
         justify-self: center;
     }
@@ -316,7 +316,7 @@ zero-zero-input-widgets {
 ### Custom Color Scheme
 
 ```css
-zero-zero-input-widgets {
+zero-input-widgets-1.0.0 {
     --primary-color: #2563eb;
     --primary-light: #3b82f6;
     --primary-dark: #1d4ed8;
@@ -332,7 +332,7 @@ zero-zero-input-widgets {
 
 ```css
 @media (prefers-color-scheme: dark) {
-    zero-zero-input-widgets {
+    zero-input-widgets-1.0.0 {
         --background-primary: #1e293b;
         --background-secondary: #334155;
         --text-primary: #f1f5f9;

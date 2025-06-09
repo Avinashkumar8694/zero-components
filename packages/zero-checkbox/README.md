@@ -24,21 +24,21 @@ A configurable checkbox component with multiple styling options, indeterminate s
 ### HTML with Hardcoded Values
 
 ```html
-<zero-checkbox 
+<zero-checkbox-1.0.0 
     checked="true"
     label="I agree to the terms and conditions"
     description="Please read our terms before continuing"
     required="true"
     checkbox-style="default"
     value="terms-agreed">
-</zero-checkbox>
+</zero-checkbox-1.0.0>
 ```
 
 ### JavaScript/TypeScript Dynamic Configuration
 
 ```javascript
 // Get reference to the component
-const checkbox = document.querySelector('zero-checkbox');
+const checkbox = document.querySelector('zero-checkbox-1.0.0');
 
 // Configure properties dynamically
 checkbox.checked = false;
@@ -126,7 +126,7 @@ The component uses the following CSS variables from the global theme:
 ### Terms and Conditions Checkbox
 
 ```html
-<zero-checkbox 
+<zero-checkbox-1.0.0 
     id="termsCheckbox"
     label="I agree to the Terms of Service and Privacy Policy"
     description="You must agree to our terms to continue with registration"
@@ -134,7 +134,7 @@ The component uses the following CSS variables from the global theme:
     value="terms-accepted"
     error-message="You must accept the terms to proceed"
     show-error="false">
-</zero-checkbox>
+</zero-checkbox-1.0.0>
 
 <button id="submitBtn" disabled>Register</button>
 
@@ -170,35 +170,35 @@ submitBtn.addEventListener('click', () => {
 <div class="settings-panel">
     <h3>Notification Settings</h3>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="emailNotifications"
         label="Email Notifications"
         description="Receive notifications via email"
         checkbox-style="switch"
         value="email-notifications">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="pushNotifications"
         label="Push Notifications"
         description="Receive push notifications in your browser"
         checkbox-style="switch"
         value="push-notifications">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="smsNotifications"
         label="SMS Notifications"
         description="Receive notifications via text message"
         checkbox-style="switch"
         value="sms-notifications">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
     <button id="saveSettings">Save Settings</button>
 </div>
 
 <script>
-const checkboxes = document.querySelectorAll('zero-checkbox');
+const checkboxes = document.querySelectorAll('zero-checkbox-1.0.0');
 const saveBtn = document.getElementById('saveSettings');
 
 function getSettings() {
@@ -239,39 +239,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ```html
 <div class="checkbox-group">
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="selectAll"
         label="Select All"
         description="Select or deselect all options"
         checkbox-style="custom"
         value="select-all">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
     <hr>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="option1"
         label="Option 1"
         value="option-1">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="option2"
         label="Option 2"
         value="option-2">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="option3"
         label="Option 3"
         value="option-3">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="option4"
         label="Option 4"
         value="option-4">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
 </div>
 
 <script>
@@ -317,7 +317,7 @@ updateSelectAllState();
 <form id="consentForm">
     <h3>User Consent</h3>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="dataProcessing"
         label="Data Processing Consent"
         description="I consent to the processing of my personal data"
@@ -325,9 +325,9 @@ updateSelectAllState();
         value="data-processing"
         error-message="Data processing consent is required"
         show-error="false">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="ageVerification"
         label="Age Verification"
         description="I confirm that I am 18 years or older"
@@ -335,14 +335,14 @@ updateSelectAllState();
         value="age-verification"
         error-message="Age verification is required"
         show-error="false">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="marketingEmails"
         label="Marketing Communications"
         description="I would like to receive marketing emails (optional)"
         value="marketing-emails">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
     <button type="submit">Submit</button>
 </form>
@@ -367,7 +367,7 @@ consentForm.addEventListener('submit', (e) => {
     
     if (isValid) {
         const formData = {};
-        document.querySelectorAll('zero-checkbox').forEach(checkbox => {
+        document.querySelectorAll('zero-checkbox-1.0.0').forEach(checkbox => {
             if (checkbox.value) {
                 formData[checkbox.value] = checkbox.checked;
             }
@@ -400,7 +400,7 @@ const defaultInterests = [
 ];
 
 function createCheckbox(interest) {
-    const checkbox = document.createElement('zero-checkbox');
+    const checkbox = document.createElement('zero-checkbox-1.0.0');
     checkbox.label = interest.label;
     checkbox.description = interest.description;
     checkbox.value = interest.id;

@@ -24,21 +24,21 @@ A configurable password input component with show/hide functionality, strength m
 ### HTML with Hardcoded Values
 
 ```html
-<zero-password-input 
+<zero-password-input-1.0.0 
     value=""
     label="Password"
     placeholder="Enter your password"
     required="true"
     show-toggle="true"
     show-strength-meter="true">
-</zero-password-input>
+</zero-password-input-1.0.0>
 ```
 
 ### JavaScript/TypeScript Dynamic Configuration
 
 ```javascript
 // Get reference to the component
-const passwordInput = document.querySelector('zero-password-input');
+const passwordInput = document.querySelector('zero-password-input-1.0.0');
 
 // Configure properties dynamically
 passwordInput.value = '';
@@ -137,15 +137,15 @@ The component uses the following CSS variables from the global theme:
 
 ```html
 <div class="password-form">
-    <zero-password-input 
+    <zero-password-input-1.0.0 
         id="password"
         label="Password"
         placeholder="Enter password"
         required="true"
         show-strength-meter="true">
-    </zero-password-input>
+    </zero-password-input-1.0.0>
     
-    <zero-password-input 
+    <zero-password-input-1.0.0 
         id="confirmPassword"
         label="Confirm Password"
         placeholder="Confirm your password"
@@ -153,7 +153,7 @@ The component uses the following CSS variables from the global theme:
         show-toggle="false"
         error-message="Passwords do not match"
         show-error="false">
-    </zero-password-input>
+    </zero-password-input-1.0.0>
 </div>
 
 <script>
@@ -181,13 +181,13 @@ confirmInput.addEventListener('input', validatePasswordMatch);
 
 ```html
 <div class="registration-form">
-    <zero-password-input 
+    <zero-password-input-1.0.0 
         id="newPassword"
         label="Create Password"
         placeholder="Choose a strong password"
         required="true"
         show-strength-meter="true">
-    </zero-password-input>
+    </zero-password-input-1.0.0>
     
     <div class="password-requirements">
         <div class="requirement" id="length">✗ At least 8 characters</div>
@@ -245,25 +245,25 @@ newPasswordInput.addEventListener('input', (event) => {
 
 ```html
 <form class="login-form" id="loginForm">
-    <zero-text-input 
+    <zero-text-input-1.0.0 
         id="username"
         label="Username"
         placeholder="Enter username"
         required="true">
-    </zero-text-input>
+    </zero-text-input-1.0.0>
     
-    <zero-password-input 
+    <zero-password-input-1.0.0 
         id="loginPassword"
         label="Password"
         placeholder="Enter password"
         required="true"
         show-strength-meter="false">
-    </zero-password-input>
+    </zero-password-input-1.0.0>
     
-    <zero-checkbox 
+    <zero-checkbox-1.0.0 
         id="rememberMe"
         label="Remember me">
-    </zero-checkbox>
+    </zero-checkbox-1.0.0>
     
     <button type="submit">Login</button>
 </form>
@@ -289,12 +289,12 @@ loginForm.addEventListener('submit', (e) => {
 
 ```html
 <div class="password-generator">
-    <zero-password-input 
+    <zero-password-input-1.0.0 
         id="generatedPassword"
         label="Generated Password"
         show-strength-meter="true"
         show-toggle="true">
-    </zero-password-input>
+    </zero-password-input-1.0.0>
     
     <div class="generator-controls">
         <button type="button" id="generateBtn">Generate Password</button>

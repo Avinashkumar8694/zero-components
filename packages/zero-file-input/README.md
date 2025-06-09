@@ -25,36 +25,36 @@ A comprehensive file upload component with drag-and-drop support, file previews,
 ### HTML (Hardcoded Values)
 ```html
 <!-- Basic File Input -->
-<zero-file-input 
+<zero-file-input-1.0.0 
     label="Upload Documents" 
     placeholder="Choose files or drag and drop"
     accept=".pdf,.doc,.docx"
     max-file-size="5">
-</zero-file-input>
+</zero-file-input-1.0.0>
 
 <!-- Multiple Images with Preview -->
-<zero-file-input 
+<zero-file-input-1.0.0 
     label="Photo Gallery" 
     multiple="true"
     accept="image/*"
     max-files="10"
     max-file-size="2"
     show-preview="true">
-</zero-file-input>
+</zero-file-input-1.0.0>
 
 <!-- With Progress Tracking -->
-<zero-file-input 
+<zero-file-input-1.0.0 
     label="File Upload" 
     drag-drop="true"
     show-progress="true"
     help-text="Maximum 10MB per file">
-</zero-file-input>
+</zero-file-input-1.0.0>
 ```
 
 ### JavaScript (Dynamic Configuration)
 ```javascript
 // Basic setup
-const fileInput = document.querySelector('zero-file-input');
+const fileInput = document.querySelector('zero-file-input-1.0.0');
 fileInput.label = 'Upload Files';
 fileInput.multiple = true;
 fileInput.maxFiles = 5;
@@ -198,7 +198,7 @@ fileInput.clearError();
 
 ### Image Gallery Upload
 ```javascript
-const galleryUpload = document.createElement('zero-file-input');
+const galleryUpload = document.createElement('zero-file-input-1.0.0');
 galleryUpload.label = 'Photo Gallery';
 galleryUpload.multiple = true;
 galleryUpload.accept = 'image/*';
@@ -231,7 +231,7 @@ function createImagePreview(src, name) {
 
 ### Document Upload with Validation
 ```javascript
-const docUpload = document.createElement('zero-file-input');
+const docUpload = document.createElement('zero-file-input-1.0.0');
 docUpload.label = 'Document Upload';
 docUpload.accept = '.pdf,.doc,.docx,.txt,.rtf';
 docUpload.maxFileSize = 25;
@@ -284,7 +284,7 @@ async function uploadDocument(file) {
 
 ### Bulk File Processing
 ```javascript
-const bulkUpload = document.createElement('zero-file-input');
+const bulkUpload = document.createElement('zero-file-input-1.0.0');
 bulkUpload.label = 'Bulk File Upload';
 bulkUpload.multiple = true;
 bulkUpload.maxFiles = 100;
@@ -353,7 +353,7 @@ async function uploadFileWithProgress(file) {
 
 ### File Type Specific Handling
 ```javascript
-const mediaUpload = document.createElement('zero-file-input');
+const mediaUpload = document.createElement('zero-file-input-1.0.0');
 mediaUpload.label = 'Media Upload';
 mediaUpload.multiple = true;
 mediaUpload.accept = 'image/*,video/*,audio/*';

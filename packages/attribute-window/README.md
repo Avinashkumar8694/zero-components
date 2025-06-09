@@ -24,7 +24,7 @@ A dynamic form generator component that creates interactive attribute panels bas
 ### HTML (Configuration-based)
 
 ```html
-<zero-attribute-window id="attributePanel"></zero-attribute-window>
+<zero-attribute-window-1.0.0 id="attributePanel"></zero-attribute-window-1.0.0>
 
 <script>
 // Configure the attribute window
@@ -57,7 +57,7 @@ attributePanel.AttributeWindowAttributes = [
 
 ```javascript
 // Create and configure the attribute window
-const attributeWindow = document.createElement('zero-attribute-window');
+const attributeWindow = document.createElement('zero-attribute-window-1.0.0');
 
 // Define attribute configuration
 const attributeConfig = [
@@ -188,7 +188,7 @@ interface RangeSettings {
 Generates the attribute window form based on the current configuration.
 
 ```javascript
-const attributeWindow = document.querySelector('zero-attribute-window');
+const attributeWindow = document.querySelector('zero-attribute-window-1.0.0');
 attributeWindow.prepareAttributeWindow('my-component');
 ```
 
@@ -217,7 +217,7 @@ const inputElement = attributeWindow.createInputElement(
     <div class="target-component" id="targetComponent">
         <!-- Target component that will be modified -->
     </div>
-    <zero-attribute-window id="propertyPanel"></zero-attribute-window>
+    <zero-attribute-window-1.0.0 id="propertyPanel"></zero-attribute-window-1.0.0>
 </div>
 
 <script>
@@ -307,7 +307,7 @@ new PropertyEditor();
 ```javascript
 class FormConfigurationBuilder {
     constructor() {
-        this.attributeWindow = document.createElement('zero-attribute-window');
+        this.attributeWindow = document.createElement('zero-attribute-window-1.0.0');
         this.formConfig = [];
         this.setupConfigBuilder();
     }
@@ -389,7 +389,7 @@ new FormConfigurationBuilder();
 class ComponentInspector {
     constructor() {
         this.inspectedComponent = null;
-        this.attributeWindow = document.createElement('zero-attribute-window');
+        this.attributeWindow = document.createElement('zero-attribute-window-1.0.0');
         this.setupInspector();
     }
     

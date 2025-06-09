@@ -21,9 +21,9 @@ A dynamic form rendering component built with Lit Element. This component provid
 ### HTML
 ```html
 <!-- Basic Renderer -->
-<zero-nrenderer id="myRenderer">
+<zero-nrenderer-1.0.0 id="myRenderer">
     <!-- Content will be rendered here -->
-</zero-nrenderer>
+</zero-nrenderer-1.0.0>
 ```
 
 ### JavaScript

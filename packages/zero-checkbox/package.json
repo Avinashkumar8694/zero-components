@@ -6,5 +6,8 @@
   "type": "module",
   "keywords": ["lit", "web-component", "checkbox", "form"],
   "author": "Zero Components",
-  "license": "MIT"
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
 }

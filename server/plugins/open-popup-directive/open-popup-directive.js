@@ -3,7 +3,7 @@
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const s = { ATTRIBUTE: 1, CHILD: 2, PROPERTY: 3, BOOLEAN_ATTRIBUTE: 4, EVENT: 5, ELEMENT: 6 }, c = (i) => (...e) => ({ _$litDirective$: i, values: e });
+const s = { ATTRIBUTE: 1 }, c = (i) => (...e) => ({ _$litDirective$: i, values: e });
 class p {
   constructor(e) {
   }

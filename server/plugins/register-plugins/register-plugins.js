@@ -16,8 +16,8 @@ and limitations under the License.
 var ue;
 (function(A) {
   (function(h) {
-    var v = typeof globalThis == "object" ? globalThis : typeof oe == "object" ? oe : typeof self == "object" ? self : typeof this == "object" ? this : g(), m = k(A);
-    typeof v.Reflect < "u" && (m = k(v.Reflect, m)), h(m, v), typeof v.Reflect > "u" && (v.Reflect = A);
+    var v = typeof globalThis == "object" ? globalThis : typeof oe == "object" ? oe : typeof self == "object" ? self : typeof this == "object" ? this : M(), g = k(A);
+    typeof v.Reflect < "u" && (g = k(v.Reflect, g)), h(g, v), typeof v.Reflect > "u" && (v.Reflect = A);
     function k(T, P) {
       return function(E, R) {
         Object.defineProperty(T, E, { configurable: !0, writable: !0, value: R }), P && P(E, R);
@@ -35,13 +35,13 @@ var ue;
       } catch {
       }
     }
-    function g() {
+    function M() {
       return S() || O();
     }
   })(function(h, v) {
-    var m = Object.prototype.hasOwnProperty, k = typeof Symbol == "function", S = k && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", O = k && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", g = typeof Object.create == "function", T = { __proto__: [] } instanceof Array, P = !g && !T, E = {
+    var g = Object.prototype.hasOwnProperty, k = typeof Symbol == "function", S = k && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", O = k && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", M = typeof Object.create == "function", T = { __proto__: [] } instanceof Array, P = !M && !T, E = {
       // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-      create: g ? function() {
+      create: M ? function() {
         return L(/* @__PURE__ */ Object.create(null));
       } : T ? function() {
         return L({ __proto__: null });
@@ -49,12 +49,12 @@ var ue;
         return L({});
       },
       has: P ? function(e, t) {
-        return m.call(e, t);
+        return g.call(e, t);
       } : function(e, t) {
         return t in e;
       },
       get: P ? function(e, t) {
-        return m.call(e, t) ? e[t] : void 0;
+        return g.call(e, t) ? e[t] : void 0;
       } : function(e, t) {
         return e[t];
       }
@@ -69,9 +69,9 @@ var ue;
       } else {
         if (!Y(e))
           throw new TypeError();
-        if (!w(t))
+        if (!p(t))
           throw new TypeError();
-        if (!w(n) && !s(n) && !j(n))
+        if (!p(n) && !s(n) && !j(n))
           throw new TypeError();
         return j(n) && (n = void 0), r = b(r), Me(e, t, r, n);
       }
@@ -79,7 +79,7 @@ var ue;
     h("decorate", se);
     function ce(e, t) {
       function r(n, f) {
-        if (!w(n))
+        if (!p(n))
           throw new TypeError();
         if (!s(f) && !Te(f))
           throw new TypeError();
@@ -89,51 +89,51 @@ var ue;
     }
     h("metadata", ce);
     function de(e, t, r, n) {
-      if (!w(r))
+      if (!p(r))
         throw new TypeError();
       return s(n) || (n = b(n)), q(e, t, r, n);
     }
     h("defineMetadata", de);
     function le(e, t, r) {
-      if (!w(t))
+      if (!p(t))
         throw new TypeError();
       return s(r) || (r = b(r)), V(e, t, r);
     }
     h("hasMetadata", le);
     function he(e, t, r) {
-      if (!w(t))
+      if (!p(t))
         throw new TypeError();
       return s(r) || (r = b(r)), U(e, t, r);
     }
     h("hasOwnMetadata", he);
     function ve(e, t, r) {
-      if (!w(t))
+      if (!p(t))
         throw new TypeError();
       return s(r) || (r = b(r)), Z(e, t, r);
     }
     h("getMetadata", ve);
     function ye(e, t, r) {
-      if (!w(t))
+      if (!p(t))
         throw new TypeError();
       return s(r) || (r = b(r)), B(e, t, r);
     }
     h("getOwnMetadata", ye);
     function we(e, t) {
-      if (!w(e))
+      if (!p(e))
         throw new TypeError();
       return s(t) || (t = b(t)), $(e, t);
     }
     h("getMetadataKeys", we);
     function pe(e, t) {
-      if (!w(e))
+      if (!p(e))
         throw new TypeError();
       return s(t) || (t = b(t)), J(e, t);
     }
     h("getOwnMetadataKeys", pe);
     function _e(e, t, r) {
-      if (!w(t))
+      if (!p(t))
         throw new TypeError();
-      if (s(r) || (r = b(r)), !w(t))
+      if (s(r) || (r = b(r)), !p(t))
         throw new TypeError();
       s(r) || (r = b(r));
       var n = x(
@@ -158,11 +158,11 @@ var ue;
     }
     function Me(e, t, r, n) {
       for (var f = e.length - 1; f >= 0; --f) {
-        var _ = e[f], p = _(t, r, n);
-        if (!s(p) && !j(p)) {
-          if (!w(p))
+        var y = e[f], _ = y(t, r, n);
+        if (!s(_) && !j(_)) {
+          if (!p(_))
             throw new TypeError();
-          n = p;
+          n = _;
         }
       }
       return n;
@@ -219,15 +219,15 @@ var ue;
         return r;
       if (r.length <= 0)
         return f;
-      for (var _ = new F(), p = [], c = 0, a = r; c < a.length; c++) {
-        var i = a[c], o = _.has(i);
-        o || (_.add(i), p.push(i));
+      for (var y = new F(), _ = [], c = 0, a = r; c < a.length; c++) {
+        var i = a[c], o = y.has(i);
+        o || (y.add(i), _.push(i));
       }
       for (var u = 0, d = f; u < d.length; u++) {
-        var i = d[u], o = _.has(i);
-        o || (_.add(i), p.push(i));
+        var i = d[u], o = y.has(i);
+        o || (y.add(i), _.push(i));
       }
-      return p;
+      return _;
     }
     function J(e, t) {
       var r = x(
@@ -267,7 +267,7 @@ var ue;
     function me(e) {
       return typeof e == "symbol";
     }
-    function w(e) {
+    function p(e) {
       return typeof e == "object" ? e !== null : typeof e == "function";
     }
     function be(e, t) {
@@ -288,25 +288,25 @@ var ue;
       var r = "string", n = ee(e, S);
       if (n !== void 0) {
         var f = n.call(e, r);
-        if (w(f))
+        if (p(f))
           throw new TypeError();
         return f;
       }
       return Oe(e);
     }
     function Oe(e, t) {
-      var r, n;
+      var r, n, f;
       {
-        var f = e.toString;
-        if (D(f)) {
-          var n = f.call(e);
-          if (!w(n))
+        var y = e.toString;
+        if (D(y)) {
+          var n = y.call(e);
+          if (!p(n))
             return n;
         }
         var r = e.valueOf;
         if (D(r)) {
           var n = r.call(e);
-          if (!w(n))
+          if (!p(n))
             return n;
         }
       }
@@ -357,7 +357,7 @@ var ue;
       if (!D(t))
         throw new TypeError();
       var r = t.call(e);
-      if (!w(r))
+      if (!p(r))
         throw new TypeError();
       return r;
     }
@@ -385,14 +385,14 @@ var ue;
     function Ee() {
       var e;
       !s(I) && typeof v.Reflect < "u" && !(I in v.Reflect) && typeof v.Reflect.defineMetadata == "function" && (e = Ie(v.Reflect));
-      var t, r, n, f = new z(), _ = {
-        registerProvider: p,
+      var t, r, n, f = new z(), y = {
+        registerProvider: _,
         getProvider: a,
         setProvider: o
       };
-      return _;
-      function p(u) {
-        if (!Object.isExtensible(_))
+      return y;
+      function _(u) {
+        if (!Object.isExtensible(y))
           throw new Error("Cannot add provider to a frozen registry.");
         switch (!0) {
           case e === u:
@@ -421,12 +421,12 @@ var ue;
               return t;
             if (!s(n))
               for (var l = te(n); ; ) {
-                var y = ne(l);
-                if (!y)
+                var w = ne(l);
+                if (!w)
                   return;
-                var M = re(y);
-                if (M.isProviderFor(u, d))
-                  return ae(l), M;
+                var m = re(w);
+                if (m.isProviderFor(u, d))
+                  return ae(l), m;
               }
           }
         }
@@ -434,8 +434,8 @@ var ue;
           return e;
       }
       function a(u, d) {
-        var l = f.get(u), y;
-        return s(l) || (y = l.get(d)), s(y) && (y = c(u, d), s(y) || (s(l) && (l = new C(), f.set(u, l)), l.set(d, y))), y;
+        var l = f.get(u), w;
+        return s(l) || (w = l.get(d)), s(w) && (w = c(u, d), s(w) || (s(l) && (l = new C(), f.set(u, l)), l.set(d, w))), w;
       }
       function i(u) {
         if (s(u))
@@ -445,19 +445,19 @@ var ue;
       function o(u, d, l) {
         if (!i(l))
           throw new Error("Metadata provider not registered.");
-        var y = a(u, d);
-        if (y !== l) {
-          if (!s(y))
+        var w = a(u, d);
+        if (w !== l) {
+          if (!s(w))
             return !1;
-          var M = f.get(u);
-          s(M) && (M = new C(), f.set(u, M)), M.set(d, l);
+          var m = f.get(u);
+          s(m) && (m = new C(), f.set(u, m)), m.set(d, l);
         }
         return !0;
       }
     }
     function Pe() {
       var e;
-      return !s(I) && w(v.Reflect) && Object.isExtensible(v.Reflect) && (e = v.Reflect[I]), s(e) && (e = Ee()), !s(I) && w(v.Reflect) && Object.isExtensible(v.Reflect) && Object.defineProperty(v.Reflect, I, {
+      return !s(I) && p(v.Reflect) && Object.isExtensible(v.Reflect) && (e = v.Reflect[I]), s(e) && (e = Ee()), !s(I) && p(v.Reflect) && Object.isExtensible(v.Reflect) && Object.defineProperty(v.Reflect, I, {
         enumerable: !1,
         configurable: !1,
         writable: !1,
@@ -470,9 +470,9 @@ var ue;
           var u = t.get(i);
           return s(u) ? !1 : u.has(o);
         },
-        OrdinaryDefineOwnMetadata: p,
+        OrdinaryDefineOwnMetadata: _,
         OrdinaryHasOwnMetadata: f,
-        OrdinaryGetOwnMetadata: _,
+        OrdinaryGetOwnMetadata: y,
         OrdinaryOwnMetadataKeys: c,
         OrdinaryDeleteMetadata: a
       };
@@ -484,14 +484,14 @@ var ue;
             return;
           d = new C(), t.set(i, d), l = !0;
         }
-        var y = d.get(o);
-        if (s(y)) {
+        var w = d.get(o);
+        if (s(w)) {
           if (!u)
             return;
-          if (y = new C(), d.set(o, y), !e.setProvider(i, o, r))
+          if (w = new C(), d.set(o, w), !e.setProvider(i, o, r))
             throw d.delete(o), l && t.delete(i), new Error("Wrong provider for target.");
         }
-        return y;
+        return w;
       }
       function f(i, o, u) {
         var d = n(
@@ -502,7 +502,7 @@ var ue;
         );
         return s(d) ? !1 : X(d.has(i));
       }
-      function _(i, o, u) {
+      function y(i, o, u) {
         var d = n(
           o,
           u,
@@ -512,7 +512,7 @@ var ue;
         if (!s(d))
           return d.get(i);
       }
-      function p(i, o, u, d) {
+      function _(i, o, u, d) {
         var l = n(
           u,
           d,
@@ -530,21 +530,21 @@ var ue;
         );
         if (s(d))
           return u;
-        for (var l = d.keys(), y = te(l), M = 0; ; ) {
-          var ie = ne(y);
+        for (var l = d.keys(), w = te(l), m = 0; ; ) {
+          var ie = ne(w);
           if (!ie)
-            return u.length = M, u;
+            return u.length = m, u;
           var xe = re(ie);
           try {
-            u[M] = xe;
+            u[m] = xe;
           } catch (Ge) {
             try {
-              ae(y);
+              ae(w);
             } finally {
               throw Ge;
             }
           }
-          M++;
+          m++;
         }
       }
       function a(i, o, u) {
@@ -564,16 +564,16 @@ var ue;
       }
     }
     function Ie(e) {
-      var t = e.defineMetadata, r = e.hasOwnMetadata, n = e.getOwnMetadata, f = e.getOwnMetadataKeys, _ = e.deleteMetadata, p = new z(), c = {
+      var t = e.defineMetadata, r = e.hasOwnMetadata, n = e.getOwnMetadata, f = e.getOwnMetadataKeys, y = e.deleteMetadata, _ = new z(), c = {
         isProviderFor: function(a, i) {
-          var o = p.get(a);
-          return !s(o) && o.has(i) ? !0 : f(a, i).length ? (s(o) && (o = new F(), p.set(a, o)), o.add(i), !0) : !1;
+          var o = _.get(a);
+          return !s(o) && o.has(i) ? !0 : f(a, i).length ? (s(o) && (o = new F(), _.set(a, o)), o.add(i), !0) : !1;
         },
         OrdinaryDefineOwnMetadata: t,
         OrdinaryHasOwnMetadata: r,
         OrdinaryGetOwnMetadata: n,
         OrdinaryOwnMetadataKeys: f,
-        OrdinaryDeleteMetadata: _
+        OrdinaryDeleteMetadata: y
       };
       return c;
     }
@@ -660,9 +660,9 @@ var ue;
           }, c.prototype.keys = function() {
             return new r(this._keys, this._values, f);
           }, c.prototype.values = function() {
-            return new r(this._keys, this._values, _);
+            return new r(this._keys, this._values, y);
           }, c.prototype.entries = function() {
-            return new r(this._keys, this._values, p);
+            return new r(this._keys, this._values, _);
           }, c.prototype["@@iterator"] = function() {
             return this.entries();
           }, c.prototype[O] = function() {
@@ -684,10 +684,10 @@ var ue;
       function f(c, a) {
         return c;
       }
-      function _(c, a) {
+      function y(c, a) {
         return a;
       }
-      function p(c, a) {
+      function _(c, a) {
         return [c, a];
       }
     }
@@ -776,27 +776,27 @@ var ue;
         return t[a] = !0, a;
       }
       function f(a, i) {
-        if (!m.call(a, r)) {
+        if (!g.call(a, r)) {
           if (!i)
             return;
           Object.defineProperty(a, r, { value: E.create() });
         }
         return a[r];
       }
-      function _(a, i) {
+      function y(a, i) {
         for (var o = 0; o < i; ++o)
           a[o] = Math.random() * 255 | 0;
         return a;
       }
-      function p(a) {
+      function _(a) {
         if (typeof Uint8Array == "function") {
           var i = new Uint8Array(a);
-          return typeof crypto < "u" ? crypto.getRandomValues(i) : typeof msCrypto < "u" ? msCrypto.getRandomValues(i) : _(i, a), i;
+          return typeof crypto < "u" ? crypto.getRandomValues(i) : typeof msCrypto < "u" ? msCrypto.getRandomValues(i) : y(i, a), i;
         }
-        return _(new Array(a), a);
+        return y(new Array(a), a);
       }
       function c() {
-        var a = p(e);
+        var a = _(e);
         a[6] = a[6] & 79 | 64, a[8] = a[8] & 191 | 128;
         for (var i = "", o = 0; o < e; ++o) {
           var u = a[o];
@@ -816,9 +816,10 @@ class fe {
   }
   // Method to register plugins dynamically
   registerPlugins(h, v) {
+    var g;
     if (!h || !v)
       throw new Error("Key and value are required to register a plugin.");
-    this.modules[h] = v, console.log(`Plugin registered and available as zero.modules['${h}']`);
+    this.modules[h] = v, (g = this.modules[h]) == null || g.onInit(), console.log(`Plugin registered and available as zero.modules['${h}']`);
   }
   // Method to attach listeners
   attachListeners() {
@@ -826,11 +827,11 @@ class fe {
       var S, O;
       if (!((O = (S = h == null ? void 0 : h.detail) == null ? void 0 : S.element) != null && O.localName))
         return;
-      const v = customElements.get(h.detail.element.localName), m = Reflect.getMetadata("ZeroAttribute", v.prototype) || [], k = Reflect.getMetadata("ZeroComponent", v.prototype);
+      const v = customElements.get(h.detail.element.localName), g = Reflect.getMetadata("ZeroAttribute", v.prototype) || [], k = Reflect.getMetadata("ZeroComponent", v.prototype);
       this.components[h.detail.element.localName] = {
         class: v,
-        inputs: m.filter((g) => !g.eventTrigger).reduce((g, { fieldMappings: T, ...P }) => (g[T] = { ...P }, g), {}),
-        outputs: { events: m.filter((g) => g.eventTrigger).map((g) => g.eventTrigger) },
+        inputs: g.filter((M) => !M.eventTrigger).reduce((M, { fieldMappings: T, ...P }) => (M[T] = { ...P }, M), {}),
+        outputs: { events: g.filter((M) => M.eventTrigger).map((M) => M.eventTrigger) },
         componentMetadata: k
       }, console.log("Component Loaded:", h.detail.element.localName);
     });

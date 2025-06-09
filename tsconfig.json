@@ -35,7 +35,7 @@
         // Report errors on unused local variables
         "noUnusedLocals": false,
         // Report errors on unused parameters
-        "noUnusedParameters": true,
+        "noUnusedParameters": false,
         // Report errors for fallthrough cases in switch statements
         "noFallthroughCasesInSwitch": true,
 

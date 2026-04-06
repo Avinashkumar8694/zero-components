@@ -1,0 +1,10 @@
+{
+  "name": "zero-flow-node-script",
+  "version": "1.0.0",
+  "description": "Flow script node component",
+  "main": "zero-flow-node-script.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "flow-node", "flow-node-type:script"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

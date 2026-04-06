@@ -2,19 +2,20 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { env } from 'node:process';
+import { fileURLToPath } from 'node:url';
 import cors from 'cors'; // Import cors
 
 const app = express();
-const port = env.PORT || 3000;
-const basePath = env.BASE_PATH || '';
+const port = env.PORT || 5555;
+const basePath = env.BASE_PATH || '/service';
 
 app.use(express.json()); // Middleware to parse JSON bodies
 
-// Use CORS middleware
+// Use CORS middleware - maximally permissive
 app.use(cors({
-    origin: '*', // Allow all origins (or configure specific origins)
-    methods: ['GET', 'POST', 'DELETE'], // Allow specific HTTP methods
-    allowedHeaders: ['Content-Type'], // Allow specific headers
+    origin: '*',
+    methods: '*',
+    allowedHeaders: '*',
 }));
 
 // Create the application and setup routes
@@ -39,7 +40,7 @@ const setupRoutes = (app, basePath) => {
 
     // List files in the 'plugins' directory
     router.get('/files', (req, res) => {
-        const pluginsDir = path.resolve('plugins');
+        const pluginsDir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'plugins');
         fs.readdir(pluginsDir, (err, files) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to list files' });
@@ -78,7 +79,9 @@ const setupRoutes = (app, basePath) => {
     });
 
     // Serve static files from 'plugins' directory
-    router.use('/plugins', express.static('plugins'));
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    router.use('/plugins', express.static(path.join(__dirname, 'plugins')));
 
     app.use(basePath, router);
 };

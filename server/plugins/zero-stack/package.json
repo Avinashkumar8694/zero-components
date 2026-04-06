@@ -1,0 +1,10 @@
+{
+  "name": "zero-stack",
+  "version": "1.0.0",
+  "description": "Flexible stack layout component for row and column composition",
+  "main": "zero-stack.js",
+  "type": "module",
+  "keywords": ["lit", "web-component", "layout", "stack", "flex"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

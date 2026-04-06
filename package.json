@@ -5,8 +5,9 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "zero-gen build",
-        "start": "zero-gen start",
+        "build": "node build-actions.js",
+        "start": "node server/index.js",
+        "dev": "node server/index.js",
         "serve": "zero-gen serve"
     },
     "keywords": [],
@@ -17,6 +18,7 @@
     ],
     "type": "module",
     "devDependencies": {
+        "esbuild": "^0.28.0",
         "lit": "^3.1.4",
         "typescript": "^5.2.2"
     },

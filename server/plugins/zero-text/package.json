@@ -1,0 +1,10 @@
+{
+  "name": "zero-text",
+  "version": "1.0.0",
+  "description": "Rich paragraph text component",
+  "main": "zero-text.js",
+  "type": "module",
+  "keywords": ["lit", "web-component", "text", "paragraph", "content"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

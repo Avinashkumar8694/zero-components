@@ -1,0 +1,10 @@
+{
+  "name": "zero-section",
+  "version": "1.0.0",
+  "description": "Responsive section container with max width and padding",
+  "main": "zero-section.js",
+  "type": "module",
+  "keywords": ["lit", "web-component", "section", "container", "layout"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

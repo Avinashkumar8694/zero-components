@@ -11,10 +11,18 @@ export * from './packages/zero-date-picker/zero-date-picker';
 export * from './packages/zero-dropdown/zero-dropdown';
 
 export * from './packages/code-editor/code-editor';
+export * from './packages/zero-button/zero-button';
+export * from './packages/zero-card/zero-card';
 export * from './packages/zero-file-input/zero-file-input';
+export * from './packages/zero-heading/zero-heading';
+export * from './packages/zero-image/zero-image';
 export * from './packages/zero-number-input/zero-number-input';
 export * from './packages/zero-range-slider/zero-range-slider';
 export * from './packages/zero-password-input/zero-password-input';
+export * from './packages/zero-section/zero-section';
+export * from './packages/zero-stack/zero-stack';
+export * from './packages/zero-text/zero-text';
 export * from './packages/zero-input-widgets/zero-input-widgets';
+export * from './packages/zero-panel-layout/zero-panel-layout';
 export * from './packages/zero-text-input/zero-text-input';
 export * from './packages/zero-textarea/zero-textarea';

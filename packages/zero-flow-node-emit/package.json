@@ -1,0 +1,10 @@
+{
+  "name": "zero-flow-node-emit",
+  "version": "1.0.0",
+  "description": "Flow emit node component",
+  "main": "zero-flow-node-emit.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "flow-node", "flow-node-type:emit"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

@@ -1,3 +1,4 @@
+// @environment page
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 
 import { LitElement, html, css } from 'lit';

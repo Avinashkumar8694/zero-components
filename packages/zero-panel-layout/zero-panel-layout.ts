@@ -1,3 +1,4 @@
+// @environment page
 import {
   RendererAttribute,
   RendererComponent,

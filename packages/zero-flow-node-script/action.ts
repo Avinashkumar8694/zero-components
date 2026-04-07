@@ -4,12 +4,27 @@ export interface FlowNodeActionResult {
 }
 
 export interface NodeActionContext {
+  /** The entry triggers input data */
   flowInput: Record<string, unknown>;
+  /** Global flow data state */
   data: Record<string, unknown>;
+  /** Local flow variables */
   locals: Record<string, unknown>;
+  /** Trace logger */
   log: (...args: unknown[]) => void;
+  /** Direct side-effect: emit an event */
+  emit: (channel: string, payload: unknown) => void;
+  /** Direct side-effect: wait for an event */
+  waitFor: (channel: string, timeoutMs?: number) => Promise<unknown>;
+  /** Method to persistently set global project variables */
+  setData: (key: string, value: unknown) => void;
+  /** Method to persistently set local node-scope variables */
+  setLocal: (key: string, value: unknown) => void;
 }
 
+/**
+ * The Script node allows custom logic execution with direct state access.
+ */
 export async function execute(
   config: Record<string, unknown>,
   input: Record<string, unknown>,
@@ -18,11 +33,25 @@ export async function execute(
   const code = String(config.code ?? "return input;");
 
   try {
+    // ACTIVE STATE PROXY: Allows direct mutation like state.key = val
+    const state = context ? new Proxy(context.data, {
+      set: (target, prop, value) => {
+        context.setData(String(prop), value);
+        return Reflect.set(target, prop, value);
+      },
+      get: (target, prop) => {
+        return context.data[String(prop)];
+      }
+    }) : (context?.data ?? {});
+
     const scope = {
       input,
       data: context?.data ?? {},
       locals: context?.locals ?? {},
+      state, // The orchestrator for direct mutation
       log: context?.log ?? console.log,
+      emit: context?.emit,
+      waitFor: context?.waitFor,
       JSON,
       Math,
       Date,
@@ -30,8 +59,6 @@ export async function execute(
       parseFloat,
       isNaN,
       isFinite,
-      encodeURIComponent,
-      decodeURIComponent,
       Array,
       Object,
       String: globalThis.String,
@@ -44,7 +71,6 @@ export async function execute(
         log: context?.log ?? console.log, 
         warn: context?.log ?? console.warn, 
         error: context?.log ?? console.error, 
-        info: context?.log ?? console.info 
       },
     };
 

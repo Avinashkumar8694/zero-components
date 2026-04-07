@@ -8,7 +8,10 @@
         "build": "node build-actions.js",
         "start": "node server/index.js",
         "dev": "node server/index.js",
-        "serve": "zero-gen serve"
+        "serve": "zero-gen serve",
+        "publish": "node publish-to-marketplace.js",
+        "publish:all": "node publish-to-marketplace.js all",
+        "publish:package": "node publish-to-marketplace.js"
     },
     "keywords": [],
     "author": "",

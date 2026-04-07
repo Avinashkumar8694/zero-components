@@ -4,41 +4,60 @@ export interface FlowNodeActionResult {
 }
 
 export interface NodeActionContext {
-  flowInput: Record<string, unknown>;
+  /** Global flow data state */
   data: Record<string, unknown>;
+  /** Local flow variables */
   locals: Record<string, unknown>;
+  /** Trace logger */
   log: (...args: unknown[]) => void;
 }
 
+/**
+ * The Switch node evaluates a conditional expression and determines the next branch.
+ */
 export async function execute(
   config: Record<string, unknown>, 
   input: Record<string, unknown>,
   context?: NodeActionContext
 ): Promise<FlowNodeActionResult> {
-  const expression = String(config.expression ?? "");
-  let result: unknown = true;
+  const expression = String(config.expression ?? "true");
+  let result: unknown = false;
 
-  if (expression.trim()) {
-    try {
-      const keys = ["input", "data", "locals"];
-      const values = [input, context?.data ?? {}, context?.locals ?? {}];
-      // eslint-disable-next-line @typescript-eslint/no-implied-eval
-      const fn = new Function(...keys, `"use strict"; return (${expression});`);
-      result = fn(...values);
-    } catch {
-      result = false;
-    }
+  try {
+    // Provide a standardized evaluation scope
+    const scope = {
+      input,
+      data: context?.data ?? {},
+      locals: context?.locals ?? {},
+      JSON,
+      Math,
+      Date,
+    };
+
+    const keys = Object.keys(scope);
+    const values = Object.values(scope);
+    
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval
+    const fn = new Function(...keys, `"use strict"; return (${expression});`);
+    result = fn(...values);
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    context?.log?.(`[Switch] Evaluation failed for "${expression}": ${message}`);
+    result = false;
   }
 
-  context?.log?.(`[Switch] Evaluated "${expression}" → ${JSON.stringify(result)}`);
+  const matched = Boolean(result);
+  context?.log?.(`[Switch] Evaluated "${expression}" → ${matched}`);
 
   return {
     output: { 
       ...input, 
-      result, 
-      matched: Boolean(result), 
-      expression 
+      __metadata: {
+        nodeType: "switch",
+        expression,
+        result: matched,
+      }
     },
-    next: null,
+    next: null, // Flow engine uses the result to choose the branch
   };
 }

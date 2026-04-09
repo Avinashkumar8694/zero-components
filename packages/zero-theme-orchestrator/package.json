@@ -1,0 +1,9 @@
+{
+  "name": "zero-theme-orchestrator",
+  "version": "1.0.0",
+  "description": "Central orchestrator for independent theme registration and discovery",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {}
+}

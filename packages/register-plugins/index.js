@@ -8,9 +8,9 @@
 import 'reflect-metadata';
 class RegisterPluginClass {
     constructor() {
-        // Initialize window.zero if it doesn't already exist
-        this.modules = {};
-        this.components = {}
+        // Initialize with existing data if available
+        this.modules = (window.zero && window.zero.modules) || {};
+        this.components = (window.zero && window.zero.components) || {};
         // Attach the element-connected event listener
         this.attachListeners();
     }
@@ -35,6 +35,10 @@ class RegisterPluginClass {
                 return;
             }
             const _class = customElements.get(event.detail.element.localName);
+            if (!_class || !_class.prototype) {
+                console.warn(`[Registry] Could not find class prototype for ${event.detail.element.localName}`);
+                return;
+            }
             const inputsMetadata = Reflect.getMetadata('ZeroAttribute', _class.prototype) || [];
             const componentMetadata = Reflect.getMetadata('ZeroComponent', _class.prototype);
             // Store the element under window.zero.components[element.selector]
@@ -48,8 +52,9 @@ class RegisterPluginClass {
                 componentMetadata
             };
             console.log('Component Loaded:', event.detail.element.localName);
-
-            // You can perform any additional actions here, such as updating component properties or state
+            window.dispatchEvent(new CustomEvent('zero-element:metadata-ready', {
+                detail: { element: event.detail.element.localName }
+            }));
         });
     }
 }
@@ -58,7 +63,10 @@ class RegisterPluginClass {
 if (!window.zero) {
     window.zero = new RegisterPluginClass();
 } else {
-    window.zero = Object.assign(window.zero, new RegisterPluginClass());
+    const existing = window.zero;
+    const instance = new RegisterPluginClass();
+    // Merge while preserving references if possible, but simplest is to replace with the instance that already pulled in 'existing' data
+    window.zero = instance;
 }
 
 // // Example usage: Define a class with an onInit method

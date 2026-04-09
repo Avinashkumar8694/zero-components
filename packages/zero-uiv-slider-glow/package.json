@@ -1,0 +1,13 @@
+{
+  "name": "zero-uiv-slider-neon",
+  "version": "1.0.0",
+  "description": "Uiverse-inspired Neon slider component",
+  "main": "zero-uiv-slider-neon.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "slider", "neon", "uiverse"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
+}

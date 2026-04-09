@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --sidebar-bg: rgba(30, 41, 59, 0.7);
+            --card-bg: rgba(30, 41, 59, 0.5);
+            --text-color: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent-color: #38bdf8;
+            --border-color: rgba(51, 65, 85, 0.5);
+            --glass-blur: blur(12px);
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-section { padding: 1.5rem 0.5rem; }
+        .nav-item {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 0.75rem 1.5rem; text-decoration: none;
+            color: var(--text-color); border-radius: 8px;
+            margin: 0.25rem 0.5rem; transition: all 0.3s ease;
+        }
+        .nav-item:hover { background: rgba(56, 189, 248, 0.1); color: var(--accent-color); }
+        .nav-item.active { background: var(--accent-color); color: #0f172a; }
+
+        .main-content { flex-grow: 1; padding: 3rem; overflow-y: auto; }
+        .settings-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 800px;
+            margin-bottom: 2rem;
+        }
+
+        .form-group { margin-bottom: 2rem; }
+        .form-label { display: block; margin-bottom: 0.75rem; color: var(--text-muted); font-size: 0.875rem; text-transform: uppercase; }
+        
+        select, input {
+            width: 100%; padding: 1rem; background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-color); border-radius: 8px;
+            color: white; outline: none; font-size: 1rem;
+        }
+
+        .theme-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem; margin-top: 1rem;
+        }
+
+        .theme-option {
+            padding: 1rem; border: 1px solid var(--border-color); border-radius: 8px;
+            cursor: pointer; text-align: center; transition: all 0.2s ease;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .theme-option:hover { border-color: var(--accent-color); }
+        .theme-option.active { border-color: var(--accent-color); background: rgba(56, 189, 248, 0.1); color: var(--accent-color); }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div style="padding: 2rem; border-bottom: 1px solid var(--border-color);">
+            <div style="font-size: 1.5rem; font-weight: 700; color: var(--accent-color); display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fas fa-layer-group"></i> <span>Zero Core</span>
+            </div>
+        </div>
+        <nav class="nav-section">
+            <a href="index.html" class="nav-item"><i class="fas fa-th-large"></i> Explore</a>
+            <a href="marketplace.html" class="nav-item"><i class="fas fa-shopping-bag"></i> Marketplace</a>
+            <a href="settings.html" class="nav-item active"><i class="fas fa-sliders-h"></i> Settings</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <h1>Global Settings</h1>
+        <p style="color: var(--text-muted); margin-bottom: 3rem;">Configure your global theme orchestrator and provider preferences.</p>
+
+        <div class="settings-card">
+            <h3>Environment</h3>
+            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <label class="form-label" style="display:inline-block; margin-bottom:0">Live Developer Mode</label>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0.25rem 0 0 0;">Load component source files directly for zero-build testing.</p>
+                </div>
+                <label style="position: relative; display: inline-block; width: 50px; height: 28px;">
+                    <input type="checkbox" id="devModeToggle" onchange="toggleDevMode()" style="opacity: 0; width: 0; height: 0;">
+                    <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;" id="devModeSlider"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <h3>Theme Provider</h3>
+            <div class="form-group">
+                <label class="form-label">Active Provider</label>
+                <select id="providerSelect" onchange="changeProvider()">
+                    <!-- Populated by JS -->
+                </select>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <h3>Active Theme</h3>
+            <div class="form-group">
+                <label class="form-label">Select Theme Style</label>
+                <div id="themeGrid" class="theme-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/packages/register-plugins/index.js"></script>
+    <script type="module" src="/packages/zero-theme-orchestrator/src/index.ts"></script>
+    <script type="module" src="/packages/zero-uiv-themes/src/index.ts"></script>
+    <script type="module" src="./index.ts"></script>
+    <script>
+        function toggleDevMode() {
+            const isDev = document.getElementById('devModeToggle').checked;
+            localStorage.setItem('zero-env-mode', isDev ? 'dev' : 'prod');
+            alert('Environment changed! Reloading dashboard...');
+            window.location.reload();
+        }
+
+        function renderSettings() {
+            const isDev = localStorage.getItem('zero-env-mode') === 'dev';
+            document.getElementById('devModeToggle').checked = isDev;
+            document.getElementById('devModeSlider').style.backgroundColor = isDev ? 'var(--accent-color)' : '#ccc';
+
+            const manager = window.zeroThemeManager;
+            if (!manager) {
+                setTimeout(renderSettings, 100);
+                return;
+            }
+
+            const providers = manager.getProviders();
+            const providerSelect = document.getElementById('providerSelect');
+            const activePID = manager.getActiveProviderId();
+
+            providerSelect.innerHTML = providers.map(p => 
+                `<option value="${p.id}" ${p.id === activePID ? 'selected' : ''}>${p.name}</option>`
+            ).join('');
+
+            const activeProvider = providers.find(p => p.id === activePID);
+            if (activeProvider) {
+                const themes = activeProvider.getThemeNames();
+                const activeTheme = manager.getActiveThemeName();
+                const themeGrid = document.getElementById('themeGrid');
+                
+                themeGrid.innerHTML = themes.map(t => `
+                    <div class="theme-option ${t === activeTheme ? 'active' : ''}" onclick="window.zeroThemeManager.setActiveTheme('${t}'); renderSettings();">
+                        <i class="fas ${getThemeIcon(t)}" style="display: block; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                        ${t.charAt(0).toUpperCase() + t.slice(1)}
+                    </div>
+                `).join('');
+            }
+        }
+
+        function getThemeIcon(name) {
+            const icons = {
+                modern: 'fa-rocket',
+                cyber: 'fa-terminal',
+                glass: 'fa-square',
+                retro: 'fa-gamepad',
+                neon: 'fa-bolt'
+            };
+            return icons[name] || 'fa-palette';
+        }
+
+        function changeProvider() {
+            const id = document.getElementById('providerSelect').value;
+            window.zeroThemeManager.setActiveProvider(id);
+            renderSettings();
+        }
+
+        window.addEventListener('library-ready', renderSettings);
+        window.addEventListener('DOMContentLoaded', () => {
+            renderSettings();
+            // Listen for structural changes in themes/providers
+            if (window.zeroThemeManager) {
+                window.zeroThemeManager.addEventListener('providers-changed', renderSettings);
+                window.zeroThemeManager.addEventListener('theme-changed', renderSettings);
+            } else {
+                // Fallback for extreme late-binding
+                window.addEventListener('zero-orchestrator-ready', () => {
+                    window.zeroThemeManager.addEventListener('providers-changed', renderSettings);
+                    window.zeroThemeManager.addEventListener('theme-changed', renderSettings);
+                    renderSettings();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

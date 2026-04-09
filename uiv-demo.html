@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zero UIV Component Library Demo</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 40px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            margin-bottom: 60px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 3rem;
+            background: linear-gradient(90deg, #6c63ff, #ff00c1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        section {
+            margin-bottom: 80px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        h2 {
+            font-size: 1.8rem;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            color: #94a3b8;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 40px;
+            align-items: center;
+            justify-items: center;
+        }
+        .full-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .component-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.2);
+            width: 100%;
+        }
+        .component-label {
+            font-size: 0.8rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+    
+    <!-- Component Scripts -->
+    <script type="module">
+        import './packages/zero-uiv-button-cyber/zero-uiv-button-cyber.ts';
+        import './packages/zero-uiv-button-glass/zero-uiv-button-glass.ts';
+        import './packages/zero-uiv-button-retro/zero-uiv-button-retro.ts';
+        import './packages/zero-uiv-button-neon/zero-uiv-button-neon.ts';
+        import './packages/zero-uiv-button-modern/zero-uiv-button-modern.ts';
+        import './packages/zero-uiv-checkbox-heart/zero-uiv-checkbox-heart.ts';
+        import './packages/zero-uiv-checkbox-neon/zero-uiv-checkbox-neon.ts';
+        import './packages/zero-uiv-checkbox-tick/zero-uiv-checkbox-tick.ts';
+        import './packages/zero-uiv-input-floating/zero-uiv-input-floating.ts';
+        import './packages/zero-uiv-input-cyber/zero-uiv-input-cyber.ts';
+        import './packages/zero-uiv-input-neon/zero-uiv-input-neon.ts';
+        import './packages/zero-uiv-loader-orbit/zero-uiv-loader-orbit.ts';
+        import './packages/zero-uiv-switch-ios/zero-uiv-switch-ios.ts';
+        import './packages/zero-uiv-card-glass/zero-uiv-card-glass.ts';
+        import './packages/zero-uiv-radio-neon/zero-uiv-radio-neon.ts';
+        import './packages/zero-uiv-tooltip-modern/zero-uiv-tooltip-modern.ts';
+        
+        // Complex Components
+        import './packages/zero-uiv-table-cyber/zero-uiv-table-cyber.ts';
+        import './packages/zero-uiv-table-glass/zero-uiv-table-glass.ts';
+        import './packages/zero-uiv-table-retro/zero-uiv-table-retro.ts';
+        import './packages/zero-uiv-slider-neon/zero-uiv-slider-neon.ts';
+        import './packages/zero-uiv-slider-cyber/zero-uiv-slider-cyber.ts';
+        import './packages/zero-uiv-slider-modern/zero-uiv-slider-modern.ts';
+        import './packages/zero-uiv-expansion-modern/zero-uiv-expansion-modern.ts';
+        import './packages/zero-uiv-expansion-glass/zero-uiv-expansion-glass.ts';
+        import './packages/zero-uiv-expansion-retro/zero-uiv-expansion-retro.ts';
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Zero Style Hub</h1>
+            <p>Uiverse-inspired Lit Components Library</p>
+        </header>
+
+        <section id="buttons">
+            <h2>Buttons (Advanced)</h2>
+            <div class="grid">
+                <div class="component-box">
+                    <span class="component-label">Cyber Loading</span>
+                    <zero-uiv-button-cyber-1.0.0 label="Processing" loading tag="BUSY"></zero-uiv-button-cyber-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Glass Danger</span>
+                    <zero-uiv-button-glass-1.0.0 label="Delete" variant="danger"></zero-uiv-button-glass-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Retro Primary</span>
+                    <zero-uiv-button-retro-1.0.0 label="Confirm" variant="primary"></zero-uiv-button-retro-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Neon Secondary</span>
+                    <zero-uiv-button-neon-1.0.0 label="Explore" variant="secondary" neon-color="#4fd1c5"></zero-uiv-button-neon-1.0.0>
+                </div>
+            </div>
+        </section>
+
+        <section id="inputs">
+            <h2>Inputs (Advanced)</h2>
+            <div class="grid">
+                <div class="component-box">
+                    <span class="component-label">Cyber Error</span>
+                    <zero-uiv-input-cyber-1.0.0 label="Username" error error-text="Invalid characters detected"></zero-uiv-input-cyber-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Floating Clearable</span>
+                    <zero-uiv-input-floating-1.0.0 label="Search" value="Type here..." clearable></zero-uiv-input-floating-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Neon Prefix</span>
+                    <zero-uiv-input-neon-1.0.0 label="Email">
+                        <span slot="prefix">📧</span>
+                    </zero-uiv-input-neon-1.0.0>
+                </div>
+            </div>
+        </section>
+
+        <section id="tables">
+            <h2>Tables (Sorting & Selection)</h2>
+            <div class="full-grid">
+                <div class="component-box">
+                    <span class="component-label">Cyber Table (Selectable)</span>
+                    <zero-uiv-table-cyber-1.0.0 selectable></zero-uiv-table-cyber-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Glass Table (Loading)</span>
+                    <zero-uiv-table-glass-1.0.0 loading caption="Real-time Feed"></zero-uiv-table-glass-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Retro Table (Empty)</span>
+                    <zero-uiv-table-retro-1.0.0 .data="${[]}"></zero-uiv-table-retro-1.0.0>
+                </div>
+            </div>
+        </section>
+
+        <section id="sliders">
+            <h2>Sliders (Complex)</h2>
+            <div class="grid">
+                <div class="component-box">
+                    <span class="component-label">Neon Slider</span>
+                    <zero-uiv-slider-neon-1.0.0 label="Volume" neon-color="#00fbff" value="70"></zero-uiv-slider-neon-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Cyber Slider</span>
+                    <zero-uiv-slider-cyber-1.0.0 label="Power" cyber-color="#ff003c" value="45"></zero-uiv-slider-cyber-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Modern Slider</span>
+                    <zero-uiv-slider-modern-1.0.0 label="Scale" value="80"></zero-uiv-slider-modern-1.0.0>
+                </div>
+            </div>
+        </section>
+
+        <section id="expansion">
+            <h2>Expansion Panels (Accordion)</h2>
+            <div class="full-grid">
+                <div class="component-box">
+                    <span class="component-label">Coordinated Group A</span>
+                    <zero-uiv-expansion-modern-1.0.0 group="A" title="Primary Settings">
+                        <p>This is part of group A.</p>
+                    </zero-uiv-expansion-modern-1.0.0>
+                    <zero-uiv-expansion-modern-1.0.0 group="A" title="Secondary Settings">
+                        <p>Opening this will close Primary Settings.</p>
+                    </zero-uiv-expansion-modern-1.0.0>
+                </div>
+            </div>
+        </section>
+
+        <section id="others">
+            <h2>Feedback & Basic</h2>
+            <div class="grid">
+                <div class="component-box">
+                    <span class="component-label">Heart Checkbox</span>
+                    <zero-uiv-checkbox-heart-1.0.0 label="Like" checked="true"></zero-uiv-checkbox-heart-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Neon Toggle</span>
+                    <zero-uiv-switch-ios-1.0.0 label="Active" checked="true" active-color="#4cd964"></zero-uiv-switch-ios-1.0.0>
+                </div>
+                <div class="component-box">
+                    <span class="component-label">Orbit Loader</span>
+                    <zero-uiv-loader-orbit-1.0.0 loader-color="#00fbff" size="50"></zero-uiv-loader-orbit-1.0.0>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "zero-uiv-switch-ios",
+  "version": "1.0.0",
+  "description": "Uiverse-inspired iOS switch component",
+  "main": "zero-uiv-switch-ios.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "switch", "ios", "uiverse"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "zero-uiv-table-frosted",
+  "version": "1.0.0",
+  "description": "Uiverse-inspired Frosted effect table component",
+  "main": "zero-uiv-table-frosted.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "table", "frosted", "uiverse"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
+}

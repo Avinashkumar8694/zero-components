@@ -1,4 +1,12 @@
-import * as componentsLib from './public-api.ts';
+import * as Lit from 'lit';
+import * as LitDecorators from 'lit/decorators.js';
+import * as ZeroAnnotation from 'zero-annotation';
+
+(window as any).lit = Lit;
+(window as any)['lit/decorators.js'] = LitDecorators;
+(window as any)['zero-annotation'] = ZeroAnnotation;
+
+
 import { UserInterfaceType, DropdownOptionItem,RangeSettings } from 'zero-annotation';
 declare global {
     interface Window {
@@ -8,25 +16,60 @@ declare global {
 
 // Initialize global components object
 globalThis.zeroComponents = {} as Record<string, any>;
+let activeComponentName: string | null = null;
+
+// 1. Move Listeners to top level so they catch early registration events
+window.addEventListener('element-connected', (event: CustomEvent) => {
+    const element = event.detail.element;
+    console.log('Component Loaded:', element);
+    updateComponentList(); 
+});
+
+window.addEventListener('zero-element:metadata-ready', (event: any) => {
+    const componentName = event.detail.element;
+    console.log(`[Registry] Metadata ready for ${componentName}, updating settings.`);
+    updateNavForComponent(componentName);
+    attachOutputListeners(componentName);
+});
+
+window.addEventListener('plugins-updated', () => {
+    updateComponentList(); 
+});
+
+window.addEventListener('zero-element:component-load', (event: any) => {
+    const metadata = event.detail.element;
+    if (metadata && metadata.selector) {
+        const fullSelector = `${metadata.selector}-${metadata.version}`;
+        console.log('[Registry] Registering component:', fullSelector);
+        // Ensure zeroLibrary or componentRegistry has this metadata
+        (window as any).zeroLibrary = (window as any).zeroLibrary || {};
+        (window as any).zeroLibrary[fullSelector] = metadata;
+        
+        registerComponent(fullSelector, {
+            inputs: metadata.inputs,
+            outputs: metadata.outputs
+        });
+    }
+});
+
+// Move bridge import down to ensure listeners are attached first
+import './bridge.ts';
 
 const initializeStyles = () => {
-    window.addEventListener('element-connected', (event: CustomEvent) => {
-        const element = event.detail.element;
-        console.log('Component Loaded:', element);
-        // You can perform any additional actions here, such as updating component properties or state
-      });
     window.addEventListener('register-plugins', (event: CustomEvent) => {
         console.log('Module Loaded:', event);
-        // You can perform any additional actions here, such as updating component properties or state
-      });
+    });
+    
     const styleElement = document.createElement('style');
     document.head?.appendChild(styleElement);
 };
 
 const createInputElement = (key: string, config: any, customElement: HTMLElement) => {
     const inputElement = document.createElement('div');
+    inputElement.className = 'setting-group';
     
     const label = document.createElement('label');
+    label.className = 'setting-label';
     label.textContent = config.displayLabel || key;
     label.htmlFor = key;
     inputElement.appendChild(label);
@@ -211,133 +254,293 @@ const registerComponent = (name: string, config: { inputs?: any; outputs?: any }
     // Update the UI to show the component in the list
     updateComponentList();
 
-    (outputs.events || []).forEach(event => {
-        customElement.addEventListener(event, (e: Event) => {
-            console.log(`[${name}][event:${event}]`, e);
-        });
-    });
-};
-
-const loadComponents = (): Promise<void> => {
-    return new Promise((resolve) => {
-        const componentsConfig = extractComponentsConfig();
-        Object.entries(componentsConfig).forEach(([name, config]) => {
-            registerComponent(name, config);
-        });
-        resolve(); // Notify that components have been loaded
-    });
-};
-
-const extractComponentsConfig = (): Record<string, any> => {
-    const components = {} as Record<string, any>;
-
-    for (const _class of Object.values(componentsLib)) {
-        if(!_class.prototype){
-            continue;
-        }
-        const inputsMetadata = Reflect.getMetadata('ZeroAttribute', _class.prototype) || [];
-        const componentMetadata = Reflect.getMetadata('ZeroComponent', _class.prototype);
-        const selector = `${componentMetadata.selector}-${componentMetadata.version}`;
-
-        components[selector] = {
-            inputs: inputsMetadata.filter(input => !input.eventTrigger).reduce((acc: Record<string, any>, { fieldMappings, ...rest }) => {
-                acc[fieldMappings] = { ...rest };
-                return acc;
-            }, {}),
-            outputs: { events: inputsMetadata.filter(input => input.eventTrigger).map(input => input.eventTrigger) },
-        };
+    // If this is the active component, refresh its nav
+    if (activeComponentName === name) {
+        updateNavForComponent(name);
     }
 
-    return components;
+    // Try to attach output listeners immediately (if metadata is already there)
+    attachOutputListeners(name);
 };
 
-// Function to update the component list in the UI
-const updateComponentList = () => {
-    const componentList = document.getElementById('componentList');
-    if (componentList) {
-        componentList.innerHTML = ''; // Clear existing list
-        Object.keys(globalThis.zeroComponents).forEach(key => {
-            const listItem = document.createElement('li');
-            listItem.textContent = key;
-            listItem.addEventListener('click', () => {
-                const component = globalThis.zeroComponents[key][0]; // Assuming single instance for simplicity
-                displayComponent(component);
-                updateUrlWithComponent(key);
-                updateNavForComponent(key); // Open sidenav
-            });
-            componentList.appendChild(listItem);
+const attachOutputListeners = (name: string) => {
+    const config = (window as any).zero?.components?.[name];
+    const instance = globalThis.zeroComponents[name]?.[0];
+    
+    if (config && config.outputs && instance) {
+        (config.outputs.events || []).forEach((event: string) => {
+            // Avoid duplicate listeners
+            if (!instance[`__zero_listener_${event}`]) {
+                console.log(`[Registry] Attaching output listener: ${event} for ${name}`);
+                instance.addEventListener(event, (e: any) => {
+                    console.log(`[${name}][event:${event}]`, e);
+                    logEvent(name, event, e.detail || e);
+                });
+                instance[`__zero_listener_${event}`] = true;
+            }
         });
-    } else {
-        console.error('componentList element not found');
+    }
+};
+
+const logEvent = (componentName: string, eventName: string, detail: any) => {
+    const logContainer = document.getElementById('event-log');
+    if (logContainer) {
+        // Remove "Waiting for events..." if it exists
+        if (logContainer.innerHTML.includes('Waiting for events...')) {
+            logContainer.innerHTML = '';
+        }
+
+        const entry = document.createElement('div');
+        entry.style.marginBottom = '0.75rem';
+        entry.style.paddingBottom = '0.75rem';
+        entry.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+
+        const timestamp = new Date().toLocaleTimeString();
+        const detailStr = typeof detail === 'object' ? JSON.stringify(detail, null, 2) : detail;
+
+        entry.innerHTML = `
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                <span style="color: var(--accent-color); font-weight: 600;">${eventName}</span>
+                <span style="color: var(--text-muted); font-size: 0.7rem;">${timestamp}</span>
+            </div>
+            <pre style="margin: 0; overflow-x: auto; white-space: pre-wrap; font-size: 0.75rem;">${detailStr}</pre>
+        `;
+        
+        logContainer.prepend(entry);
+    }
+};
+
+(window as any).clearEventLog = () => {
+    const logContainer = document.getElementById('event-log');
+    if (logContainer) {
+        logContainer.innerHTML = '<div style="color: var(--text-muted)">Waiting for events...</div>';
+    }
+};
+
+// Simplified component loading - Registry is populated by dynamically injected scripts
+const loadComponents = async (): Promise<void> => {
+    return new Promise((resolve) => {
+        window.addEventListener('plugins-ready', () => {
+            console.log('[Dashboard] Plugins ready signal received from bridge');
+            window.dispatchEvent(new CustomEvent('library-ready'));
+            resolve();
+        });
+        
+        // Safety timeout in case bridge fails or plugins were already ready
+        setTimeout(() => {
+            window.dispatchEvent(new CustomEvent('library-ready'));
+            resolve();
+        }, 3000);
+    });
+};
+
+const extractComponentsConfig = () => {
+    return (window as any).componentRegistry || {};
+};
+
+// UI Update Logic
+const updateComponentList = () => {
+    const list = document.getElementById('quickNavList');
+    const grid = document.getElementById('exploreView');
+    const registeredComponents = Object.keys(globalThis.zeroComponents);
+    
+    if (list) {
+        list.innerHTML = '';
+        registeredComponents.forEach(key => {
+            const item = document.createElement('a');
+            item.className = 'nav-item';
+            
+            // Fetch metadata for better display
+            const config = (window as any).zero?.components?.[key] || 
+                           (window as any).zeroLibrary?.[key] || 
+                           (window as any).componentRegistry?.[key];
+            
+            const displayName = config?.componentMetadata?.name || key.substring(0, key.lastIndexOf('-') || key.length);
+            const displaySelector = key;
+            
+            item.innerHTML = `
+                <div style="display: flex; flex-direction: column; overflow: hidden;">
+                    <span style="font-weight: 600; font-size: 0.9rem;">${displayName}</span>
+                    <span style="color: var(--text-muted); font-size: 0.7rem; font-family: monospace;">${displaySelector}</span>
+                </div>
+            `;
+            item.href = '#';
+            item.onclick = () => {
+                activeComponentName = key;
+                displayComponent(globalThis.zeroComponents[key][0]);
+                showPreview(key);
+                updateNavForComponent(key);
+            };
+            list.appendChild(item);
+        });
+    }
+
+    if (grid && document.getElementById('exploreView')?.style.display !== 'none') {
+        grid.innerHTML = '';
+        if (registeredComponents.length === 0) {
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);"><h3>No components added yet</h3><p>Go to the <a href="marketplace.html" style="color: var(--accent-color)">Marketplace</a> to browse and add components.</p></div>';
+        }
+        registeredComponents.forEach(key => {
+            const config = (window as any).zero?.components?.[key] || 
+                           (window as any).zeroLibrary?.[key] || 
+                           (window as any).componentRegistry?.[key];
+            
+            const displayName = config?.componentMetadata?.name || key.substring(0, key.lastIndexOf('-') || key.length);
+            const displaySelector = key;
+
+            const card = document.createElement('div');
+            card.className = 'component-card';
+            card.innerHTML = `
+                <div style="font-size: 2rem; color: var(--accent-color); margin-bottom: 1rem;"><i class="fas fa-puzzle-piece"></i></div>
+                <h3 style="margin: 0; font-size: 1.1rem;">${displayName}</h3>
+                <div style="color: var(--text-muted); font-size: 0.75rem; font-family: monospace; margin-top: 0.25rem;">${displaySelector}</div>
+                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.75rem;">${config?.componentMetadata?.title || 'Dynamic Lit component with active theme support.'}</p>
+            `;
+            card.onclick = () => {
+                activeComponentName = key;
+                displayComponent(globalThis.zeroComponents[key][0]);
+                showPreview(key);
+                updateNavForComponent(key);
+            };
+            grid.appendChild(card);
+        });
     }
 };
 
 const displayComponent = (component: HTMLElement) => {
-    const main = document.getElementById('main');
-    if (main) {
-        main.innerHTML = ''; // Clear existing content
-        main.appendChild(component);
-    } else {
-        console.error('main element not found');
+    const preview = document.getElementById('mainPreview');
+    if (preview) {
+        preview.innerHTML = '';
+        preview.appendChild(component);
     }
 };
 
-const updateUrlWithComponent = (componentName: string) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('component', componentName);
-    history.pushState({}, '', url.toString());
-};
-
-// Event listener for DOMContentLoaded
-document.addEventListener('DOMContentLoaded', async () => {
-    initializeStyles();
-    await loadComponents(); // Ensure components are loaded before updating the UI
-    updateComponentList(); // Update the UI with the list of component keys
-
-    // Handle URL changes
-    const urlParams = new URLSearchParams(window.location.search);
-    const componentName = urlParams.get('component');
-    if (componentName) {
-        const component = globalThis.zeroComponents[componentName]?.[0];
-        if (component) {
-            displayComponent(component);
-            updateNavForComponent(componentName);
-        }
-    } else {
-        hideNav(); // Hide sidenav if no component is selected
-    }
-});
-
-// Update sidenav based on selected component
 const updateNavForComponent = (componentName: string) => {
     const sidenavelist = document.getElementById('sidenav-list');
-    const componentConfig = extractComponentsConfig()[componentName];
-    if (sidenavelist && componentConfig) {
-        sidenavelist.innerHTML = ''; // Clear existing inputs
-        Object.entries(componentConfig.inputs).forEach(([key, config]) => {
-            const inputElement = createInputElement(key, config, globalThis.zeroComponents[componentName][0]);
+    // Prioritize window.zero.components populated by register-plugins
+    const config = (window as any).zero?.components?.[componentName] || 
+                   (window as any).zeroLibrary?.[componentName] || 
+                   (window as any).componentRegistry?.[componentName];
+    
+    if (sidenavelist && config) {
+        sidenavelist.innerHTML = '';
+        const inputs = config.inputs || {};
+        const instances = globalThis.zeroComponents[componentName];
+        
+        if (!instances || instances.length === 0) {
+            sidenavelist.innerHTML = '<div style="color: var(--text-muted)">Waiting for component instance...</div>';
+            return;
+        }
+
+        Object.entries(inputs).forEach(([key, inputConfig]) => {
+            const inputElement = createInputElement(key, inputConfig, instances[0]);
             sidenavelist.appendChild(inputElement);
         });
-        showNav(); // Show sidenav when a component is selected
-    } else {
-        console.error('sidenav-list element not found or componentConfig not found');
+    } else if (sidenavelist) {
+        sidenavelist.innerHTML = '<div style="color: var(--text-muted)">No configurable properties found.</div>';
     }
 };
 
-const showNav = () => {
-    const sidenav = document.getElementById('sidenav');
-    if (sidenav) {
-        sidenav.style.display = 'block';
-    } else {
-        console.error('sidenav element not found');
-    }
+// View Management
+const showExplore = () => {
+    const exploreView = document.getElementById('exploreView');
+    const previewView = document.getElementById('previewView');
+    const pageTitle = document.getElementById('pageTitle');
+    const globalNav = document.getElementById('globalNav');
+    const componentNav = document.getElementById('componentNav');
+
+    if (exploreView) exploreView.style.display = 'grid';
+    if (previewView) previewView.style.display = 'none';
+    if (pageTitle) pageTitle.textContent = 'Component Explorer';
+    if (globalNav) globalNav.style.display = 'block';
+    if (componentNav) componentNav.style.display = 'none';
+    
+    activeComponentName = null;
 };
 
-const hideNav = () => {
-    const sidenav = document.getElementById('sidenav');
-    if (sidenav) {
-        sidenav.style.display = 'none';
-    } else {
-        console.error('sidenav element not found');
-    }
+const showPreview = (name: string) => {
+    const exploreView = document.getElementById('exploreView');
+    const previewView = document.getElementById('previewView');
+    const pageTitle = document.getElementById('pageTitle');
+    const globalNav = document.getElementById('globalNav');
+    const componentNav = document.getElementById('componentNav');
+
+    if (exploreView) exploreView.style.display = 'none';
+    if (previewView) previewView.style.display = 'block';
+    
+    // Format name and version for title
+    const config = (window as any).zero?.components?.[name] || 
+                   (window as any).zeroLibrary?.[name] || 
+                   (window as any).componentRegistry?.[name];
+                   
+    const displayName = config?.componentMetadata?.name || name;
+    const displaySelector = name;
+    
+    if (pageTitle) pageTitle.innerHTML = `
+        <div style="display: flex; flex-direction: column;">
+            <span>${displayName}</span>
+            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: monospace;">${displaySelector}</span>
+        </div>
+    `;
+    if (globalNav) globalNav.style.display = 'none';
+    if (componentNav) componentNav.style.display = 'flex';
 };
+
+(window as any).showExplore = showExplore;
+(window as any).showPreview = showPreview;
+
+// Initialization
+document.addEventListener('DOMContentLoaded', async () => {
+    initializeStyles();
+    await loadComponents();
+    updateComponentList();
+    showExplore(); // Ensure explorer is shown initially
+});
+
+// window.addEventListener('plugins-updated', () => {
+//     window.location.reload(); 
+// });
+
+// Theme Status Sync & Global Variable Injection
+const updateDashboardTheme = () => {
+    const themeSpan = document.getElementById('currentThemeName');
+    const manager = (window as any).zeroThemeManager;
+    if (!manager) return;
+    
+    // 1. Update Header Text
+    if (themeSpan) {
+        themeSpan.textContent = manager.getActiveThemeName();
+    }
+
+    // 2. Inject Preview-Specific overrides if needed
+    // The Orchestrator now handles :root variable injection.
+    // We only need to ensure the preview pane uses the correct variables.
+    let styleTag = document.getElementById('zero-preview-styles');
+    if (!styleTag) {
+        styleTag = document.createElement('style');
+        styleTag.id = 'zero-preview-styles';
+        document.head.appendChild(styleTag);
+    }
+    
+    styleTag.innerHTML = `
+        .preview-pane {
+            background-color: var(--uiv-app-bg, var(--uiv-bg-color, #0f172a));
+            background-image: radial-gradient(var(--uiv-app-border-color, rgba(255,255,255,0.1)) 1.5px, transparent 1.5px);
+            background-size: 30px 30px;
+            border-color: var(--uiv-app-border-color, var(--uiv-primary-color, rgba(51, 65, 85, 0.5)));
+            backdrop-filter: var(--uiv-app-glass-blur, none);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3), inset 0 0 60px rgba(0,0,0,0.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        /* Ensure component labels are visible */
+        .preview-pane span, .preview-pane label {
+            color: var(--uiv-app-text-color, var(--uiv-text-color, #fff));
+        }
+    `;
+};
+
+(window as any).zeroThemeManager?.addEventListener('theme-changed', updateDashboardTheme);
+(window as any).zeroThemeManager?.addEventListener('providers-changed', updateDashboardTheme);
+updateDashboardTheme();

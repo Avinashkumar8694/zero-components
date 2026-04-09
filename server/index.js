@@ -2,10 +2,14 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import { env } from 'node:process';
-import cors from 'cors'; // Import cors
+import { fileURLToPath } from 'url';
+import cors from 'cors'; 
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = env.PORT || 3000;
+const port = env.PORT || 5555;
 const basePath = env.BASE_PATH || '';
 
 app.use(express.json()); // Middleware to parse JSON bodies
@@ -65,7 +69,7 @@ const setupRoutes = (app, basePath) => {
         });
     });
 
-    // Delete a file
+    // DELETE a file
     router.delete('/files/:fileName', (req, res) => {
         const filePath = path.join('plugins', req.params.fileName);
 
@@ -77,8 +81,73 @@ const setupRoutes = (app, basePath) => {
         });
     });
 
+    // Configuration persistence
+    const configPath = path.resolve('zero-config.json');
+
+    router.get('/config', (req, res) => {
+        if (!fs.existsSync(configPath)) {
+            const defaultConfig = { installedPlugins: [], activeProvider: '', activeTheme: '' };
+            fs.writeFileSync(configPath, JSON.stringify(defaultConfig, null, 2));
+            return res.json(defaultConfig);
+        }
+        fs.readFile(configPath, 'utf8', (err, data) => {
+            if (err) return res.status(500).json({ error: 'Failed to read config' });
+            res.json(JSON.parse(data));
+        });
+    });
+
+    router.post('/config', (req, res) => {
+        fs.writeFile(configPath, JSON.stringify(req.body, null, 2), err => {
+            if (err) return res.status(500).json({ error: 'Failed to save config' });
+            res.json({ message: 'Configuration saved' });
+        });
+    });
+
+    // Discovery API - Scan packages directory for live development mode
+    router.get('/discovery', async (req, res) => {
+        const targetDir = path.resolve(__dirname, '../packages');
+        if (!fs.existsSync(targetDir)) return res.json({ components: [], themes: [] });
+
+        try {
+            const dirs = await fs.promises.readdir(targetDir, { withFileTypes: true });
+            const discovery = { components: [], themes: [] };
+            
+            const promises = dirs.filter(d => d.isDirectory()).map(async (d) => {
+                const pkgPath = path.join(targetDir, d.name, 'package.json');
+                try {
+                    const content = await fs.promises.readFile(pkgPath, 'utf8');
+                    const pkg = JSON.parse(content);
+                    const plugin = pkg.zeroPlugin || (pkg.zero?.component ? { type: 'component' } : null);
+                    
+                    if (plugin) {
+                        let mainPath = fs.existsSync(path.join(targetDir, d.name, 'src/index.ts')) 
+                            ? `/packages/${d.name}/src/index.ts` 
+                            : `/packages/${d.name}/${d.name}.ts`;
+
+                        const item = {
+                            id: d.name,
+                            name: plugin.name || d.name.replace('zero-uiv-', '').toUpperCase(),
+                            desc: plugin.description || pkg.description || 'Unified Lit plugin',
+                            type: plugin.type || 'component',
+                            selector: d.name,
+                            main: mainPath
+                        };
+                        if (item.type === 'theme') discovery.themes.push(item);
+                        else discovery.components.push(item);
+                    }
+                } catch (e) { /* skip */ }
+            });
+
+            await Promise.all(promises);
+            res.json(discovery);
+        } catch (err) {
+            res.status(500).json({ error: 'Discovery failure' });
+        }
+    });
+
+
     // Serve static files from 'plugins' directory
-    router.use('/plugins', express.static('plugins'));
+    router.use('/plugins', express.static(path.join(__dirname, 'plugins')));
 
     app.use(basePath, router);
 };

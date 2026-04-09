@@ -1,0 +1,13 @@
+{
+  "name": "zero-uiv-checkbox-glow",
+  "version": "1.0.0",
+  "description": "Uiverse-inspired Glow effect checkbox component",
+  "main": "zero-uiv-checkbox-glow.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "checkbox", "glow", "uiverse"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
+}

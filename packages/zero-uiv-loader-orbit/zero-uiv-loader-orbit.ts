@@ -1,0 +1,102 @@
+import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
+import { LitElement, html, css } from 'lit';
+import { property } from 'lit/decorators.js';
+
+@RendererComponent({
+    name: 'zero-uiv-loader-orbit',
+    version: '1.0.0',
+    title: 'Orbit Loader',
+    elementSelector: 'zero-uiv-loader-orbit',
+    group: 'Uiverse Loaders',
+    iconName: 'loader-icon.png',
+})
+@applyGlobalStyles()
+export class ZeroUivLoaderOrbit extends LitElement {
+    static styles = css`
+        :host {
+            --uiv-loader-color: var(--uiv-primary-color, #6366f1);
+            --uiv-loader-accent: var(--uiv-secondary-color, #8b5cf6);
+            --uiv-size: 50px;
+            --intensity: var(--uiv-glow-intensity, 1);
+            display: inline-block;
+        }
+
+        .orbit-container {
+            width: var(--uiv-size);
+            height: var(--uiv-size);
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .center {
+            width: calc(var(--uiv-size) * 0.3);
+            height: calc(var(--uiv-size) * 0.3);
+            background: var(--uiv-loader-color);
+            border-radius: 50%;
+            box-shadow: 0 0 calc(15px * var(--intensity)) var(--uiv-loader-color);
+        }
+
+        .orbit {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+
+        .planet {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: calc(var(--uiv-size) * 0.2);
+            height: calc(var(--uiv-size) * 0.2);
+            background: var(--uiv-loader-accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--uiv-loader-accent);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    `;
+
+    @property({ type: String })
+    @RendererAttribute({
+        attributeType: AttributeType.PROPERTY,
+        uiComponentType: UserInterfaceType.COLOR_PICKER,
+        displayLabel: 'Loader Color',
+        fieldMappings: 'loaderColor',
+    })
+    loaderColor = '#6c63ff';
+
+    @property({ type: Number })
+    @RendererAttribute({
+        attributeType: AttributeType.PROPERTY,
+        uiComponentType: UserInterfaceType.NUMBER_INPUT,
+        displayLabel: 'Size',
+        fieldMappings: 'size',
+    })
+    size = 50;
+
+    render() {
+        return html`
+            <style>
+                :host {
+                    --uiv-loader-color: ${this.loaderColor};
+                    --uiv-size: ${this.size}px;
+                }
+            </style>
+            <div class="orbit-container" role="status" aria-busy="true" aria-label="Loading">
+                <div class="center"></div>
+                <div class="orbit">
+                    <div class="planet"></div>
+                </div>
+            </div>
+        `;
+    }
+}

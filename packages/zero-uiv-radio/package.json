@@ -1,0 +1,18 @@
+{
+  "name": "zero-uiv-radio",
+  "version": "1.0.0",
+  "description": "Unified Uiverse-inspired radio component",
+  "main": "zero-uiv-radio.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "radio", "uiverse"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  },
+  "dependencies": {
+    "lit": "^3.0.0",
+    "zero-annotation": "workspace:*",
+    "zero-uiv-themes": "workspace:*"
+  }
+}

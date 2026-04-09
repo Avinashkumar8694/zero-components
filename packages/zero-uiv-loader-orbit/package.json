@@ -1,0 +1,13 @@
+{
+  "name": "zero-uiv-loader-orbit",
+  "version": "1.0.0",
+  "description": "Uiverse-inspired Orbit loader component",
+  "main": "zero-uiv-loader-orbit.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "loader", "orbit", "uiverse"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
+}

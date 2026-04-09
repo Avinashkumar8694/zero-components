@@ -4,307 +4,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Component Renderer</title>
+    <title>Zero Component Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-    <script type="module" src="./packages/register-plugins/index.js"></script>
-    <script type="module" src="./packages/dynamic-js-injector/index.js"></script>
-    <!-- example import from url -->
-    <!-- <script src="http://localhost:5555/service/plugins/dynamic-render/dynamic-render.js"></script> -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #333;
-            --secondary-color: #1C1C1C;
-            --text-color: #5b5f61;
-            --header-height: 50px;
-            --sidenav-width: 250px;
-            --transition-speed: 0.3s;
-            --font-family: Quicksand;
-            --hover-color: #444;
+            /* Application Standard Variables with Advanced Semantic Mapping */
+            --bg-color: var(--uiv-app-bg, #0f172a);
+            --sidebar-bg: var(--uiv-app-sidebar-bg, rgba(30, 41, 59, 0.7));
+            --header-bg: var(--uiv-app-header-bg, rgba(15, 23, 42, 0.8));
+            --card-bg: var(--uiv-app-card-bg, rgba(30, 41, 59, 0.5));
+            --text-color: var(--uiv-app-text-color, #f1f5f9);
+            --text-muted: var(--uiv-app-text-muted, #94a3b8);
+            --accent-color: var(--uiv-app-accent-color, #38bdf8);
+            --border-color: var(--uiv-app-border-color, rgba(51, 65, 85, 0.5));
+            --glass-blur: var(--uiv-app-glass-blur, blur(12px));
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body {
             margin: 0;
-
+            background-color: var(--bg-color);
             color: var(--text-color);
-            /* font-size: 18px; */
-            font-style: normal;
-            font-family: var(--font-family);
-            font-weight: normal;
-
-
-            /* font-family: var(--font-family); */
-            /* color: var(--text-color); */
-            /* background-color: var(--background-color); */
-
-            /* font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-                Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-                "Segoe UI Symbol"; */
-            box-sizing: border-box;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
         }
 
-        .header {
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            text-align: center;
-            padding: 5px;
-            height: var(--header-height);
-            line-height: var(--header-height);
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        /* Sidebar Glassmorphism */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            z-index: 100;
         }
 
-        .header .toggle-btn {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 22px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--text-color);
-            transition: color var(--transition-speed);
+        .sidebar-header {
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .header .toggle-btn:hover {
-            color: rgba(255, 255, 255, 0.8);
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
-        .sidenav {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: var(--secondary-color);
-            overflow-x: hidden;
-            transition: width var(--transition-speed);
-            /* padding-top: var(--header-height); */
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.7);
+        .nav-section {
+            padding: 1.5rem 0.5rem;
+            flex-grow: 1;
+            overflow-y: auto;
         }
 
-        .sidenav a {
-            padding: 15px 20px;
+        .nav-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            padding: 0 1.5rem 0.75rem 1.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1.5rem;
             text-decoration: none;
-            font-size: 16px;
             color: var(--text-color);
-            display: block;
-            transition: background-color var(--transition-speed), padding-left var(--transition-speed);
-        }
-
-        .sidenav a:hover {
-            background-color: var(--hover-color);
-            padding-left: 30px;
-        }
-
-        .main {
-            margin-left: 0;
-            transition: margin-left var(--transition-speed);
-            padding: 16px;
-        }
-
-        .main h2 {
-            font-weight: 500;
-            color: #E0E0E0;
-        }
-
-        .main ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .main li {
-            padding: 10px;
-            border-bottom: 1px solid #444;
-            color: #B0B0B0;
-        }
-
-        .main li:hover {
-            background-color: #333;
-            cursor: pointer;
-        }
-
-
-        /* Basic container styling */
-        div>div {
-            margin: 10px 0;
-            padding: 5px;
             border-radius: 8px;
-            /* background-color: var(--background-color); */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            /* border: 1px solid var(--secondary-color); */
-            transition: background-color 0.3s, border-color 0.3s;
+            margin: 0.25rem 0.5rem;
+            transition: var(--transition);
+            font-size: 0.9375rem;
         }
 
-        /* Hover effect for containers */
-        div>div:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        .nav-item:hover {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
         }
 
-        /* Label styling */
-        label {
+        .nav-item.active {
+            background: var(--accent-color);
+            color: #0f172a;
+        }
+
+        /* Main Content */
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.05), transparent);
+        }
+
+        .top-bar {
+            height: 70px;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--header-bg);
+            backdrop-filter: var(--glass-blur);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .content-area {
+            padding: 2rem;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+
+        /* Grid of Components */
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .component-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .component-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .preview-pane {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 3rem;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .controls-pane {
+            display: none; /* Removed from main layout, moved to sidebar */
+        }
+
+        .setting-group {
+            margin-bottom: 2rem;
+        }
+
+        .setting-label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.75rem;
             color: var(--text-color);
-            font-weight: 500;
-        }
-
-        /* General styles for input elements */
-        input[type="text"],
-        input[type="checkbox"],
-        input[type="color"],
-        input[type="range"],
-        input[type="password"],
-        input[type="file"],
-        input[type="date"],
-        textarea,
-        select {
-            background-color: var(--secondary-color);
-            /* Dark background for inputs */
-            color: var(--text-color);
-            /* Light text for contrast */
-            border: 1px solid var(--primary-color);
-            /* Light border for inputs */
-            border-radius: 4px;
-            padding: 8px;
-            margin: 4px 0;
-            box-sizing: border-box;
-            font-size: 14px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        /* Styles for range sliders */
-        input[type="range"] {
-            width: calc(100% - 16px);
-            -webkit-appearance: none;
-            background: var(--secondary-color);
-            border-radius: 4px;
-            height: 6px;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            background: var(--primary-color);
-            border: 2px solid var(--hover-color);
-            border-radius: 50%;
-            height: 20px;
-            width: 20px;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            background: var(--primary-color);
-            border: 2px solid var(--hover-color);
-            border-radius: 50%;
-            height: 20px;
-            width: 20px;
-            cursor: pointer;
-        }
-
-        /* Styles for dropdowns */
-        select {
-            padding: 8px;
-            border: 1px solid var(--primary-color);
-            /* Dark border for dropdowns */
-            border-radius: 4px;
-            background-color: var(--secondary-color);
-            /* Dark background for dropdowns */
-            color: var(--text-color);
-            /* Light text for contrast */
-        }
-
-        /* Styles for checkboxes */
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            appearance: none;
-            background-color: var(--secondary-color);
-            /* Dark background */
-            border: 2px solid var(--primary-color);
-            /* Light border */
-            border-radius: 4px;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        input[type="checkbox"]:checked {
-            background-color: var(--primary-color);
-            /* Highlight when checked */
-            border-color: var(--primary-color);
-            /* Match border with background */
-        }
-
-        /* Styles for color pickers */
-        input[type="color"] {
-            border: none;
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            cursor: pointer;
-        }
-
-        /* Focus styles for inputs */
-        input:focus,
-        select:focus {
-            border-color: var(--primary-color);
             outline: none;
-            box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+            transition: var(--transition);
+        }
+
+        input:focus { border-color: var(--accent-color); }
+
+        .theme-pill {
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-color);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
     </style>
 </head>
 
 <body>
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" onclick="closeNav()">Close &times;</a>
-        <div id="sidenav-list">
-            <!-- Inputs for components will be dynamically added here -->
+    <!-- Navigation Sidebar -->
+    <aside class="sidebar">
+        <div id="globalNav">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Zero Core</span>
+                </div>
+            </div>
+            
+            <nav class="nav-section">
+                <div class="nav-label">Global</div>
+                <a href="index.html" class="nav-item active"><i class="fas fa-th-large"></i> Explore</a>
+                <a href="marketplace.html" class="nav-item"><i class="fas fa-shopping-bag"></i> Marketplace</a>
+                <a href="settings.html" class="nav-item"><i class="fas fa-sliders-h"></i> Settings</a>
+                
+                <div class="nav-label" style="margin-top: 2rem;">Quick Components</div>
+                <div id="quickNavList">
+                    <!-- populated by JS -->
+                </div>
+            </nav>
         </div>
-    </div>
 
-    <div class="header">
-        <button class="toggle-btn" onclick="toggleNav()">&#9776;</button>
-        Component Renderer
-    </div>
-
-    <div id="main" class="main">
-        <h2>Component List</h2>
-        <ul id="componentList">
-            <!-- Component names will be dynamically added here -->
-        </ul>
-        <div id="componentContent">
-            <!-- Component content will be dynamically added here -->
+        <div id="componentNav" style="display: none; flex-direction: column; height: 100%;">
+            <div class="sidebar-header" style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem;">
+                <button onclick="showExplore()" style="background: rgba(56, 189, 248, 0.1); border: 1px solid var(--border-color); color: var(--accent-color); cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                    <i class="fas fa-arrow-left"></i> Back to Explorer
+                </button>
+            </div>
+            <div class="nav-section" style="padding-top: 0;">
+                <div id="settingsSection">
+                    <div class="nav-label">Component Settings</div>
+                    <div id="sidenav-list" style="padding: 0 0.5rem;"></div>
+                </div>
+                <div id="eventLogSection" style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                    <div class="nav-label" style="display: flex; justify-content: space-between; align-items: center;">
+                        Event Log
+                        <button onclick="window.clearEventLog()" style="background: none; border: none; color: var(--accent-color); cursor: pointer; font-size: 0.7rem; padding: 0;">Clear</button>
+                    </div>
+                    <div id="event-log" style="margin: 0.5rem; height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.75rem; background: rgba(15, 23, 42, 0.3); border-radius: 8px; padding: 0.75rem; color: #94a3b8; line-height: 1.4;">
+                        <div style="color: var(--text-muted)">Waiting for events...</div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </aside>
+
+    <div class="main-container">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div>
+                <h2 id="pageTitle" style="margin: 0; font-size: 1.25rem;">Component Explorer</h2>
+            </div>
+            <div class="theme-pill">
+                <i class="fas fa-palette"></i>
+                <span id="currentThemeName">modern</span>
+            </div>
+        </header>
+
+        <!-- Dynamic Content -->
+        <main class="content-area">
+            <div id="exploreView" class="component-grid">
+                <!-- Default Grid View -->
+            </div>
+            
+            <div id="previewView" style="display: none;">
+                <div style="width: 100%; height: calc(100vh - 150px); display: flex; align-items: center; justify-content: center;">
+                    <div class="preview-pane" id="mainPreview" style="width: 100%; max-width: 1200px; height: 100%;">
+                        <!-- Component rendered here -->
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <script>
-        function toggleNav() {
-            const sidenav = document.getElementById("mySidenav");
-            const main = document.getElementById("main");
-            if (sidenav.style.width === "250px") {
-                closeNav();
-            } else {
-                sidenav.style.width = "250px";
-                main.style.marginLeft = "250px";
-            }
-        }
-
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-            document.getElementById("main").style.marginLeft = "0";
-        }
-    </script>
+    <script type="module" src="/packages/register-plugins/index.js"></script>
+    <script type="module" src="/packages/zero-theme-orchestrator/src/index.ts"></script>
+    <script type="module" src="/packages/zero-uiv-themes/src/index.ts"></script>
     <script type="module" src="./index.ts"></script>
+    <script>
+        // Inline layout functions removed (moved to index.ts)
+    </script>
 </body>
-
 </html>

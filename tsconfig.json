@@ -40,15 +40,14 @@
         "noFallthroughCasesInSwitch": true,
 
         // Emit additional interop code for CommonJS and ES modules
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "paths": {
+            "zero-uiv-themes": ["packages/zero-uiv-themes/src/index.ts"]
+        }
     },
     // Specify files to include in the project
     "include": ["packages", "index.ts"]
-
-    // Other options can be added here as needed
-    // "exclude": ["node_modules"],
-    // "baseUrl": ".",
-    // "paths": {},
     // "outDir": "./dist",
     // "rootDir": "./src",
     // "removeComments": true,

@@ -1,0 +1,13 @@
+{
+  "name": "zero-uiv-button-retro",
+  "version": "1.0.0",
+  "description": "Uiverse-inspired Retro 3D button component",
+  "main": "zero-uiv-button-retro.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "button", "retro", "uiverse"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
+}

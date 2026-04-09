@@ -1,72 +1,127 @@
-// Define the registerPluginClass with the registerPlugins method
-// if (!window.zero) {
-//     window.zero = {
-//         modules: {},   // Initialize modules to store plugins
-//         components: {} // Initialize components to store elements
-//     };
-// }
 import 'reflect-metadata';
+
+// ─── Global Reflect Shim ─────────────────────────────────────────────────────
+// individual plugin bundles often carry their own isolated reflect-metadata.
+// this ensures they all converge on a single, global reflect-metadata store.
+if (typeof window !== 'undefined' && !window.Reflect) {
+    window.Reflect = Reflect;
+} else if (typeof window !== 'undefined' && window.Reflect !== Reflect) {
+    // If another instance exists, we merge or at least warn, but for now 
+    // we prioritize the registry's instance as it loads first in index.html
+    const existing = window.Reflect;
+    Object.assign(Reflect, existing);
+    window.Reflect = Reflect;
+}
+
 class RegisterPluginClass {
     constructor() {
-        // Initialize window.zero if it doesn't already exist
-        this.modules = {};
-        this.components = {}
-        // Attach the element-connected event listener
+        this.modules = window.zero?.modules || {};
+        this.components = window.zero?.components || {};
         this.attachListeners();
     }
 
-    // Method to register plugins dynamically
     registerPlugins(key, value) {
-        if (!key || !value) {
-            throw new Error('Key and value are required to register a plugin.');
-        }
-
-        // Store the value under window.zero.modules[key]
+        if (!key || !value) return;
         this.modules[key] = value;
-        this.modules[key]?.onInit();
-        console.log(`Plugin registered and available as zero.modules['${key}']`);
+        if (typeof value.onInit === 'function') value.onInit();
+        console.log(`[Zero] Plugin registered: modules['${key}']`);
     }
 
-    // Method to attach listeners
-    attachListeners() {
-        console.log('component listener activated')
-        window.addEventListener('element-connected', (event) => {
-            if(!event?.detail?.element?.localName){
+    registerElement(name, constructor, retryCount = 0) {
+        if (!name || !constructor) {
+            console.warn(`[Zero] Cannot register element: name or constructor missing (${name})`);
+            return;
+        }
+
+        // Use the global Reflect (which we shimmed above)
+        const proto = constructor.prototype;
+        const inputsMetadata = Reflect.getMetadata('ZeroAttribute', proto) || [];
+        const componentMetadata = Reflect.getMetadata('ZeroComponent', constructor) || Reflect.getMetadata('ZeroComponent', proto);
+
+        console.log(`[Zero] Registry: Attempting registration for '${name}' (Retry: ${retryCount})`);
+        console.log(`[Zero] Registry: Found ${inputsMetadata.length} attributes.`);
+        
+        if (!componentMetadata) {
+            if (retryCount < 5) {
+                console.log(`[Zero] Registry: Metadata not yet available for '${name}', retrying in 50ms...`);
+                setTimeout(() => this.registerElement(name, constructor, retryCount + 1), 50);
                 return;
+            } else {
+                console.warn(`[Zero] Registry: Failed to find component metadata for '${name}' after 5 retries.`);
             }
-            const _class = customElements.get(event.detail.element.localName);
-            const inputsMetadata = Reflect.getMetadata('ZeroAttribute', _class.prototype) || [];
-            const componentMetadata = Reflect.getMetadata('ZeroComponent', _class.prototype);
-            // Store the element under window.zero.components[element.selector]
-            this.components[event.detail.element.localName] = {
-                class: _class,
-                inputs: inputsMetadata.filter(input => !input.eventTrigger).reduce((acc, { fieldMappings, ...rest }) => {
-                    acc[fieldMappings] = { ...rest };
+        }
+
+        this.components[name] = {
+            class: constructor,
+            inputs: inputsMetadata
+                .filter(input => !input.eventTrigger)
+                .reduce((acc, { fieldMappings, ...rest }) => {
+                    const key = fieldMappings || rest.name;
+                    if (key) acc[key] = { ...rest };
                     return acc;
                 }, {}),
-                outputs: { events: inputsMetadata.filter(input => input.eventTrigger).map(input => input.eventTrigger) },
-                componentMetadata
-            };
-            console.log('Component Loaded:', event.detail.element.localName);
+            outputs: { 
+                events: inputsMetadata
+                    .filter(input => input.eventTrigger)
+                    .map(input => input.eventTrigger) 
+            },
+            metadata: componentMetadata || {}
+        };
 
-            // You can perform any additional actions here, such as updating component properties or state
+        // Also register under base selector as a "latest/default" version fallback
+        if (componentMetadata?.selector && componentMetadata.selector !== name) {
+            this.components[componentMetadata.selector] = this.components[name];
+        }
+        
+        console.log(`[Zero] Registry: SUCCESS. Registered '${name}' and '${componentMetadata?.selector || ""}' fallback.`);
+    }
+
+    attachListeners() {
+        console.log('[Zero] Registry: Event listener initialized for (zero-element:component-load)');
+        
+        window.addEventListener('zero-element:component-load', (event) => {
+            const metadata = event?.detail?.element;
+            console.log('[Zero] Registry: RECEIVED zero-element:component-load event', metadata);
+            
+            if (!metadata || !metadata.selector) return;
+
+            const name = `${metadata.selector}-${metadata.version}`;
+            
+            // Catchup Mechanism: The custom element might be defined just after the event fires
+            let attempts = 0;
+            const tryRegister = () => {
+                const constructor = customElements.get(name);
+                if (constructor) {
+                    console.log(`[Zero] Registry: Custom element '${name}' found. Starting registration.`);
+                    this.registerElement(name, constructor);
+                } else if (attempts < 10) {
+                    attempts++;
+                    if (attempts === 1) console.log(`[Zero] Registry: Custom element '${name}' not found yet, starting catchup poll...`);
+                    setTimeout(tryRegister, 100);
+                } else {
+                    console.error(`[Zero] Registry: TIMEOUT. Could not find custom element '${name}' in registry.`);
+                }
+            };
+            tryRegister();
+        });
+
+        window.addEventListener('element-connected', (event) => {
+            const element = event?.detail?.element;
+            if (element?.localName) {
+                const constructor = customElements.get(element.localName);
+                if (constructor) this.registerElement(element.localName, constructor);
+            }
         });
     }
 }
 
-// Ensure the class is available globally on window.zero
-if (!window.zero) {
-    window.zero = new RegisterPluginClass();
-} else {
-    window.zero = Object.assign(window.zero, new RegisterPluginClass());
+// Global Singleton Initialization
+if (!window.zero || !(window.zero instanceof RegisterPluginClass)) {
+    const existing = window.zero || {};
+    const instance = new RegisterPluginClass();
+    if (existing.modules) Object.assign(instance.modules, existing.modules);
+    if (existing.components) Object.assign(instance.components, existing.components);
+    
+    window.zero = instance;
+    window.ro = instance;
 }
-
-// // Example usage: Define a class with an onInit method
-// class DynamicRenderJs {
-//     onInit() {
-//         console.log('Plugin DynamicRenderJs initialized');
-//     }
-// }
-
-// // Register the plugin with the key 'register-js'
-// window.zero.registerPlugins('register-js', new DynamicRenderJs());

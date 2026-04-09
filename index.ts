@@ -198,8 +198,8 @@ const createInputElement = (key: string, config: any, customElement: HTMLElement
 };
 
 
-const registerComponent = (name: string, config: { inputs?: any; outputs?: any }) => {
-    const { inputs = {}, outputs = { events: [] } } = config;
+const registerComponent = (name: string, config: { inputs?: any; outputs?: any; class?: any }) => {
+    const { inputs = {}, outputs = { events: [] }, class: _class } = config;
 
     const customElement = document.createElement(name) as any;
 
@@ -231,17 +231,23 @@ const loadComponents = (): Promise<void> => {
 const extractComponentsConfig = (): Record<string, any> => {
     const components = {} as Record<string, any>;
 
-    for (const _class of Object.values(componentsLib)) {
+    for (const _class of Object.values(componentsLib) as any[]) {
         if(!_class.prototype){
             continue;
         }
         const inputsMetadata = Reflect.getMetadata('ZeroAttribute', _class.prototype) || [];
-        const componentMetadata = Reflect.getMetadata('ZeroComponent', _class.prototype);
+        const componentMetadata = Reflect.getMetadata('ZeroComponent', _class);
+        
+        if (!componentMetadata) continue;
+        
         const selector = `${componentMetadata.selector}-${componentMetadata.version}`;
 
         components[selector] = {
+            class: _class,
             inputs: inputsMetadata.filter(input => !input.eventTrigger).reduce((acc: Record<string, any>, { fieldMappings, ...rest }) => {
-                acc[fieldMappings] = { ...rest };
+                if (fieldMappings) {
+                   acc[fieldMappings] = { ...rest };
+                }
                 return acc;
             }, {}),
             outputs: { events: inputsMetadata.filter(input => input.eventTrigger).map(input => input.eventTrigger) },

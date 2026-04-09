@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -86,11 +87,14 @@ function getKeywords(pkgName) {
 function publish() {
     console.log('🚀 Publishing packages to zero-marketplace...\n');
     
-    // First build all packages
+    // Build exact package or all packages
     console.log('📋 Building packages...');
     try {
-        const { execSync } = require('child_process');
-        execSync('npm run build', { stdio: 'inherit', cwd: __dirname });
+        if (targetPackage) {
+            execSync(`node build-actions.js ${targetPackage}`, { stdio: 'inherit', cwd: __dirname });
+        } else {
+            execSync('node build-actions.js', { stdio: 'inherit', cwd: __dirname });
+        }
     } catch (e) {
         console.warn('⚠️  Build had some issues, continuing with publish...');
     }

@@ -10,12 +10,20 @@ const __dirname = path.dirname(__filename);
 const packagesDir = path.join(__dirname, 'packages');
 const pluginsDir = path.join(__dirname, 'server', 'plugins');
 
+const args = process.argv.slice(2);
+const targetPackage = args[0];
+
 async function buildAll() {
-    console.log('Building all components and actions...');
+    if (targetPackage) {
+        console.log(`Building specific component: ${targetPackage}...`);
+    } else {
+        console.log('Building all components and actions...');
+    }
     const packages = fs.readdirSync(packagesDir);
 
     for (const pkg of packages) {
         if (pkg.startsWith('.')) continue; // skip hidden files
+        if (targetPackage && pkg !== targetPackage) continue; // skip non-target
 
         const pkgPath = path.join(packagesDir, pkg);
         
@@ -49,7 +57,7 @@ async function buildAll() {
                     target: 'es2022',
                     minify: false,
                     // externalize everything we don't want bundled
-                    external: []
+                    external: ['reflect-metadata', 'zero-annotation']
                 });
                 console.log(`✅ Built ${pkg}/action.ts -> server/plugins/${pkg}/action.js`);
             } catch (err) {

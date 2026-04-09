@@ -1,6 +1,6 @@
 {
   "name": "zero-section",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Responsive section container with max width and padding",
   "main": "zero-section.ts",
   "type": "module",

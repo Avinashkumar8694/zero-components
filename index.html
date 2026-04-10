@@ -19,7 +19,14 @@
             --accent-color: var(--uiv-app-accent-color, #38bdf8);
             --border-color: var(--uiv-app-border-color, rgba(51, 65, 85, 0.5));
             --glass-blur: var(--uiv-app-glass-blur, blur(12px));
+            --sidebar-text: var(--uiv-app-sidebar-text, #f1f5f9);
             --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-color);
+            margin: 0;
+            font-weight: 600;
         }
 
         body {
@@ -58,10 +65,23 @@
             font-size: 1.25rem;
             font-weight: 700;
             margin-bottom: 24px;
-            color: var(--uiv-text-primary);
+            color: var(--sidebar-text);
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--sidebar-text);
+        }
+
+        .logo i {
+            color: var(--accent-color);
         }
 
         .sidebar-section {
@@ -73,7 +93,8 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--uiv-text-tertiary, var(--uiv-app-text-muted));
+            color: var(--sidebar-text);
+            opacity: 0.7;
             margin-bottom: 16px;
         }
 
@@ -83,7 +104,7 @@
             gap: 1rem;
             padding: 0.75rem 1.25rem;
             text-decoration: none;
-            color: var(--text-color);
+            color: var(--sidebar-text);
             border-radius: 8px;
             margin: 0.25rem 0.5rem;
             transition: var(--transition);
@@ -92,18 +113,32 @@
         }
 
         .nav-item:hover {
-            background: rgba(56, 189, 248, 0.1);
+            background: var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.1));
             color: var(--accent-color);
         }
 
         .nav-item.active {
-            background: var(--accent-color);
-            color: #0f172a;
+            background: var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.1));
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--sidebar-text);
+            opacity: 0.5;
+            padding: 0 1.25rem;
+            margin-bottom: 12px;
         }
 
         .btn-primary {
-            background-color: var(--uiv-color-primary);
+            background: var(--accent-color);
             color: var(--uiv-text-inverse, #ffffff);
+            padding: 10px 20px;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
             font-weight: 600;
@@ -111,14 +146,13 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+            box-shadow: 0 4px 12px var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.2));
             transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
-            background-color: var(--uiv-color-primary-hover, var(--uiv-color-primary));
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(56, 189, 248, 0.3);
+            box-shadow: 0 8px 20px var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.3));
         }
 
         .btn-primary:active {
@@ -131,7 +165,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background: radial-gradient(circle at top right, rgba(56, 189, 248, 0.05), transparent);
+            background: radial-gradient(circle at top right, var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.05)), transparent);
         }
 
         .top-bar {
@@ -179,7 +213,7 @@
         .component-card:hover {
             transform: translateY(-4px);
             border-color: var(--accent-color);
-            background: rgba(30, 41, 59, 0.8);
+            background: var(--uiv-app-sidebar-bg, rgba(30, 41, 59, 0.8));
         }
 
         .preview-pane {
@@ -268,7 +302,7 @@
         <div id="componentNav" style="display: none; flex-direction: column; height: 100%;">
             <div class="sidebar-header" style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem;">
                 <button onclick="showExplore()"
-                    style="background: rgba(56, 189, 248, 0.1); border: 1px solid var(--border-color); color: var(--accent-color); cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                    style="background: var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.1)); border: 1px solid var(--border-color); color: var(--accent-color); cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
                     <i class="fas fa-arrow-left"></i> Back to Explorer
                 </button>
             </div>
@@ -285,7 +319,7 @@
                             style="background: none; border: none; color: var(--accent-color); cursor: pointer; font-size: 0.7rem; padding: 0;">Clear</button>
                     </div>
                     <div id="event-log"
-                        style="margin: 0.5rem; height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.75rem; background: rgba(15, 23, 42, 0.3); border-radius: 8px; padding: 0.75rem; color: #94a3b8; line-height: 1.4;">
+                        style="margin: 0.5rem; height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.75rem; background: var(--uiv-app-accent-transparent, rgba(15, 23, 42, 0.3)); border-radius: 8px; padding: 0.75rem; color: var(--uiv-app-text-muted, #94a3b8); line-height: 1.4;">
                         <div style="color: var(--text-muted)">Waiting for events...</div>
                     </div>
                 </div>

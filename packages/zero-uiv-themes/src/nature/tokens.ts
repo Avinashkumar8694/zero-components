@@ -18,13 +18,16 @@ export const natureTokens = {
         
         '--uiv-app-bg': '#021a11',
         '--uiv-app-sidebar-bg': '#022c22',
+        '--uiv-app-sidebar-text': '#ecfdf5',
         '--uiv-app-header-bg': '#021a11',
         '--uiv-app-card-bg': 'rgba(6, 78, 59, 0.6)',
         '--uiv-app-input-bg': 'rgba(2, 44, 34, 0.4)',
         '--uiv-app-accent-color': '#10b981',
+        '--uiv-app-accent-transparent': 'rgba(16, 185, 129, 0.15)',
         '--uiv-app-text-color': '#ecfdf5',
         '--uiv-app-text-muted': '#6ee7b7',
         '--uiv-app-border-color': 'rgba(16, 185, 129, 0.25)',
         '--uiv-app-hover-shadow': '0 40px 80px -20px rgba(0,0,0,0.5), 0 0 20px #10b981',
+        '--uiv-app-glass-blur': 'blur(0px)',
     }
 };

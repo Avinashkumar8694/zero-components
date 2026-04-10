@@ -44,6 +44,10 @@ export abstract class BaseTheme {
                 --uiv-status-warning: var(--uiv-color-warning, #f59e0b);
                 --uiv-status-danger: var(--uiv-color-danger, #dc2626);
                 --uiv-status-info: var(--uiv-color-info, #0ea5e9);
+                
+                /* Semantic Text Fallbacks */
+                --uiv-text-inverse: var(--uiv-text-inverse, #ffffff);
+                --uiv-text-primary-themed: var(--uiv-text-primary, var(--uiv-text-color, #1a1a1a));
             }
 
             /* Semantic Utility Classes */
@@ -54,12 +58,12 @@ export abstract class BaseTheme {
             .uiv-text-danger { color: var(--uiv-status-danger) !important; }
             .uiv-text-info { color: var(--uiv-status-info) !important; }
             
-            .uiv-bg-primary { background: var(--uiv-status-primary) !important; color: #ffffff !important; }
-            .uiv-bg-secondary { background: var(--uiv-status-secondary) !important; color: #ffffff !important; }
-            .uiv-bg-success { background: var(--uiv-status-success) !important; color: #ffffff !important; }
-            .uiv-bg-warning { background: var(--uiv-status-warning) !important; color: #ffffff !important; }
-            .uiv-bg-danger { background: var(--uiv-status-danger) !important; color: #ffffff !important; }
-            .uiv-bg-info { background: var(--uiv-status-info) !important; color: #ffffff !important; }
+            .uiv-bg-primary { background: var(--uiv-status-primary) !important; color: var(--uiv-text-inverse) !important; }
+            .uiv-bg-secondary { background: var(--uiv-status-secondary) !important; color: var(--uiv-text-inverse) !important; }
+            .uiv-bg-success { background: var(--uiv-status-success) !important; color: var(--uiv-text-inverse) !important; }
+            .uiv-bg-warning { background: var(--uiv-status-warning) !important; color: var(--uiv-text-inverse) !important; }
+            .uiv-bg-danger { background: var(--uiv-status-danger) !important; color: var(--uiv-text-inverse) !important; }
+            .uiv-bg-info { background: var(--uiv-status-info) !important; color: var(--uiv-text-inverse) !important; }
 
             ${this.baseStyles}
             ${this.getBaseStyles()}
@@ -88,59 +92,73 @@ export abstract class BaseTheme {
     getCoreComponentStyles(): CSSResult {
         return css`
             .uiv-input, .uiv-select, .uiv-textarea {
-                background-color: var(--uiv-input-bg, var(--uiv-app-input-bg, #ffffff));
-                color: var(--uiv-text-primary, var(--uiv-app-text-color, #1a1a1a));
-                border: 1px solid var(--uiv-input-border, var(--uiv-app-border-color, #cbd5e1));
+                background-color: var(--uiv-input-bg, var(--uiv-app-input-bg, var(--uiv-surface-color, #ffffff)));
+                color: var(--uiv-text-primary-themed, var(--uiv-app-text-color, #1a1a1a));
+                border: 1px solid var(--uiv-input-border, var(--uiv-app-border-color, rgba(128,128,128,0.2)));
                 border-radius: var(--uiv-border-radius, 8px);
-                padding: 8px 12px;
+                padding: 10px 14px;
                 font-family: inherit;
                 font-size: 14px;
                 width: 100%;
                 box-sizing: border-box;
-                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+                transition: var(--uiv-transition-smooth, all 0.3s cubic-bezier(0.4, 0, 0.2, 1));
                 display: block;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            }
+
+            .uiv-input:hover, .uiv-select:hover, .uiv-textarea:hover {
+                border-color: var(--uiv-status-primary);
             }
 
             .uiv-input[type="checkbox"], .uiv-input[type="radio"] {
                 width: auto;
                 cursor: pointer;
                 display: inline-block;
+                box-shadow: none;
             }
 
             .uiv-input:focus, .uiv-select:focus, .uiv-textarea:focus {
                 outline: none;
-                border-color: var(--uiv-color-primary, #3b82f6);
-                box-shadow: 0 0 0 2px var(--uiv-app-accent-transparent, rgba(59, 130, 246, 0.2));
+                border-color: var(--uiv-status-primary);
+                box-shadow: 0 0 0 3px var(--uiv-app-accent-transparent, rgba(59, 130, 246, 0.2));
             }
 
             .uiv-button {
-                background-color: var(--uiv-btn-bg, var(--uiv-color-primary, #3b82f6));
-                color: var(--uiv-btn-text, var(--uiv-text-inverse, #ffffff));
+                background-color: var(--uiv-btn-bg, var(--uiv-status-primary));
+                color: var(--uiv-btn-text, var(--uiv-text-inverse));
                 border: none;
                 border-radius: var(--uiv-border-radius, 8px);
-                padding: 10px 20px;
+                padding: 12px 24px;
                 font-weight: 600;
                 cursor: pointer;
-                transition: transform 0.1s ease, filter 0.2s ease;
+                transition: var(--uiv-transition-smooth, all 0.3s cubic-bezier(0.4, 0, 0.2, 1));
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 gap: 8px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             }
 
             .uiv-button:hover {
-                filter: brightness(1.1);
+                filter: brightness(1.15);
+                transform: translateY(-1px);
+                box-shadow: var(--uiv-shadow-depth, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
             }
 
             .uiv-button:active {
-                transform: scale(0.98);
+                transform: translateY(0);
+                filter: brightness(0.95);
             }
 
             .uiv-label {
-                color: var(--uiv-text-primary, var(--uiv-app-text-color));
-                font-weight: 500;
-                margin-bottom: 6px;
+                color: inherit;
+                font-weight: 600;
+                margin-bottom: 8px;
+                font-size: 0.85rem;
+                letter-spacing: 0.025em;
+                text-transform: uppercase;
                 display: block;
+                opacity: 0.8;
             }
         `;
     }

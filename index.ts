@@ -69,7 +69,7 @@ const initializeStyles = () => {
     const styleElement = document.createElement('style');
     styleElement.innerHTML = `
         .remove-plugin:hover {
-            color: #ef4444 !important; /* red-500 */
+            color: var(--uiv-color-danger, #ef4444) !important;
             transform: scale(1.1);
         }
         .component-card:hover .remove-plugin {
@@ -308,7 +308,7 @@ const logEvent = (componentName: string, eventName: string, detail: any) => {
         const entry = document.createElement('div');
         entry.style.marginBottom = '0.75rem';
         entry.style.paddingBottom = '0.75rem';
-        entry.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+        entry.style.borderBottom = '1px solid var(--uiv-app-accent-transparent, rgba(255,255,255,0.05))';
 
         const timestamp = new Date().toLocaleTimeString();
         const detailStr = typeof detail === 'object' ? JSON.stringify(detail, null, 2) : detail;
@@ -382,7 +382,7 @@ const updateComponentList = () => {
             item.innerHTML = `
                 <div style="display: flex; flex-direction: column; overflow: hidden;">
                     <span style="font-weight: 600; font-size: 0.9rem;">${displayName}</span>
-                    <span style="color: var(--text-muted); font-size: 0.7rem; font-family: monospace;">${displaySelector}</span>
+                    <span style="opacity: 0.7; font-size: 0.7rem; font-family: monospace;">${displaySelector}</span>
                 </div>
             `;
             item.href = '#';
@@ -414,7 +414,7 @@ const updateComponentList = () => {
             card.style.position = 'relative';
             
             card.innerHTML = `
-                <div class="remove-plugin" title="Remove Plugin" style="position: absolute; top: 0.75rem; right: 0.75rem; color: var(--text-muted); cursor: pointer; padding: 0.25rem; transition: color 0.2s; z-index: 10;">
+                <div class="remove-plugin" title="Remove Plugin" style="position: absolute; top: 0.75rem; right: 0.75rem; color: var(--uiv-app-text-muted, #64748b); cursor: pointer; padding: 0.25rem; transition: color 0.2s; z-index: 10;">
                     <i class="fas fa-trash-alt"></i>
                 </div>
                 <div class="card-content">
@@ -575,12 +575,14 @@ const updateDashboardTheme = () => {
         :root {
             --bg-color: var(--uiv-app-bg, #0f172a);
             --sidebar-bg: var(--uiv-app-sidebar-bg, rgba(30, 41, 59, 0.7));
+            --sidebar-text: var(--uiv-app-sidebar-text, var(--uiv-app-text-color, #f1f5f9));
             --header-bg: var(--uiv-app-header-bg, rgba(15, 23, 42, 0.8));
             --card-bg: var(--uiv-app-card-bg, rgba(30, 41, 59, 0.5));
             --text-color: var(--uiv-app-text-color, #f1f5f9);
             --accent-color: var(--uiv-app-accent-color, #38bdf8);
             --border-color: var(--uiv-app-border-color, rgba(51, 65, 85, 0.5));
             --glass-blur: var(--uiv-app-glass-blur, blur(12px));
+            --btn-danger: var(--uiv-status-danger, #ef4444);
         }
 
         .component-card {
@@ -620,8 +622,17 @@ const updateDashboardTheme = () => {
         }
 
         .component-card:hover {
-            transform: translateY(-12px) scale(1.01);
-            box-shadow: var(--uiv-app-hover-shadow, 0 40px 80px -20px rgba(0,0,0,0.5), 0 0 20px var(--accent-color));
+            transform: translateY(-12px) scale(1.02);
+            background: var(--accent-color);
+            color: var(--uiv-text-inverse, #1a1a1a);
+            border-color: var(--accent-color);
+            box-shadow: var(--uiv-app-hover-shadow, 0 30px 60px -12px rgba(0,0,0,0.4));
+        }
+
+        .component-card:hover .remove-plugin,
+        .component-card:hover span,
+        .component-card:hover i {
+             color: var(--uiv-text-inverse, #1a1a1a) !important;
         }
 
         .component-card:hover::before {

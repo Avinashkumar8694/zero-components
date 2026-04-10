@@ -25,14 +25,17 @@ export const neonGlobalTokens = {
         // App Dashboard Tokens
         '--uiv-app-bg': '#000000',
         '--uiv-app-sidebar-bg': '#0a0a0a',
+        '--uiv-app-sidebar-text': '#ffffff',
         '--uiv-app-header-bg': '#0f0f0f',
         '--uiv-app-card-bg': '#111111',
         '--uiv-app-input-bg': 'rgba(255, 255, 255, 0.05)',
         '--uiv-app-text-color': '#f8fafc',
         '--uiv-app-text-muted': 'rgba(255, 255, 255, 0.6)',
-        '--uiv-app-accent-color': '#f59e0b',
-        '--uiv-app-border-color': '#262626',
-        '--uiv-app-glass-blur': 'none',
+        '--uiv-app-accent-color': '#39ff14',
+        '--uiv-app-accent-transparent': 'rgba(57, 255, 20, 0.15)',
+        '--uiv-app-border-color': 'rgba(57, 255, 20, 0.3)',
+        '--uiv-app-hover-shadow': '0 30px 60px -12px rgba(57, 255, 20, 0.3), 0 0 20px rgba(57, 255, 20, 0.2)',
+        '--uiv-app-glass-blur': 'blur(0px)',
 
         // Extended Reference Tokens
         '--uiv-bg-primary': '#000000',

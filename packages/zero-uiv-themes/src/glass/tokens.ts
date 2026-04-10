@@ -21,13 +21,16 @@ export const glassGlobalTokens: ThemeTokens = {
     // App Dashboard Tokens
     '--uiv-app-bg': '#02041a',
     '--uiv-app-sidebar-bg': 'rgba(2, 4, 32, 0.4)',
+    '--uiv-app-sidebar-text': '#ffffff',
     '--uiv-app-header-bg': 'rgba(2, 4, 32, 0.4)',
     '--uiv-app-card-bg': 'rgba(255, 255, 255, 0.01)',
     '--uiv-app-text-color': '#ffffff',
     '--uiv-app-text-muted': 'rgba(255, 255, 255, 0.6)',
     '--uiv-app-accent-color': '#38bdf8',
+    '--uiv-app-accent-transparent': 'rgba(56, 189, 248, 0.15)',
     '--uiv-app-border-color': 'rgba(255, 255, 255, 0.08)',
-    '--uiv-app-hover-shadow': '0 40px 80px -20px rgba(0,0,0,0.5), 0 0 20px #38bdf8',
+    '--uiv-app-hover-shadow': '0 40px 80px -20px rgba(0,0,0,0.5), 0 0 25px rgba(56, 189, 248, 0.3)',
+    '--uiv-app-glass-blur': 'blur(40px) saturate(200%)',
 };
 
 export const glassComponentTokens: Record<string, ThemeTokens> = {

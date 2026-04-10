@@ -53,12 +53,12 @@ export class ZeroUivInputGlow extends LitElement {
         :host {
             display: block;
             margin-bottom: 20px;
-            --inp-p: var(--uiv-primary-color, #6366f1);
-            --inp-s: var(--uiv-secondary-color, #8b5cf6);
-            --inp-t: var(--uiv-text-color, #1e293b);
-            --inp-bg: var(--uiv-surface-color, #ffffff);
-            --inp-border: var(--uiv-border-color, #e2e8f0);
-            --glow: var(--uiv-border-glow, 0 0 10px rgba(99, 102, 241, 0.2));
+            --inp-p: var(--uiv-primary-color, var(--uiv-status-primary));
+            --inp-s: var(--uiv-secondary-color, var(--uiv-status-secondary));
+            --inp-t: var(--uiv-text-color, var(--uiv-text-primary-themed));
+            --inp-bg: var(--uiv-surface-color, var(--uiv-app-input-bg, #ffffff));
+            --inp-border: var(--uiv-border-color, var(--uiv-app-border-color, rgba(128,128,128,0.2)));
+            --glow: var(--uiv-border-glow, 0 0 10px var(--uiv-app-accent-transparent, rgba(99, 102, 241, 0.2)));
             --glow-intensity: var(--uiv-glow-intensity, 1);
         }
 
@@ -81,7 +81,7 @@ export class ZeroUivInputGlow extends LitElement {
 
         input:focus {
             border-color: var(--inp-p);
-            box-shadow: 0 0 0 calc(4px * var(--glow-intensity)) var(--uiv-bg-overlay, rgba(99, 102, 241, 0.1)),
+            box-shadow: 0 0 0 calc(4px * var(--glow-intensity)) var(--uiv-app-accent-transparent, rgba(99, 102, 241, 0.1)),
                         var(--glow);
             transform: translateY(-2px);
         }

@@ -93,27 +93,27 @@ export class ZeroUivTable extends LitElement {
 
         /* Cyber Specifics */
         .cyber table {
-            border: 2px solid var(--uiv-table-border, #ff003c);
+            border: 2px solid var(--uiv-table-border, var(--uiv-status-primary));
         }
 
         .cyber th {
-            background: var(--uiv-table-header-bg, rgba(255, 0, 60, 0.1));
-            color: var(--uiv-table-border, #ff003c);
+            background: var(--uiv-table-header-bg, var(--uiv-app-accent-transparent, rgba(255, 0, 60, 0.1)));
+            color: var(--uiv-table-border, var(--uiv-status-primary));
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
         /* Glass Specifics */
         .glass table {
-            background: var(--uiv-table-bg, rgba(255, 255, 255, 0.05));
-            border: 1px solid var(--uiv-table-border, rgba(255, 255, 255, 0.2));
-            backdrop-filter: blur(10px);
+            background: var(--uiv-table-bg, var(--uiv-app-card-bg, rgba(255, 255, 255, 0.05)));
+            border: 1px solid var(--uiv-table-border, var(--uiv-app-border-color, rgba(255, 255, 255, 0.2)));
+            backdrop-filter: var(--uiv-app-glass-blur, blur(10px));
         }
 
         /* Retro Specifics */
         .retro table {
-            border: 3px solid #000;
-            box-shadow: 6px 6px 0 #000;
+            border: 3px solid var(--uiv-text-primary-themed, #000);
+            box-shadow: 6px 6px 0 var(--uiv-text-primary-themed, #000);
         }
     `;
 

@@ -18,13 +18,16 @@ export const wealthTokens = {
         
         '--uiv-app-bg': '#020617',
         '--uiv-app-sidebar-bg': '#111827',
+        '--uiv-app-sidebar-text': '#ffffff',
         '--uiv-app-header-bg': '#020617',
         '--uiv-app-card-bg': 'rgba(15, 23, 42, 0.6)',
         '--uiv-app-input-bg': 'rgba(15, 23, 42, 0.4)',
         '--uiv-app-accent-color': '#d4af37',
+        '--uiv-app-accent-transparent': 'rgba(212, 175, 55, 0.15)',
         '--uiv-app-text-color': '#ffffff',
         '--uiv-app-text-muted': '#d4af37',
         '--uiv-app-border-color': 'rgba(212, 175, 55, 0.2)',
         '--uiv-app-hover-shadow': '0 40px 80px -20px rgba(212, 175, 55, 0.2), 0 0 20px rgba(212, 175, 55, 0.1)',
+        '--uiv-app-glass-blur': 'blur(10px)',
     }
 };

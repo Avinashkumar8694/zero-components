@@ -9,14 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --sidebar-bg: rgba(30, 41, 59, 0.7);
-            --card-bg: rgba(30, 41, 59, 0.5);
-            --text-color: #f1f5f9;
-            --text-muted: #94a3b8;
-            --accent-color: #38bdf8;
-            --border-color: rgba(51, 65, 85, 0.5);
-            --glass-blur: blur(12px);
+            --bg-color: var(--uiv-app-bg, #0f172a);
+            --sidebar-bg: var(--uiv-app-sidebar-bg, rgba(30, 41, 59, 0.7));
+            --sidebar-text: var(--uiv-app-sidebar-text, var(--uiv-app-text-color, #f1f5f9));
+            --card-bg: var(--uiv-app-card-bg, rgba(30, 41, 59, 0.5));
+            --text-color: var(--uiv-app-text-color, #f1f5f9);
+            --text-muted: var(--uiv-app-text-muted, #94a3b8);
+            --accent-color: var(--uiv-app-accent-color, #38bdf8);
+            --border-color: var(--uiv-app-border-color, rgba(51, 65, 85, 0.5));
+            --glass-blur: var(--uiv-app-glass-blur, blur(12px));
         }
 
         body {
@@ -37,20 +38,45 @@
             flex-direction: column;
         }
 
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--sidebar-text);
+        }
+
+        .logo i {
+            color: var(--accent-color);
+        }
+
         .nav-section {
             padding: 1.5rem 0.5rem;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--sidebar-text);
+            opacity: 0.5;
+            padding: 0 1.25rem;
+            margin-bottom: 12px;
+            margin-top: 2rem;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            padding: 0.75rem 1.5rem;
+            gap: 0.75rem;
+            padding: 0.75rem 1.25rem;
             text-decoration: none;
-            color: var(--text-color);
+            color: var(--sidebar-text);
             border-radius: 8px;
-            margin: 0.25rem 0.5rem;
-            transition: all 0.3s ease;
+            margin-bottom: 0.25rem;
+            transition: var(--transition);
         }
 
         .nav-item:hover {
@@ -59,8 +85,9 @@
         }
 
         .nav-item.active {
-            background: var(--accent-color);
-            color: #0f172a;
+            background: var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.1));
+            color: var(--accent-color);
+            font-weight: 600;
         }
 
         .main-content {
@@ -134,8 +161,7 @@
 <body>
     <aside class="sidebar">
         <div style="padding: 2rem; border-bottom: 1px solid var(--border-color);">
-            <div
-                style="font-size: 1.5rem; font-weight: 700; color: var(--accent-color); display: flex; align-items: center; gap: 0.75rem;">
+            <div class="logo">
                 <i class="fas fa-layer-group"></i> <span>Zero Core</span>
             </div>
         </div>
@@ -164,7 +190,7 @@
                     <input type="checkbox" id="devModeToggle" onchange="toggleDevMode()"
                         style="opacity: 0; width: 0; height: 0;">
                     <span
-                        style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;"
+                        style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--uiv-app-text-muted, #ccc); transition: .4s; border-radius: 34px;"
                         id="devModeSlider"></span>
                 </label>
             </div>
@@ -179,7 +205,7 @@
                     <input type="checkbox" id="syncModeToggle" onchange="toggleSyncMode()"
                         style="opacity: 0; width: 0; height: 0;">
                     <span
-                        style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px;"
+                        style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--uiv-app-text-muted, #ccc); transition: .4s; border-radius: 34px;"
                         id="syncModeSlider"></span>
                 </label>
             </div>
@@ -228,9 +254,11 @@
                 :root {
                     --bg-color: var(--uiv-app-bg, #0f172a);
                     --sidebar-bg: var(--uiv-app-sidebar-bg, rgba(30, 41, 59, 0.7));
+                    --sidebar-text: var(--uiv-app-sidebar-text, var(--uiv-app-text-color, #f1f5f9));
                     --header-bg: var(--uiv-app-header-bg, rgba(15, 23, 42, 0.8));
                     --card-bg: var(--uiv-app-card-bg, rgba(30, 41, 59, 0.5));
                     --text-color: var(--uiv-app-text-color, #f1f5f9);
+                    --text-muted: var(--uiv-app-text-muted, #94a3b8);
                     --accent-color: var(--uiv-app-accent-color, #38bdf8);
                     --border-color: var(--uiv-app-border-color, rgba(51, 65, 85, 0.5));
                     --glass-blur: var(--uiv-app-glass-blur, blur(12px));
@@ -244,10 +272,10 @@
                 }
 
                 .theme-option.active {
-                    background: var(--accent-color);
-                    color: #000;
+                    background: var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.1));
+                    color: var(--accent-color);
                     border-color: var(--accent-color);
-                    box-shadow: 0 0 15px var(--accent-color);
+                    box-shadow: 0 0 15px var(--uiv-app-accent-transparent);
                 }
             `;
         };
@@ -259,6 +287,7 @@
             if (devToggle) devToggle.checked = isDev;
             const devSlider = document.getElementById('devModeSlider');
             if (devSlider) devSlider.style.backgroundColor = isDev ? 'var(--accent-color)' : '#ccc';
+            if (devSlider) devSlider.style.backgroundColor = isDev ? 'var(--accent-color)' : 'var(--border-color)';
 
             const manager = window.zeroThemeManager;
             const providersSettings = document.getElementById('providersSettings');
@@ -272,7 +301,7 @@
             const syncToggle = document.getElementById('syncModeToggle');
             if (syncToggle) syncToggle.checked = isSync;
             const syncSlider = document.getElementById('syncModeSlider');
-            if (syncSlider) syncSlider.style.backgroundColor = isSync ? 'var(--accent-color)' : '#ccc';
+            if (syncSlider) syncSlider.style.backgroundColor = isSync ? 'var(--accent-color)' : 'var(--border-color)';
 
             const providers = manager.getProviders();
             if (!providersSettings) return;
@@ -308,7 +337,7 @@
                             <div style="display: flex; align-items: center; gap: 1rem;">
                                 <i class="fas ${p.id.includes('uiv') ? 'fa-magic' : 'fa-palette'}" style="color: ${isRoot ? 'var(--accent-color)' : 'var(--text-muted)'}; font-size: 1.25rem;"></i>
                                 <h3 style="margin: 0;">${p.name}</h3>
-                                ${isRoot ? '<span style="background: var(--accent-color); color: #0f172a; font-size: 0.6rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: uppercase;">Primary</span>' : ''}
+                                ${isRoot ? '<span style="background: var(--accent-color); color: var(--uiv-text-inverse, #0f172a); font-size: 0.6rem; font-weight: 700; padding: 0.2rem 0.5rem; border-radius: 4px; text-transform: uppercase;">Primary</span>' : ''}
                             </div>
                             <button onclick="window.zeroThemeManager.setRootProvider('${p.id}'); renderSettings();" 
                                     style="background: ${isRoot ? 'rgba(56, 189, 248, 0.2)' : 'transparent'}; border: 1px solid ${isRoot ? 'var(--accent-color)' : 'rgba(255,255,255,0.1)'}; color: ${isRoot ? 'var(--accent-color)' : 'var(--text-muted)'}; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">

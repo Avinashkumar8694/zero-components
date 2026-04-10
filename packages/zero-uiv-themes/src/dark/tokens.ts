@@ -45,6 +45,7 @@ export const darkTokens = {
         // App Tokens
         '--uiv-app-bg': '#0f172a',
         '--uiv-app-sidebar-bg': '#1e293b',
+        '--uiv-app-sidebar-text': '#f1f5f9',
         '--uiv-app-header-bg': '#0f172a',
         '--uiv-app-card-bg': '#1e293b',
         '--uiv-app-input-bg': '#0f172a',
@@ -54,5 +55,6 @@ export const darkTokens = {
         '--uiv-app-text-muted': '#94a3b8',
         '--uiv-app-border-color': '#334155',
         '--uiv-app-hover-shadow': '0 10px 15px rgba(0,0,0,0.6)',
+        '--uiv-app-glass-blur': 'blur(12px)',
     }
 };

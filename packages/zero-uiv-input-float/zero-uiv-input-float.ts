@@ -53,9 +53,9 @@ export class ZeroUivInputFloat extends LitElement {
         :host {
             display: block;
             margin-bottom: 20px;
-            --inp-p: var(--uiv-primary-color, #6c63ff);
-            --inp-t: var(--uiv-text-color, #333);
-            --inp-b: var(--uiv-border-color, #ccc);
+            --inp-p: var(--uiv-primary-color, var(--uiv-status-primary));
+            --inp-t: var(--uiv-text-color, var(--uiv-text-primary-themed));
+            --inp-b: var(--uiv-border-color, var(--uiv-app-border-color, rgba(128,128,128,0.2)));
         }
 
         .floating-group {
@@ -83,7 +83,7 @@ export class ZeroUivInputFloat extends LitElement {
             position: absolute;
             top: 25px;
             left: 0;
-            color: #999;
+            color: var(--uiv-text-muted, #999);
             pointer-events: none;
             transition: all 0.3s;
         }

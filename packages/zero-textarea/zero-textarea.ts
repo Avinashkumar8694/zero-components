@@ -25,10 +25,10 @@ export class ZeroTextarea extends LitElement {
         :host {
             display: block;
             width: 100%;
-            --uiv-primary: var(--uiv-primary-color, #6c63ff);
-            --uiv-bg: var(--uiv-surface-color, #fff);
-            --uiv-text: var(--uiv-text-color, #333);
-            --uiv-border: var(--uiv-border-color, #ddd);
+            --uiv-primary: var(--uiv-primary-color, var(--uiv-status-primary));
+            --uiv-bg: var(--uiv-surface-color, var(--uiv-app-input-bg, #fff));
+            --uiv-text: var(--uiv-text-color, var(--uiv-text-primary-themed));
+            --uiv-border: var(--uiv-border-color, var(--uiv-app-border-color, rgba(128,128,128,0.2)));
         }
 
         .form-field {
@@ -81,8 +81,8 @@ export class ZeroTextarea extends LitElement {
             opacity: 0.7;
         }
 
-        .character-count.near-limit { color: var(--uiv-warning-color, #ff9800); }
-        .character-count.over-limit { color: var(--uiv-error-color, #f44336); font-weight: bold; }
+        .character-count.near-limit { color: var(--uiv-color-warning, var(--uiv-status-warning)); }
+        .character-count.over-limit { color: var(--uiv-color-danger, var(--uiv-status-danger)); font-weight: bold; }
     `;
 
     @property({ type: String })
@@ -303,7 +303,7 @@ export class ZeroTextarea extends LitElement {
                 
                 ${this.showCharacterCount || this.showWordCount ? html`
                     <div class="textarea-footer uiv-${themeModule?.id}-text">
-                        <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
+                        <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-status-danger)">
                             ${this.errorMessage}
                         </div>
                         <div>

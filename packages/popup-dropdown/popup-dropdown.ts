@@ -55,11 +55,11 @@ export class PopupDropdown extends LitElement {
         :host {
             display: block;
             font-family: var(--uiv-font-family, Arial, sans-serif);
-            --dropdown-label-color: var(--uiv-text-color, #333);
-            --dropdown-border-color: var(--uiv-border-color, #ddd);
-            --dropdown-bg-color: var(--uiv-bg-surface, #fff);
-            --dropdown-icon-color: var(--uiv-primary-color, #666);
-            --option-hover-bg-color: var(--uiv-bg-overlay, #f0f0f0);
+            --dropdown-label-color: var(--uiv-text-color, var(--uiv-text-primary-themed));
+            --dropdown-border-color: var(--uiv-border-color, var(--uiv-app-border-color, rgba(128,128,128,0.2)));
+            --dropdown-bg-color: var(--uiv-bg-surface, var(--uiv-surface-color, #fff));
+            --dropdown-icon-color: var(--uiv-primary-color, var(--uiv-status-primary));
+            --option-hover-bg-color: var(--uiv-bg-overlay, var(--uiv-app-accent-transparent, rgba(128,128,128,0.1)));
             --dropdown-border-radius: var(--uiv-border-radius, 8px);
             --dropdown-height: var(--input-height, 42px);
             --dropdown-font-size: 14px;

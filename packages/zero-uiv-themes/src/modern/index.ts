@@ -25,14 +25,17 @@ export const modernGlobalTokens = {
         // App Dashboard Tokens
         '--uiv-app-bg': '#000000',
         '--uiv-app-sidebar-bg': '#0a0a0a',
+        '--uiv-app-sidebar-text': '#f8fafc',
         '--uiv-app-header-bg': '#0f0f0f',
         '--uiv-app-card-bg': '#111111',
         '--uiv-app-input-bg': 'rgba(255, 255, 255, 0.05)',
         '--uiv-app-text-color': '#f8fafc',
         '--uiv-app-text-muted': 'rgba(255, 255, 255, 0.6)',
         '--uiv-app-accent-color': '#f59e0b',
+        '--uiv-app-accent-transparent': 'rgba(245, 158, 11, 0.15)',
         '--uiv-app-border-color': '#262626',
-        '--uiv-app-glass-blur': 'none',
+        '--uiv-app-hover-shadow': '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 20px rgba(245, 158, 11, 0.2)',
+        '--uiv-app-glass-blur': 'blur(0px)',
     }
 };
 

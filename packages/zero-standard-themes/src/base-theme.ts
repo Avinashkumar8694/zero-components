@@ -80,25 +80,31 @@ export abstract class BaseTheme {
                 color: var(--uiv-text-primary, var(--uiv-app-text-color, #1a1a1a));
                 border: 1px solid var(--uiv-input-border, var(--uiv-app-border-color, #cbd5e1));
                 border-radius: var(--uiv-border-radius, 8px);
-                padding: 8px 12px;
+                padding: 10px 14px;
                 font-family: inherit;
                 font-size: 14px;
                 width: 100%;
                 box-sizing: border-box;
-                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 display: block;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            }
+
+            .uiv-input:hover, .uiv-select:hover, .uiv-textarea:hover {
+                border-color: var(--uiv-color-primary, #3b82f6);
             }
 
             .uiv-input[type="checkbox"], .uiv-input[type="radio"] {
                 width: auto;
                 cursor: pointer;
                 display: inline-block;
+                box-shadow: none;
             }
 
             .uiv-input:focus, .uiv-select:focus, .uiv-textarea:focus {
                 outline: none;
                 border-color: var(--uiv-color-primary, #3b82f6);
-                box-shadow: 0 0 0 2px var(--uiv-app-accent-transparent, rgba(59, 130, 246, 0.2));
+                box-shadow: 0 0 0 3px var(--uiv-app-accent-transparent, rgba(59, 130, 246, 0.2));
             }
 
             .uiv-button {
@@ -106,29 +112,37 @@ export abstract class BaseTheme {
                 color: var(--uiv-btn-text, var(--uiv-text-inverse, #ffffff));
                 border: none;
                 border-radius: var(--uiv-border-radius, 8px);
-                padding: 10px 20px;
+                padding: 12px 24px;
                 font-weight: 600;
                 cursor: pointer;
-                transition: transform 0.1s ease, filter 0.2s ease;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 gap: 8px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             }
 
             .uiv-button:hover {
                 filter: brightness(1.1);
+                transform: translateY(-1px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             }
 
             .uiv-button:active {
-                transform: scale(0.98);
+                transform: translateY(0);
+                filter: brightness(0.95);
             }
 
             .uiv-label {
-                color: var(--uiv-text-primary, var(--uiv-app-text-color));
-                font-weight: 500;
-                margin-bottom: 6px;
+                color: inherit;
+                font-weight: 600;
+                margin-bottom: 8px;
+                font-size: 0.85rem;
+                letter-spacing: 0.025em;
+                text-transform: uppercase;
                 display: block;
+                opacity: 0.8;
             }
         `;
     }

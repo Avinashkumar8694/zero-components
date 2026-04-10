@@ -24,14 +24,17 @@ export const retroGlobalTokens = {
         // App Dashboard Tokens
         '--uiv-app-bg': '#000500',
         '--uiv-app-sidebar-bg': '#001a00',
+        '--uiv-app-sidebar-text': '#39ff14',
         '--uiv-app-header-bg': '#001a00',
         '--uiv-app-card-bg': '#001100',
         '--uiv-app-input-bg': 'rgba(57, 255, 20, 0.1)',
         '--uiv-app-text-color': '#39ff14',
         '--uiv-app-text-muted': '#00ff00',
         '--uiv-app-accent-color': '#39ff14',
+        '--uiv-app-accent-transparent': 'rgba(57, 255, 20, 0.15)',
         '--uiv-app-border-color': '#003300',
-        '--uiv-app-glass-blur': 'none',
+        '--uiv-app-hover-shadow': '10px 10px 0px #000, 0 0 20px rgba(57, 255, 20, 0.4)',
+        '--uiv-app-glass-blur': 'blur(0px)',
     }
 };
 

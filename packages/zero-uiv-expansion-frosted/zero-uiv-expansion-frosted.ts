@@ -56,7 +56,7 @@ export class ZeroUivExpansionFrosted extends LitElement {
             margin-bottom: 15px;
             --exp-bg: var(--uiv-bg-color, rgba(255, 255, 255, 0.1));
             --exp-b: var(--uiv-border-color, rgba(255, 255, 255, 0.2));
-            --exp-t: var(--uiv-text-color, #fff);
+            --exp-t: var(--uiv-text-color, var(--uiv-text-inverse, #fff));
         }
 
         .expansion-wrapper {

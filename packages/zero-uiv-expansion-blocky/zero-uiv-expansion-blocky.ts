@@ -54,15 +54,15 @@ export class ZeroUivExpansionBlocky extends LitElement {
             display: block;
             width: 100%;
             margin-bottom: 20px;
-            --exp-bg: var(--uiv-bg-color, #fff);
-            --exp-s: var(--uiv-secondary-color, #eee);
+            --exp-bg: var(--uiv-bg-color, var(--uiv-surface-color, #fff));
+            --exp-s: var(--uiv-secondary-color, var(--uiv-app-bg, #eee));
         }
 
         .expansion-wrapper {
             width: 100%;
             background: var(--exp-bg);
-            border: 3px solid #000;
-            box-shadow: 6px 6px 0 #000;
+            border: 3px solid var(--uiv-text-primary-themed, #000);
+            box-shadow: 6px 6px 0 var(--uiv-text-primary-themed, #000);
             overflow: hidden;
             transition: transform 0.2s;
         }
@@ -74,10 +74,10 @@ export class ZeroUivExpansionBlocky extends LitElement {
             padding: 12px 20px;
             cursor: pointer;
             user-select: none;
-            color: #000;
+            color: var(--uiv-text-primary-themed, #000);
             font-weight: 900;
             background: var(--exp-s);
-            border-bottom: 3px solid #000;
+            border-bottom: 3px solid var(--uiv-text-primary-themed, #000);
         }
 
         .content {
@@ -85,7 +85,7 @@ export class ZeroUivExpansionBlocky extends LitElement {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out, padding 0.3s ease;
-            color: #000;
+            color: var(--uiv-text-primary-themed, #000);
             background: var(--exp-bg);
         }
 

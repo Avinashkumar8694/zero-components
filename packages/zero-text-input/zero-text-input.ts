@@ -2,6 +2,8 @@ import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceT
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
+const getThemeManager = () => (window as any).zeroThemeManager;
+
 /**
  * A configurable text input component with global styling.
  * 
@@ -23,56 +25,66 @@ export class ZeroTextInput extends LitElement {
         :host {
             display: block;
             width: 100%;
+            --uiv-primary: var(--uiv-primary-color, #6c63ff);
+            --uiv-bg: var(--uiv-surface-color, #fff);
+            --uiv-text: var(--uiv-text-color, #333);
+            --uiv-border: var(--uiv-border-color, #ddd);
         }
 
         .form-field {
-            margin-bottom: var(--spacing-lg, 20px);
+            margin-bottom: 20px;
         }
 
         .form-field label {
             display: block;
-            margin-bottom: var(--spacing-xs, 6px);
-            font-size: var(--font-size-base, 14px);
-            color: var(--text-primary, #333);
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--uiv-text);
             font-weight: 500;
-        }        input.mat-mdc-input-element {
+            transition: color 0.3s ease;
+        }
+
+        input.mat-mdc-input-element {
             width: 100%;
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
-            border: 1px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-sm, 4px);
-            font-size: var(--font-size-base, 14px);
-            background-color: var(--background-primary, #fff);
-            color: var(--text-primary, #333);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            min-height: var(--input-height, 36px);
+            padding: 12px 16px;
+            border: 1px solid var(--uiv-border);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--uiv-bg);
+            color: var(--uiv-text);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 40px;
             box-sizing: border-box;
-            font-family: var(--font-family, 'Roboto', sans-serif);
+            box-shadow: var(--uiv-shadow-depth, none);
         }
 
         input.mat-mdc-input-element::placeholder {
-            color: var(--text-secondary, #666);
-        }        input.mat-mdc-input-element:hover {
-            border-color: var(--primary-light, #6c63ff);
-            background: var(--primary-background-hover, rgba(108, 99, 255, 0.02));
+            color: var(--uiv-text-muted, #94a3b8);
+        }
+
+        input.mat-mdc-input-element:hover {
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow, 0 0 10px rgba(108, 99, 255, 0.1));
         }
 
         input.mat-mdc-input-element:focus {
             outline: none;
-            background: var(--background-primary, #fff);
-            border-color: var(--primary-color, #6c63ff);
-            box-shadow: 0 0 0 2px var(--primary-light, rgba(108, 99, 255, 0.2));
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow, 0 0 15px rgba(108, 99, 255, 0.2));
+            transform: translateY(-1px);
         }
 
         input.mat-mdc-input-element:disabled {
-            background-color: var(--background-disabled, #f5f5f5);
-            color: var(--text-disabled, #999);
+            background-color: #f5f5f5;
+            color: #999;
             cursor: not-allowed;
+            opacity: 0.6;
         }
 
         .error-message {
-            color: var(--error-color, #f44336);
-            font-size: var(--font-size-sm, 12px);
-            margin-top: var(--spacing-xs, 4px);
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 6px;
             display: none;
         }
 
@@ -81,11 +93,7 @@ export class ZeroTextInput extends LitElement {
         }
 
         input.mat-mdc-input-element.error {
-            border-color: var(--error-color, #f44336);
-        }
-
-        input.mat-mdc-input-element.error:focus {
-            box-shadow: 0 0 0 2px var(--error-light, rgba(244, 67, 54, 0.2));
+            border-color: #ef4444;
         }
     `;
 
@@ -221,14 +229,24 @@ export class ZeroTextInput extends LitElement {
         }));
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         return html`
-            <div class="form-field">
-                <label for="text-input">${this.label}</label>
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('text-input') : ''}
+            </style>
+            <div class="form-field uiv-${themeModule?.id}-theme">
+                <label for="text-input" class="uiv-${themeModule?.id}-text">${this.label}</label>
                 <input 
                     id="text-input"
                     type="text" 
-                    class="mat-mdc-input-element ${this.showError ? 'error' : ''}"
+                    class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan ${this.showError ? 'error' : ''}"
                     .value="${this.value}" 
                     placeholder="${this.placeholder}"
                     ?required="${this.required}"
@@ -239,7 +257,7 @@ export class ZeroTextInput extends LitElement {
                     @focus="${this.handleFocus}"
                     @blur="${this.handleBlur}"
                 />
-                <div class="error-message ${this.showError ? 'show' : ''}">
+                <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
                     ${this.errorMessage}
                 </div>
             </div>

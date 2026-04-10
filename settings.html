@@ -112,30 +112,15 @@
             </div>
         </div>
 
-        <div class="settings-card">
-            <h3>Theme Provider</h3>
-            <div class="form-group">
-                <label class="form-label">Active Provider</label>
-                <select id="providerSelect" onchange="changeProvider()">
-                    <!-- Populated by JS -->
-                </select>
-            </div>
-        </div>
-
-        <div class="settings-card">
-            <h3>Active Theme</h3>
-            <div class="form-group">
-                <label class="form-label">Select Theme Style</label>
-                <div id="themeGrid" class="theme-grid">
-                    <!-- Populated by JS -->
-                </div>
-            </div>
+        <div id="providersSettings">
+            <!-- Dynamically generated per provider -->
         </div>
     </main>
 
     <script type="module" src="/packages/register-plugins/index.js"></script>
     <script type="module" src="/packages/zero-theme-orchestrator/src/index.ts"></script>
     <script type="module" src="/packages/zero-uiv-themes/src/index.ts"></script>
+    <script type="module" src="/packages/zero-standard-themes/src/index.ts"></script>
     <script type="module" src="./index.ts"></script>
     <script>
         function toggleDevMode() {
@@ -157,26 +142,33 @@
             }
 
             const providers = manager.getProviders();
-            const providerSelect = document.getElementById('providerSelect');
-            const activePID = manager.getActiveProviderId();
-
-            providerSelect.innerHTML = providers.map(p => 
-                `<option value="${p.id}" ${p.id === activePID ? 'selected' : ''}>${p.name}</option>`
-            ).join('');
-
-            const activeProvider = providers.find(p => p.id === activePID);
-            if (activeProvider) {
-                const themes = activeProvider.getThemeNames();
-                const activeTheme = manager.getActiveThemeName();
-                const themeGrid = document.getElementById('themeGrid');
+            const providersSettings = document.getElementById('providersSettings');
+            
+            providersSettings.innerHTML = providers.map(p => {
+                const themes = p.getThemeNames();
+                const activeTheme = manager.getActiveThemeName(p.id);
                 
-                themeGrid.innerHTML = themes.map(t => `
-                    <div class="theme-option ${t === activeTheme ? 'active' : ''}" onclick="window.zeroThemeManager.setActiveTheme('${t}'); renderSettings();">
-                        <i class="fas ${getThemeIcon(t)}" style="display: block; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
-                        ${t.charAt(0).toUpperCase() + t.slice(1)}
+                return `
+                    <div class="settings-card">
+                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                            <i class="fas ${p.id.includes('uiv') ? 'fa-magic' : 'fa-palette'}" style="color: var(--accent-color); font-size: 1.25rem;"></i>
+                            <h3 style="margin: 0;">${p.name}</h3>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Select Theme Style (Current: ${activeTheme})</label>
+                            <div class="theme-grid">
+                                ${themes.map(t => `
+                                    <div class="theme-option ${t === activeTheme ? 'active' : ''}" 
+                                         onclick="window.zeroThemeManager.setActiveTheme('${t}', '${p.id}'); renderSettings();">
+                                        <i class="fas ${getThemeIcon(t)}" style="display: block; font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                                        ${t.charAt(0).toUpperCase() + t.slice(1)}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
                     </div>
-                `).join('');
-            }
+                `;
+            }).join('');
         }
 
         function getThemeIcon(name) {
@@ -185,15 +177,14 @@
                 cyber: 'fa-terminal',
                 glass: 'fa-square',
                 retro: 'fa-gamepad',
-                neon: 'fa-bolt'
+                neon: 'fa-bolt',
+                corporate: 'fa-briefcase',
+                wealth: 'fa-coins',
+                nature: 'fa-leaf',
+                light: 'fa-sun',
+                dark: 'fa-moon'
             };
             return icons[name] || 'fa-palette';
-        }
-
-        function changeProvider() {
-            const id = document.getElementById('providerSelect').value;
-            window.zeroThemeManager.setActiveProvider(id);
-            renderSettings();
         }
 
         window.addEventListener('library-ready', renderSettings);

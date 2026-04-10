@@ -2,6 +2,8 @@ import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceT
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
+const getThemeManager = () => (window as any).zeroThemeManager;
+
 interface FileItem {
   file: File;
   id: string;
@@ -222,225 +224,131 @@ export class ZeroFileInput extends LitElement {  // Basic Properties
   static styles = css`
     :host {
       display: block;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: var(--uiv-font-family, inherit);
+      --uiv-primary: var(--uiv-primary-color, #1976d2);
+      --uiv-bg: var(--uiv-surface-color, #ffffff);
+      --uiv-text: var(--uiv-text-color, #333);
+      --uiv-border: var(--uiv-border-color, #e0e0e0);
     }
 
     .form-field {
       position: relative;
       margin-bottom: 16px;
-    }    .form-field-label {
+    }
+
+    .form-field-label {
       display: block;
-      font-size: var(--font-size-base, 14px);
+      font-size: 14px;
       font-weight: 500;
       margin-bottom: 8px;
-      color: var(--text-primary, rgba(0, 0, 0, 0.87));
+      color: var(--uiv-text);
     }
 
     .form-field-label.required::after {
       content: ' *';
-      color: var(--error-color, #f44336);
-    }    .file-input-container {
+      color: var(--uiv-error-color, #f44336);
+    }
+
+    .file-input-container {
       position: relative;
-      border: 2px dashed var(--border-color, #e0e0e0);
-      border-radius: var(--border-radius, 4px);
-      background: var(--background-color, #ffffff);
-      transition: all 0.3s ease;
+      border: 2px dashed var(--uiv-border);
+      border-radius: 12px;
+      background: var(--uiv-bg);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      box-shadow: var(--uiv-shadow-depth, none);
+      overflow: hidden;
     }
 
     .file-input-container:hover {
-      border-color: var(--primary-color, #1976d2);
-      background: var(--hover-background, #f8f9fa);
-    }    .file-input-container.drag-over {
-      border-color: var(--primary-color, #1976d2);
-      background: color-mix(in srgb, var(--primary-color, #1976d2) 5%, #ffffff);
-      border-style: solid;
-    }
-
-    .file-input-container.disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      pointer-events: none;
-    }
-
-    .file-input-container.error {
-      border-color: var(--error-color, #f44336);
+      border-color: var(--uiv-primary);
+      box-shadow: var(--uiv-border-glow);
     }
 
     .drop-zone {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;      padding: var(--spacing-lg, 24px);
-      min-height: var(--drop-zone-height, 120px);
+      justify-content: center;
+      padding: 32px;
+      min-height: 140px;
       text-align: center;
-    }    .file-input {
-      position: absolute;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-      pointer-events: none;
-    }.upload-icon {
-      width: var(--icon-size-xl, 32px);
-      height: var(--icon-size-xl, 32px);
-      margin-bottom: 12px;
-      opacity: 0.6;
-    }.upload-text {
-      font-size: var(--font-size-lg, 16px);
-      color: var(--text-primary, rgba(0, 0, 0, 0.87));
+    }
+
+    .upload-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      color: var(--uiv-primary);
+      opacity: 0.8;
+    }
+
+    .upload-text {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--uiv-text);
       margin-bottom: 4px;
     }
 
     .upload-subtext {
-      font-size: var(--font-size-base, 14px);
-      color: var(--text-secondary, rgba(0, 0, 0, 0.6));
+      font-size: 12px;
+      color: var(--uiv-text);
+      opacity: 0.6;
     }
 
-    .file-list {
-      margin-top: 16px;
-    }    .file-item {
+    .file-item {
       display: flex;
       align-items: center;
-      padding: var(--spacing-md, 12px);
-      border: 1px solid #e0e0e0;
-      border-radius: var(--border-radius-sm, 4px);
-      margin-bottom: 8px;
-      background: white;
-    }    .file-preview {
-      width: var(--icon-size-xl, 40px);
-      height: var(--icon-size-xl, 40px);
-      border-radius: var(--border-radius-sm, 4px);
-      margin-right: 12px;
-      object-fit: cover;
-      background: #f5f5f5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: var(--font-size-xs, 12px);
-      color: var(--text-secondary, #666);
-      text-transform: uppercase;
-      font-weight: bold;
-      border: 1px solid #e0e0e0;
-      overflow: hidden;
+      padding: 12px;
+      border: 1px solid var(--uiv-border);
+      border-radius: 8px;
+      margin-top: 8px;
+      background: var(--uiv-bg);
+      box-shadow: var(--uiv-shadow-depth, none);
     }
 
-    .file-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: inherit;
+    .file-name {
+      font-weight: 600;
+      color: var(--uiv-text);
     }
 
-    .file-info {
-      flex: 1;
-    }    .file-name {
-      font-size: var(--font-size-base, 14px);
-      font-weight: 500;
-      color: var(--text-primary, rgba(0, 0, 0, 0.87));
-      margin-bottom: 2px;
-    }
-
-    .file-size {
-      font-size: var(--font-size-xs, 12px);
-      color: var(--text-secondary, rgba(0, 0, 0, 0.6));
-    }
-
-    .file-progress {
-      width: 100%;
-      height: 4px;      background: var(--background-secondary, #e0e0e0);
-      border-radius: var(--border-radius-xs, 2px);
-      margin-top: 4px;
-      overflow: hidden;
-    }
-
-    .file-progress-bar {
-      height: 100%;
-      background: var(--success-color, #4caf50);
-      transition: width 0.3s ease;
-    }    .file-error {
-      font-size: var(--font-size-xs, 12px);
-      color: var(--error-color, #f44336);
-      margin-top: 2px;
-    }.file-actions {
-      display: flex;
-      gap: var(--spacing-sm, 8px);
-    }
-
-    .file-action-btn {
-      padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-      border: none;
-      border-radius: var(--border-radius-sm, 4px);
-      font-size: var(--font-size-xs, 12px);
-      cursor: pointer;
-      transition: var(--transition-fast, background 0.2s ease);
-    }
-
-    .remove-btn {
-      background: #ffebee;
-      color: var(--error-color, #f44336);
-    }
-
-    .remove-btn:hover {
-      background: #ffcdd2;
-    }    .form-field-hint {
-      font-size: var(--font-size-xs, 12px);
-      color: var(--text-secondary, rgba(0, 0, 0, 0.6));
-      margin-top: 4px;
-    }
-
-    .form-field-error {      font-size: var(--font-size-xs, 12px);
-      color: var(--error-color, #f44336);
-      margin-top: 4px;
-    }    .browse-button {
-      display: inline-flex;
-      align-items: center;
-      padding: var(--spacing-sm, 8px) var(--spacing-lg, 16px);
-      background: var(--primary-color, #1976d2);
+    .browse-button {
+      background: var(--uiv-primary);
       color: white;
+      padding: 8px 24px;
+      border-radius: 8px;
       border: none;
-      border-radius: var(--border-radius-sm, 4px);
-      font-size: var(--font-size-base, 14px);
+      font-weight: 600;
+      margin-top: 16px;
       cursor: pointer;
-      transition: var(--transition-fast, background 0.2s ease);
-      margin-top: var(--spacing-md, 12px);
-    }
-
-    .browse-button:hover {
-      background: color-mix(in srgb, var(--primary-color, #1976d2) 90%, black);
-    }
-
-    @media (max-width: 768px) {
-      .drop-zone {
-        padding: 16px;
-        min-height: 80px;
-      }
-        .upload-text {
-        font-size: var(--font-size-base, 14px);
-      }
+      box-shadow: var(--uiv-border-glow);
     }
   `;
 
+  connectedCallback() {
+    super.connectedCallback();
+    getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+  }
+
   protected render(): TemplateResult {
+    const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
     return html`
-      <div class="form-field" style="width: ${this.width}; height: ${this.height}">
+      <style>
+        ${themeModule ? themeModule.getGlobalStyles() : ''}
+        ${themeModule ? themeModule.getComponentStyles('file-input') : ''}
+      </style>
+      <div class="form-field uiv-${themeModule?.id}-theme" style="width: ${this.width}">
         ${this.label ? html`
-          <label class="form-field-label ${this.required ? 'required' : ''}">
+          <label class="form-field-label uiv-${themeModule?.id}-text ${this.required ? 'required' : ''}">
             ${this.label}
           </label>
-        ` : ''}        <div 
-          class="file-input-container ${this.isDragOver ? 'drag-over' : ''} ${this.disabled ? 'disabled' : ''} ${this.hasError ? 'error' : ''}"
+        ` : ''}
+        <div 
+          class="file-input-container uiv-${themeModule?.id}-scan ${this.isDragOver ? 'drag-over' : ''} ${this.disabled ? 'disabled' : ''} ${this.hasError ? 'error' : ''}"
           @dragover=${this.handleDragOver}
           @dragleave=${this.handleDragLeave}
           @drop=${this.handleDrop}
           @click=${this.handleClick}
-          style="
-            --primary-color: ${this.primaryColor};
-            --error-color: ${this.errorColor};
-            --success-color: ${this.successColor};
-            --border-radius: ${this.borderRadius};
-            --drop-zone-height: ${this.dropZoneHeight};
-          "
         >
           <input
             class="file-input"
@@ -456,13 +364,13 @@ export class ZeroFileInput extends LitElement {  // Basic Properties
             <svg class="upload-icon" viewBox="0 0 24 24" fill="currentColor">
               <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
             </svg>
-            <div class="upload-text">${this.placeholder}</div>
-            <div class="upload-subtext">
+            <div class="upload-text uiv-${themeModule?.id}-text">${this.placeholder}</div>
+            <div class="upload-subtext uiv-${themeModule?.id}-text">
               ${this.accept ? `Supported: ${this.accept}` : 'All file types supported'} 
               ${this.maxFileSize ? `• Max ${this.maxFileSize}MB` : ''}
             </div>
             ${!this.dragDrop ? html`
-              <button type="button" class="browse-button" @click=${this.handleBrowseClick}>
+              <button type="button" class="browse-button uiv-${themeModule?.id}-card" @click=${this.handleBrowseClick}>
                 Browse Files
               </button>
             ` : ''}
@@ -472,8 +380,8 @@ export class ZeroFileInput extends LitElement {  // Basic Properties
         ${this.files.length > 0 && this.showPreview ? html`
           <div class="file-list">
             ${this.files.map(fileItem => html`
-              <div class="file-item">
-                <div class="file-preview">
+              <div class="file-item uiv-${themeModule?.id}-card">
+                <div class="file-preview uiv-${themeModule?.id}-card">
                   ${this.isImageFile(fileItem.file) ? html`
                     <img src=${URL.createObjectURL(fileItem.file)} alt=${fileItem.file.name} />
                   ` : html`
@@ -481,21 +389,22 @@ export class ZeroFileInput extends LitElement {  // Basic Properties
                   `}
                 </div>
                 <div class="file-info">
-                  <div class="file-name">${fileItem.file.name}</div>
-                  <div class="file-size">${this.formatFileSize(fileItem.file.size)}</div>
+                  <div class="file-name uiv-${themeModule?.id}-text">${fileItem.file.name}</div>
+                  <div class="file-size uiv-${themeModule?.id}-text" style="opacity: 0.7">${this.formatFileSize(fileItem.file.size)}</div>
                   ${this.showProgress && fileItem.progress !== undefined ? html`
-                    <div class="file-progress">
-                      <div class="file-progress-bar" style="width: ${fileItem.progress}%"></div>
+                    <div class="file-progress" style="background: rgba(var(--uiv-primary-rgb, 25, 118, 210), 0.1)">
+                      <div class="file-progress-bar uiv-${themeModule?.id}-card" style="width: ${fileItem.progress}%; background: var(--uiv-primary-color)"></div>
                     </div>
                   ` : ''}
                   ${fileItem.error ? html`
-                    <div class="file-error">${fileItem.error}</div>
+                    <div class="file-error" style="color: var(--uiv-error-color, #f44336)">${fileItem.error}</div>
                   ` : ''}
                 </div>
                 <div class="file-actions">
                   <button 
                     type="button" 
-                    class="file-action-btn remove-btn"
+                    class="file-action-btn remove-btn uiv-${themeModule?.id}-card"
+                    style="border: 1px solid var(--uiv-error-color, #f44336); color: var(--uiv-error-color, #f44336); background: transparent"
                     @click=${() => this.removeFile(fileItem.id)}
                   >
                     Remove
@@ -507,11 +416,11 @@ export class ZeroFileInput extends LitElement {  // Basic Properties
         ` : ''}
 
         ${this.helpText && !this.hasError ? html`
-          <div class="form-field-hint">${this.helpText}</div>
+          <div class="form-field-hint uiv-${themeModule?.id}-text" style="opacity: 0.7">${this.helpText}</div>
         ` : ''}
         
         ${this.errorMessage && this.hasError ? html`
-          <div class="form-field-error">${this.errorMessage}</div>
+          <div class="form-field-error uiv-${themeModule?.id}-text" style="color: var(--uiv-error-color, #f44336)">${this.errorMessage}</div>
         ` : ''}
       </div>
     `;

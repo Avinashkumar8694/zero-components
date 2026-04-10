@@ -2,6 +2,8 @@ import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceT
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
+const getThemeManager = () => (window as any).zeroThemeManager;
+
 /**
  * A configurable number input component with step controls.
  * 
@@ -23,17 +25,21 @@ export class ZeroNumberInput extends LitElement {
         :host {
             display: block;
             width: 100%;
+            --uiv-primary: var(--uiv-primary-color, #6c63ff);
+            --uiv-bg: var(--uiv-surface-color, #fff);
+            --uiv-text: var(--uiv-text-color, #333);
+            --uiv-border: var(--uiv-border-color, #ddd);
         }
 
         .form-field {
-            margin-bottom: var(--spacing-lg, 20px);
+            margin-bottom: 20px;
         }
 
         .form-field label {
             display: block;
-            margin-bottom: var(--spacing-xs, 6px);
-            font-size: var(--font-size-base, 14px);
-            color: var(--text-primary, #333);
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--uiv-text);
             font-weight: 500;
         }
 
@@ -45,101 +51,59 @@ export class ZeroNumberInput extends LitElement {
 
         input.mat-mdc-input-element {
             width: 100%;
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
-            border: 1px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-sm, 4px);
-            font-size: var(--font-size-base, 14px);
-            background-color: var(--background-primary, #fff);
-            color: var(--text-primary, #333);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            min-height: var(--input-height, 36px);
+            padding: 8px 12px;
+            border: 1px solid var(--uiv-border);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--uiv-bg);
+            color: var(--uiv-text);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 40px;
             box-sizing: border-box;
-            font-family: var(--font-family, 'Roboto', sans-serif);
+            box-shadow: var(--uiv-shadow-depth, none);
         }
 
-        input.mat-mdc-input-element::placeholder {
-            color: var(--text-secondary, #666);
-        }        input.mat-mdc-input-element:hover {
-            border-color: var(--primary-light, #6c63ff);
-            background: var(--primary-background-hover, rgba(108, 99, 255, 0.02));
+        input.mat-mdc-input-element:hover {
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
         }
 
         input.mat-mdc-input-element:focus {
             outline: none;
-            background: var(--background-primary, #fff);
-            border-color: var(--primary-color, #6c63ff);
-            box-shadow: 0 0 0 2px var(--primary-light, rgba(108, 99, 255, 0.2));
-        }
-
-        input.mat-mdc-input-element:disabled {
-            background-color: var(--background-disabled, #f5f5f5);
-            color: var(--text-disabled, #999);
-            cursor: not-allowed;
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
+            transform: translateY(-1px);
         }
 
         .step-controls {
             display: flex;
             flex-direction: column;
-            margin-left: var(--spacing-xs, 4px);
-        }        .step-button {
-            background: var(--background-secondary, #f5f5f5);
-            border: 1px solid var(--border-color, #ddd);
-            color: var(--text-primary, #333);
+            margin-left: 8px;
+            gap: 4px;
+        }
+
+        .step-button {
+            background: var(--uiv-bg);
+            border: 1px solid var(--uiv-border);
+            color: var(--uiv-text);
             cursor: pointer;
-            font-size: var(--font-size-xs, 12px);
-            padding: var(--spacing-xs, 2px) var(--spacing-xs, 6px);
-            min-width: var(--icon-size-sm, 24px);
-            height: var(--input-step-height, 18px);
+            width: 28px;
+            height: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: var(--transition-fast, background-color 0.2s, border-color 0.2s);
-        }
-
-        .step-button:first-child {
-            border-radius: var(--border-radius-sm, 4px) var(--border-radius-sm, 4px) 0 0;
-            border-bottom: 0;
-        }
-
-        .step-button:last-child {
-            border-radius: 0 0 var(--border-radius-sm, 4px) var(--border-radius-sm, 4px);
+            border-radius: 4px;
+            transition: all 0.2s;
+            font-size: 10px;
+            box-shadow: var(--uiv-shadow-depth, none);
         }
 
         .step-button:hover:not(:disabled) {
-            background: var(--primary-light, #6c63ff);
+            background: var(--uiv-primary);
             color: white;
-            border-color: var(--primary-color, #6c63ff);
-        }
-
-        .step-button:disabled {
-            background: var(--background-disabled, #f5f5f5);
-            color: var(--text-disabled, #ccc);
-            cursor: not-allowed;
-        }
-
-        .error-message {
-            color: var(--error-color, #f44336);
-            font-size: var(--font-size-sm, 12px);
-            margin-top: var(--spacing-xs, 4px);
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        input.mat-mdc-input-element.error {
-            border-color: var(--error-color, #f44336);
-        }
-
-        input.mat-mdc-input-element.error:focus {
-            box-shadow: 0 0 0 2px var(--error-light, rgba(244, 67, 54, 0.2));
-        }
-
-        .value-display {
-            font-size: var(--font-size-sm, 12px);
-            color: var(--text-secondary, #666);
-            margin-top: var(--spacing-xs, 4px);
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
+            transform: scale(1.1);
         }
     `;
 
@@ -311,15 +275,25 @@ export class ZeroNumberInput extends LitElement {
         this.dispatchChangeEvent();
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         return html`
-            <div class="form-field">
-                <label for="number-input">${this.label}</label>
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('input') : ''}
+            </style>
+            <div class="form-field uiv-${themeModule?.id}-theme">
+                <label for="number-input" class="uiv-${themeModule?.id}-text">${this.label}</label>
                 <div class="number-container">
                     <input 
                         id="number-input"
                         type="number" 
-                        class="mat-mdc-input-element ${this.showError ? 'error' : ''}"
+                        class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan ${this.showError ? 'error' : ''}"
                         .value="${String(this.value)}" 
                         placeholder="${this.placeholder}"
                         min="${this.min}"
@@ -334,13 +308,13 @@ export class ZeroNumberInput extends LitElement {
                         <div class="step-controls">
                             <button 
                                 type="button"
-                                class="step-button"
+                                class="step-button uiv-${themeModule?.id}-card"
                                 ?disabled="${this.disabled || this.value >= this.max}"
                                 @click="${this.increment}"
                             >▲</button>
                             <button 
                                 type="button"
-                                class="step-button"
+                                class="step-button uiv-${themeModule?.id}-card"
                                 ?disabled="${this.disabled || this.value <= this.min}"
                                 @click="${this.decrement}"
                             >▼</button>
@@ -348,11 +322,11 @@ export class ZeroNumberInput extends LitElement {
                     ` : ''}
                 </div>
                 ${this.unitLabel ? html`
-                    <div class="value-display">
+                    <div class="value-display uiv-${themeModule?.id}-text-secondary">
                         Current: ${this.value} ${this.unitLabel}
                     </div>
                 ` : ''}
-                <div class="error-message ${this.showError ? 'show' : ''}">
+                <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
                     ${this.errorMessage}
                 </div>
             </div>

@@ -1,7 +1,9 @@
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, CSSResult } from 'lit';
 import { property } from 'lit/decorators.js';
+
+const getThemeManager = () => (window as any).zeroThemeManager;
 
 /**
  * Represents a Monaco-like code editor component with syntax highlighting and advanced features.
@@ -24,11 +26,11 @@ export class CodeEditor extends LitElement {    static styles = css`
             display: block;
             width: 100%;
             height: 400px;
-            border: 1px solid var(--border-color, #d1d5db);
-            border-radius: var(--border-radius-lg, 8px);
+            border: 1px solid var(--uiv-border-color, #d1d5db);
+            border-radius: var(--uiv-border-radius, 8px);
             overflow: hidden;
-            font-family: var(--font-family-mono, 'Courier New', monospace);
-            background: var(--editor-background, #1e1e1e);
+            font-family: var(--uiv-font-mono, 'Courier New', monospace);
+            background: var(--uiv-bg-surface, #1e1e1e);
             position: relative;
         }
 
@@ -37,13 +39,13 @@ export class CodeEditor extends LitElement {    static styles = css`
             flex-direction: column;
             height: 100%;
         }        .editor-header {
-            background: var(--editor-header-background, #2d2d30);
-            border-bottom: 1px solid var(--editor-border-color, #3e3e42);
+            background: var(--uiv-bg-overlay, #2d2d30);
+            border-bottom: 1px solid var(--uiv-border-color, #3e3e42);
             padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            color: var(--editor-text-secondary, #cccccc);
+            color: var(--uiv-text-muted, #cccccc);
             font-size: var(--font-size-xs, 12px);
         }
 
@@ -51,12 +53,12 @@ export class CodeEditor extends LitElement {    static styles = css`
             display: flex;
             gap: 1px;
         }        .editor-tab {
-            background: var(--editor-header-background, #2d2d30);
+            background: var(--uiv-bg-overlay, #2d2d30);
             border: none;
-            color: var(--editor-text-secondary, #cccccc);
+            color: var(--uiv-text-muted, #cccccc);
             padding: var(--spacing-xs, 6px) var(--spacing-md, 12px);
             cursor: pointer;
-            border-radius: var(--border-radius-sm, 4px) var(--border-radius-sm, 4px) 0 0;
+            border-radius: var(--uiv-border-radius, 4px) var(--uiv-border-radius, 4px) 0 0;
             font-size: var(--font-size-xs, 12px);
             position: relative;
         }
@@ -75,11 +77,11 @@ export class CodeEditor extends LitElement {    static styles = css`
             gap: 8px;
             align-items: center;
         }        .language-selector {
-            background: var(--editor-select-background, #3c3c3c);
-            border: 1px solid var(--editor-select-border, #464647);
-            color: var(--editor-text-secondary, #cccccc);
+            background: var(--uiv-bg-surface, #3c3c3c);
+            border: 1px solid var(--uiv-border-color, #464647);
+            color: var(--uiv-text-color, #cccccc);
             padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            border-radius: var(--border-radius-sm, 4px);
+            border-radius: var(--uiv-border-radius, 4px);
             font-size: var(--font-size-xs, 11px);
         }
 
@@ -88,18 +90,18 @@ export class CodeEditor extends LitElement {    static styles = css`
             flex: 1;
             overflow: hidden;
         }        .line-numbers {
-            background: var(--editor-sidebar-background, #252526);
-            color: var(--editor-text-muted, #6e7681);
+            background: var(--uiv-bg-surface, #252526);
+            color: var(--uiv-text-muted, #6e7681);
             padding: var(--spacing-md, 12px) var(--spacing-sm, 8px);
             font-size: var(--font-size-sm, 13px);
             line-height: 1.4;
             text-align: right;
             min-width: 50px;
-            border-right: 1px solid var(--editor-border-color, #3e3e42);
+            border-right: 1px solid var(--uiv-border-color, #3e3e42);
             user-select: none;
             overflow: hidden;
             white-space: pre-line;
-            font-family: var(--font-family-mono, 'Consolas', 'Courier New', monospace);
+            font-family: var(--uiv-font-mono, 'Consolas', 'Courier New', monospace);
         }
 
         .editor-content {
@@ -138,14 +140,15 @@ export class CodeEditor extends LitElement {    static styles = css`
             color: transparent;
         }
 
-        .keyword { color: var(--syntax-keyword, #569cd6); }
-        .string { color: var(--syntax-string, #ce9178); }
-        .comment { color: var(--syntax-comment, #6a9955); font-style: italic; }
-        .number { color: var(--syntax-number, #b5cea8); }
-        .operator { color: var(--syntax-operator, #d4d4d4); }
-        .function { color: var(--syntax-function, #dcdcaa); }
-        .variable { color: var(--syntax-variable, #9cdcfe); }
-        .type { color: var(--syntax-type, #4ec9b0); }        .editor-footer {
+        .keyword { color: var(--uiv-accent-primary, #569cd6); }
+        .string { color: var(--uiv-accent-secondary, #ce9178); }
+        .comment { color: var(--uiv-text-muted, #6a9955); font-style: italic; }
+        .number { color: var(--uiv-primary-color, #b5cea8); }
+        .operator { color: var(--uiv-text-color, #d4d4d4); }
+        .function { color: var(--uiv-primary-light, #dcdcaa); }
+        .variable { color: var(--uiv-text-muted, #9cdcfe); }
+        .type { color: var(--uiv-primary-color, #4ec9b0); }
+        .editor-footer {
             background: var(--primary-color, #007acc);
             color: white;
             padding: var(--spacing-xs, 4px) var(--spacing-md, 12px);
@@ -454,6 +457,11 @@ class CodeEditor {
         this.fireChangeEvent();
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     firstUpdated() {
         this.updateLineNumbers();
         this.setupKeyboardShortcuts();
@@ -729,9 +737,14 @@ class CodeEditor {
     }
 
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         return html`
-            <div class="editor-container theme-${this.theme}">
-                <div class="editor-header">
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('input') : ''}
+            </style>
+            <div class="editor-container uiv-${themeModule?.id}-theme uiv-${themeModule?.id}-card">
+                <div class="editor-header uiv-${themeModule?.id}-scan">
                     <div class="editor-tabs">
                         <button class="editor-tab active">
                             ${this.language === 'javascript' ? 'script.js' : 

@@ -35,16 +35,19 @@ class OpenPopupDirective extends Directive {
             }
 
             element.addEventListener('click', () => {
-                const popup = document.querySelector(`#popup-${this.config.webComponentSelector}`) as HTMLElement;
+                const popupId = `popup-${this.config.webComponentSelector}`;
+                let popup = document.querySelector(`#${popupId}`) as any;
+                
                 if (!popup) {
-                    console.error('Popup element not found.');
-                    return;
+                    popup = this.createPopup();
+                    document.body.appendChild(popup);
                 }
-                popup.style.width = this.config.width || 'auto';
-                popup.style.height = this.config.height || 'auto';
+
+                if (this.config.width) popup.style.width = this.config.width;
+                if (this.config.height) popup.style.height = this.config.height;
                 popup.setAttribute('position', this.config.position || 'center');
-                popup.setAttribute('hasBackdrop', this.config?.hasBackdrop);
-                popup['open'] = true;
+                popup.setAttribute('has-backdrop', String(this.config.hasBackdrop !== false));
+                popup.open = true;
             });
         };
     }
@@ -52,22 +55,19 @@ class OpenPopupDirective extends Directive {
 
     createPopup() {
         try {
-            const popup = document.createElement('my-popup');
+            const popup = document.createElement('zero-popup-dialog');
             const webComponent = document.createElement(this.config.webComponentSelector);
 
             popup.setAttribute('id', `popup-${this.config.webComponentSelector}`);
             popup.setAttribute('position', this.config.position || 'center');
             popup.appendChild(webComponent);
 
-            // Apply additional configurations
-            if (this.config.width) popup.style.width = this.config.width;
-            if (this.config.height) popup.style.height = this.config.height;
-            popup['hasBackdrop'] = this.config.hasBackdrop !== false;
+            // Forward theme classes if needed, though zero-popup-dialog handles common theming
+            // The internal webComponent will be themed by itself if it's a LitElement with ThemeOrchestrator
 
             // Handle outputs (events)
             popup.addEventListener('closed', () => {
                 console.log(`Popup for ${this.config.webComponentSelector} closed`);
-                
             });
 
             popup.addEventListener('opened', () => {

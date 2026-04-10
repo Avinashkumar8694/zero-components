@@ -2,6 +2,8 @@ import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceT
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
+const getThemeManager = () => (window as any).zeroThemeManager;
+
 interface DatePickerSettings {
   minDate?: Date;
   maxDate?: Date;
@@ -297,42 +299,49 @@ export class ZeroDatePicker extends LitElement {
       margin-bottom: 16px;
     }    .form-field-label {
       display: block;
-      font-size: var(--font-size-base, 14px);
+      font-size: 14px;
       font-weight: 500;
       margin-bottom: 8px;
-      color: var(--text-primary, rgba(0, 0, 0, 0.87));
+      color: var(--uiv-text-main);
+      transition: color 0.3s ease;
     }
 
     .form-field-label.required::after {
       content: ' *';
-      color: var(--error-color, #f44336);
+      color: var(--uiv-error-color, #f44336);
     }
 
     .input-container {
       position: relative;
       display: flex;
       align-items: center;
-    }    .mat-mdc-input-element {
+    }
+
+    .mat-mdc-input-element {
       width: 100%;
-      min-height: var(--input-height, 36px);
-      border: 1px solid #e0e0e0;
-      border-radius: var(--border-radius, 4px);
-      font-size: var(--font-size-lg, 16px);
+      min-height: 40px;
+      border: 1px solid var(--uiv-border);
+      border-radius: 8px;
+      font-size: 16px;
       line-height: 1.5;
-      background: var(--background-color, #ffffff);
-      color: var(--text-primary, rgba(0, 0, 0, 0.87));
-      transition: all 0.2s ease;
+      background: var(--uiv-surface);
+      color: var(--uiv-text-main);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
+      padding: 0 40px 0 16px;
+      box-shadow: var(--uiv-shadow-depth, none);
     }
 
     .mat-mdc-input-element:hover {
-      border-color: var(--primary-color, #1976d2);
+      border-color: var(--uiv-primary);
+      box-shadow: var(--uiv-border-glow);
     }
 
     .mat-mdc-input-element:focus {
       outline: none;
-      border-color: var(--primary-color, #1976d2);
-      box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color, #1976d2) 20%, transparent);
+      border-color: var(--uiv-primary);
+      box-shadow: var(--uiv-border-glow);
+      transform: translateY(-1px);
     }
 
     .mat-mdc-input-element:disabled {
@@ -357,12 +366,19 @@ export class ZeroDatePicker extends LitElement {
       top: 100%;
       left: 0;
       right: 0;
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: var(--border-radius, 4px);
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      background: var(--uiv-surface);
+      border: 1px solid var(--uiv-border);
+      border-radius: 8px;
+      box-shadow: var(--uiv-shadow-depth, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
       z-index: 1000;
-      margin-top: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+      animation: dropdownSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes dropdownSlide {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .calendar-header {
@@ -545,26 +561,28 @@ export class ZeroDatePicker extends LitElement {
     }
   `;
 
+  connectedCallback() {
+      super.connectedCallback();
+      getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+  }
+
   protected render(): TemplateResult {
+    const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
     return html`
-      <div class="form-field" style="width: ${this.width}">
+      <style>
+        ${themeModule ? themeModule.getGlobalStyles() : ''}
+        ${themeModule ? themeModule.getComponentStyles('date-picker') : ''}
+      </style>
+      <div class="form-field uiv-${themeModule?.id}-theme" style="width: ${this.width}">
         ${this.label ? html`
-          <label class="form-field-label ${this.required ? 'required' : ''}">
+          <label class="form-field-label uiv-${themeModule?.id}-text ${this.required ? 'required' : ''}">
             ${this.label}
           </label>
         ` : ''}
         
-        <div 
-          class="input-container"
-          style="
-            --primary-color: ${this.primaryColor};
-            --error-color: ${this.errorColor};
-            --background-color: ${this.backgroundColor};
-            --border-radius: ${this.borderRadius};
-          "
-        >
+        <div class="input-container">
           <input
-            class="mat-mdc-input-element ${this.hasError ? 'error' : ''}"
+            class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan ${this.hasError ? 'error' : ''}"
             type="text"
             .value=${this.inputValue}
             placeholder=${this.placeholder}
@@ -575,17 +593,17 @@ export class ZeroDatePicker extends LitElement {
             @keydown=${this.handleKeyDown}
             @blur=${this.handleInputBlur}
           />
-          <svg class="calendar-icon" viewBox="0 0 24 24" fill="currentColor">
+          <svg class="calendar-icon uiv-${themeModule?.id}-text" viewBox="0 0 24 24" fill="currentColor">
             <path d="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19Z" />
           </svg>
         </div>
 
         ${this.isOpen ? html`
-          <div class="dropdown">
-            <div class="calendar-header">
+          <div class="dropdown uiv-${themeModule?.id}-card">
+            <div class="calendar-header uiv-${themeModule?.id}-card">
               <button 
                 type="button" 
-                class="nav-button" 
+                class="nav-button uiv-${themeModule?.id}-text" 
                 @click=${this.previousMonth}
                 aria-label="Previous month"
               >
@@ -594,7 +612,7 @@ export class ZeroDatePicker extends LitElement {
                 </svg>
               </button>
               
-              <div class="month-year">
+              <div class="month-year uiv-${themeModule?.id}-text">
                 ${this.monthNames[this.currentDate.getMonth()]} ${this.currentDate.getFullYear()}
               </div>
               
@@ -614,7 +632,7 @@ export class ZeroDatePicker extends LitElement {
               <div class="weekdays ${this.showWeekNumbers ? 'with-week-numbers' : ''}">
                 ${this.showWeekNumbers ? html`<div class="week-number"></div>` : ''}
                 ${this.getWeekdayNames().map(day => html`
-                  <div class="weekday">${day}</div>
+                  <div class="weekday uiv-${themeModule?.id}-text" style="opacity: 0.7">${day}</div>
                 `)}
               </div>
               
@@ -643,11 +661,11 @@ export class ZeroDatePicker extends LitElement {
         ` : ''}
 
         ${this.helpText && !this.hasError ? html`
-          <div class="form-field-hint">${this.helpText}</div>
+          <div class="form-field-hint uiv-${themeModule?.id}-text" style="opacity: 0.7">${this.helpText}</div>
         ` : ''}
         
         ${this.errorMessage && this.hasError ? html`
-          <div class="form-field-error">${this.errorMessage}</div>
+          <div class="form-field-error uiv-${themeModule?.id}-text" style="color: var(--uiv-error-color, #f44336)">${this.errorMessage}</div>
         ` : ''}
       </div>
     `;

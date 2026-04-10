@@ -2,6 +2,8 @@ import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceT
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
+const getThemeManager = () => (window as any).zeroThemeManager;
+
 /**
  * A configurable range slider component with dual handles and tooltips.
  * 
@@ -23,51 +25,60 @@ export class ZeroRangeSlider extends LitElement {
         :host {
             display: block;
             width: 100%;
+            --uiv-primary: var(--uiv-primary-color, #6c63ff);
+            --uiv-bg: var(--uiv-surface-color, #fff);
+            --uiv-text: var(--uiv-text-color, #333);
+            --uiv-border: var(--uiv-border-color, #ddd);
         }
 
         .form-field {
-            margin-bottom: var(--spacing-lg, 20px);
+            margin-bottom: 20px;
         }
 
         .form-field label {
             display: block;
-            margin-bottom: var(--spacing-xs, 6px);
-            font-size: var(--font-size-base, 14px);
-            color: var(--text-primary, #333);
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--uiv-text);
             font-weight: 500;
         }
 
         .range-container {
-            padding: var(--spacing-md, 12px) 0;
+            padding: 12px 0;
         }
 
         .range-display {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--spacing-sm, 8px);
-            font-size: var(--font-size-sm, 12px);
-            color: var(--text-secondary, #666);
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: var(--uiv-text);
+            opacity: 0.8;
         }
 
         .range-value {
-            font-weight: 500;
-            color: var(--primary-color, #6c63ff);
-            font-size: var(--font-size-base, 14px);
+            font-weight: 600;
+            color: var(--uiv-primary);
+            font-size: 14px;
         }
 
         .slider-track {
-            position: relative;            height: 6px;
-            background: var(--background-secondary, #f5f5f5);
-            border-radius: var(--border-radius-xs, 3px);
-            margin: var(--spacing-md, 12px) 0;
+            position: relative;
+            height: 6px;
+            background: rgba(var(--uiv-primary-rgb, 108, 99, 255), 0.1);
+            border-radius: 3px;
+            margin: 12px 0;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
         }
 
         .slider-progress {
             position: absolute;
-            height: 100%;            background: var(--primary-color, #6c63ff);
-            border-radius: var(--border-radius-xs, 3px);
-            transition: all 0.2s;
+            height: 100%;
+            background: var(--uiv-primary);
+            border-radius: 3px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: var(--uiv-border-glow);
         }
 
         input[type="range"] {
@@ -83,177 +94,67 @@ export class ZeroRangeSlider extends LitElement {
             outline: none;
             cursor: pointer;
             pointer-events: none;
-        }        input[type="range"]::-webkit-slider-thumb {
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: var(--icon-size-md, 20px);
-            height: var(--icon-size-md, 20px);
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
-            background: var(--primary-color, #6c63ff);
-            border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            background: var(--uiv-primary);
+            border: 3px solid var(--uiv-bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
             cursor: pointer;
             pointer-events: all;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         input[type="range"]::-webkit-slider-thumb:hover {
-            transform: scale(1.1);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }        input[type="range"]::-moz-range-thumb {
-            width: var(--icon-size-md, 20px);
-            height: var(--icon-size-md, 20px);
-            border-radius: 50%;
-            background: var(--primary-color, #6c63ff);
-            border: 2px solid white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            cursor: pointer;
-            pointer-events: all;
-            transition: all 0.2s;
-        }
-
-        input[type="range"]::-moz-range-thumb:hover {
-            transform: scale(1.1);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        input[type="range"]:disabled {
-            cursor: not-allowed;
-        }
-
-        input[type="range"]:disabled::-webkit-slider-thumb {
-            background: var(--background-disabled, #ccc);
-            cursor: not-allowed;
-        }
-
-        input[type="range"]:disabled::-moz-range-thumb {
-            background: var(--background-disabled, #ccc);
-            cursor: not-allowed;
-        }
-
-        .dual-slider {
-            position: relative;
-        }
-
-        .dual-slider input[type="range"] {
-            position: absolute;
-            top: 0;
-        }
-
-        .dual-slider input[type="range"]:first-child {
-            z-index: 1;
+            transform: translateY(-2px) scale(1.2);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
         }
 
         .dual-slider input[type="range"]:last-child {
             z-index: 2;
         }
 
-        .value-labels {
-            display: flex;
-            justify-content: space-between;
-            margin-top: var(--spacing-sm, 8px);
-            font-size: var(--font-size-sm, 12px);
-            color: var(--text-secondary, #666);
+        .tooltip {
+            position: absolute;
+            background: var(--uiv-primary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            transform: translateX(-50%);
+            top: -40px;
+            opacity: 0;
+            transition: all 0.2s;
+            pointer-events: none;
+            z-index: 10;
+            box-shadow: var(--uiv-border-glow);
         }
 
-        .current-values {
-            display: flex;
-            justify-content: center;
-            gap: var(--spacing-md, 12px);
-            margin-top: var(--spacing-sm, 8px);
-            font-size: var(--font-size-base, 14px);
-            font-weight: 500;
-        }
+        .tooltip.show { opacity: 1; transform: translateX(-50%) translateY(-5px); }
 
-        .value-input {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs, 4px);
-        }        .value-input input {
-            width: 60px;
-            padding: var(--spacing-xs, 2px) var(--spacing-xs, 6px);
-            border: 1px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-xs, 3px);
-            font-size: var(--font-size-sm, 12px);
-            text-align: center;
-        }
-
-        .step-controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: var(--spacing-sm, 8px);
-        }        .step-button {
-            background: var(--background-secondary, #f5f5f5);
-            border: 1px solid var(--border-color, #ddd);
-            color: var(--text-primary, #333);
+        .step-button {
+            background: var(--uiv-bg);
+            border: 1px solid var(--uiv-border);
+            color: var(--uiv-text);
+            padding: 4px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-size: var(--font-size-sm, 12px);
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            border-radius: var(--border-radius-xs, 3px);
-            transition: var(--transition-fast, all 0.2s);
+            transition: all 0.2s;
+            font-size: 12px;
+            box-shadow: var(--uiv-shadow-depth, none);
         }
 
         .step-button:hover:not(:disabled) {
-            background: var(--primary-color, #6c63ff);
+            background: var(--uiv-primary);
             color: white;
-        }
-
-        .step-button:disabled {
-            background: var(--background-disabled, #f5f5f5);
-            color: var(--text-disabled, #ccc);
-            cursor: not-allowed;
-        }        .tooltip {
-            position: absolute;
-            background: var(--text-primary, #333);
-            color: white;
-            padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
-            border-radius: var(--border-radius-xs, 3px);
-            font-size: var(--font-size-sm, 12px);
-            white-space: nowrap;
-            transform: translateX(-50%);
-            top: -35px;
-            opacity: 0;
-            transition: var(--transition-fast, opacity 0.2s);
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .tooltip.show {
-            opacity: 1;
-        }
-
-        .tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 4px solid transparent;
-            border-top-color: var(--text-primary, #333);
-        }
-
-        .error-message {
-            color: var(--error-color, #f44336);
-            font-size: var(--font-size-sm, 12px);
-            margin-top: var(--spacing-xs, 4px);
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        .slider-track.error .slider-progress {
-            background: var(--error-color, #f44336);
-        }
-
-        input[type="range"].error::-webkit-slider-thumb {
-            background: var(--error-color, #f44336);
-        }
-
-        input[type="range"].error::-moz-range-thumb {
-            background: var(--error-color, #f44336);
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
         }
     `;
 
@@ -492,18 +393,28 @@ export class ZeroRangeSlider extends LitElement {
         this.dispatchChangeEvent();
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         const minVal = this.dualRange ? Math.min(this.value, this.secondValue) : this.value;
         const maxVal = this.dualRange ? Math.max(this.value, this.secondValue) : this.value;
 
         return html`
-            <div class="form-field">
-                <label>${this.label}</label>
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('slider') : ''}
+            </style>
+            <div class="form-field uiv-${themeModule?.id}-theme">
+                <label class="uiv-${themeModule?.id}-text">${this.label}</label>
                 
                 <div class="range-container">
-                    <div class="range-display">
+                    <div class="range-display uiv-${themeModule?.id}-text">
                         <span>${this.formatValue(this.min)}</span>
-                        <span class="range-value">
+                        <span class="range-value uiv-${themeModule?.id}-text">
                             ${this.dualRange ? 
                                 `${this.formatValue(minVal)} - ${this.formatValue(maxVal)}` :
                                 this.formatValue(this.value)
@@ -512,8 +423,8 @@ export class ZeroRangeSlider extends LitElement {
                         <span>${this.formatValue(this.max)}</span>
                     </div>
                     
-                    <div class="slider-track ${this.showError ? 'error' : ''} ${this.dualRange ? 'dual-slider' : ''}">
-                        <div class="slider-progress" 
+                    <div class="slider-track uiv-${themeModule?.id}-scan ${this.showError ? 'error' : ''} ${this.dualRange ? 'dual-slider' : ''}">
+                        <div class="slider-progress uiv-${themeModule?.id}-card" 
                              style="left: ${this.getProgressLeft()}; width: ${this.getProgressWidth()}"></div>
                         
                         <input 
@@ -545,18 +456,19 @@ export class ZeroRangeSlider extends LitElement {
                         ` : ''}
                         
                         ${this.showTooltip && this.showTooltipState ? html`
-                            <div class="tooltip show" style="left: ${this.getProgressLeft()}">
+                            <div class="tooltip uiv-${themeModule?.id}-card show" style="left: ${this.getProgressLeft()}">
                                 ${this.formatValue(this.value)}
                             </div>
                         ` : ''}
                     </div>
                     
                     ${this.showValueInputs ? html`
-                        <div class="current-values">
+                        <div class="current-values uiv-${themeModule?.id}-text">
                             <div class="value-input">
                                 <span>Value:</span>
                                 <input 
                                     type="number"
+                                    class="uiv-${themeModule?.id}-card"
                                     min="${this.min}"
                                     max="${this.max}"
                                     step="${this.step}"
@@ -570,6 +482,7 @@ export class ZeroRangeSlider extends LitElement {
                                     <span>Second:</span>
                                     <input 
                                         type="number"
+                                        class="uiv-${themeModule?.id}-card"
                                         min="${this.min}"
                                         max="${this.max}"
                                         step="${this.step}"
@@ -586,16 +499,16 @@ export class ZeroRangeSlider extends LitElement {
                         <div class="step-controls">
                             <button 
                                 type="button"
-                                class="step-button"
+                                class="step-button uiv-${themeModule?.id}-card"
                                 ?disabled="${this.disabled || this.value <= this.min}"
                                 @click="${() => this.stepValue(-1, false)}"
                             >
                                 -${this.step}
                             </button>
-                            <span>Step: ${this.step}</span>
+                            <span class="uiv-${themeModule?.id}-text">Step: ${this.step}</span>
                             <button 
                                 type="button"
-                                class="step-button"
+                                class="step-button uiv-${themeModule?.id}-card"
                                 ?disabled="${this.disabled || this.value >= this.max}"
                                 @click="${() => this.stepValue(1, false)}"
                             >
@@ -605,7 +518,7 @@ export class ZeroRangeSlider extends LitElement {
                     ` : ''}
                 </div>
                 
-                <div class="error-message ${this.showError ? 'show' : ''}">
+                <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
                     ${this.errorMessage}
                 </div>
             </div>

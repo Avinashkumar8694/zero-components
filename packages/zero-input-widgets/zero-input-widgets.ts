@@ -1,7 +1,9 @@
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig } from 'zero-annotation';
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, CSSResult } from 'lit';
 import { property } from 'lit/decorators.js';
+
+const getThemeManager = () => (window as any).zeroThemeManager;
 
 /**
  * Represents a user profile form with various input fields.
@@ -23,9 +25,10 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
         :host {
             display: block;
             width: 100%;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: var(--spacing-lg, 20px);
+            font-family: var(--uiv-font-family, sans-serif);
         }
 
         .form-container {
@@ -34,7 +37,6 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
             gap: var(--spacing-lg, 20px);
         }
 
-        /* Form field styling matching global styles */
         .form-field {
             margin-bottom: var(--spacing-lg, 20px);
         }
@@ -43,160 +45,53 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
             display: block;
             margin-bottom: var(--spacing-xs, 6px);
             font-size: var(--font-size-base, 14px);
-            color: var(--text-primary, #333);
+            color: var(--uiv-text-color, #333);
             font-weight: 500;
         }
 
-        /* Input styling matching mat-mdc-input-element */
         input.mat-mdc-input-element,
         textarea.mat-mdc-input-element,
         select.mat-mdc-input-element {
             width: 100%;
             padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
-            border: 1px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-sm, 4px);
+            border: 1px solid var(--uiv-border-color, #ddd);
+            border-radius: var(--uiv-border-radius, 4px);
             font-size: var(--font-size-base, 14px);
-            background-color: var(--background-primary, #fff);            color: var(--text-primary, #333);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            min-height: var(--input-height, 36px);
+            background-color: var(--uiv-bg-surface, #fff);
+            color: var(--uiv-text-color, #333);
+            transition: all 0.2s;
+            min-height: var(--input-height, 42px);
             box-sizing: border-box;
-            font-family: var(--font-family, 'Roboto', sans-serif);
-        }
-
-        input.mat-mdc-input-element::placeholder,
-        textarea.mat-mdc-input-element::placeholder {
-            color: var(--text-secondary, #666);
-        }        input.mat-mdc-input-element:hover,
-        textarea.mat-mdc-input-element:hover,
-        select.mat-mdc-input-element:hover {
-            border-color: var(--primary-light, #6c63ff);
-            background: var(--primary-background-hover, rgba(108, 99, 255, 0.02));
         }
 
         input.mat-mdc-input-element:focus,
         textarea.mat-mdc-input-element:focus,
         select.mat-mdc-input-element:focus {
             outline: none;
-            background: var(--background-primary, #fff);
-            border-color: var(--primary-color, #6c63ff);
-            box-shadow: 0 0 0 2px var(--primary-light, rgba(108, 99, 255, 0.2));
+            border-color: var(--uiv-primary-color, #6c63ff);
+            box-shadow: var(--uiv-shadow-depth);
         }
 
-        textarea.mat-mdc-input-element {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        /* Checkbox field styling */
         .checkbox-field {
             display: flex;
             align-items: center;
             gap: var(--spacing-sm, 8px);
-        }        .checkbox-field input[type="checkbox"] {
-            width: var(--icon-size-sm, 18px);
-            height: var(--icon-size-sm, 18px);
-            margin: 0;
-            cursor: pointer;
         }
 
-        .checkbox-field span {
-            font-size: var(--font-size-base, 14px);
-            color: var(--text-primary, #333);
-            cursor: pointer;
-        }
-
-        /* Range slider styling */
-        .range-field {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs, 6px);
-        }
-
-        .range-display {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: var(--font-size-sm, 12px);
-            color: var(--text-secondary, #666);
-        }
-
-        .range-value {
-            font-weight: 500;
-            color: var(--primary-color, #6c63ff);
-        }        input[type="range"] {
-            width: 100%;
-            height: 6px;
-            border-radius: var(--border-radius-xs, 3px);
-            background: var(--background-secondary, #f5f5f5);
-            outline: none;
-            cursor: pointer;
-        }
-
-        /* File input styling */
-        .file-field {
-            position: relative;
-        }
-
-        input[type="file"] {
-            width: 100%;
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
-            border: 1px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-sm, 4px);
-            background-color: var(--background-primary, #fff);
-            cursor: pointer;
-        }
-
-        /* Color picker styling */
-        input[type="color"] {            width: 50px;
-            height: var(--input-height, 36px);
-            border: 1px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-sm, 4px);
-            cursor: pointer;
-            padding: 0;
-        }
-
-        /* Submit button styling */
         .submit-button {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm, 8px);
-            padding: var(--spacing-sm, 8px) var(--spacing-lg, 20px);
-            background-color: var(--primary-color, #6c63ff);
-            color: white;
+            padding: 12px 24px;
+            background-color: var(--uiv-primary-color, #6c63ff);
+            color: #fff;
             border: none;
-            border-radius: var(--border-radius-sm, 4px);
-            font-size: var(--font-size-base, 14px);
-            font-weight: 500;
+            border-radius: var(--uiv-border-radius, 4px);
             cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            align-self: flex-start;
-            margin-top: var(--spacing-md, 12px);
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
         .submit-button:hover {
-            background-color: var(--primary-dark, #5b52d9);
-            transform: translateY(-1px);
-        }
-
-        .submit-button:active {
-            transform: translateY(0);
-        }
-
-        /* Form result display */
-        .form-result {
-            margin-top: var(--spacing-md, 12px);
-            padding: var(--spacing-md, 12px);
-            background: var(--background-secondary, #f5f5f5);
-            border-radius: var(--border-radius-sm, 4px);
-            border: 1px solid var(--border-color, #ddd);
-        }
-
-        .form-result pre {
-            margin: 0;
-            font-family: 'Courier New', monospace;
-            font-size: var(--font-size-sm, 12px);
-            color: var(--text-primary, #333);
-            white-space: pre-wrap;
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
     `;
 
@@ -346,7 +241,7 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
         eventTrigger: 'onSubmit',
     })
     handleSubmit(event: Event) {
-        event.preventDefault();
+        if (event) event.preventDefault();
         const formData = {
             username: this.username,
             password: this.password,
@@ -365,16 +260,28 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
             bubbles: true,
             composed: true,
         }));
-    }    render() {
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
+    render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         return html`
-            <div class="form-container">
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('input') : ''}
+            </style>
+            <div class="form-container uiv-${themeModule?.id}-theme">
                 <!-- Text Input -->
                 <div class="form-field">
-                    <label for="username">User Name</label>
+                    <label for="username" class="uiv-${themeModule?.id}-text">User Name</label>
                     <input 
                         id="username" 
                         type="text" 
-                        class="mat-mdc-input-element"
+                        class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan"
                         .value="${this.username}" 
                         placeholder="Enter your username"
                         @input="${(e: Event) => this.username = (e.target as HTMLInputElement).value}" 
@@ -383,11 +290,11 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
                 <!-- Password Input -->
                 <div class="form-field">
-                    <label for="password">Password</label>
+                    <label for="password" class="uiv-${themeModule?.id}-text">Password</label>
                     <input 
                         id="password" 
                         type="password" 
-                        class="mat-mdc-input-element"
+                        class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan"
                         .value="${this.password}" 
                         placeholder="Enter your password"
                         @input="${(e: Event) => this.password = (e.target as HTMLInputElement).value}" 
@@ -396,10 +303,10 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
                 <!-- Dropdown -->
                 <div class="form-field">
-                    <label for="role">User Role</label>
+                    <label for="role" class="uiv-${themeModule?.id}-text">User Role</label>
                     <select 
                         id="role" 
-                        class="mat-mdc-input-element"
+                        class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan"
                         .value="${this.userRole}" 
                         @change="${(e: Event) => this.userRole = (e.target as HTMLSelectElement).value}"
                     >
@@ -412,7 +319,7 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
                 <!-- Checkbox -->
                 <div class="form-field">
-                    <label>Accept Terms</label>
+                    <label class="uiv-${themeModule?.id}-text">Accept Terms</label>
                     <div class="checkbox-field">
                         <input 
                             id="termsAccepted" 
@@ -420,7 +327,7 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
                             .checked="${this.termsAccepted}" 
                             @change="${(e: Event) => this.termsAccepted = (e.target as HTMLInputElement).checked}" 
                         />
-                        <span @click="${() => this.termsAccepted = !this.termsAccepted}">
+                        <span class="uiv-${themeModule?.id}-text" @click="${() => this.termsAccepted = !this.termsAccepted}">
                             I accept the terms and conditions
                         </span>
                     </div>
@@ -428,11 +335,11 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
                 <!-- Range Slider -->
                 <div class="form-field">
-                    <label for="age">Age</label>
+                    <label for="age" class="uiv-${themeModule?.id}-text">Age</label>
                     <div class="range-field">
-                        <div class="range-display">
+                        <div class="range-display uiv-${themeModule?.id}-text">
                             <span>18 years</span>
-                            <span class="range-value">${this.age} years</span>
+                            <span class="range-value uiv-${themeModule?.id}-text">${this.age} years</span>
                             <span>100 years</span>
                         </div>
                         <input 
@@ -449,22 +356,23 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
                 <!-- File Input -->
                 <div class="form-field">
-                    <label for="profilePicture">Profile Picture</label>
+                    <label for="profilePicture" class="uiv-${themeModule?.id}-text">Profile Picture</label>
                     <input 
                         id="profilePicture" 
                         type="file" 
                         accept=".jpg,.png,.jpeg"
+                        class="uiv-${themeModule?.id}-text"
                         @change="${(e: Event) => this.profilePicture = (e.target as HTMLInputElement).files?.[0]?.name || ''}" 
                     />
                 </div>
 
                 <!-- Date Input -->
                 <div class="form-field">
-                    <label for="birthDate">Birth Date</label>
+                    <label for="birthDate" class="uiv-${themeModule?.id}-text">Birth Date</label>
                     <input 
                         id="birthDate" 
                         type="date" 
-                        class="mat-mdc-input-element"
+                        class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan"
                         .value="${this.birthDate}" 
                         @change="${(e: Event) => this.birthDate = (e.target as HTMLInputElement).value}" 
                     />
@@ -472,10 +380,11 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
                 <!-- Color Picker -->
                 <div class="form-field">
-                    <label for="favoriteColor">Favorite Color</label>
+                    <label for="favoriteColor" class="uiv-${themeModule?.id}-text">Favorite Color</label>
                     <input 
                         id="favoriteColor" 
                         type="color" 
+                        class="uiv-${themeModule?.id}-bg"
                         .value="${this.favoriteColor}" 
                         @input="${(e: Event) => this.favoriteColor = (e.target as HTMLInputElement).value}" 
                     />
@@ -483,11 +392,11 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
                 <!-- Number Input -->
                 <div class="form-field">
-                    <label for="height">Height (cm)</label>
+                    <label for="height" class="uiv-${themeModule?.id}-text">Height (cm)</label>
                     <input 
                         id="height" 
                         type="number" 
-                        class="mat-mdc-input-element"
+                        class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan"
                         min="50" 
                         max="250" 
                         step="1" 
@@ -499,10 +408,10 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
                 <!-- Textarea -->
                 <div class="form-field">
-                    <label for="bio">Bio</label>
+                    <label for="bio" class="uiv-${themeModule?.id}-text">Bio</label>
                     <textarea 
                         id="bio" 
-                        class="mat-mdc-input-element"
+                        class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan"
                         rows="4" 
                         .value="${this.bio}" 
                         placeholder="Tell us about yourself"
@@ -512,7 +421,7 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
                 <!-- Newsletter Checkbox -->
                 <div class="form-field">
-                    <label>Newsletter Subscription</label>
+                    <label class="uiv-${themeModule?.id}-text">Newsletter Subscription</label>
                     <div class="checkbox-field">
                         <input 
                             id="newsletterSubscribed" 
@@ -520,24 +429,24 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
                             .checked="${this.newsletterSubscribed}" 
                             @change="${(e: Event) => this.newsletterSubscribed = (e.target as HTMLInputElement).checked}" 
                         />
-                        <span @click="${() => this.newsletterSubscribed = !this.newsletterSubscribed}">
+                        <span class="uiv-${themeModule?.id}-text" @click="${() => this.newsletterSubscribed = !this.newsletterSubscribed}">
                             Subscribe to our newsletter
                         </span>
                     </div>
                 </div>
 
                 <!-- Submit Button -->
-                <button type="button" class="submit-button" @click="${this.handleSubmit}">
+                <button type="button" class="submit-button uiv-${themeModule?.id}-pulse" @click="${this.handleSubmit}">
                     <span>💾</span> Submit Form
                 </button>
 
                 <!-- Form Result Display -->
-                ${this.getFormDataDisplay()}
+                ${this.getFormDataDisplay(themeModule)}
             </div>
         `;
     }
 
-    private getFormDataDisplay() {
+    private getFormDataDisplay(themeModule: any) {
         const formData = {
             username: this.username,
             userRole: this.userRole,
@@ -553,8 +462,8 @@ export class ZeroInputWidgets extends LitElement {    static styles = css`
 
         if (Object.values(formData).some(value => value !== '' && value !== false && value !== 0 && value !== 25)) {
             return html`
-                <div class="form-result">
-                    <pre>${JSON.stringify(formData, null, 2)}</pre>
+                <div class="form-result uiv-${themeModule?.id}-card">
+                    <pre class="uiv-${themeModule?.id}-text">${JSON.stringify(formData, null, 2)}</pre>
                 </div>
             `;
         }

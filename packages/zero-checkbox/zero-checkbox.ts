@@ -2,6 +2,8 @@ import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceT
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
+const getThemeManager = () => (window as any).zeroThemeManager;
+
 /**
  * A configurable checkbox component with custom styling.
  * 
@@ -23,30 +25,37 @@ export class ZeroCheckbox extends LitElement {
         :host {
             display: block;
             width: 100%;
+            --uiv-primary: var(--uiv-primary-color, #6c63ff);
+            --uiv-bg: var(--uiv-surface-color, #fff);
+            --uiv-text: var(--uiv-text-color, #333);
+            --uiv-border: var(--uiv-border-color, #ddd);
         }
 
         .form-field {
-            margin-bottom: var(--spacing-lg, 20px);
+            margin-bottom: 20px;
         }
 
         .form-field label.main-label {
             display: block;
-            margin-bottom: var(--spacing-xs, 6px);
-            font-size: var(--font-size-base, 14px);
-            color: var(--text-primary, #333);
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--uiv-text);
             font-weight: 500;
         }
 
         .checkbox-field {
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm, 8px);
+            gap: 12px;
             cursor: pointer;
-            padding: var(--spacing-xs, 4px);
-            border-radius: var(--border-radius-sm, 4px);
-            transition: background-color 0.2s;
-        }        .checkbox-field:hover:not(.disabled) {
-            background-color: var(--primary-background-hover, rgba(108, 99, 255, 0.05));
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .checkbox-field:hover:not(.disabled) {
+            background-color: rgba(var(--uiv-primary-rgb, 108, 99, 255), 0.05);
+            transform: translateX(2px);
         }
 
         .checkbox-field.disabled {
@@ -57,28 +66,32 @@ export class ZeroCheckbox extends LitElement {
         .checkbox-container {
             position: relative;
             display: inline-block;
-        }        input[type="checkbox"] {
-            width: var(--icon-size-sm, 18px);
-            height: var(--icon-size-sm, 18px);
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
             margin: 0;
             cursor: pointer;
             appearance: none;
             -webkit-appearance: none;
-            -moz-appearance: none;
-            border: 2px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-xs, 3px);
-            background-color: var(--background-primary, #fff);
+            border: 2px solid var(--uiv-border);
+            border-radius: 6px;
+            background-color: var(--uiv-bg);
             transition: all 0.2s;
             position: relative;
+            box-shadow: var(--uiv-shadow-depth, none);
         }
 
         input[type="checkbox"]:hover:not(:disabled) {
-            border-color: var(--primary-light, #6c63ff);
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
         }
 
         input[type="checkbox"]:checked {
-            background-color: var(--primary-color, #6c63ff);
-            border-color: var(--primary-color, #6c63ff);
+            background-color: var(--uiv-primary);
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
         }
 
         input[type="checkbox"]:checked::after {
@@ -86,43 +99,21 @@ export class ZeroCheckbox extends LitElement {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);            color: white;
-            font-size: var(--font-size-xs, 12px);
-            font-weight: bold;
-        }
-
-        input[type="checkbox"]:indeterminate {
-            background-color: var(--primary-color, #6c63ff);
-            border-color: var(--primary-color, #6c63ff);
-        }
-
-        input[type="checkbox"]:indeterminate::after {
-            content: '−';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);            color: white;
-            font-size: var(--font-size-base, 14px);
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 14px;
             font-weight: bold;
         }
 
         input[type="checkbox"]:focus {
             outline: none;
-            box-shadow: 0 0 0 2px var(--primary-light, rgba(108, 99, 255, 0.2));
+            box-shadow: 0 0 0 2px rgba(var(--uiv-primary-rgb, 108, 99, 255), 0.2), var(--uiv-border-glow);
         }
 
         input[type="checkbox"]:disabled {
-            background-color: var(--background-disabled, #f5f5f5);
-            border-color: var(--border-disabled, #ccc);
+            background-color: #f5f5f5;
+            border-color: #ccc;
             cursor: not-allowed;
-        }
-
-        input[type="checkbox"]:disabled:checked {
-            background-color: var(--background-disabled, #f5f5f5);
-        }
-
-        input[type="checkbox"]:disabled:checked::after {
-            color: var(--text-disabled, #999);
         }
 
         .checkbox-label {
@@ -355,14 +346,24 @@ export class ZeroCheckbox extends LitElement {
         }
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         return html`
-            <div class="form-field">
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('checkbox') : ''}
+            </style>
+            <div class="form-field uiv-${themeModule?.id}-theme">
                 ${this.label ? html`
-                    <label class="main-label">Choose Option</label>
+                    <label class="main-label uiv-${themeModule?.id}-text">Choose Option</label>
                 ` : ''}
                 
-                <div class="${this.getCheckboxClass()}" @click="${this.handleCheckboxClick}">
+                <div class="${this.getCheckboxClass()} uiv-${themeModule?.id}-card" @click="${this.handleCheckboxClick}">
                     <div class="checkbox-container">
                         <input 
                             type="checkbox"
@@ -376,14 +377,14 @@ export class ZeroCheckbox extends LitElement {
                             @click="${(e: Event) => e.stopPropagation()}"
                         />
                     </div>
-                    <span class="checkbox-label">${this.label}</span>
+                    <span class="checkbox-label uiv-${themeModule?.id}-text">${this.label}</span>
                 </div>
                 
                 ${this.description ? html`
-                    <div class="description">${this.description}</div>
+                    <div class="description uiv-${themeModule?.id}-text-secondary">${this.description}</div>
                 ` : ''}
                 
-                <div class="error-message ${this.showError ? 'show' : ''}">
+                <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
                     ${this.errorMessage}
                 </div>
             </div>

@@ -251,9 +251,17 @@
             <div>
                 <h2 id="pageTitle" style="margin: 0; font-size: 1.25rem;">Component Explorer</h2>
             </div>
-            <div class="theme-pill">
-                <i class="fas fa-palette"></i>
-                <span id="currentThemeName">modern</span>
+            <div style="display: flex; gap: 1rem;">
+                <div class="theme-pill" title="UIV Components Theme">
+                    <i class="fas fa-magic"></i>
+                    <span style="font-size: 0.7rem; color: var(--text-muted); margin-right: 0.25rem;">UIV:</span>
+                    <span id="uivThemeName">modern</span>
+                </div>
+                <div class="theme-pill" title="Standard Components Theme">
+                    <i class="fas fa-palette"></i>
+                    <span style="font-size: 0.7rem; color: var(--text-muted); margin-right: 0.25rem;">STD:</span>
+                    <span id="standardThemeName">modern</span>
+                </div>
             </div>
         </header>
 
@@ -276,6 +284,7 @@
     <script type="module" src="/packages/register-plugins/index.js"></script>
     <script type="module" src="/packages/zero-theme-orchestrator/src/index.ts"></script>
     <script type="module" src="/packages/zero-uiv-themes/src/index.ts"></script>
+    <script type="module" src="/packages/zero-standard-themes/src/index.ts"></script>
     <script type="module" src="./index.ts"></script>
     <script>
         // Inline layout functions removed (moved to index.ts)

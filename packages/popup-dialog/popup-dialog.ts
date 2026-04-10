@@ -1,8 +1,10 @@
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig } from 'zero-annotation';
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, CSSResult } from 'lit';
 import { property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
+
+const getThemeManager = () => (window as any).zeroThemeManager;
 /**
  * Represents a user profile form with various input fields.
  * 
@@ -33,19 +35,18 @@ export class PopupDialog extends LitElement {
     static styles = css`
       :host {
         display: block;
-        font-family: Arial, sans-serif;
-        --popup-bg-color: #fff;
-        --popup-border-color: #ddd;
-        --popup-hover-border-color: #ccc;
-        --popup-font-color: #333;
-        --popup-shadow-color: rgba(0, 0, 0, 0.1);
-        --popup-border-radius: 6px;
-        --popup-font-size: 12px;
-        --popup-header-color: #666;
-        --popup-icon-color: #666;
-        --popup-option-hover-bg-color: #f0f0f0;
-        --popup-width: 180px;
-        --popup-padding: 8px;
+        font-family: var(--uiv-font-family, Arial, sans-serif);
+        --popup-bg-color: var(--uiv-surface-color, #fff);
+        --popup-border-color: var(--uiv-border-color, #ddd);
+        --popup-font-color: var(--uiv-text-color, #333);
+        --popup-shadow-color: var(--uiv-shadow-depth, 0 4px 12px rgba(0, 0, 0, 0.1));
+        --popup-border-radius: var(--uiv-border-radius, 12px);
+        --popup-font-size: 14px;
+        --popup-header-color: var(--uiv-text-muted, #666);
+        --popup-icon-color: var(--uiv-primary-color, #666);
+        --popup-padding: 16px;
+        --popup-width: auto;
+        min-width: 200px;
       }
   
       .popup-backdrop {
@@ -127,24 +128,35 @@ export class PopupDialog extends LitElement {
       }
     `;
   
+    connectedCallback() {
+      super.connectedCallback();
+      getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     render() {
       const { webComponentSelector, inputs, outputs, position } = this.config;
       const positionStyle = this._getPositionStyle(position);
+      const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
   
       return html`
-        <div class="popup-backdrop ${this.hasBackdrop && this.open ? 'open' : ''}" @click=${this._close}></div>
-        <div class="popup-container ${this.open ? 'open' : ''}" style=${styleMap(positionStyle)}>
-          <div class="popup-header">
-            <span>Popup Title</span>
-            <span class="close-button" @click=${this._close}>✖</span>
+        <style>
+          ${themeModule ? themeModule.getGlobalStyles() : ''}
+          ${themeModule ? themeModule.getComponentStyles('dialog') : ''}
+        </style>
+        <div class="uiv-${themeModule?.id}-theme">
+          <div class="popup-backdrop ${this.hasBackdrop && this.open ? 'open' : ''}" @click=${this._close}></div>
+          <div class="popup-container ${this.open ? 'open' : ''} uiv-${themeModule?.id}-card uiv-${themeModule?.id}-glass" style=${styleMap(positionStyle)}>
+            <div class="popup-header uiv-${themeModule?.id}-text">
+              <span class="uiv-${themeModule?.id}-text">Popup Title</span>
+              <span class="close-button uiv-${themeModule?.id}-text" @click=${this._close}>✖</span>
+            </div>
+            <div class="popup-content uiv-${themeModule?.id}-text">
+              ${this.open && webComponentSelector
+                ? html`<${webComponentSelector} .inputs=${inputs} .outputs=${outputs}></${webComponentSelector}>`
+                : html`<p>No component provided.</p>`}
+            </div>
+            <div class="popup-arrow"></div>
           </div>
-          <div class="popup-content">
-            ${this.open && webComponentSelector
-              ? html`<${webComponentSelector} .inputs=${inputs} .outputs=${outputs}></${webComponentSelector}>`
-              : html`<p>No component provided.</p>`}
-          </div>
-          <div class="popup-arrow"></div>
-          <div class="popup-arrow-outline"></div>
         </div>
       `;
     }

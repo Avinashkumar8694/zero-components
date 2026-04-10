@@ -161,7 +161,7 @@ export class ZeroUivRadio extends LitElement {
     }
 
     render() {
-        const themeModule = getThemeManager()?.getActiveTheme();
+        const themeModule = getThemeManager()?.getActiveTheme('zero-uiv-themes');
         return html`
             <style>
                 ${themeModule ? themeModule.getGlobalStyles() : ''}

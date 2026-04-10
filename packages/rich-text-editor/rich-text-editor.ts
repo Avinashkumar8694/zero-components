@@ -1,7 +1,9 @@
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig } from 'zero-annotation';
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, CSSResult } from 'lit';
 import { property } from 'lit/decorators.js';
+
+const getThemeManager = () => (window as any).zeroThemeManager;
 
 /**
  * Represents a user profile form with various input fields.
@@ -52,17 +54,17 @@ export class RichTextEditor extends LitElement {
       display: block;
       width: 100%;
       margin: auto;
-      /* border: 1px solid var(--border-color, #ddd); */
-      border-radius: var(--border-radius-lg, 8px);
+      border-radius: var(--uiv-border-radius, 8px);
       overflow: visible;
       position: relative;
+      font-family: var(--uiv-font-family, sans-serif);
     }
 
     :host([editorMode]) .editor {
       position: relative;
     }
     :host([editorMode]) .editor:hover {
-      border: 1px solid var(--border-color, #ddd); /* Change this to your desired border color */
+      border: 1px solid var(--uiv-primary-color, #ddd);
       box-sizing: border-box;
     }
     .toolbar {
@@ -70,16 +72,16 @@ export class RichTextEditor extends LitElement {
       flex-wrap: wrap;
       justify-content: flex-start;
       padding: var(--spacing-sm, 8px);
-      color: var(--text-secondary, #5b5f61);
-      background-color: var(--background-secondary, #f5f5f5);
-      border-bottom: 1px solid var(--border-color, #ddd);
+      color: var(--uiv-text-color, #5b5f61);
+      background-color: var(--uiv-bg-surface, #f5f5f5);
+      border-bottom: 1px solid var(--uiv-border-color, #ddd);
       position: absolute;
       top: 40px;
       left: 0;
       right: 0;
       z-index: 10;
-      box-shadow: var(--shadow-md, 0 2px 5px rgba(0, 0, 0, 0.1));
-      border-radius: var(--border-radius-lg, 8px);
+      box-shadow: var(--uiv-shadow-depth, 0 2px 5px rgba(0, 0, 0, 0.1));
+      border-radius: var(--uiv-border-radius, 8px);
       transition: var(--transition-normal, opacity 0.3s ease, transform 0.3s ease);
       opacity: 0;
       transform: translateY(-10px);
@@ -99,7 +101,7 @@ export class RichTextEditor extends LitElement {
       position: relative;
     }
     .toolbar button:hover, .toolbar select:hover, .toolbar input[type="color"]:hover {
-      background-color: var(--background-hover, #e0e0e0);
+      background-color: var(--uiv-bg-overlay, #e0e0e0);
       border-radius: var(--border-radius-sm, 4px);
     }
     .toolbar button::after {
@@ -108,8 +110,8 @@ export class RichTextEditor extends LitElement {
       top: 100%;
       left: 50%;
       transform: translateX(-50%);
-      background-color: var(--tooltip-background, #333);
-      color: var(--tooltip-text, #fff);
+      background-color: var(--uiv-bg-surface, #333);
+      color: var(--uiv-text-color, #fff);
       padding: var(--spacing-xs, 4px);
       border-radius: var(--border-radius-sm, 4px);
       white-space: nowrap;
@@ -138,7 +140,7 @@ export class RichTextEditor extends LitElement {
       z-index: 20;
     }
     .toolbar-toggle:hover {
-      background-color: var(--background-hover, #e0e0e0);
+      background-color: var(--uiv-bg-overlay, #e0e0e0);
       border-radius: 50%;
     }
     .toolbar input[type="color"] {
@@ -178,6 +180,11 @@ export class RichTextEditor extends LitElement {
       visibility: visible;
     } */
   `;
+
+  connectedCallback() {
+      super.connectedCallback();
+      getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+  }
 
   firstUpdated() {
     // Ensure the initial content is set correctly
@@ -430,40 +437,43 @@ export class RichTextEditor extends LitElement {
   }
 
   render() {
+    const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
     return html`
-      <div class="toolbar ${this.toolbarVisible ? 'visible' : ''}">
-        <button @click="${() => this.execCommand('bold')}" title="Bold">B</button>
-        <button @click="${() => this.execCommand('italic')}" title="Italic">I</button>
-        <button @click="${() => this.execCommand('underline')}" title="Underline">U</button>
-        <button @click="${() => this.execCommand('strikethrough')}" title="Strikethrough">S</button>
-        <input type="color" @input="${this.handleColorChange}" title="Text Color">
-        <input type="color" @input="${this.handleBgColorChange}" title="Background Color">
-        <select @change="${this.handleFontFamilyChange}" title="Font Family">
-          <option value="Arial">Arial</option>
-          <option value="Courier New">Courier New</option>
-          <option value="Georgia">Georgia</option>
-          <option value="Times New Roman">Times New Roman</option>
-          <option value="Verdana">Verdana</option>
-        </select>
-        <select @change="${this.handleFontSizeChange}">
-          <option value="1">Small</option>
-          <option value="3">Normal</option>
-          <option value="5">Large</option>
-          <option value="7">Huge</option>
-        </select>
-        <select @change="${this.handleAlignChange}">
-          <option value="left">Left</option>
-          <option value="center">Center</option>
-          <option value="right">Right</option>
-          <option value="justify">Justify</option>
-        </select>
-        <!-- <button @click="${this.toggleEditorMode}" title="Toggle Mode">
-          ${this.editorMode ? 'Preview' : 'Edit'}
-        </button> -->
+      <style>
+        ${themeModule ? themeModule.getGlobalStyles() : ''}
+        ${themeModule ? themeModule.getComponentStyles('input') : ''}
+      </style>
+      <div class="uiv-${themeModule?.id}-theme">
+        <div class="toolbar ${this.toolbarVisible ? 'visible' : ''} uiv-${themeModule?.id}-card uiv-${themeModule?.id}-glass">
+          <button @click="${() => this.execCommand('bold')}" title="Bold" class="uiv-${themeModule?.id}-text">B</button>
+          <button @click="${() => this.execCommand('italic')}" title="Italic" class="uiv-${themeModule?.id}-text">I</button>
+          <button @click="${() => this.execCommand('underline')}" title="Underline" class="uiv-${themeModule?.id}-text">U</button>
+          <button @click="${() => this.execCommand('strikethrough')}" title="Strikethrough" class="uiv-${themeModule?.id}-text">S</button>
+          <input type="color" @input="${this.handleColorChange}" title="Text Color" class="uiv-${themeModule?.id}-bg">
+          <input type="color" @input="${this.handleBgColorChange}" title="Background Color" class="uiv-${themeModule?.id}-bg">
+          <select @change="${this.handleFontFamilyChange}" title="Font Family" class="uiv-${themeModule?.id}-text uiv-${themeModule?.id}-bg">
+            <option value="Arial">Arial</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Verdana">Verdana</option>
+          </select>
+          <select @change="${this.handleFontSizeChange}" class="uiv-${themeModule?.id}-text uiv-${themeModule?.id}-bg">
+            <option value="1">Small</option>
+            <option value="3">Normal</option>
+            <option value="5">Large</option>
+            <option value="7">Huge</option>
+          </select>
+          <select @change="${this.handleAlignChange}" class="uiv-${themeModule?.id}-text uiv-${themeModule?.id}-bg">
+            <option value="left">Left</option>
+            <option value="center">Center</option>
+            <option value="right">Right</option>
+            <option value="justify">Justify</option>
+          </select>
+        </div>
+        <button class="toolbar-toggle uiv-${themeModule?.id}-text" @click="${this.toggleToolbar}" ?hidden="${!this.editorMode}" title="Toggle Toolbar">🛠️</button>
+        <div class="editor uiv-${themeModule?.id}-text" contenteditable="${this.editorMode}" @input="${this.handleInput}" @paste="${this.onPaste}"></div>
       </div>
-      <button class="toolbar-toggle" @click="${this.toggleToolbar}" ?hidden="${!this.editorMode}" title="Toggle Toolbar">🛠️</button>
-      <div class="editor" contenteditable="${this.editorMode}" @input="${this.handleInput}" @paste="${this.onPaste}"></div>
-      <!-- <div class="preview" ?hidden="${this.editorMode}"></div> -->
     `;
   }
 }

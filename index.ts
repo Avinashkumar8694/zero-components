@@ -61,6 +61,15 @@ const initializeStyles = () => {
     });
     
     const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+        .remove-plugin:hover {
+            color: #ef4444 !important; /* red-500 */
+            transform: scale(1.1);
+        }
+        .component-card:hover .remove-plugin {
+            opacity: 1;
+        }
+    `;
     document.head?.appendChild(styleElement);
 };
 
@@ -342,7 +351,13 @@ const extractComponentsConfig = () => {
 const updateComponentList = () => {
     const list = document.getElementById('quickNavList');
     const grid = document.getElementById('exploreView');
-    const registeredComponents = Object.keys(globalThis.zeroComponents);
+    
+    // Filter out components that are no longer installed in localStorage
+    const registeredComponents = Object.keys(globalThis.zeroComponents).filter(key => {
+        // Deriving plugin ID from key (selector-version)
+        const id = key.substring(0, key.lastIndexOf('-')) || key;
+        return (window as any).isPluginInstalled(id);
+    });
     
     if (list) {
         list.innerHTML = '';
@@ -390,18 +405,43 @@ const updateComponentList = () => {
 
             const card = document.createElement('div');
             card.className = 'component-card';
+            card.style.position = 'relative';
+            
             card.innerHTML = `
-                <div style="font-size: 2rem; color: var(--accent-color); margin-bottom: 1rem;"><i class="fas fa-puzzle-piece"></i></div>
-                <h3 style="margin: 0; font-size: 1.1rem;">${displayName}</h3>
-                <div style="color: var(--text-muted); font-size: 0.75rem; font-family: monospace; margin-top: 0.25rem;">${displaySelector}</div>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.75rem;">${config?.componentMetadata?.title || 'Dynamic Lit component with active theme support.'}</p>
+                <div class="remove-plugin" title="Remove Plugin" style="position: absolute; top: 0.75rem; right: 0.75rem; color: var(--text-muted); cursor: pointer; padding: 0.25rem; transition: color 0.2s; z-index: 10;">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <div class="card-content">
+                    <div style="font-size: 2rem; color: var(--accent-color); margin-bottom: 1rem;"><i class="fas fa-puzzle-piece"></i></div>
+                    <h3 style="margin: 0; font-size: 1.1rem;">${displayName}</h3>
+                    <div style="color: var(--text-muted); font-size: 0.75rem; font-family: monospace; margin-top: 0.25rem;">${displaySelector}</div>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.75rem;">${config?.componentMetadata?.title || 'Dynamic Lit component with active theme support.'}</p>
+                </div>
             `;
-            card.onclick = () => {
+
+            // Handle remove button click
+            const removeBtn = card.querySelector('.remove-plugin');
+            removeBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (confirm(`Are you sure you want to remove the plugin "${displayName}"?`)) {
+                    const pluginId = key.substring(0, key.lastIndexOf('-')) || key;
+                    (window as any).uninstallPlugin(pluginId);
+                    
+                    // Also remove from memory to ensure it disappears immediately
+                    delete globalThis.zeroComponents[key];
+                    updateComponentList();
+                }
+            });
+
+            // Handle card content click
+            const cardContent = card.querySelector('.card-content');
+            cardContent?.addEventListener('click', () => {
                 activeComponentName = key;
                 displayComponent(globalThis.zeroComponents[key][0]);
                 showPreview(key);
                 updateNavForComponent(key);
-            };
+            });
+
             grid.appendChild(card);
         });
     }
@@ -503,13 +543,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Theme Status Sync & Global Variable Injection
 const updateDashboardTheme = () => {
-    const themeSpan = document.getElementById('currentThemeName');
+    const uivThemeSpan = document.getElementById('uivThemeName');
+    const stdThemeSpan = document.getElementById('standardThemeName');
     const manager = (window as any).zeroThemeManager;
     if (!manager) return;
     
-    // 1. Update Header Text
-    if (themeSpan) {
-        themeSpan.textContent = manager.getActiveThemeName();
+    // 1. Update Header Text for both providers
+    if (uivThemeSpan) {
+        uivThemeSpan.textContent = manager.getActiveThemeName('zero-uiv-themes');
+    }
+    if (stdThemeSpan) {
+        stdThemeSpan.textContent = manager.getActiveThemeName('zero-standard-themes');
     }
 
     // 2. Inject Preview-Specific overrides if needed

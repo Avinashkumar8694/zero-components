@@ -13,12 +13,22 @@ export interface ThemeProvider {
 export class ThemeOrchestrator extends EventTarget {
     private static instance: ThemeOrchestrator;
     private providers: Map<string, ThemeProvider> = new Map();
-    private activeProviderId: string = localStorage.getItem('zero-active-provider') || 'zero-uiv-themes';
-    private activeThemeName: string = localStorage.getItem('zero-active-theme') || 'modern';
+    private activeThemes: Record<string, string> = {};
 
     private constructor() {
         super();
         console.log('[ThemeOrchestrator] Initialized');
+        
+        // Restore active themes from localStorage
+        try {
+            const saved = localStorage.getItem('zero-active-themes');
+            if (saved) {
+                this.activeThemes = JSON.parse(saved);
+            }
+        } catch (e) {
+            console.warn('[ThemeOrchestrator] Failed to restore active themes', e);
+        }
+
         // Pull in existing providers if another instance existed
         const existing = (window as any).zeroThemeManager;
         if (existing && existing.providers) {
@@ -40,44 +50,49 @@ export class ThemeOrchestrator extends EventTarget {
     registerProvider(provider: ThemeProvider) {
         this.providers.set(provider.id, provider);
         console.log(`[ThemeOrchestrator] Registered provider: ${provider.id}`);
+        
+        // Set default theme for new provider if not set
+        if (!this.activeThemes[provider.id]) {
+            this.activeThemes[provider.id] = 'modern';
+        }
+
         this.dispatchEvent(new CustomEvent('providers-changed'));
         
-        // If this is the active provider, apply its theme immediately
-        if (provider.id === this.activeProviderId) {
-            this.refreshActiveTheme();
-        }
+        // Refresh to apply if this provider defines global root tokens
+        this.refreshActiveTheme(provider.id);
     }
 
     getProviders(): ThemeProvider[] {
         return Array.from(this.providers.values());
     }
 
-    setActiveProvider(id: string) {
-        if (this.providers.has(id)) {
-            this.activeProviderId = id;
-            localStorage.setItem('zero-active-provider', id);
-            this.refreshActiveTheme();
+    setActiveTheme(name: string, providerId: string) {
+        if (this.providers.has(providerId)) {
+            this.activeThemes[providerId] = name;
+            localStorage.setItem('zero-active-themes', JSON.stringify(this.activeThemes));
+            this.refreshActiveTheme(providerId);
         }
     }
 
-    setActiveTheme(name: string) {
-        this.activeThemeName = name;
-        localStorage.setItem('zero-active-theme', name);
-        this.refreshActiveTheme();
+    getActiveTheme(providerId?: string) {
+        // Default to zero-standard-themes if no providerId specified
+        const id = providerId || (this.providers.has('zero-standard-themes') ? 'zero-standard-themes' : 'zero-uiv-themes');
+        const provider = this.providers.get(id);
+        const themeName = this.activeThemes[id] || 'modern';
+        return provider ? provider.getTheme(themeName) : null;
     }
 
-    getActiveTheme() {
-        const provider = this.providers.get(this.activeProviderId);
-        return provider ? provider.getTheme(this.activeThemeName) : null;
+    getActiveThemeName(providerId: string) {
+        return this.activeThemes[providerId] || 'modern';
     }
 
-    private refreshActiveTheme() {
-        const theme = this.getActiveTheme();
+    private refreshActiveTheme(providerId: string) {
+        const theme = this.getActiveTheme(providerId);
         if (theme && theme.globalTokens) {
             this.applyRootTheme(theme.globalTokens);
         } else {
             // Ensure components are notified even if there are no global root tokens
-            this.dispatchEvent(new CustomEvent('theme-changed'));
+            this.dispatchEvent(new CustomEvent('theme-changed', { detail: { providerId } }));
         }
     }
 
@@ -96,9 +111,6 @@ export class ThemeOrchestrator extends EventTarget {
         // Trigger a global theme-changed event for non-Lit components
         this.dispatchEvent(new CustomEvent('theme-changed', { detail: { tokens } }));
     }
-
-    getActiveProviderId() { return this.activeProviderId; }
-    getActiveThemeName() { return this.activeThemeName; }
 }
 
 // Auto-initialize on window

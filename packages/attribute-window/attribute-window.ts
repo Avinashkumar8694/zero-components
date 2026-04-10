@@ -1,7 +1,9 @@
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig, RendererAttributeConfiguration, RangeSettings } from 'zero-annotation';
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, CSSResult } from 'lit';
 import { property } from 'lit/decorators.js';
+
+const getThemeManager = () => (window as any).zeroThemeManager;
 
 /**
  * Represents a user profile form with various input fields.
@@ -22,227 +24,50 @@ import { property } from 'lit/decorators.js';
 export class AttributeWindow extends LitElement {
 
     static styles = css`
-        /* Add styles here */
-        :root {
-            --primary-color: #333;     
-            --secondary-color: #1C1C1C; 
-            --text-color: #E0E0E0;     
-            --header-height: 50px;     
-            --sidenav-width: 250px;    
-            --transition-speed: 0.3s;  
-            --font-family: 'Roboto', sans-serif; 
-            --background-color: #121212; 
-            --hover-color: #444;      
+        :host {
+            display: block;
+            width: 100%;
+            font-family: var(--uiv-font-family, 'Roboto', sans-serif);
         }
 
-        body {
-            margin: 0;
-            font-family: var(--font-family);
-            color: var(--text-color);
-            background-color: var(--background-color);
-        }        .header {
-            background-color: var(--primary-color);
-            color: var(--text-color);
+        .attribute-window-container {
+            padding: var(--spacing-lg, 20px);
+            background-color: var(--uiv-bg-surface, #121212);
+            color: var(--uiv-text-color, #E0E0E0);
+            min-height: 100%;
+        }
+
+        .header {
+            background-color: var(--uiv-bg-overlay, #333);
+            color: var(--uiv-text-color);
             text-align: center;
             padding: var(--spacing-sm, 10px);
-            height: var(--header-height);
-            line-height: var(--header-height);
+            height: 50px;
+            line-height: 50px;
             position: relative;
-            box-shadow: var(--shadow-md, 0 2px 5px rgba(0, 0, 0, 0.5)); 
+            box-shadow: var(--uiv-shadow-depth);
         }
 
-        .header .toggle-btn {
-            position: absolute;
-            left: var(--spacing-md, 15px);
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: var(--font-size-lg, 22px);
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--text-color);
-            transition: color var(--transition-speed);
-        }
-
-        .header .toggle-btn:hover {
-            color: rgba(255, 255, 255, 0.8); 
-        }
-
-        .sidenav {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1;
-            top: 0;
-            left: 0;
-            background-color: var(--secondary-color);
-            overflow-x: hidden;
-            transition: width var(--transition-speed);
-            padding-top: var(--header-height);
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.7); 
-        }        .sidenav a {
-            padding: var(--spacing-md, 15px) var(--spacing-lg, 20px);
-            text-decoration: none;
-            font-size: var(--font-size-lg, 18px);
-            color: var(--text-color);
-            display: block;
-            transition: var(--transition-speed, background-color), var(--transition-speed, padding-left);
-        }
-
-        .sidenav a:hover {
-            background-color: var(--hover-color);
-            padding-left: var(--spacing-xl, 30px);
-        }
-
-        .main {
-            margin-left: 0;
-            transition: margin-left var(--transition-speed);
-            padding: 20px;
-        }
-
-        .main h2 {
-            font-weight: 500;
-            color: #E0E0E0;
-        }
-
-        .main ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .main li {
-            padding: 10px;
-            border-bottom: 1px solid #444;
-            color: #B0B0B0;
-        }
-
-        .main li:hover {
-            background-color: #333;
-            cursor: pointer;
-        }
-
-
-        /* Basic container styling */
-        div > div {
-            margin: 10px 0;
-            padding: 12px;
-            border-radius: 8px;
-            background-color: var(--background-color);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--secondary-color);
-            transition: background-color 0.3s, border-color 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Hover effect for containers */
-        div > div:hover {
-            background-color: var(--secondary-color);
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Label styling */
         label {
             display: block;
             margin-bottom: 8px;
             font-size: 14px;
-            color: var(--text-color);
+            color: var(--uiv-text-color);
             font-weight: 500;
         }
 
-        /* General styles for input elements */
-        input[type="text"],
-        input[type="checkbox"],
-        input[type="color"],
-        input[type="range"],
-        input[type="password"],
-        input[type="file"],
-        input[type="date"],
-        textarea,
-        select {
-            background-color: var(--secondary-color); /* Dark background for inputs */
-            color: var(--text-color); /* Light text for contrast */
-            border: 1px solid var(--primary-color); /* Light border for inputs */
-            border-radius: 4px;
-            padding: 8px;
-            margin: 4px 0;
-            box-sizing: border-box;
-            font-size: 14px;
-            transition: border-color 0.3s, box-shadow 0.3s;
+        .dynamic-input-container {
+            margin: 10px 0;
+            padding: 12px;
+            border-radius: var(--uiv-border-radius, 8px);
+            background-color: var(--uiv-bg-surface);
+            border: 1px solid var(--uiv-border-color);
+            transition: all 0.3s ease;
         }
 
-        /* Styles for range sliders */
-        input[type="range"] {
-            width: calc(100% - 16px);
-            -webkit-appearance: none;
-            background: var(--secondary-color);
-            border-radius: 4px;
-            height: 6px;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            background: var(--primary-color);
-            border: 2px solid var(--hover-color);
-            border-radius: 50%;
-            height: 20px;
-            width: 20px;
-            cursor: pointer;
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            background: var(--primary-color);
-            border: 2px solid var(--hover-color);
-            border-radius: 50%;
-            height: 20px;
-            width: 20px;
-            cursor: pointer;
-        }
-
-        /* Styles for dropdowns */
-        select {
-            padding: 8px;
-            border: 1px solid var(--primary-color); /* Dark border for dropdowns */
-            border-radius: 4px;
-            background-color: var(--secondary-color); /* Dark background for dropdowns */
-            color: var(--text-color); /* Light text for contrast */
-        }
-
-        /* Styles for checkboxes */
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            appearance: none;
-            background-color: var(--secondary-color); /* Dark background */
-            border: 2px solid var(--primary-color); /* Light border */
-            border-radius: 4px;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-
-        input[type="checkbox"]:checked {
-            background-color: var(--primary-color); /* Highlight when checked */
-            border-color: var(--primary-color); /* Match border with background */
-        }
-
-        /* Styles for color pickers */
-        input[type="color"] {
-            border: none;
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            cursor: pointer;
-        }
-
-        /* Focus styles for inputs */
-        input:focus,
-        select:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+        .dynamic-input-container:hover {
+            border-color: var(--uiv-primary-color);
+            box-shadow: var(--uiv-shadow-depth);
         }
     `;
     attr = [];
@@ -264,10 +89,25 @@ export class AttributeWindow extends LitElement {
         return this.attr;
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => {
+            this.requestUpdate();
+            this.prepareAttributeWindow('attribute-window');
+        });
+    }
+
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         return html`
-            <div id="attributewindow-list">
-                <!-- Dynamic attribute window elements will be injected here -->
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('input') : ''}
+            </style>
+            <div class="attribute-window-container uiv-${themeModule?.id}-theme">
+                <div id="attributewindow-list">
+                    <!-- Dynamic attribute window elements will be injected here -->
+                </div>
             </div>
         `;
     }
@@ -309,9 +149,14 @@ export class AttributeWindow extends LitElement {
     }
 
     createInputElement(key: string, config: RendererAttributeConfiguration | any, customElement: HTMLElement) {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
+        const themeId = themeModule?.id || 'light';
+        
         const inputElement = document.createElement('div');
+        inputElement.className = `dynamic-input-container uiv-${themeId}-card uiv-${themeId}-scan`;
 
         const label = document.createElement('label');
+        label.className = `uiv-${themeId}-text`;
         label.textContent = config.displayLabel || key;
         label.htmlFor = key;
         inputElement.appendChild(label);

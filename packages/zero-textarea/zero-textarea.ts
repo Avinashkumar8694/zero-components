@@ -2,6 +2,8 @@ import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceT
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
+const getThemeManager = () => (window as any).zeroThemeManager;
+
 /**
  * A configurable textarea component with character count and auto-resize.
  * 
@@ -23,104 +25,64 @@ export class ZeroTextarea extends LitElement {
         :host {
             display: block;
             width: 100%;
+            --uiv-primary: var(--uiv-primary-color, #6c63ff);
+            --uiv-bg: var(--uiv-surface-color, #fff);
+            --uiv-text: var(--uiv-text-color, #333);
+            --uiv-border: var(--uiv-border-color, #ddd);
         }
 
         .form-field {
-            margin-bottom: var(--spacing-lg, 20px);
+            margin-bottom: 20px;
         }
 
         .form-field label {
             display: block;
-            margin-bottom: var(--spacing-xs, 6px);
-            font-size: var(--font-size-base, 14px);
-            color: var(--text-primary, #333);
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--uiv-text);
             font-weight: 500;
         }
 
         textarea.mat-mdc-input-element {
             width: 100%;
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
-            border: 1px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-sm, 4px);
-            font-size: var(--font-size-base, 14px);
-            background-color: var(--background-primary, #fff);
-            color: var(--text-primary, #333);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            min-height: 80px;
+            padding: 12px;
+            border: 1px solid var(--uiv-border);
+            border-radius: 12px;
+            font-size: 14px;
+            background-color: var(--uiv-bg);
+            color: var(--uiv-text);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 100px;
             resize: vertical;
             box-sizing: border-box;
-            font-family: var(--font-family, 'Roboto', sans-serif);
-            line-height: 1.5;
+            line-height: 1.6;
+            box-shadow: var(--uiv-shadow-depth, none);
         }
 
-        textarea.mat-mdc-input-element.auto-resize {
-            resize: none;
-            overflow: hidden;
-        }
-
-        textarea.mat-mdc-input-element::placeholder {
-            color: var(--text-secondary, #666);
-        }        textarea.mat-mdc-input-element:hover {
-            border-color: var(--primary-light, #6c63ff);
-            background: var(--primary-background-hover, rgba(108, 99, 255, 0.02));
+        textarea.mat-mdc-input-element:hover {
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
         }
 
         textarea.mat-mdc-input-element:focus {
             outline: none;
-            background: var(--background-primary, #fff);
-            border-color: var(--primary-color, #6c63ff);
-            box-shadow: 0 0 0 2px var(--primary-light, rgba(108, 99, 255, 0.2));
-        }
-
-        textarea.mat-mdc-input-element:disabled {
-            background-color: var(--background-disabled, #f5f5f5);
-            color: var(--text-disabled, #999);
-            cursor: not-allowed;
-            resize: none;
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
+            transform: translateY(-1px);
         }
 
         .textarea-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: var(--spacing-xs, 4px);
-            font-size: var(--font-size-sm, 12px);
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--uiv-text);
+            opacity: 0.7;
         }
 
-        .character-count {
-            color: var(--text-secondary, #666);
-        }
-
-        .character-count.near-limit {
-            color: var(--warning-color, #ff9800);
-        }
-
-        .character-count.over-limit {
-            color: var(--error-color, #f44336);
-        }
-
-        .error-message {
-            color: var(--error-color, #f44336);
-            font-size: var(--font-size-sm, 12px);
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        textarea.mat-mdc-input-element.error {
-            border-color: var(--error-color, #f44336);
-        }
-
-        textarea.mat-mdc-input-element.error:focus {
-            box-shadow: 0 0 0 2px var(--error-light, rgba(244, 67, 54, 0.2));
-        }
-
-        .word-count {
-            color: var(--text-secondary, #666);
-            margin-left: var(--spacing-sm, 8px);
-        }
+        .character-count.near-limit { color: var(--uiv-warning-color, #ff9800); }
+        .character-count.over-limit { color: var(--uiv-error-color, #f44336); font-weight: bold; }
     `;
 
     @property({ type: String })
@@ -309,16 +271,26 @@ export class ZeroTextarea extends LitElement {
         }
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         const characterCountClass = this.getCharacterCountClass();
         const wordCount = this.getWordCount();
         
         return html`
-            <div class="form-field">
-                <label for="textarea-input">${this.label}</label>
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('input') : ''}
+            </style>
+            <div class="form-field uiv-${themeModule?.id}-theme">
+                <label for="textarea-input" class="uiv-${themeModule?.id}-text">${this.label}</label>
                 <textarea 
                     id="textarea-input"
-                    class="mat-mdc-input-element ${this.autoResize ? 'auto-resize' : ''} ${this.showError ? 'error' : ''}"
+                    class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan ${this.autoResize ? 'auto-resize' : ''} ${this.showError ? 'error' : ''}"
                     .value="${this.value}" 
                     placeholder="${this.placeholder}"
                     rows="${this.rows}"
@@ -330,8 +302,8 @@ export class ZeroTextarea extends LitElement {
                 ></textarea>
                 
                 ${this.showCharacterCount || this.showWordCount ? html`
-                    <div class="textarea-footer">
-                        <div class="error-message ${this.showError ? 'show' : ''}">
+                    <div class="textarea-footer uiv-${themeModule?.id}-text">
+                        <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
                             ${this.errorMessage}
                         </div>
                         <div>
@@ -348,7 +320,7 @@ export class ZeroTextarea extends LitElement {
                         </div>
                     </div>
                 ` : html`
-                    <div class="error-message ${this.showError ? 'show' : ''}">
+                    <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
                         ${this.errorMessage}
                     </div>
                 `}

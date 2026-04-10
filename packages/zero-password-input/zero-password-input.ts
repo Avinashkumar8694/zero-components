@@ -2,6 +2,8 @@ import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceT
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
+const getThemeManager = () => (window as any).zeroThemeManager;
+
 /**
  * A configurable password input component with show/hide functionality.
  * 
@@ -270,17 +272,27 @@ export class ZeroPasswordInput extends LitElement {
         }));
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         const strength = this.getPasswordStrength();
         
         return html`
-            <div class="form-field">
-                <label for="password-input">${this.label}</label>
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('input') : ''}
+            </style>
+            <div class="form-field uiv-${themeModule?.id}-theme">
+                <label for="password-input" class="uiv-${themeModule?.id}-text">${this.label}</label>
                 <div class="password-container">
                     <input 
                         id="password-input"
                         type="${this.showPassword ? 'text' : 'password'}" 
-                        class="mat-mdc-input-element ${this.showError ? 'error' : ''}"
+                        class="mat-mdc-input-element uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan ${this.showError ? 'error' : ''}"
                         .value="${this.value}" 
                         placeholder="${this.placeholder}"
                         ?required="${this.required}"
@@ -291,7 +303,7 @@ export class ZeroPasswordInput extends LitElement {
                     ${this.showToggle ? html`
                         <button 
                             type="button"
-                            class="toggle-button"
+                            class="toggle-button uiv-${themeModule?.id}-text"
                             ?disabled="${this.disabled}"
                             @click="${this.togglePasswordVisibility}"
                         >
@@ -302,10 +314,10 @@ export class ZeroPasswordInput extends LitElement {
                 ${this.showStrengthMeter && this.value ? html`
                     <div class="strength-meter">
                         <div class="strength-bar strength-${strength.strength}" 
-                             style="width: ${strength.width}%"></div>
+                             style="width: ${strength.width}%; background-color: var(--uiv-${strength.strength === 'weak' ? 'error' : strength.strength === 'medium' ? 'warning' : 'primary'}-color)"></div>
                     </div>
                 ` : ''}
-                <div class="error-message ${this.showError ? 'show' : ''}">
+                <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
                     ${this.errorMessage}
                 </div>
             </div>

@@ -1,6 +1,8 @@
 import { RendererComponent, RendererAttribute, applyGlobalStyles, AttributeType } from 'zero-annotation';
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, CSSResult } from 'lit';
 import { property } from 'lit/decorators.js';
+
+const getThemeManager = () => (window as any).zeroThemeManager;
 
 /**
  * Represents a dropdown directive with options and validation.
@@ -30,39 +32,24 @@ export class PopupDropdownDirective extends LitElement {
 
     static styles = css`
     :host {
-      --dropdown-bg-color: #fff;
-      --dropdown-border-color: #ccc;
-      --dropdown-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      --dropdown-border-radius: 6px;
-      --dropdown-padding: 10px;
-      --dropdown-width: 200px;
-      --dropdown-item-hover-bg: #f0f0f0;
-      --selected-item-bg: #e0e0e0; /* Background color for selected item */
-      --notch-border-color: var(--dropdown-bg-color);
-      --notch-left-offset: 20px;
-      --notch-left-offset-before: -10px;
-      --dropdown-item-padding: 10px;
-      --dropdown-z-index: 1000;
-      --error-bg-color: #ffdddd;
-      --error-border-color: #ff5f5f;
-
       display: inline-block;
       position: relative;
       cursor: pointer;
+      font-family: var(--uiv-font-family, sans-serif);
     }
 
     .dropdown-menu {
       position: absolute;
-      background-color: var(--dropdown-bg-color);
-      border: 1px solid var(--dropdown-border-color);
-      box-shadow: var(--dropdown-shadow);
-      border-radius: var(--dropdown-border-radius);
-      padding: var(--dropdown-padding);
-      width: var(--dropdown-width);
-      z-index: var(--dropdown-z-index);
+      background-color: var(--uiv-bg-surface, #fff);
+      border: 1px solid var(--uiv-border-color, #ccc);
+      box-shadow: var(--uiv-shadow-depth, 0 2px 10px rgba(0, 0, 0, 0.2));
+      border-radius: var(--uiv-border-radius, 6px);
+      padding: var(--spacing-sm, 10px);
+      width: var(--uiv-input-width, 200px);
+      z-index: 1000;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+      transition: all 0.3s ease-in-out;
       transform: translateY(10px);
     }
 
@@ -79,24 +66,14 @@ export class PopupDropdownDirective extends LitElement {
 
     .notch {
         position: absolute;
-        top: -10px; /* Adjust this value as needed */
-        left: var(--notch-left-offset);
+        top: -10px;
+        left: 20px;
         width: 0;
         height: 0;
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
-        border-bottom: 10px solid var(--dropdown-border-color);
+        border-bottom: 10px solid var(--uiv-border-color, #ddd);
         background-color: transparent;
-        &::after{
-            position: absolute;
-            top: 2px; /* Adjust this value as needed */
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 10px solid var(--dropdown-bg-color); /* Keep this for the border */
-            background-color: transparent; /* Ensure the background is transparent */
-            content: '';
-            left: var(--notch-left-offset-before);
-        }
     }
 
     .dropdown-menu ul {
@@ -106,19 +83,24 @@ export class PopupDropdownDirective extends LitElement {
     }
 
     .dropdown-menu li {
-      padding: var(--dropdown-item-padding);
+      padding: var(--spacing-sm, 10px);
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: var(--uiv-border-radius, 4px);
+      color: var(--uiv-text-color);
+      transition: background 0.2s;
     }
 
     .dropdown-menu li:hover {
-      background-color: var(--dropdown-item-hover-bg);
+      background-color: var(--uiv-bg-overlay, #f0f0f0);
     }
 
     .dropdown-menu li.selected {
-      background-color: var(--selected-item-bg); /* Highlight selected item */
-    }    .error-message {
-      color: var(--error-border-color);
+      background-color: var(--uiv-primary-color, #e0e0e0);
+      color: #fff;
+    }
+
+    .error-message {
+      color: var(--uiv-error-color, #ff5f5f);
       font-size: var(--font-size-sm, 0.9em);
       margin-top: var(--spacing-xs, 5px);
     }
@@ -230,13 +212,16 @@ export class PopupDropdownDirective extends LitElement {
 
     // Render the template
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         return html`
-        
-      <div>
+      <style>
+        ${themeModule ? themeModule.getGlobalStyles() : ''}
+      </style>
+      <div class="uiv-${themeModule?.id}-theme">
         <slot></slot>
         ${this.open
                 ? html`
-              <div class="dropdown-menu open">
+              <div class="dropdown-menu open uiv-${themeModule?.id}-card uiv-${themeModule?.id}-glass">
                 <div class="notch"></div>
                 <ul>
                   ${this.options.map(
@@ -244,7 +229,7 @@ export class PopupDropdownDirective extends LitElement {
                       <li 
                         data-value="${JSON.stringify(opt)}" 
                         @click="${this.handleOptionClick}" 
-                        class="${this.selectedValue === opt.value ? 'selected' : ''}" 
+                        class="${this.selectedValue === opt.value ? 'selected' : ''} uiv-${themeModule?.id}-text" 
                       >
                         ${opt.label}
                       </li>
@@ -272,14 +257,19 @@ export class PopupDropdownDirective extends LitElement {
     // Lifecycle method: Initialize the directive when connected
     connectedCallback() {
         super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
 
         // Check for attribute configuration
         const configAttr = this.getAttribute('zero-popup-dropdown-directive');
         if (configAttr) {
-            const config = JSON.parse(configAttr);
-            this.enabled = config.enabled;
-            this.options = config.options;
-            this.selectedValue = config.selectedValue || ''; // Set initial selected value from config
+            try {
+                const config = JSON.parse(configAttr);
+                this.enabled = config.enabled;
+                this.options = config.options || [];
+                this.selectedValue = config.selectedValue || ''; 
+            } catch (e) {
+                console.error('Error parsing popup dropdown config', e);
+            }
         }
 
         // Validate inputs from attributes

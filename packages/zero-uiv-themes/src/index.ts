@@ -5,19 +5,34 @@ import { glassTheme } from './glass/index';
 import { modernTheme } from './modern/index';
 import { retroTheme } from './retro/index';
 import { neonTheme } from './neon/index';
+import { lightTheme } from './light/index';
+import { darkTheme } from './dark/index';
+import { corporateTheme } from './corporate/index';
+import { wealthTheme } from './wealth/index';
+import { natureTheme } from './nature/index';
 
 export * from './cyber';
 export * from './glass';
 export * from './modern';
 export * from './retro';
 export * from './neon';
+export * from './light';
+export * from './dark';
+export * from './corporate';
+export * from './wealth';
+export * from './nature';
 
 export const themeRegistry: Record<string, any> = {
     cyber: cyberTheme,
     glass: glassTheme,
     modern: modernTheme,
     retro: retroTheme,
-    neon: neonTheme
+    neon: neonTheme,
+    light: lightTheme,
+    dark: darkTheme,
+    corporate: corporateTheme,
+    wealth: wealthTheme,
+    nature: natureTheme
 };
 
 export class ZeroUivThemeProvider {

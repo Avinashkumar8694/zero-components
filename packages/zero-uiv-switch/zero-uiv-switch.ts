@@ -115,7 +115,7 @@ export class ZeroUivSwitch extends LitElement {
     }
 
     render() {
-        const themeModule = getThemeManager()?.getActiveTheme();
+        const themeModule = getThemeManager()?.getActiveTheme('zero-uiv-themes');
         if (!themeModule) return html`<label class="switch"><input type="checkbox" .checked="${this.checked}"><span class="slider"></span></label>`;
         return html`
             <style>

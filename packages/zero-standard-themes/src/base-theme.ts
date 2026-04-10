@@ -4,14 +4,6 @@ export interface ThemeTokens {
     [key: string]: string;
 }
 
-export interface ThemeModule {
-    id: string;
-    name: string;
-    globalTokens: ThemeTokens;
-    componentTokens: Record<string, ThemeTokens>;
-    baseStyles: CSSResult;
-}
-
 export function createThemeStyles(tokens: ThemeTokens): CSSResult {
     const serialized = Object.entries(tokens)
         .map(([key, value]) => `${key}: ${value};`)

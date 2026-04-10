@@ -104,7 +104,7 @@ export class ZeroUivCard extends LitElement {
     }
 
     render() {
-        const themeModule = getThemeManager()?.getActiveTheme();
+        const themeModule = getThemeManager()?.getActiveTheme('zero-uiv-themes');
         if (!themeModule) return html`<div class="card ${this.theme}"></div>`;
         return html`
             <style>

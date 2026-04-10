@@ -269,7 +269,7 @@ export class ZeroUivButton extends LitElement {
     }
 
     render() {
-        const themeModule = getThemeManager()?.getActiveTheme();
+        const themeModule = getThemeManager()?.getActiveTheme('zero-uiv-themes');
         const activeTheme = this.theme || themeModule?.id || 'modern';
         
         return html`
@@ -287,7 +287,7 @@ export class ZeroUivButton extends LitElement {
     private renderThemeTemplate(activeTheme: string): TemplateResult {
         const btnClass = activeTheme;
         const isDisabled = this.disabled || this.loading;
-        const themeModule = getThemeManager()?.getActiveTheme();
+        const themeModule = getThemeManager()?.getActiveTheme('zero-uiv-themes');
 
         return html`
             <button class="${btnClass} uiv-${themeModule?.id}-theme uiv-${themeModule?.id}-card" ?disabled="${isDisabled}" data-label="${this.label}">

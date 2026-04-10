@@ -1,7 +1,9 @@
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig } from 'zero-annotation';
 
-import { LitElement, html, css } from 'lit';
+import { LitElement, html, css, CSSResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
+
+const getThemeManager = () => (window as any).zeroThemeManager;
 
 /**
  * Represents a user profile form with various input fields.
@@ -52,16 +54,15 @@ export class PopupDropdown extends LitElement {
     static styles = css`
         :host {
             display: block;
-            font-family: Arial, sans-serif;
-            --dropdown-label-color: #333;
-            --dropdown-border-color: #ddd;
-            --dropdown-hover-border-color: #ccc;
-            --dropdown-bg-color: #fff;
-            --dropdown-icon-color: #666;
-            --option-hover-bg-color: #f0f0f0;
-            --dropdown-border-radius: 6px;
-            --dropdown-height: var(--input-height, 36px); /* Use standardized input height */
-            --dropdown-font-size: 12px; /* Match font size of options */
+            font-family: var(--uiv-font-family, Arial, sans-serif);
+            --dropdown-label-color: var(--uiv-text-color, #333);
+            --dropdown-border-color: var(--uiv-border-color, #ddd);
+            --dropdown-bg-color: var(--uiv-bg-surface, #fff);
+            --dropdown-icon-color: var(--uiv-primary-color, #666);
+            --option-hover-bg-color: var(--uiv-bg-overlay, #f0f0f0);
+            --dropdown-border-radius: var(--uiv-border-radius, 8px);
+            --dropdown-height: var(--input-height, 42px);
+            --dropdown-font-size: 14px;
         }
         
         .dropdown-message-box {
@@ -176,9 +177,13 @@ export class PopupDropdown extends LitElement {
         }
     `;
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     private toggleDropdown() {
         this._isOpen = !this._isOpen;
-        this.requestUpdate(); // Request update to re-render based on state change
     }
 
     @RendererAttribute({
@@ -193,21 +198,25 @@ export class PopupDropdown extends LitElement {
     }
 
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         return html`
-            <div class="dropdown-message-box">
-                <label class="label">Appearance</label>
-                <div class="dropdown-container" @click=${this.toggleDropdown}>
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('dropdown') : ''}
+            </style>
+            <div class="dropdown-message-box uiv-${themeModule?.id}-theme">
+                <label class="label uiv-${themeModule?.id}-text">Appearance</label>
+                <div class="dropdown-container uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan" @click=${this.toggleDropdown}>
                     <div class="dropdown-header">
-                        <span id="selected-option">${this.selectedOption || 'Select an option'}</span>
-                        <i class="fas fa-caret-down dropdown-icon"></i>
+                        <span id="selected-option" class="uiv-${themeModule?.id}-text">${this.selectedOption || 'Select an option'}</span>
+                        <i class="fas fa-caret-down dropdown-icon uiv-${themeModule?.id}-text"></i>
                     </div>
                 </div>
-                <div class="dropdown-options ${this._isOpen ? 'open' : ''}">
+                <div class="dropdown-options ${this._isOpen ? 'open' : ''} uiv-${themeModule?.id}-card uiv-${themeModule?.id}-glass">
                     <span class="message-arrow"></span>
-                    <span class="message-arrow-outline"></span>
                     <div class="dropdown-options-list">
                         ${this.options.map(option => html`
-                            <div class="option ${this.selectedOption === option.value ? 'selected' : ''}" @click=${() => this.selectOption(option)}>
+                            <div class="option ${this.selectedOption === option.value ? 'selected' : ''} uiv-${themeModule?.id}-text" @click=${() => this.selectOption(option)}>
                                 ${option.label}
                             </div>
                         `)}

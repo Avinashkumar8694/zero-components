@@ -2,6 +2,8 @@ import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceT
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
+const getThemeManager = () => (window as any).zeroThemeManager;
+
 /**
  * A configurable dropdown/select component with search functionality.
  * 
@@ -23,47 +25,48 @@ export class ZeroDropdown extends LitElement {
         :host {
             display: block;
             width: 100%;
+            --uiv-primary: var(--uiv-primary-color, #6c63ff);
+            --uiv-bg: var(--uiv-surface-color, #fff);
+            --uiv-text: var(--uiv-text-color, #333);
+            --uiv-border: var(--uiv-border-color, #ddd);
         }
 
         .form-field {
-            margin-bottom: var(--spacing-lg, 20px);
+            margin-bottom: 20px;
         }
 
         .form-field label {
             display: block;
-            margin-bottom: var(--spacing-xs, 6px);
-            font-size: var(--font-size-base, 14px);
-            color: var(--text-primary, #333);
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--uiv-text);
             font-weight: 500;
-        }        select.mat-mdc-input-element {
+        }
+
+        select.mat-mdc-input-element {
             width: 100%;
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
-            border: 1px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-sm, 4px);
-            font-size: var(--font-size-base, 14px);
-            background-color: var(--background-primary, #fff);
-            color: var(--text-primary, #333);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            min-height: var(--input-height, 36px);
-            box-sizing: border-box;
-            font-family: var(--font-family, 'Roboto', sans-serif);
+            padding: 8px 12px;
+            border: 1px solid var(--uiv-border);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--uiv-bg);
+            color: var(--uiv-text);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 40px;
             cursor: pointer;
-        }select.mat-mdc-input-element:hover {
-            border-color: var(--primary-light, #6c63ff);
-            background: var(--primary-background-hover, rgba(108, 99, 255, 0.02));
+            box-shadow: var(--uiv-shadow-depth, none);
+        }
+
+        select.mat-mdc-input-element:hover {
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
         }
 
         select.mat-mdc-input-element:focus {
             outline: none;
-            background: var(--background-primary, #fff);
-            border-color: var(--primary-color, #6c63ff);
-            box-shadow: 0 0 0 2px var(--primary-light, rgba(108, 99, 255, 0.2));
-        }
-
-        select.mat-mdc-input-element:disabled {
-            background-color: var(--background-disabled, #f5f5f5);
-            color: var(--text-disabled, #999);
-            cursor: not-allowed;
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
+            transform: translateY(-1px);
         }
 
         .custom-dropdown {
@@ -72,42 +75,31 @@ export class ZeroDropdown extends LitElement {
 
         .dropdown-button {
             width: 100%;
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
-            border: 1px solid var(--border-color, #ddd);
-            border-radius: var(--border-radius-sm, 4px);
-            font-size: var(--font-size-base, 14px);
-            background-color: var(--background-primary, #fff);            color: var(--text-primary, #333);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            min-height: var(--input-height, 36px);
-            box-sizing: border-box;
-            font-family: var(--font-family, 'Roboto', sans-serif);
+            padding: 8px 12px;
+            border: 1px solid var(--uiv-border);
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: var(--uiv-bg);
+            color: var(--uiv-text);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 40px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            text-align: left;
-        }        .dropdown-button:hover:not(:disabled) {
-            border-color: var(--primary-light, #6c63ff);
-            background: var(--primary-background-hover, rgba(108, 99, 255, 0.02));
+            box-shadow: var(--uiv-shadow-depth, none);
+        }
+
+        .dropdown-button:hover:not(:disabled) {
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
         }
 
         .dropdown-button:focus {
             outline: none;
-            border-color: var(--primary-color, #6c63ff);
-            box-shadow: 0 0 0 2px var(--primary-light, rgba(108, 99, 255, 0.2));
-        }
-
-        .dropdown-button:disabled {
-            background-color: var(--background-disabled, #f5f5f5);
-            color: var(--text-disabled, #999);
-            cursor: not-allowed;
-        }        .dropdown-arrow {
-            font-size: var(--font-size-xs, 12px);
-            transition: transform 0.2s;
-        }
-
-        .dropdown-arrow.open {
-            transform: rotate(180deg);
+            border-color: var(--uiv-primary);
+            box-shadow: var(--uiv-border-glow);
+            transform: translateY(-1px);
         }
 
         .dropdown-options {
@@ -115,35 +107,28 @@ export class ZeroDropdown extends LitElement {
             top: 100%;
             left: 0;
             right: 0;
-            background: var(--background-primary, #fff);
-            border: 1px solid var(--border-color, #ddd);
-            border-top: none;
-            border-radius: 0 0 var(--border-radius-sm, 4px) var(--border-radius-sm, 4px);
-            max-height: 200px;
+            background: var(--uiv-bg);
+            border: 1px solid var(--uiv-border);
+            border-radius: 8px;
+            margin-top: 8px;
+            max-height: 250px;
             overflow-y: auto;
             z-index: 1000;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: var(--uiv-shadow-depth, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+            animation: dropdownSlide 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .search-input {
-            width: 100%;
-            padding: var(--spacing-sm, 8px);
-            border: none;
-            border-bottom: 1px solid var(--border-color, #ddd);
-            font-size: var(--font-size-base, 14px);
-            box-sizing: border-box;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-bottom-color: var(--primary-color, #6c63ff);
+        @keyframes dropdownSlide {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .option-item {
-            padding: var(--spacing-sm, 8px) var(--spacing-md, 12px);
+            padding: 10px 16px;
             cursor: pointer;
-            transition: background-color 0.2s;
-            border-bottom: 1px solid var(--border-light, #f0f0f0);
+            transition: all 0.2s;
+            border-bottom: 1px solid rgba(var(--uiv-primary-rgb, 108, 99, 255), 0.05);
+            color: var(--uiv-text);
         }
 
         .option-item:last-child {
@@ -151,62 +136,27 @@ export class ZeroDropdown extends LitElement {
         }
 
         .option-item:hover {
-            background-color: var(--background-hover, #f5f5f5);
+            background-color: rgba(var(--uiv-primary-rgb, 108, 99, 255), 0.05);
+            color: var(--uiv-primary);
+            padding-left: 20px;
         }
 
         .option-item.selected {
-            background-color: var(--primary-color, #6c63ff);
+            background-color: var(--uiv-primary);
             color: white;
         }
 
-        .option-item.highlighted {
-            background-color: var(--primary-light, rgba(108, 99, 255, 0.1));
-        }
-
-        .no-options {
-            padding: var(--spacing-md, 12px);
-            text-align: center;
-            color: var(--text-secondary, #666);
-            font-style: italic;
-        }
-
-        .error-message {
-            color: var(--error-color, #f44336);
-            font-size: var(--font-size-sm, 12px);
-            margin-top: var(--spacing-xs, 4px);
-            display: none;
-        }
-
-        .error-message.show {
-            display: block;
-        }
-
-        select.mat-mdc-input-element.error,
-        .dropdown-button.error {
-            border-color: var(--error-color, #f44336);
-        }
-
-        select.mat-mdc-input-element.error:focus,
-        .dropdown-button.error:focus {
-            box-shadow: 0 0 0 2px var(--error-light, rgba(244, 67, 54, 0.2));
-        }
-
-        .multi-select-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-xs, 4px);
-            margin-top: var(--spacing-xs, 4px);
-        }        .tag {
-            background: var(--primary-color, #6c63ff);
+        .tag {
+            background: var(--uiv-primary);
             color: white;
-            padding: var(--spacing-xs, 2px) var(--spacing-sm, 8px);
-            border-radius: var(--border-radius-xs, 3px);
-            font-size: var(--font-size-sm, 12px);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
             display: flex;
             align-items: center;
-            gap: var(--spacing-xs, 4px);
+            gap: 6px;
+            box-shadow: var(--uiv-border-glow);
         }
-
         .tag-remove {
             cursor: pointer;
             font-weight: bold;
@@ -418,30 +368,41 @@ export class ZeroDropdown extends LitElement {
         this.dispatchChangeEvent();
     }
 
+    connectedCallback() {
+        super.connectedCallback();
+        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
+    }
+
     render() {
+        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
         if (this.customStyle || this.searchable) {
             const filteredOptions = this.getFilteredOptions();
             
             return html`
-                <div class="form-field">
-                    <label for="dropdown">${this.label}</label>
+                <style>
+                    ${themeModule ? themeModule.getGlobalStyles() : ''}
+                    ${themeModule ? themeModule.getComponentStyles('dropdown') : ''}
+                </style>
+                <div class="form-field uiv-${themeModule?.id}-theme">
+                    <label for="dropdown" class="uiv-${themeModule?.id}-text">${this.label}</label>
                     <div class="custom-dropdown">
                         <button 
                             type="button"
-                            class="dropdown-button ${this.showError ? 'error' : ''}"
+                            class="dropdown-button uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan ${this.showError ? 'error' : ''}"
                             ?disabled="${this.disabled}"
                             @click="${this.toggleDropdown}"
                         >
-                            <span>${this.getSelectedLabel()}</span>
-                            <span class="dropdown-arrow ${this.isOpen ? 'open' : ''}">▼</span>
+                            <span class="uiv-${themeModule?.id}-text">${this.getSelectedLabel()}</span>
+                            <span class="dropdown-arrow uiv-${themeModule?.id}-text ${this.isOpen ? 'open' : ''}">▼</span>
                         </button>
                         
                         ${this.isOpen ? html`
-                            <div class="dropdown-options">
+                            <div class="dropdown-options uiv-${themeModule?.id}-card">
                                 ${this.searchable ? html`
                                     <input 
                                         type="text"
-                                        class="search-input"
+                                        class="search-input uiv-${themeModule?.id}-text"
+                                        style="background: transparent; border-bottom: 1px solid rgba(var(--uiv-primary-rgb), 0.2);"
                                         placeholder="Search options..."
                                         .value="${this.searchQuery}"
                                         @input="${this.handleSearch}"
@@ -459,7 +420,7 @@ export class ZeroDropdown extends LitElement {
                                         ${option.label}
                                     </div>
                                 `) : html`
-                                    <div class="no-options">No options found</div>
+                                    <div class="no-options uiv-${themeModule?.id}-text-secondary">No options found</div>
                                 `}
                             </div>
                         ` : ''}
@@ -487,11 +448,15 @@ export class ZeroDropdown extends LitElement {
         }
 
         return html`
-            <div class="form-field">
-                <label for="select-input">${this.label}</label>
+            <style>
+                ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getComponentStyles('dropdown') : ''}
+            </style>
+            <div class="form-field uiv-${themeModule?.id}-theme">
+                <label for="select-input" class="uiv-${themeModule?.id}-text">${this.label}</label>
                 <select 
                     id="select-input"
-                    class="mat-mdc-input-element ${this.showError ? 'error' : ''}"
+                    class="mat-mdc-input-element uiv-${themeModule?.id}-card ${this.showError ? 'error' : ''}"
                     ?required="${this.required}"
                     ?disabled="${this.disabled}"
                     ?multiple="${this.multiple}"
@@ -509,7 +474,7 @@ export class ZeroDropdown extends LitElement {
                         </option>
                     `)}
                 </select>
-                <div class="error-message ${this.showError ? 'show' : ''}">
+                <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
                     ${this.errorMessage}
                 </div>
             </div>

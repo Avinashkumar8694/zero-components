@@ -238,7 +238,7 @@ export class ZeroUivInput extends LitElement {
     }
 
     render() {
-        const themeModule = getThemeManager()?.getActiveTheme();
+        const themeModule = getThemeManager()?.getActiveTheme('zero-uiv-themes');
         const activeTheme = this.theme || themeModule?.id || 'modern';
 
         return html`

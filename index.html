@@ -23,66 +23,72 @@
         }
 
         body {
+            background-color: var(--uiv-app-bg);
+            color: var(--uiv-text-primary);
+            font-family: var(--uiv-font-family, 'Outfit', 'Inter', -apple-system, sans-serif);
             margin: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Inter', sans-serif;
-            display: flex;
+            padding: 0;
             height: 100vh;
             overflow: hidden;
+            display: flex;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* Sidebar Glassmorphism */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr 340px;
+            height: 100%;
+            background-color: var(--uiv-bg-primary);
+        }
+
+        /* Sidebar Styles */
         .sidebar {
-            width: 280px;
-            background: var(--sidebar-bg);
-            backdrop-filter: var(--glass-blur);
+            background-color: var(--uiv-app-sidebar-bg);
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            transition: var(--transition);
-            z-index: 100;
+            padding: 24px;
+            overflow-y: auto;
+            position: relative;
+            z-index: 10;
+            transition: background-color 0.4s ease, border-color 0.4s ease;
         }
 
-        .sidebar-header {
-            padding: 2rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .logo {
-            font-size: 1.5rem;
+        .sidebar-title {
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--accent-color);
+            margin-bottom: 24px;
+            color: var(--uiv-text-primary);
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 12px;
         }
 
-        .nav-section {
-            padding: 1.5rem 0.5rem;
-            flex-grow: 1;
-            overflow-y: auto;
+        .sidebar-section {
+            margin-bottom: 32px;
         }
 
-        .nav-label {
+        .sidebar-section h3 {
             font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: var(--text-muted);
-            padding: 0 1.5rem 0.75rem 1.5rem;
+            color: var(--uiv-text-tertiary, var(--uiv-app-text-muted));
+            margin-bottom: 16px;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
             gap: 1rem;
-            padding: 0.75rem 1.5rem;
+            padding: 0.75rem 1.25rem;
             text-decoration: none;
             color: var(--text-color);
             border-radius: 8px;
             margin: 0.25rem 0.5rem;
             transition: var(--transition);
             font-size: 0.9375rem;
+            width: auto;
         }
 
         .nav-item:hover {
@@ -93,6 +99,30 @@
         .nav-item.active {
             background: var(--accent-color);
             color: #0f172a;
+        }
+
+        .btn-primary {
+            background-color: var(--uiv-color-primary);
+            color: var(--uiv-text-inverse, #ffffff);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--uiv-color-primary-hover, var(--uiv-color-primary));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
         }
 
         /* Main Content */
@@ -129,12 +159,21 @@
         }
 
         .component-card {
-            background: var(--card-bg);
+            background: var(--card-bg, rgba(30, 41, 59, 0.4));
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 20px;
             padding: 1.5rem;
+            backdrop-filter: var(--glass-blur);
+            box-shadow: var(--uiv-shadow-depth, 0 8px 32px 0 rgba(0, 0, 0, 0.3));
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
             cursor: pointer;
-            transition: var(--transition);
+        }
+
+        .component-card::before {
+            content: '';
         }
 
         .component-card:hover {
@@ -156,7 +195,8 @@
         }
 
         .controls-pane {
-            display: none; /* Removed from main layout, moved to sidebar */
+            display: none;
+            /* Removed from main layout, moved to sidebar */
         }
 
         .setting-group {
@@ -170,9 +210,11 @@
             margin-bottom: 0.75rem;
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             width: 100%;
-            background: rgba(15, 23, 42, 0.5);
+            background: var(--uiv-app-input-bg, rgba(15, 23, 42, 0.5));
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 0.75rem;
@@ -181,7 +223,9 @@
             transition: var(--transition);
         }
 
-        input:focus { border-color: var(--accent-color); }
+        input:focus {
+            border-color: var(--accent-color);
+        }
 
         .theme-pill {
             background: rgba(56, 189, 248, 0.1);
@@ -207,13 +251,13 @@
                     <span>Zero Core</span>
                 </div>
             </div>
-            
+
             <nav class="nav-section">
                 <div class="nav-label">Global</div>
                 <a href="index.html" class="nav-item active"><i class="fas fa-th-large"></i> Explore</a>
                 <a href="marketplace.html" class="nav-item"><i class="fas fa-shopping-bag"></i> Marketplace</a>
                 <a href="settings.html" class="nav-item"><i class="fas fa-sliders-h"></i> Settings</a>
-                
+
                 <div class="nav-label" style="margin-top: 2rem;">Quick Components</div>
                 <div id="quickNavList">
                     <!-- populated by JS -->
@@ -223,7 +267,8 @@
 
         <div id="componentNav" style="display: none; flex-direction: column; height: 100%;">
             <div class="sidebar-header" style="display: flex; align-items: center; gap: 1rem; padding: 1.5rem;">
-                <button onclick="showExplore()" style="background: rgba(56, 189, 248, 0.1); border: 1px solid var(--border-color); color: var(--accent-color); cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+                <button onclick="showExplore()"
+                    style="background: rgba(56, 189, 248, 0.1); border: 1px solid var(--border-color); color: var(--accent-color); cursor: pointer; padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.8rem; display: flex; align-items: center; gap: 0.5rem; width: 100%;">
                     <i class="fas fa-arrow-left"></i> Back to Explorer
                 </button>
             </div>
@@ -232,12 +277,15 @@
                     <div class="nav-label">Component Settings</div>
                     <div id="sidenav-list" style="padding: 0 0.5rem;"></div>
                 </div>
-                <div id="eventLogSection" style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                <div id="eventLogSection"
+                    style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
                     <div class="nav-label" style="display: flex; justify-content: space-between; align-items: center;">
                         Event Log
-                        <button onclick="window.clearEventLog()" style="background: none; border: none; color: var(--accent-color); cursor: pointer; font-size: 0.7rem; padding: 0;">Clear</button>
+                        <button onclick="window.clearEventLog()"
+                            style="background: none; border: none; color: var(--accent-color); cursor: pointer; font-size: 0.7rem; padding: 0;">Clear</button>
                     </div>
-                    <div id="event-log" style="margin: 0.5rem; height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.75rem; background: rgba(15, 23, 42, 0.3); border-radius: 8px; padding: 0.75rem; color: #94a3b8; line-height: 1.4;">
+                    <div id="event-log"
+                        style="margin: 0.5rem; height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.75rem; background: rgba(15, 23, 42, 0.3); border-radius: 8px; padding: 0.75rem; color: #94a3b8; line-height: 1.4;">
                         <div style="color: var(--text-muted)">Waiting for events...</div>
                     </div>
                 </div>
@@ -270,9 +318,10 @@
             <div id="exploreView" class="component-grid">
                 <!-- Default Grid View -->
             </div>
-            
+
             <div id="previewView" style="display: none;">
-                <div style="width: 100%; height: calc(100vh - 150px); display: flex; align-items: center; justify-content: center;">
+                <div
+                    style="width: 100%; height: calc(100vh - 150px); display: flex; align-items: center; justify-content: center;">
                     <div class="preview-pane" id="mainPreview" style="width: 100%; max-width: 1200px; height: 100%;">
                         <!-- Component rendered here -->
                     </div>
@@ -290,4 +339,5 @@
         // Inline layout functions removed (moved to index.ts)
     </script>
 </body>
+
 </html>

@@ -16,11 +16,15 @@ export const natureTokens = {
         '--uiv-shadow-depth': '0 20px 25px -5px rgba(0, 0, 0, 0.05)',
         '--uiv-glass-blur': '0px',
         
-        // App Tokens
-        '--uiv-app-bg': '#fefce8',
-        '--uiv-app-sidebar': '#166534',
-        '--uiv-app-header': '#fefce8',
-        '--uiv-app-accent': '#166534',
-        '--uiv-app-glass': 'rgba(254, 252, 232, 0.9)',
+        '--uiv-app-bg': '#021a11',
+        '--uiv-app-sidebar-bg': '#022c22',
+        '--uiv-app-header-bg': '#021a11',
+        '--uiv-app-card-bg': 'rgba(6, 78, 59, 0.6)',
+        '--uiv-app-input-bg': 'rgba(2, 44, 34, 0.4)',
+        '--uiv-app-accent-color': '#10b981',
+        '--uiv-app-text-color': '#ecfdf5',
+        '--uiv-app-text-muted': '#6ee7b7',
+        '--uiv-app-border-color': 'rgba(16, 185, 129, 0.25)',
+        '--uiv-app-hover-shadow': '0 40px 80px -20px rgba(0,0,0,0.5), 0 0 20px #10b981',
     }
 };

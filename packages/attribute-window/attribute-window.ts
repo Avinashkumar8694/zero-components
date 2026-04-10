@@ -98,13 +98,14 @@ export class AttributeWindow extends LitElement {
     }
 
     render() {
-        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
+        const themeModule = getThemeManager()?.getActiveTheme();
         return html`
             <style>
                 ${themeModule ? themeModule.getGlobalStyles() : ''}
+                ${themeModule ? themeModule.getCoreComponentStyles() : ''}
                 ${themeModule ? themeModule.getComponentStyles('input') : ''}
             </style>
-            <div class="attribute-window-container uiv-${themeModule?.id}-theme">
+            <div class="attribute-window-container">
                 <div id="attributewindow-list">
                     <!-- Dynamic attribute window elements will be injected here -->
                 </div>
@@ -149,14 +150,13 @@ export class AttributeWindow extends LitElement {
     }
 
     createInputElement(key: string, config: RendererAttributeConfiguration | any, customElement: HTMLElement) {
-        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
-        const themeId = themeModule?.id || 'light';
+        const themeModule = getThemeManager()?.getActiveTheme();
         
         const inputElement = document.createElement('div');
-        inputElement.className = `dynamic-input-container uiv-${themeId}-card uiv-${themeId}-scan`;
+        inputElement.className = 'dynamic-input-container';
 
         const label = document.createElement('label');
-        label.className = `uiv-${themeId}-text`;
+        label.className = 'uiv-label';
         label.textContent = config.displayLabel || key;
         label.htmlFor = key;
         inputElement.appendChild(label);
@@ -164,6 +164,7 @@ export class AttributeWindow extends LitElement {
         switch (config.uiComponentType) {
             case UserInterfaceType.TEXT_INPUT:
                 const textInput = document.createElement('input');
+                textInput.className = 'uiv-input';
                 textInput.type = config?.optionItems?.['type'] || 'text';
                 textInput.id = key;
                 textInput.value = config.initialValue?.toString() || '';
@@ -176,6 +177,7 @@ export class AttributeWindow extends LitElement {
     
             case UserInterfaceType.PASSWORD_INPUT:
                 const passwordInput = document.createElement('input');
+                passwordInput.className = 'uiv-input';
                 passwordInput.type = 'password';
                 passwordInput.id = key;
                 passwordInput.value = config.initialValue?.toString() || '';
@@ -188,17 +190,20 @@ export class AttributeWindow extends LitElement {
                 
             case UserInterfaceType.TEXTAREA:
                 const textarea = document.createElement('textarea');
+                textarea.className = 'uiv-textarea';
                 textarea.id = key;
                 textarea.value = config.initialValue?.toString() || '';
                 textarea.placeholder = config.placeholderText || '';
-                textarea.addEventListener('input', (e) => {
-                    customElement[key] = (e.target as HTMLTextAreaElement).value;
+                textarea.addEventListener('change', (e) => {
+                    let value = config?.optionItems?.type == 'Object' ? JSON.parse((e.target as HTMLTextAreaElement).value) : (e.target as HTMLTextAreaElement).value;
+                    customElement[key] = value;
                 });
                 inputElement.appendChild(textarea);
                 break;
     
             case UserInterfaceType.CHECKBOX:
                 const toggleSwitch = document.createElement('input');
+                toggleSwitch.className = 'uiv-input';
                 toggleSwitch.type = 'checkbox';
                 toggleSwitch.id = key;
                 toggleSwitch.checked = Boolean(config.initialValue);
@@ -213,6 +218,7 @@ export class AttributeWindow extends LitElement {
                 (config.optionItems as DropdownOptionItem[]).forEach(option => {
                     const radioWrapper = document.createElement('div');
                     const radioInput = document.createElement('input');
+                    radioInput.className = 'uiv-input';
                     radioInput.type = 'radio';
                     radioInput.name = key;
                     radioInput.id = `${key}_${option.value}`;
@@ -223,6 +229,7 @@ export class AttributeWindow extends LitElement {
                     });
     
                     const radioLabel = document.createElement('label');
+                    radioLabel.className = 'uiv-label';
                     radioLabel.htmlFor = radioInput.id;
                     radioLabel.textContent = option.label.toString();
                     
@@ -235,8 +242,9 @@ export class AttributeWindow extends LitElement {
     
             case UserInterfaceType.DROPDOWN:
                 const dropdown = document.createElement('select');
+                dropdown.className = 'uiv-select';
                 dropdown.id = key;
-                (config.optionItems as DropdownOptionItem[]).forEach(option => {
+                (config.optionItems as DropdownOptionItem[])?.forEach(option => {
                     const optionElement = document.createElement('option');
                     optionElement.value = option.value.toString();
                     optionElement.textContent = option.label.toString();
@@ -250,9 +258,10 @@ export class AttributeWindow extends LitElement {
     
             case UserInterfaceType.MULTI_SELECT:
                 const multiSelect = document.createElement('select');
+                multiSelect.className = 'uiv-select';
                 multiSelect.id = key;
                 multiSelect.multiple = true;
-                (config.optionItems as DropdownOptionItem[]).forEach(option => {
+                (config.optionItems as DropdownOptionItem[])?.forEach(option => {
                     const optionElement = document.createElement('option');
                     optionElement.value = option.value.toString();
                     optionElement.textContent = option.label.toString();
@@ -266,6 +275,7 @@ export class AttributeWindow extends LitElement {
                 
             case UserInterfaceType.RANGE_SLIDER:
                 const rangeSlider = document.createElement('input');
+                rangeSlider.className = 'uiv-input';
                 rangeSlider.type = 'range';
                 rangeSlider.id = key;
                 rangeSlider.min = (config.optionItems as RangeSettings).min?.toString() || '0';
@@ -279,6 +289,7 @@ export class AttributeWindow extends LitElement {
                 
             case UserInterfaceType.COLOR_PICKER:
                 const colorPicker = document.createElement('input');
+                colorPicker.className = 'uiv-input';
                 colorPicker.type = 'color';
                 colorPicker.id = key;
                 colorPicker.value = config.initialValue?.toString() || '#ffffff';
@@ -287,9 +298,10 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(colorPicker);
                 break;
-            
+    
             case UserInterfaceType.FILE_INPUT:
                 const fileInput = document.createElement('input');
+                fileInput.className = 'uiv-input';
                 fileInput.type = 'file';
                 fileInput.id = key;
                 fileInput.addEventListener('change', (e) => {
@@ -300,14 +312,28 @@ export class AttributeWindow extends LitElement {
     
             case UserInterfaceType.DATE_PICKER:
                 const datePicker = document.createElement('input');
+                datePicker.className = 'uiv-input';
                 datePicker.type = 'date';
                 datePicker.id = key;
                 datePicker.value = config.initialValue?.toString() || '';
-                datePicker.addEventListener('input', (e) => {
+                datePicker.addEventListener('change', (e) => {
                     customElement[key] = (e.target as HTMLInputElement).value;
                 });
                 inputElement.appendChild(datePicker);
                 break;
+                
+            case UserInterfaceType.NUMBER_INPUT:
+                const numberInput = document.createElement('input');
+                numberInput.className = 'uiv-input';
+                numberInput.type = 'number';
+                numberInput.id = key;
+                numberInput.value = config.initialValue?.toString() || '0';
+                numberInput.addEventListener('input', (e) => {
+                    customElement[key] = Number((e.target as HTMLInputElement).value);
+                });
+                inputElement.appendChild(numberInput);
+                break;
+
             case UserInterfaceType.POPUP_DROPDOWN:
                 const popup_dropdown = document.createElement('zero-popup-dropdown-1.0.0');
                 popup_dropdown.id = key;

@@ -58,6 +58,37 @@
         let installed = JSON.parse(localStorage.getItem('zero-installed-plugins') || '[]');
         installed = installed.filter((i: string) => i !== id);
         localStorage.setItem('zero-installed-plugins', JSON.stringify(installed));
+        
+        // Hard unregistration: Remove from all memory registries
+        console.log(`[Bridge] Deep unregistering plugin: ${id}`);
+        
+        const registries = [
+            (window as any).componentRegistry,
+            (globalThis as any).zeroComponents,
+            (window as any).zeroLibrary,
+            (window as any).zero?.components
+        ];
+
+        registries.forEach(registry => {
+            if (!registry) return;
+            Object.keys(registry).forEach(key => {
+                // Remove if the key matches the plugin ID (exact or as a prefix of selector-version)
+                if (key === id || key.startsWith(id + '-')) {
+                    console.log(`[Bridge] Purging from memory: ${key}`);
+                    delete registry[key];
+                }
+            });
+        });
+
+        // Clear from script cache to allow re-loading a fresh version later
+        loadedScripts.delete(id);
+
+        // Also unregister theme provider if applicable
+        const manager = (window as any).zeroThemeManager;
+        if (manager) {
+            manager.unregisterProvider(id);
+        }
+
         pushConfig();
         window.dispatchEvent(new CustomEvent('plugins-updated'));
     };

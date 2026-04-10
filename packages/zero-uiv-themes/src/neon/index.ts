@@ -24,14 +24,22 @@ export const neonGlobalTokens = {
         
         // App Dashboard Tokens
         '--uiv-app-bg': '#000000',
-        '--uiv-app-sidebar-bg': '#050505',
-        '--uiv-app-header-bg': '#080808',
-        '--uiv-app-card-bg': '#0f0f0f',
-        '--uiv-app-text-color': '#ffffff',
-        '--uiv-app-text-muted': '#666666',
-        '--uiv-app-accent-color': '#39ff14',
-        '--uiv-app-border-color': 'rgba(57, 255, 20, 0.2)',
+        '--uiv-app-sidebar-bg': '#0a0a0a',
+        '--uiv-app-header-bg': '#0f0f0f',
+        '--uiv-app-card-bg': '#111111',
+        '--uiv-app-input-bg': 'rgba(255, 255, 255, 0.05)',
+        '--uiv-app-text-color': '#f8fafc',
+        '--uiv-app-text-muted': 'rgba(255, 255, 255, 0.6)',
+        '--uiv-app-accent-color': '#f59e0b',
+        '--uiv-app-border-color': '#262626',
         '--uiv-app-glass-blur': 'none',
+
+        // Extended Reference Tokens
+        '--uiv-bg-primary': '#000000',
+        '--uiv-color-success': '#00ffcc',
+        '--uiv-color-warning': '#f0abfc',
+        '--uiv-color-danger': '#fe019a',
+        '--uiv-color-info': '#00fbff',
     }
 };
 

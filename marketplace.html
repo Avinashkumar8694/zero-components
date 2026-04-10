@@ -8,16 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --sidebar-bg: rgba(30, 41, 59, 0.7);
-            --header-bg: rgba(15, 23, 42, 0.8);
-            --card-bg: rgba(30, 41, 59, 0.5);
-            --text-color: #f1f5f9;
-            --text-muted: #94a3b8;
-            --accent-color: #38bdf8;
-            --border-color: rgba(51, 65, 85, 0.5);
-            --glass-blur: blur(12px);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Application Standard Variables - Synchronized with Orchestrator */
+            --bg-color: var(--uiv-app-bg, #0f172a);
+            --sidebar-bg: var(--uiv-app-sidebar-bg, rgba(30, 41, 59, 0.7));
+            --header-bg: var(--uiv-app-header-bg, rgba(15, 23, 42, 0.8));
+            --card-bg: var(--uiv-app-card-bg, rgba(30, 41, 59, 0.5));
+            --text-color: var(--uiv-app-text-color, #f1f5f9);
+            --text-muted: var(--uiv-app-text-muted, #94a3b8);
+            --accent-color: var(--uiv-app-accent-color, #38bdf8);
+            --border-color: var(--uiv-app-border-color, rgba(51, 65, 85, 0.5));
+            --glass-blur: var(--uiv-app-glass-blur, blur(12px));
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         body {

@@ -14,6 +14,8 @@ export class ThemeOrchestrator extends EventTarget {
     private static instance: ThemeOrchestrator;
     private providers: Map<string, ThemeProvider> = new Map();
     private activeThemes: Record<string, string> = {};
+    private rootProviderId: string = 'zero-uiv-themes';
+    private followPrimary: boolean = false;
 
     private constructor() {
         super();
@@ -21,12 +23,20 @@ export class ThemeOrchestrator extends EventTarget {
         
         // Restore active themes from localStorage
         try {
-            const saved = localStorage.getItem('zero-active-themes');
-            if (saved) {
-                this.activeThemes = JSON.parse(saved);
+            const savedThemes = localStorage.getItem('zero-active-themes');
+            if (savedThemes) {
+                this.activeThemes = JSON.parse(savedThemes);
+            }
+            const savedRoot = localStorage.getItem('zero-root-provider-id');
+            if (savedRoot) {
+                this.rootProviderId = savedRoot;
+            }
+            const savedFollow = localStorage.getItem('zero-follow-primary');
+            if (savedFollow) {
+                this.followPrimary = savedFollow === 'true';
             }
         } catch (e) {
-            console.warn('[ThemeOrchestrator] Failed to restore active themes', e);
+            console.warn('[ThemeOrchestrator] Failed to restore state', e);
         }
 
         // Pull in existing providers if another instance existed
@@ -51,9 +61,11 @@ export class ThemeOrchestrator extends EventTarget {
         this.providers.set(provider.id, provider);
         console.log(`[ThemeOrchestrator] Registered provider: ${provider.id}`);
         
-        // Set default theme for new provider if not set
+        // Ensure default theme exists in state
         if (!this.activeThemes[provider.id]) {
-            this.activeThemes[provider.id] = 'modern';
+            const savedThemes = localStorage.getItem('zero-active-themes');
+            const parsed = savedThemes ? JSON.parse(savedThemes) : {};
+            this.activeThemes[provider.id] = parsed[provider.id] || 'modern';
         }
 
         this.dispatchEvent(new CustomEvent('providers-changed'));
@@ -62,8 +74,32 @@ export class ThemeOrchestrator extends EventTarget {
         this.refreshActiveTheme(provider.id);
     }
 
+    unregisterProvider(providerId: string) {
+        if (this.providers.has(providerId)) {
+            this.providers.delete(providerId);
+            delete this.activeThemes[providerId];
+            console.log(`[ThemeOrchestrator] Unregistered provider: ${providerId}`);
+            this.dispatchEvent(new CustomEvent('providers-changed'));
+        }
+    }
+
     getProviders(): ThemeProvider[] {
         return Array.from(this.providers.values());
+    }
+
+    setRootProvider(id: string) {
+        if (this.providers.has(id)) {
+            this.rootProviderId = id;
+            localStorage.setItem('zero-root-provider-id', id);
+            console.log(`[ThemeOrchestrator] Set primary root provider: ${id}`);
+            // Re-apply root theme from the new primary
+            this.refreshActiveTheme(id);
+            this.dispatchEvent(new CustomEvent('providers-changed'));
+        }
+    }
+
+    getRootProviderId(): string {
+        return this.rootProviderId;
     }
 
     setActiveTheme(name: string, providerId: string) {
@@ -74,24 +110,40 @@ export class ThemeOrchestrator extends EventTarget {
         }
     }
 
+    setFollowPrimary(follow: boolean) {
+        this.followPrimary = follow;
+        localStorage.setItem('zero-follow-primary', String(follow));
+        console.log(`[ThemeOrchestrator] Follow primary mode: ${follow}`);
+        this.dispatchEvent(new CustomEvent('theme-changed', { detail: { followPrimary: follow } }));
+    }
+
+    getFollowPrimary(): boolean {
+        return this.followPrimary;
+    }
+
     getActiveTheme(providerId?: string) {
-        // Default to zero-standard-themes if no providerId specified
-        const id = providerId || (this.providers.has('zero-standard-themes') ? 'zero-standard-themes' : 'zero-uiv-themes');
+        // If followPrimary is on, everyone uses the root provider's selection
+        const id = (this.followPrimary || !providerId) ? this.rootProviderId : providerId;
         const provider = this.providers.get(id);
-        const themeName = this.activeThemes[id] || 'modern';
+        
+        // If in follow mode, use the theme name from the root provider slot
+        const themeName = this.activeThemes[this.followPrimary ? this.rootProviderId : id] || 'modern';
         return provider ? provider.getTheme(themeName) : null;
     }
 
     getActiveThemeName(providerId: string) {
-        return this.activeThemes[providerId] || 'modern';
+        const id = this.followPrimary ? this.rootProviderId : providerId;
+        return this.activeThemes[id] || 'modern';
     }
 
     private refreshActiveTheme(providerId: string) {
         const theme = this.getActiveTheme(providerId);
-        if (theme && theme.globalTokens) {
+        
+        // Only apply root variables if this is the designated root provider
+        if (providerId === this.rootProviderId && theme && theme.globalTokens) {
             this.applyRootTheme(theme.globalTokens);
         } else {
-            // Ensure components are notified even if there are no global root tokens
+            // Signal a theme change even for scoped providers so components can update
             this.dispatchEvent(new CustomEvent('theme-changed', { detail: { providerId } }));
         }
     }
@@ -103,7 +155,7 @@ export class ThemeOrchestrator extends EventTarget {
         const root = document.documentElement;
         
         Object.entries(tokens).forEach(([key, value]) => {
-            if (key.startsWith('--uiv-app-') || key.startsWith('--uiv-primary-') || key.startsWith('--uiv-bg-')) {
+            if (key.startsWith('--uiv-')) {
                 root.style.setProperty(key, value);
             }
         });

@@ -19,15 +19,23 @@ export const cyberGlobalTokens: ThemeTokens = {
     '--uiv-glow-intensity': '1',
     
     // App Dashboard Tokens
-    '--uiv-app-bg': '#050505',
-    '--uiv-app-sidebar-bg': '#0a0a0c',
-    '--uiv-app-header-bg': '#0f0f12',
-    '--uiv-app-card-bg': '#141418',
-    '--uiv-app-text-color': '#ffffff',
-    '--uiv-app-text-muted': '#888899',
-    '--uiv-app-accent-color': '#ff007c',
-    '--uiv-app-border-color': 'rgba(0, 255, 204, 0.2)',
-    '--uiv-app-glass-blur': 'none',
+    '--uiv-app-bg': '#021a11',
+    '--uiv-app-sidebar-bg': '#022c22',
+    '--uiv-app-header-bg': '#021a11',
+    '--uiv-app-card-bg': 'rgba(6, 78, 59, 0.6)',
+    '--uiv-app-input-bg': 'rgba(2, 44, 34, 0.4)',
+    '--uiv-app-accent-color': '#10b981',
+    '--uiv-app-text-color': '#ecfdf5',
+    '--uiv-app-text-muted': '#6ee7b7',
+    '--uiv-app-border-color': 'rgba(16, 185, 129, 0.25)',
+    '--uiv-app-hover-shadow': '0 40px 80px -20px rgba(0,0,0,0.5), 0 0 20px #10b981',
+    
+    // Extended Reference Tokens
+    '--uiv-color-primary': '#ff007c',
+    '--uiv-color-success': '#00ffcc',
+    '--uiv-color-warning': '#f59e0b',
+    '--uiv-color-danger': '#ef4444',
+    '--uiv-color-info': '#bc00ff',
 };
 
 export const cyberComponentTokens: Record<string, ThemeTokens> = {

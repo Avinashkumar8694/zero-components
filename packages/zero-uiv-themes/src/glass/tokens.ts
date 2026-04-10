@@ -2,32 +2,32 @@ import { ThemeTokens } from '../base-theme';
 
 export const glassGlobalTokens: ThemeTokens = {
     // Core Palette
-    '--uiv-primary-color': 'rgba(255, 255, 255, 0.45)',
+    '--uiv-primary-color': '#e0f2fe',
     '--uiv-secondary-color': '#0ea5e9',
-    '--uiv-accent-color': '#f43f5e',
-    '--uiv-bg-color': '#0f172a',
-    '--uiv-surface-color': 'rgba(15, 23, 42, 0.6)',
+    '--uiv-accent-color': '#38bdf8',
+    '--uiv-bg-color': '#02041a',
+    '--uiv-surface-color': 'rgba(2, 4, 32, 0.6)',
     '--uiv-text-color': '#ffffff',
     '--uiv-text-muted': 'rgba(255, 255, 255, 0.5)',
     '--uiv-border-color': 'rgba(255, 255, 255, 0.15)',
     
     // Advanced Semantic Tokens
-    '--uiv-bg-main': '#0f172a',
-    '--uiv-bg-surface': 'rgba(255, 255, 255, 0.05)',
+    '--uiv-bg-main': '#02041a',
+    '--uiv-bg-surface': 'rgba(255, 255, 255, 0.02)',
     '--uiv-bg-overlay': 'rgba(255, 255, 255, 0.1)',
-    '--uiv-glass-blur': '25px',
+    '--uiv-glass-blur': 'blur(40px) saturate(200%)',
     '--uiv-shimmer-intensity': '0.5',
     
     // App Dashboard Tokens
-    '--uiv-app-bg': 'radial-gradient(circle at 0% 0%, #1e293b 0%, #0f172a 100%)',
-    '--uiv-app-sidebar-bg': 'rgba(15, 23, 42, 0.7)',
-    '--uiv-app-header-bg': 'rgba(15, 23, 42, 0.8)',
-    '--uiv-app-card-bg': 'rgba(255, 255, 255, 0.03)',
+    '--uiv-app-bg': '#02041a',
+    '--uiv-app-sidebar-bg': 'rgba(2, 4, 32, 0.4)',
+    '--uiv-app-header-bg': 'rgba(2, 4, 32, 0.4)',
+    '--uiv-app-card-bg': 'rgba(255, 255, 255, 0.01)',
     '--uiv-app-text-color': '#ffffff',
     '--uiv-app-text-muted': 'rgba(255, 255, 255, 0.6)',
-    '--uiv-app-accent-color': '#0ea5e9',
-    '--uiv-app-border-color': 'rgba(255, 255, 255, 0.1)',
-    '--uiv-app-glass-blur': 'blur(30px)',
+    '--uiv-app-accent-color': '#38bdf8',
+    '--uiv-app-border-color': 'rgba(255, 255, 255, 0.08)',
+    '--uiv-app-hover-shadow': '0 40px 80px -20px rgba(0,0,0,0.5), 0 0 20px #38bdf8',
 };
 
 export const glassComponentTokens: Record<string, ThemeTokens> = {

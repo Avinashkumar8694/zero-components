@@ -10,7 +10,8 @@
     "zero-uiv-input-glow",
     "zero-uiv-table-blocky",
     "zero-uiv-table",
-    "zero-uiv-card"
+    "zero-uiv-card",
+    "code-editor"
   ],
   "activeProvider": "zero-uiv-themes",
   "activeTheme": "cyber"

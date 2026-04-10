@@ -55,6 +55,12 @@ window.addEventListener('zero-element:component-load', (event: any) => {
 // Move bridge import down to ensure listeners are attached first
 import './bridge.ts';
 
+// Listen for Global Theme Changes for instant sync
+window.addEventListener('theme-changed', (event: any) => {
+    console.log('[Dashboard] Global theme change detected, syncing styles...');
+    updateDashboardTheme();
+});
+
 const initializeStyles = () => {
     window.addEventListener('register-plugins', (event: CustomEvent) => {
         console.log('Module Loaded:', event);
@@ -426,9 +432,7 @@ const updateComponentList = () => {
                 if (confirm(`Are you sure you want to remove the plugin "${displayName}"?`)) {
                     const pluginId = key.substring(0, key.lastIndexOf('-')) || key;
                     (window as any).uninstallPlugin(pluginId);
-                    
-                    // Also remove from memory to ensure it disappears immediately
-                    delete globalThis.zeroComponents[key];
+                    // UI refresh is handled by the Bridge's custom event below or immediate call
                     updateComponentList();
                 }
             });
@@ -537,9 +541,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     showExplore(); // Ensure explorer is shown initially
 });
 
-// window.addEventListener('plugins-updated', () => {
-//     window.location.reload(); 
-// });
+window.addEventListener('plugins-updated', () => {
+    updateComponentList();
+    updateDashboardTheme();
+});
 
 // Theme Status Sync & Global Variable Injection
 const updateDashboardTheme = () => {
@@ -567,20 +572,107 @@ const updateDashboardTheme = () => {
     }
     
     styleTag.innerHTML = `
+        :root {
+            --bg-color: var(--uiv-app-bg, #0f172a);
+            --sidebar-bg: var(--uiv-app-sidebar-bg, rgba(30, 41, 59, 0.7));
+            --header-bg: var(--uiv-app-header-bg, rgba(15, 23, 42, 0.8));
+            --card-bg: var(--uiv-app-card-bg, rgba(30, 41, 59, 0.5));
+            --text-color: var(--uiv-app-text-color, #f1f5f9);
+            --accent-color: var(--uiv-app-accent-color, #38bdf8);
+            --border-color: var(--uiv-app-border-color, rgba(51, 65, 85, 0.5));
+            --glass-blur: var(--uiv-app-glass-blur, blur(12px));
+        }
+
+        .component-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: var(--glass-blur);
+            box-shadow: var(--uiv-shadow-depth, 0 8px 32px 0 rgba(0,0,0,0.3));
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .component-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 20px;
+            padding: 2px;
+            background: linear-gradient(45deg, transparent, var(--accent-color), transparent, var(--accent-color), transparent);
+            background-size: 400% 400%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.15; /* Reduced default to avoid clash with light themes */
+            transition: opacity 0.5s ease;
+            animation: borderRotate 4s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes borderRotate {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .component-card:hover {
+            transform: translateY(-12px) scale(1.01);
+            box-shadow: var(--uiv-app-hover-shadow, 0 40px 80px -20px rgba(0,0,0,0.5), 0 0 20px var(--accent-color));
+        }
+
+        .component-card:hover::before {
+            opacity: 1;
+        }
+
+        .component-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: 0.5s;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .component-card:hover::after {
+            left: 100%;
+        }
+
         .preview-pane {
-            background-color: var(--uiv-app-bg, var(--uiv-bg-color, #0f172a));
-            background-image: radial-gradient(var(--uiv-app-border-color, rgba(255,255,255,0.1)) 1.5px, transparent 1.5px);
-            background-size: 30px 30px;
-            border-color: var(--uiv-app-border-color, var(--uiv-primary-color, rgba(51, 65, 85, 0.5)));
-            backdrop-filter: var(--uiv-app-glass-blur, none);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3), inset 0 0 60px rgba(0,0,0,0.1);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            background-color: var(--uiv-app-bg, #0f172a);
+            position: relative;
+            border: 2px solid var(--border-color);
+            border-radius: 28px;
+            backdrop-filter: var(--glass-blur);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.6);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
         }
+
+        .preview-pane::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(var(--uiv-border-color) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
         
-        /* Ensure component labels are visible */
         .preview-pane span, .preview-pane label {
-            color: var(--uiv-app-text-color, var(--uiv-text-color, #fff));
+            color: var(--uiv-text-primary);
+            text-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            font-weight: 500;
+        }
+
+        .preview-pane .setting-label {
+            color: var(--uiv-text-secondary);
+            font-weight: 500;
+            transition: color 0.4s ease;
         }
     `;
 };

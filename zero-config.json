@@ -11,7 +11,10 @@
     "zero-uiv-table-blocky",
     "zero-uiv-table",
     "zero-uiv-card",
-    "code-editor"
+    "code-editor",
+    "base-plugin",
+    "zero-uiv-panel",
+    "zero-uiv-section"
   ],
   "activeProvider": "zero-uiv-themes",
   "activeTheme": "cyber"

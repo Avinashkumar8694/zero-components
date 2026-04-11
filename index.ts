@@ -18,6 +18,11 @@ declare global {
 globalThis.zeroComponents = {} as Record<string, any>;
 let activeComponentName: string | null = null;
 
+// Plugin Builder State
+let currentCompositionProperties: any[] = [];
+let currentCompositionEvents: any[] = [];
+let playgroundInstances: { el: HTMLElement, x: number, y: number, name: string }[] = [];
+
 // 1. Move Listeners to top level so they catch early registration events
 window.addEventListener('element-connected', (event: CustomEvent) => {
     const element = event.detail.element;
@@ -72,8 +77,16 @@ const initializeStyles = () => {
             color: var(--uiv-color-danger, #ef4444) !important;
             transform: scale(1.1);
         }
-        .component-card:hover .remove-plugin {
-            opacity: 1;
+        .playground-item-wrapper {
+            cursor: grab;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .playground-item-wrapper:active {
+            cursor: grabbing;
+        }
+        .playground-item-wrapper[dragging] {
+            opacity: 0.5;
+            transform: scale(0.98);
         }
     `;
     document.head?.appendChild(styleElement);
@@ -378,14 +391,24 @@ const updateComponentList = () => {
             
             const displayName = config?.componentMetadata?.name || key.substring(0, key.lastIndexOf('-') || key.length);
             const displaySelector = key;
+            const isVirtual = config?.componentMetadata?.isVirtual;
+            const badge = isVirtual ? '<span style="background: var(--uiv-status-info); color: white; padding: 2px 6px; border-radius: 4px; font-size: 10px; margin-left: 8px; vertical-align: middle;">🪄 Builder</span>' : '';
             
             item.innerHTML = `
-                <div style="display: flex; flex-direction: column; overflow: hidden;">
-                    <span style="font-weight: 600; font-size: 0.9rem;">${displayName}</span>
+                <div style="display: flex; flex-direction: column; overflow: hidden; width: 100%;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                        <span style="font-weight: 600; font-size: 0.9rem;">${displayName}</span>
+                        ${badge}
+                    </div>
                     <span style="opacity: 0.7; font-size: 0.7rem; font-family: monospace;">${displaySelector}</span>
                 </div>
             `;
             item.href = '#';
+            item.draggable = true;
+            item.addEventListener('dragstart', (e: DragEvent) => {
+                e.dataTransfer!.setData('componentName', key);
+                e.dataTransfer!.effectAllowed = 'copy';
+            });
             item.onclick = () => {
                 activeComponentName = key;
                 displayComponent(globalThis.zeroComponents[key][0]);
@@ -408,12 +431,15 @@ const updateComponentList = () => {
             
             const displayName = config?.componentMetadata?.name || key.substring(0, key.lastIndexOf('-') || key.length);
             const displaySelector = key;
+            const isVirtual = config?.componentMetadata?.isVirtual;
+            const badge = isVirtual ? '<div style="position: absolute; top: 0.75rem; left: 0.75rem; background: var(--uiv-status-info); color: white; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; z-index: 10;">🪄 BUILDER</div>' : '';
 
             const card = document.createElement('div');
             card.className = 'component-card';
             card.style.position = 'relative';
             
             card.innerHTML = `
+                ${badge}
                 <div class="remove-plugin" title="Remove Plugin" style="position: absolute; top: 0.75rem; right: 0.75rem; color: var(--uiv-app-text-muted, #64748b); cursor: pointer; padding: 0.25rem; transition: color 0.2s; z-index: 10;">
                     <i class="fas fa-trash-alt"></i>
                 </div>
@@ -421,7 +447,7 @@ const updateComponentList = () => {
                     <div style="font-size: 2rem; color: var(--accent-color); margin-bottom: 1rem;"><i class="fas fa-puzzle-piece"></i></div>
                     <h3 style="margin: 0; font-size: 1.1rem;">${displayName}</h3>
                     <div style="color: var(--text-muted); font-size: 0.75rem; font-family: monospace; margin-top: 0.25rem;">${displaySelector}</div>
-                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.75rem;">${config?.componentMetadata?.title || 'Dynamic Lit component with active theme support.'}</p>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.75rem;">${config?.componentMetadata?.title || config?.componentMetadata?.description || 'Dynamic Lit component built with Zero Builder.'}</p>
                 </div>
             `;
 
@@ -446,6 +472,17 @@ const updateComponentList = () => {
                 updateNavForComponent(key);
             });
 
+            // Make card draggable for Playground
+            card.draggable = true;
+            card.addEventListener('dragstart', (e) => {
+                e.dataTransfer!.setData('componentName', key);
+                e.dataTransfer!.effectAllowed = 'copy';
+                card.style.opacity = '0.5';
+            });
+            card.addEventListener('dragend', () => {
+                card.style.opacity = '1';
+            });
+
             grid.appendChild(card);
         });
     }
@@ -459,8 +496,15 @@ const displayComponent = (component: HTMLElement) => {
     }
 };
 
-const updateNavForComponent = (componentName: string) => {
+const updateNavForComponent = (componentName: string, instanceId: string | null = null) => {
     const sidenavelist = document.getElementById('sidenav-list');
+    const componentNav = document.getElementById('componentNav');
+    const globalNav = document.getElementById('globalNav');
+    
+    // Show the property nav if we are in playground or preview
+    if (componentNav) componentNav.style.display = 'flex';
+    if (globalNav) globalNav.style.display = 'none';
+
     // Prioritize window.zero.components populated by register-plugins
     const config = (window as any).zero?.components?.[componentName] || 
                    (window as any).zeroLibrary?.[componentName] || 
@@ -469,15 +513,24 @@ const updateNavForComponent = (componentName: string) => {
     if (sidenavelist && config) {
         sidenavelist.innerHTML = '';
         const inputs = config.inputs || {};
-        const instances = globalThis.zeroComponents[componentName];
         
-        if (!instances || instances.length === 0) {
+        // Find instance
+        let customElement: any = null;
+        if (instanceId) {
+            const inst = playgroundInstances.find(i => (i as any).id === instanceId);
+            if (inst) customElement = inst.el;
+        } else {
+            const instances = globalThis.zeroComponents[componentName];
+            if (instances && instances.length > 0) customElement = instances[0];
+        }
+
+        if (!customElement) {
             sidenavelist.innerHTML = '<div style="color: var(--text-muted)">Waiting for component instance...</div>';
             return;
         }
 
         Object.entries(inputs).forEach(([key, inputConfig]) => {
-            const inputElement = createInputElement(key, inputConfig, instances[0]);
+            const inputElement = createInputElement(key, inputConfig, customElement);
             sidenavelist.appendChild(inputElement);
         });
     } else if (sidenavelist) {
@@ -505,11 +558,15 @@ const showExplore = () => {
 const showPreview = (name: string) => {
     const exploreView = document.getElementById('exploreView');
     const previewView = document.getElementById('previewView');
+    const playgroundView = document.getElementById('playgroundView');
+    const codeView = document.getElementById('codeView');
     const pageTitle = document.getElementById('pageTitle');
     const globalNav = document.getElementById('globalNav');
     const componentNav = document.getElementById('componentNav');
 
     if (exploreView) exploreView.style.display = 'none';
+    if (playgroundView) playgroundView.style.display = 'none';
+    if (codeView) codeView.style.display = 'none';
     if (previewView) previewView.style.display = 'block';
     
     // Format name and version for title
@@ -530,15 +587,626 @@ const showPreview = (name: string) => {
     if (componentNav) componentNav.style.display = 'flex';
 };
 
+const showPlayground = () => {
+    const views = ['exploreView', 'previewView', 'playgroundView', 'codeView'];
+    views.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = (id === 'playgroundView') ? 'block' : 'none';
+    });
+    
+    const pageTitle = document.getElementById('pageTitle');
+    if (pageTitle) pageTitle.textContent = 'Component Playground';
+    
+    // Reset nav
+    const globalNav = document.getElementById('globalNav');
+    const componentNav = document.getElementById('componentNav');
+    if (globalNav) globalNav.style.display = 'block';
+    if (componentNav) componentNav.style.display = 'none';
+    
+    updateActiveNavItem('Playground');
+};
+
+const showCode = () => {
+    const views = ['exploreView', 'previewView', 'playgroundView', 'codeView'];
+    views.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = (id === 'codeView') ? 'flex' : 'none';
+    });
+    
+    const pageTitle = document.getElementById('pageTitle');
+    if (pageTitle) pageTitle.textContent = 'Global Code Editor';
+    
+    // Reset nav
+    const globalNav = document.getElementById('globalNav');
+    const componentNav = document.getElementById('componentNav');
+    if (globalNav) globalNav.style.display = 'block';
+    if (componentNav) componentNav.style.display = 'none';
+    
+    updateActiveNavItem('Code');
+};
+
+const updateActiveNavItem = (label: string) => {
+    const items = document.querySelectorAll('.nav-item');
+    items.forEach(item => {
+        if (item.textContent?.includes(label)) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+};
+
 (window as any).showExplore = showExplore;
 (window as any).showPreview = showPreview;
+(window as any).showPlayground = showPlayground;
+(window as any).showCode = showCode;
+
+// Playground Logic
+const playgroundCanvas = document.getElementById('playgroundCanvas');
+if (playgroundCanvas) {
+    playgroundCanvas.style.display = 'flex';
+    playgroundCanvas.style.flexDirection = 'column';
+    playgroundCanvas.style.gap = '20px';
+    playgroundCanvas.style.padding = '20px';
+    playgroundCanvas.style.overflowY = 'auto';
+    
+    playgroundCanvas.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        
+        // Remove old hover effects
+        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        
+        const path = e.composedPath();
+        const column = path.find(el => el instanceof HTMLElement && el.classList.contains('column')) as HTMLElement;
+        const section = path.find(el => el instanceof HTMLElement && el.tagName.toLowerCase() === 'zero-uiv-section') as HTMLElement;
+        
+        if (section) {
+            section.classList.add('drag-over');
+        } else if (column) {
+            column.classList.add('drag-over');
+        }
+    });
+
+    playgroundCanvas.addEventListener('drop', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+
+        const componentName = e.dataTransfer!.getData('componentName');
+        const movingId = e.dataTransfer!.getData('movingInstanceId');
+        
+        const path = e.composedPath();
+        const column = path.find(el => el instanceof HTMLElement && el.classList.contains('column')) as HTMLElement;
+        const section = path.find(el => el instanceof HTMLElement && el.tagName.toLowerCase() === 'zero-uiv-section') as HTMLElement;
+        const isCanvas = path.some(el => el instanceof HTMLElement && (el.id === 'playgroundCanvas' || el.classList.contains('playground-item-wrapper')));
+        
+        // Validation Logic
+        const isPanelComp = componentName?.startsWith('zero-uiv-panel');
+        const isSectionComp = componentName?.startsWith('zero-uiv-section');
+        const isChildComp = componentName && !isPanelComp && !isSectionComp;
+
+        if (componentName) {
+            // New Component Drop
+            if (isPanelComp && !isCanvas) {
+                alert("Panels can only be dropped at the top level (Canvas).");
+                return;
+            }
+            if (isSectionComp && !column) {
+                alert("Sections can only be dropped inside a Panel Column.");
+                return;
+            }
+            if (isChildComp && !section) {
+                alert("Components can only be dropped inside a Section.");
+                return;
+            }
+
+            const dropTarget = section || column || playgroundCanvas;
+            const slotName = column && !section ? `col-${column.dataset.col}` : '';
+            addPlaygroundComponent(componentName, 0, 0, dropTarget as HTMLElement, slotName);
+        } else if (movingId) {
+            const inst = playgroundInstances.find(i => (i as any).id === movingId);
+            if (inst && isCanvas) {
+                const wrapper = inst.el.parentElement;
+                if (wrapper) {
+                    // Vertical Reordering in Flex Stack
+                    const children = Array.from(playgroundCanvas.children).filter(child => child !== wrapper);
+                    const insertBefore = children.find(child => {
+                        const crect = child.getBoundingClientRect();
+                        return e.clientY < (crect.top + crect.height / 2);
+                    });
+                    
+                    if (insertBefore) {
+                        playgroundCanvas.insertBefore(wrapper, insertBefore);
+                    } else {
+                        playgroundCanvas.appendChild(wrapper);
+                    }
+                }
+            }
+        }
+    });
+}
+
+const addPlaygroundComponent = (name: string, x: number, y: number, parent: HTMLElement | null = null, slot: string = '') => {
+    const canvas = parent || document.getElementById('playgroundCanvas');
+    if (!canvas) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'playground-item-wrapper';
+    wrapper.style.position = 'static';
+    wrapper.style.width = '100%';
+    wrapper.style.boxSizing = 'border-box';
+    if (slot) wrapper.setAttribute('slot', slot);
+    wrapper.style.margin = '10px 0';
+    wrapper.style.padding = '20px';
+    wrapper.style.border = '1px solid var(--border-color)';
+    wrapper.style.borderRadius = '12px';
+    wrapper.style.background = 'var(--card-bg)';
+    wrapper.style.cursor = 'move';
+    wrapper.draggable = true;
+
+    // Add remove button
+    const removeBtn = document.createElement('div');
+    removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    removeBtn.style.position = 'absolute';
+    removeBtn.style.top = '-10px';
+    removeBtn.style.right = '-10px';
+    removeBtn.style.background = 'var(--uiv-color-danger, #ef4444)';
+    removeBtn.style.color = 'white';
+    removeBtn.style.width = '24px';
+    removeBtn.style.height = '24px';
+    removeBtn.style.borderRadius = '50%';
+    removeBtn.style.display = 'flex';
+    removeBtn.style.alignItems = 'center';
+    removeBtn.style.justifyContent = 'center';
+    removeBtn.style.cursor = 'pointer';
+    removeBtn.onclick = () => {
+        if (globalScript?.onDestroy) globalScript.onDestroy(el);
+        wrapper.remove();
+    };
+    wrapper.appendChild(removeBtn);
+
+    const baseTagName = name.replace(/-\d+\.\d+\.\d+$/, '');
+    const el = document.createElement(baseTagName);
+    // Apply initial metadata values if available
+    const config = (window as any).zeroLibrary?.[name];
+    if (config?.inputs) {
+        Object.entries(config.inputs).forEach(([key, input]: [string, any]) => {
+            if (input.initialValue !== undefined) (el as any)[key] = input.initialValue;
+        });
+    }
+
+    wrapper.appendChild(el);
+    canvas.appendChild(wrapper);
+    
+    const instanceId = 'inst-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+    const instance = { el, x, y, name, id: instanceId };
+    playgroundInstances.push(instance as any);
+
+    // Click to select/edit properties
+    wrapper.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.playground-item-wrapper').forEach(w => (w as HTMLElement).style.borderColor = 'var(--border-color)');
+        wrapper.style.borderColor = 'var(--uiv-status-info, #38bdf8)';
+        wrapper.style.boxShadow = '0 0 10px rgba(56, 189, 248, 0.2)';
+        updateNavForComponent(name, instanceId);
+    });
+
+    // Lifecycle: onInit
+    if (globalScript?.onInit) globalScript.onInit(el);
+
+    // Simple drag for the wrapper itself
+    wrapper.addEventListener('dragstart', (e: DragEvent) => {
+        e.stopPropagation();
+        const rect = wrapper.getBoundingClientRect();
+        (window as any).dragOffset = {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
+        e.dataTransfer!.setData('movingInstanceId', instanceId);
+        e.dataTransfer!.effectAllowed = 'move';
+        wrapper.setAttribute('dragging', '');
+    });
+
+    wrapper.addEventListener('dragend', () => {
+        wrapper.removeAttribute('dragging');
+    });
+
+    // Handle output bindings if any
+    if (config?.outputs) {
+        Object.keys(config.outputs).forEach(event => {
+            el.addEventListener(event, (e: any) => {
+                const handlerName = `on${name.split('-').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('')}${event.charAt(0).toUpperCase() + event.slice(1)}`;
+                if (globalScript?.[handlerName]) {
+                    globalScript[handlerName](e.detail);
+                }
+                // Also trigger generic onChange if script supports it
+                if (globalScript?.onChange) globalScript.onChange(el, event, e.detail);
+                
+                logEvent(`Playground Component ${name}`, event, e.detail);
+            });
+        });
+    }
+};
+
+// Global Script Management
+let globalScript: any = null;
+
+(window as any).applyGlobalCode = () => {
+    const editor = document.getElementById('globalCodeEditor') as any;
+    const code = editor.code;
+    try {
+        // Wrap user code to support exports or simple object definition
+        const scriptFunc = new Function('lit', 'ZeroAnnotation', `
+            const methods = {};
+            ${code}
+            return methods;
+        `);
+        globalScript = scriptFunc((window as any).lit, (window as any)['zero-annotation']);
+        console.log('[ScriptManager] Global methods initialized:', globalScript);
+        
+        // Notify user
+        const btn = document.querySelector('#codeView .btn-primary');
+        if (btn) {
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Applied!';
+            setTimeout(() => btn.innerHTML = originalText, 2000);
+        }
+    } catch (e: any) {
+        console.error('[ScriptManager] Compilation error:', e);
+    }
+};
+
+// --------------------------------------------------------------------------
+// Plugin Builder Implementation
+// --------------------------------------------------------------------------
+
+(window as any).showBuilderSettings = () => {
+    const panel = document.getElementById('builderSettingsPanel');
+    if (panel) {
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+    }
+};
+
+(window as any).showPropertyDefModal = () => {
+    const panel = document.getElementById('propertyDefPanel');
+    if (panel) {
+        panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        renderPropertyList();
+    }
+};
+
+(window as any).addPropertyFromUI = () => {
+    const nameInput = document.getElementById('newPropName') as HTMLInputElement;
+    const typeSelect = document.getElementById('newPropType') as HTMLSelectElement;
+    
+    if (!nameInput.value) return;
+    
+    currentCompositionProperties.push({
+        name: nameInput.value,
+        label: nameInput.value.charAt(0).toUpperCase() + nameInput.value.slice(1),
+        type: typeSelect.value
+    });
+    
+    nameInput.value = '';
+    renderPropertyList();
+};
+
+const renderPropertyList = () => {
+    const list = document.getElementById('propertyList');
+    if (!list) return;
+    
+    if (currentCompositionProperties.length === 0) {
+        list.innerHTML = '<div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 20px;">No custom properties defined yet.</div>';
+        return;
+    }
+    
+    list.innerHTML = currentCompositionProperties.map((prop, index) => `
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-color); padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border-color);">
+            <div>
+                <span style="font-size: 0.8rem; font-weight: 500;">${prop.name}</span>
+                <span style="font-size: 0.7rem; color: var(--text-muted); margin-left: 8px;">(${prop.type})</span>
+            </div>
+            <button onclick="removeProperty(${index})" style="background: none; border: none; color: var(--btn-danger); cursor: pointer; font-size: 0.8rem;"><i class="fas fa-trash"></i></button>
+        </div>
+    `).join('');
+};
+
+(window as any).removeProperty = (index: number) => {
+    currentCompositionProperties.splice(index, 1);
+    renderPropertyList();
+};
+
+(window as any).saveComposition = () => {
+    const nameInput = document.getElementById('builderPluginName') as HTMLInputElement;
+    const selectorInput = document.getElementById('builderPluginSelector') as HTMLInputElement;
+    const descInput = document.getElementById('builderPluginDesc') as HTMLTextAreaElement;
+    
+    if (!selectorInput.value) {
+        alert("Please enter a selector for your plugin.");
+        return;
+    }
+
+    const canvas = document.getElementById('playgroundCanvas');
+    const editor = document.getElementById('globalCodeEditor') as any;
+
+    const buildTree = (container: HTMLElement): any[] => {
+        const children: any[] = [];
+        const items = Array.from(container.children).filter(el => el.classList.contains('playground-item-wrapper'));
+        
+        items.forEach(wrapper => {
+            const el = wrapper.querySelector(':not(.fa-times):not(div)') as HTMLElement;
+            if (!el) return;
+            
+            const name = el.tagName.toLowerCase();
+            const inst = playgroundInstances.find(i => i.el === el);
+            
+            const node: any = {
+                name: name,
+                ref: el.id || `ref_${name.replace(/-/g, '_')}_${Math.floor(Math.random() * 1000)}`,
+                slot: wrapper.getAttribute('slot') || '',
+                config: getElementConfig(el)
+            };
+
+            // If it's a container, recurse
+            if (name === 'zero-uiv-panel' || name === 'zero-uiv-section') {
+                const contentArea = el.shadowRoot ? el.shadowRoot.querySelector('slot') || el : el;
+                // Since slots are used, children are physically in the light DOM of the element
+                node.children = buildTree(el);
+            }
+            
+            children.push(node);
+        });
+        return children;
+    };
+
+    const composition = {
+        metadata: {
+            name: nameInput.value || "Untitled Plugin",
+            selector: selectorInput.value,
+            description: descInput.value,
+            version: "1.0.0"
+        },
+        properties: [...currentCompositionProperties],
+        events: [...currentCompositionEvents],
+        children: buildTree(canvas!),
+        script: editor.code
+    };
+
+    console.log("[PluginBuilder] BUILD_INIT:", JSON.stringify(composition));
+    registerVirtualPlugin(composition);
+    
+    alert(`Plugin "${composition.metadata.name}" build initiated!`);
+    (window as any).showExplore();
+};
+
+(window as any).generateFullPluginSource = (comp: any) => {
+    const className = comp.metadata.name.replace(/\s+/g, '') + 'Plugin';
+    const propertiesTS = comp.properties.map((p: any) => `
+    @property({ type: ${p.type.charAt(0).toUpperCase() + p.type.slice(1)} })
+    ${p.name}: ${p.type} = ${p.type === 'string' ? "''" : (p.type === 'number' ? "0" : "false")};`).join('\n');
+
+    const renderChildren = (children: any[]): string => {
+        return children.map((child: any) => {
+            const attributes = Object.entries(child.config)
+                .map(([key, val]) => {
+                    if (typeof val === 'string' && val.startsWith('{{') && val.endsWith('}}')) {
+                        const propName = val.substring(2, val.length - 2).trim();
+                        return ` .${key}="\${this.${propName}}"`;
+                    }
+                    return ` .${key}="\${${JSON.stringify(val)}}"`;
+                })
+                .join('');
+
+            const innerHTML = child.children ? renderChildren(child.children) : '';
+            const slotAttr = child.slot ? ` slot="${child.slot}"` : '';
+            
+            return `
+            <${child.name}${attributes}${slotAttr} id="${child.ref}">
+                ${innerHTML}
+            </${child.name}>`;
+        }).join('');
+    };
+
+    const childrenHTML = renderChildren(comp.children);
+
+    return `
+import { LitElement, html, css } from 'lit';
+import { property } from 'lit/decorators.js';
+import { RendererComponent, applyGlobalStyles } from 'zero-annotation';
+
+@RendererComponent({
+  elementSelector: '${comp.metadata.selector}',
+  title: '${comp.metadata.name}',
+  description: '${comp.metadata.description}',
+  version: '${comp.metadata.version}',
+  name: '${comp.metadata.name}'
+})
+@applyGlobalStyles()
+export class ${className} extends LitElement {
+    static styles = css\`
+        :host { display: block; position: relative; min-height: 400px; width: 100%; overflow: hidden; }
+        .composition-container { position: relative; width: 100%; height: 100%; }
+    \`;
+
+    ${propertiesTS}
+
+    render() {
+        return html\`
+            <div class="composition-container">
+                ${childrenHTML}
+            </div>
+        \`;
+    }
+
+    ${comp.script}
+}
+    `.trim();
+};
+
+const getElementConfig = (el: HTMLElement) => {
+    const config: any = {};
+    const tagName = el.tagName.toLowerCase();
+    const litConfig = (window as any).zeroLibrary?.[tagName];
+    if (litConfig?.inputs) {
+        Object.keys(litConfig.inputs).forEach(key => {
+            config[key] = (el as any)[key];
+        });
+    }
+    return config;
+};
+
+const registerVirtualPlugin = (comp: any) => {
+    const selector = comp.metadata.selector;
+    const version = comp.metadata.version;
+    const fullKey = `${selector}-${version}`;
+
+    // 1. Add to Registry
+    (window as any).componentRegistry = (window as any).componentRegistry || {};
+    (window as any).componentRegistry[fullKey] = {
+        componentMetadata: {
+            name: comp.metadata.name,
+            title: comp.metadata.description,
+            selector: selector,
+            version: version,
+            isVirtual: true // Mark as virtual for UI badging
+        },
+        inputs: comp.properties.reduce((acc: any, prop: any) => {
+            acc[prop.name] = { 
+                attributeType: "PROPERTY", 
+                displayLabel: prop.label, 
+                uiComponentType: "TEXT_INPUT" 
+            };
+            return acc;
+        }, {}),
+        outputs: comp.events.reduce((acc: any, ev: any) => {
+            acc[ev.name] = { displayLabel: ev.label };
+            return acc;
+        }, {})
+    };
+
+    // 2. Define the Virtual Class
+    if (!customElements.get(selector)) {
+        class VirtualPlugin extends (window as any).lit.LitElement {
+            static properties = comp.properties.reduce((acc: any, prop: any) => {
+                acc[prop.name] = { type: prop.type === 'number' ? Number : (prop.type === 'boolean' ? Boolean : String) };
+                return acc;
+            }, {});
+
+            render() {
+                const renderTree = (nodes: any[]): any => {
+                    return nodes.map((node: any) => (window as any).lit.html`
+                        <\${(window as any).lit.unsafeStatic(node.name)} .config=\${node.config} slot="\${node.slot}" id="\${node.ref}">
+                            ${node.children ? renderTree(node.children) : ''}
+                        </\${(window as any).lit.unsafeStatic(node.name)}>
+                    `);
+                };
+
+                return (window as any).lit.html`
+                    <div style="position: relative; width: 100%; height: 100%; min-height: 400px; background: var(--uiv-app-bg); border-radius: 20px; border: 1px solid var(--uiv-app-border-color); overflow: hidden;">
+                        ${renderTree(comp.children)}
+                    </div>
+                `;
+            }
+            
+            private _getRefs(): any {
+                const refs: any = {};
+                this.shadowRoot?.querySelectorAll('[id]').forEach((el: any) => {
+                    refs[el.id] = el;
+                });
+                return refs;
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                const scriptFunc = new Function('el', 'methods', comp.script);
+                const methods: any = {};
+                scriptFunc(this, methods);
+                (this as any)._methods = methods;
+                if (methods.connectedCallback) methods.connectedCallback.call(this, this._getRefs());
+            }
+
+            firstUpdated() {
+                const methods = (this as any)._methods;
+                if (methods?.firstUpdated) methods.firstUpdated.call(this, this._getRefs());
+                if (methods?.onInit) methods.onInit.call(this, this._getRefs());
+            }
+
+            updated(changedProperties: any) {
+                super.updated(changedProperties);
+                const methods = (this as any)._methods;
+                if (methods?.updated) methods.updated.call(this, changedProperties, this._getRefs());
+            }
+        }
+        customElements.define(selector, VirtualPlugin as any);
+    }
+
+    // 3. Update Bridge state & Perspectives
+    (window as any).zeroLibrary = (window as any).zeroLibrary || {};
+    (window as any).zeroLibrary[fullKey] = (window as any).componentRegistry[fullKey];
+    globalThis.zeroComponents[fullKey] = [null]; 
+
+    // Auto-install so it appears in "Added Plugins"
+    if ((window as any).installPlugin) {
+        (window as any).installPlugin(selector);
+    }
+
+    updateComponentList();
+};
 
 // Initialization
 document.addEventListener('DOMContentLoaded', async () => {
     initializeStyles();
+    
+    // Manually register structural components
+    const structuralComponents = [
+        {
+            selector: 'zero-uiv-panel',
+            name: 'UI Panel',
+            description: 'Top-level UI container',
+            version: '1.0.0',
+            inputs: {
+                headerTitle: { attributeType: 'PROPERTY', displayLabel: 'Header Title', uiComponentType: 'TEXT_INPUT' },
+                accentColor: { attributeType: 'PROPERTY', displayLabel: 'Accent Color', uiComponentType: 'COLOR_PICKER' }
+            }
+        },
+        {
+            selector: 'zero-uiv-section',
+            name: 'UI Section',
+            description: 'Layout-aware grouping container',
+            version: '1.0.0',
+            inputs: {
+                sectionName: { attributeType: 'PROPERTY', displayLabel: 'Section Name', uiComponentType: 'TEXT_INPUT' },
+                layout: { 
+                    attributeType: 'PROPERTY', 
+                    displayLabel: 'Layout', 
+                    uiComponentType: 'DROPDOWN',
+                    optionItems: [
+                        { label: 'Stack', value: 'stack' },
+                        { label: 'Inline', value: 'inline' },
+                        { label: 'Grid', value: 'grid' }
+                    ]
+                }
+            }
+        }
+    ];
+
+    structuralComponents.forEach(comp => {
+        const fullKey = comp.selector + (comp.version ? `-${comp.version}` : '-1.0.0');
+        const metadata = { ...comp, version: comp.version || '1.0.0' };
+        
+        (window as any).componentRegistry = (window as any).componentRegistry || {};
+        (window as any).componentRegistry[fullKey] = {
+            componentMetadata: metadata,
+            inputs: comp.inputs
+        };
+        (window as any).zeroLibrary = (window as any).zeroLibrary || {};
+        (window as any).zeroLibrary[fullKey] = (window as any).componentRegistry[fullKey];
+        globalThis.zeroComponents[fullKey] = [null];
+        if ((window as any).installPlugin) (window as any).installPlugin(comp.selector);
+    });
+
     await loadComponents();
     updateComponentList();
-    showExplore(); // Ensure explorer is shown initially
+    showExplore(); 
 });
 
 window.addEventListener('plugins-updated', () => {

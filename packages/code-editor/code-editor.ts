@@ -258,24 +258,39 @@ export class CodeEditor extends LitElement {    static styles = css`
         placeholderText: 'Enter your code here...',
         fieldMappings: 'code',
     })
-    code = `function helloWorld() {
-    console.log("Hello, World!");
-    return "Welcome to the code editor!";
-}
+    code = `/**
+ * Zero Plugin Builder Logic
+ * Define standard Lit component lifecycle methods here.
+ * 
+ * Available Hooks:
+ * - connectedCallback(): Called when the composite plugin is added to DOM.
+ * - disconnectedCallback(): Called when removed.
+ * - firstUpdated(): Called after the first render.
+ * - updated(changedProps): Called after every property update.
+ * 
+ * Properties:
+ * - Access current composite properties via 'this.propertyName'.
+ * 
+ * Events:
+ * - Dispatch events via 'this.dispatchEvent(new CustomEvent(...))'.
+ */
 
-// This is a comment
-const message = "Monaco-like editor";
-let count = 0;
+methods.connectedCallback = function() {
+    console.log("Composite Plugin Connected!", this);
+    // Custom logic here
+};
 
-class CodeEditor {
-    constructor() {
-        this.initialized = true;
+methods.firstUpdated = function() {
+    console.log("UI is ready!");
+};
+
+methods.updated = function(changedProperties) {
+    if (changedProperties.has('someValue')) {
+        console.log('someValue changed:', this.someValue);
     }
-    
-    run() {
-        helloWorld();
-    }
-}`;    @property({ type: Array })
+};`;
+
+    @property({ type: Array })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,
         uiComponentType: UserInterfaceType.TEXTAREA,

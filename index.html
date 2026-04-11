@@ -289,6 +289,7 @@
             <nav class="nav-section">
                 <div class="nav-label">Global</div>
                 <a href="index.html" class="nav-item active"><i class="fas fa-th-large"></i> Explore</a>
+                <a href="#" class="nav-item" onclick="showPlayground()"><i class="fas fa-vial"></i> Playground</a>
                 <a href="marketplace.html" class="nav-item"><i class="fas fa-shopping-bag"></i> Marketplace</a>
                 <a href="settings.html" class="nav-item"><i class="fas fa-sliders-h"></i> Settings</a>
 
@@ -359,6 +360,97 @@
                     <div class="preview-pane" id="mainPreview" style="width: 100%; max-width: 1200px; height: 100%;">
                         <!-- Component rendered here -->
                     </div>
+                </div>
+            </div>
+
+            <div id="playgroundView" style="display: none; height: calc(100vh - 110px); position: relative; overflow: hidden; background-image: radial-gradient(var(--border-color) 1px, transparent 1px); background-size: 30px 30px; border-radius: 20px; border: 1px solid var(--border-color);">
+                <!-- Draggable components will be placed here -->
+                <div id="playgroundCanvas" style="width: 100%; height: 100%; position: relative;"></div>
+                
+                <!-- Plugin Builder Toolbar -->
+                <div style="position: absolute; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 100;">
+                    <button class="btn-primary" onclick="showBuilderSettings()" style="background: var(--uiv-color-primary, #6366f1); border-radius: 12px; height: 40px; width: 40px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Plugin Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button class="btn-primary" onclick="showPropertyDefModal()" style="background: var(--uiv-color-primary, #6366f1); border-radius: 12px; height: 40px; width: 40px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Define Properties">
+                        <i class="fas fa-list-alt"></i>
+                    </button>
+                    <button class="btn-primary" onclick="showCode()" style="background: var(--uiv-color-primary, #6366f1); border-radius: 12px; height: 40px; width: 40px; padding: 0; display: flex; align-items: center; justify-content: center;" title="Edit Logic">
+                        <i class="fas fa-code"></i>
+                    </button>
+                    <button class="btn-primary" onclick="saveComposition()" style="background: var(--uiv-status-success, #10b981); padding: 0 20px;">
+                        <i class="fas fa-save" style="margin-right: 8px;"></i> Save as Plugin
+                    </button>
+                </div>
+
+                <!-- Builder Settings Panel (Floating) -->
+                <div id="builderSettingsPanel" style="display: none; position: absolute; top: 70px; right: 20px; width: 320px; background: var(--header-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; backdrop-filter: var(--glass-blur); z-index: 101; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <h4 style="margin: 0 0 1rem 0;">Plugin Metadata</h4>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Plugin Name</label>
+                            <input type="text" id="builderPluginName" placeholder="My Awesome Plugin" style="width: 100%; height: 40px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); padding: 0 12px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Selector</label>
+                            <input type="text" id="builderPluginSelector" placeholder="my-awesome-plugin" style="width: 100%; height: 40px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); padding: 0 12px;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">Description</label>
+                            <textarea id="builderPluginDesc" placeholder="A composite plugin built with Playground." style="width: 100%; height: 80px; background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); padding: 8px 12px; resize: none;"></textarea>
+                        </div>
+                        <button class="btn-primary" onclick="document.getElementById('builderSettingsPanel').style.display='none'" style="width: 100%; margin-top: 8px;">Done</button>
+                    </div>
+                </div>
+
+                <!-- Property Definition Panel (Floating) -->
+                <div id="propertyDefPanel" style="display: none; position: absolute; top: 70px; right: 20px; width: 360px; background: var(--header-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; backdrop-filter: var(--glass-blur); z-index: 101; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h4 style="margin: 0;">Define Component API</h4>
+                        <button onclick="document.getElementById('propertyDefPanel').style.display='none'" style="background: none; border: none; color: var(--text-muted); cursor: pointer;"><i class="fas fa-times"></i></button>
+                    </div>
+
+                    <div id="propertyList" style="max-height: 200px; overflow-y: auto; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 8px;">
+                        <!-- Property items will appear here -->
+                        <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; padding: 20px;">No custom properties defined yet.</div>
+                    </div>
+
+                    <div style="background: var(--bg-color); border-radius: 12px; padding: 12px; border: 1px solid var(--border-color);">
+                        <h5 style="margin: 0 0 10px 0; font-size: 0.8rem;">Add New Property</h5>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            <input type="text" id="newPropName" placeholder="Name (e.g. title)" style="width: 100%; height: 36px; background: var(--header-bg); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); padding: 0 10px; font-size: 0.8rem;">
+                            <div style="display: flex; gap: 8px;">
+                                <select id="newPropType" style="flex: 1; height: 36px; background: var(--header-bg); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary); padding: 0 8px; font-size: 0.8rem;">
+                                    <option value="string">String</option>
+                                    <option value="number">Number</option>
+                                    <option value="boolean">Boolean</option>
+                                    <option value="object">Object</option>
+                                </select>
+                                <button class="btn-primary" onclick="addPropertyFromUI()" style="height: 36px; padding: 0 15px; font-size: 0.8rem;">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Script Status -->
+            </div>
+
+            <div id="codeView" style="display: none; height: calc(100vh - 110px); flex-direction: column;">
+                <div style="padding: 10px 20px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <button class="btn-primary" onclick="showPlayground()" style="background: none; border: 1px solid var(--border-color); color: var(--text-primary); width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 10px;" title="Back to Playground">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <h4 style="margin: 0; font-size: 0.9rem;">Component Logic Builder</h4>
+                    </div>
+                </div>
+                <div style="flex-grow: 1; border-radius: 20px; overflow: hidden; border: 1px solid var(--border-color);">
+                    <zero-code-editor id="globalCodeEditor" language="javascript" theme="dark"></zero-code-editor>
+                </div>
+                <div style="margin-top: 1rem; display: flex; justify-content: flex-end; gap: 1rem;">
+                    <button class="btn-primary" onclick="applyGlobalCode()" style="background: var(--uiv-status-success, #10b981);">
+                        <i class="fas fa-play"></i> Apply & Run Changes
+                    </button>
                 </div>
             </div>
         </main>

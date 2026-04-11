@@ -31,7 +31,7 @@ async function buildAll() {
         try {
             console.log(`Building component ${pkg} with zero-gen...`);
             // we use child_process to invoke zero-gen for each package
-            execSync(`npx zero-gen build ${pkg}`, { stdio: 'inherit', cwd: __dirname });
+            execSync(`npx -y zero-gen build ${pkg}`, { stdio: 'inherit', cwd: __dirname });
         } catch (e) {
             console.warn(`⚠️ zero-gen build had warnings for ${pkg} (e.g. missing assets), proceeding with action build anyway`);
         }

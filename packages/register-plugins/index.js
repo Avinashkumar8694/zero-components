@@ -1,5 +1,17 @@
-// Define the registerPluginClass with the registerPlugins method
 import 'reflect-metadata';
+
+// ─── Global Reflect Shim ─────────────────────────────────────────────────────
+// individual plugin bundles often carry their own isolated reflect-metadata.
+// this ensures they all converge on a single, global reflect-metadata store.
+if (typeof window !== 'undefined' && !window.Reflect) {
+    window.Reflect = Reflect;
+} else if (typeof window !== 'undefined' && window.Reflect !== Reflect) {
+    // If another instance exists, we merge or at least warn, but for now 
+    // we prioritize the registry's instance as it loads first in index.html
+    const existing = window.Reflect;
+    Object.assign(Reflect, existing);
+    window.Reflect = Reflect;
+}
 
 class RegisterPluginClass {
     constructor() {
@@ -55,43 +67,94 @@ class RegisterPluginClass {
         this.registerModule(key, value);
     }
 
-    // Method to attach listeners
-    attachListeners() {
-        console.log('[Registry] Component connection listener activated');
-        window.addEventListener('element-connected', (event) => {
-            console.log('[Registry] Received element-connected event:', event.detail);
-            
-            if(!event?.detail?.element?.localName){
-                console.warn('[Registry] Received element-connected event with missing localName', event.detail);
-                return;
-            }
-            const tagName = event.detail.element.localName;
-            const _class = customElements.get(tagName);
-            
-            if (!_class || !_class.prototype) {
-                console.warn(`[Registry] Could not find class prototype for ${tagName}. If this is a dynamic component, ensure it is defined before dispatching connected event.`);
-                return;
-            }
+    registerElement(name, constructor, retryCount = 0) {
+        if (!name || !constructor) {
+            console.warn(`[Zero] Cannot register element: name or constructor missing (${name})`);
+            return;
+        }
 
-            // Hydrate metadata from Reflect
-            const componentMetadata = Reflect.getMetadata('ZeroComponent', _class.prototype);
-            const inputsMetadata = Reflect.getMetadata('ZeroAttribute', _class.prototype) || [];
-            
-            // SCHEMA ALIGNMENT: Studio Platform expects 'metadata' property, matching it here
-            this.components[tagName] = {
-                class: _class,
-                inputs: inputsMetadata.filter(input => !input.eventTrigger).reduce((acc, { fieldMappings, ...rest }) => {
-                    acc[fieldMappings] = { ...rest };
+        // Use the global Reflect (which we shimmed above)
+        const proto = constructor.prototype;
+        const inputsMetadata = Reflect.getMetadata('ZeroAttribute', proto) || [];
+        const componentMetadata = Reflect.getMetadata('ZeroComponent', constructor) || Reflect.getMetadata('ZeroComponent', proto);
+
+        console.log(`[Zero] Registry: Attempting registration for '${name}' (Retry: ${retryCount})`);
+        console.log(`[Zero] Registry: Found ${inputsMetadata.length} attributes.`);
+        
+        if (!componentMetadata) {
+            if (retryCount < 5) {
+                console.log(`[Zero] Registry: Metadata not yet available for '${name}', retrying in 50ms...`);
+                setTimeout(() => this.registerElement(name, constructor, retryCount + 1), 50);
+                return;
+            } else {
+                console.warn(`[Zero] Registry: Failed to find component metadata for '${name}' after 5 retries.`);
+            }
+        }
+
+        this.components[name] = {
+            class: constructor,
+            inputs: inputsMetadata
+                .filter(input => !input.eventTrigger)
+                .reduce((acc, { fieldMappings, ...rest }) => {
+                    const key = fieldMappings || rest.name;
+                    if (key) acc[key] = { ...rest };
                     return acc;
                 }, {}),
-                outputs: { events: inputsMetadata.filter(input => input.eventTrigger).map(input => input.eventTrigger) },
-                metadata: componentMetadata || { selector: tagName.split('-').slice(0,-1).join('-'), version: tagName.split('-').pop() }
-            };
+            outputs: { 
+                events: inputsMetadata
+                    .filter(input => input.eventTrigger)
+                    .map(input => input.eventTrigger) 
+            },
+            metadata: componentMetadata || { selector: name.split('-').slice(0,-1).join('-'), version: name.split('-').pop() }
+        };
 
-            console.log('[Registry] Component Hydrated successfully:', tagName, this.components[tagName]);
-            window.dispatchEvent(new CustomEvent('zero-element:metadata-ready', {
-                detail: { element: tagName }
-            }));
+        // Also register under base selector as a "latest/default" version fallback
+        if (componentMetadata?.selector && componentMetadata.selector !== name) {
+            this.components[componentMetadata.selector] = this.components[name];
+        }
+        
+        console.log(`[Zero] Registry: SUCCESS. Registered '${name}' and '${componentMetadata?.selector || ""}' fallback.`);
+        
+        window.dispatchEvent(new CustomEvent('zero-element:metadata-ready', {
+            detail: { element: name }
+        }));
+    }
+
+    // Method to attach listeners
+    attachListeners() {
+        console.log('[Zero] Registry: Event listeners activated');
+
+        window.addEventListener('zero-element:component-load', (event) => {
+            const metadata = event?.detail?.element;
+            console.log('[Zero] Registry: RECEIVED zero-element:component-load event', metadata);
+            
+            if (!metadata || !metadata.selector) return;
+
+            const name = `${metadata.selector}-${metadata.version || '1.0.0'}`;
+            
+            // Catchup Mechanism: The custom element might be defined just after the event fires
+            let attempts = 0;
+            const tryRegister = () => {
+                const constructor = customElements.get(name);
+                if (constructor) {
+                    console.log(`[Zero] Registry: Custom element '${name}' found. Starting registration.`);
+                    this.registerElement(name, constructor);
+                } else if (attempts < 10) {
+                    attempts++;
+                    setTimeout(tryRegister, 100);
+                } else {
+                    console.error(`[Zero] Registry: TIMEOUT. Could not find custom element '${name}' in registry.`);
+                }
+            };
+            tryRegister();
+        });
+
+        window.addEventListener('element-connected', (event) => {
+            const element = event?.detail?.element;
+            if (element?.localName) {
+                const constructor = customElements.get(element.localName);
+                if (constructor) this.registerElement(element.localName, constructor);
+            }
         });
     }
 }
@@ -101,7 +164,7 @@ const instance = new RegisterPluginClass();
 window.zero = instance;
 window.ZeroRegistry = instance;
 globalThis.zero = instance;
+window.ro = instance;
 
 // Dispatch ready event for @ZeroRegistryReady decorators
 window.dispatchEvent(new CustomEvent('zero-registry-ready'));
-

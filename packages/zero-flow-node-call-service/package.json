@@ -1,0 +1,10 @@
+{
+  "name": "zero-flow-node-call-service",
+  "version": "1.0.0",
+  "description": "Flow call service node component",
+  "main": "zero-flow-node-call-service.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "flow-node", "flow-node-type:call-service"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

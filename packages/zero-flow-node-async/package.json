@@ -1,0 +1,10 @@
+{
+  "name": "zero-flow-node-async",
+  "version": "1.0.0",
+  "description": "Flow async node component",
+  "main": "zero-flow-node-async.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "flow-node", "flow-node-type:async"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

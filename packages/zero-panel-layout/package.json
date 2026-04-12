@@ -1,0 +1,16 @@
+{
+  "name": "zero-panel-layout",
+  "version": "1.0.0",
+  "description": "Responsive panel layout component with 1-4 column options",
+  "main": "zero-panel-layout.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component",
+    "layout",
+    "grid",
+    "panel"
+  ],
+  "author": "Zero Components",
+  "license": "MIT"
+}

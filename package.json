@@ -10,7 +10,10 @@
         "dev": "../zero-gen/src/zero-gen.js start",
         "api": "../zero-gen/src/zero-gen.js serve",
         "serve": "../zero-gen/src/zero-gen.js serve",
-        "stop": "lsof -ti:3000,5555 | xargs kill -9 2>/dev/null || true"
+        "stop": "lsof -ti:3000,5555 | xargs kill -9 2>/dev/null || true",
+        "publish": "node publish-to-marketplace.js",
+        "publish:all": "node publish-to-marketplace.js all",
+        "publish:package": "node publish-to-marketplace.js"
     },
     "keywords": [],
     "author": "",
@@ -20,6 +23,7 @@
     ],
     "type": "module",
     "devDependencies": {
+        "esbuild": "^0.28.0",
         "lit": "^3.1.4",
         "typescript": "^5.2.2"
     },

@@ -1,0 +1,10 @@
+{
+  "name": "zero-flow-node-start",
+  "version": "1.0.0",
+  "description": "Flow start node component",
+  "main": "zero-flow-node-start.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "flow-node", "flow-node-type:start"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

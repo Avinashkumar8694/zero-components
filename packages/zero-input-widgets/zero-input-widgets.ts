@@ -1,3 +1,4 @@
+// @environment page
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig } from 'zero-annotation';
 
 import { LitElement, html, css, CSSResult } from 'lit';

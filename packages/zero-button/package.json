@@ -1,0 +1,10 @@
+{
+  "name": "zero-button",
+  "version": "1.0.0",
+  "description": "Reusable action button component",
+  "main": "zero-button.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "button", "action"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "zero-image",
+  "version": "1.0.0",
+  "description": "Responsive image component",
+  "main": "zero-image.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "image", "media", "responsive"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

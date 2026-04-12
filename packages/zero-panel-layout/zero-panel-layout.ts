@@ -23,7 +23,9 @@ export class ZeroPanelLayout extends LitElement {
   static styles = css`
     :host {
       display: block;
-      width: 100%;
+      width: var(--zero-width, 100%);
+      padding: var(--zero-padding, 0);
+      box-sizing: border-box;
       --zero-panel-header-bg: transparent;
       --zero-panel-header-padding: 12px 16px;
       --zero-panel-transition: 240ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -90,58 +92,70 @@ export class ZeroPanelLayout extends LitElement {
     }
 
     .layout {
-      --zero-panel-columns: 1;
-      --zero-panel-gap: 16px;
-      --zero-panel-min-col: 220px;
-      display: grid;
+      display: var(--zero-display, flex);
+      flex-direction: var(--zero-direction, row);
+      flex-wrap: wrap;
+      justify-content: var(--zero-justify, flex-start);
+      align-items: var(--zero-align, stretch);
+      gap: var(--zero-gap, 16px);
       width: 100%;
       box-sizing: border-box;
       padding: 16px;
-      gap: var(--zero-panel-gap);
-      grid-template-columns: repeat(var(--zero-panel-columns), minmax(var(--zero-panel-min-col), 1fr));
-      align-items: start;
       min-height: 120px;
     }
 
     slot {
-      display: block;
-      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      /* Calculate width based on items per row, minus the gap share */
+      flex: 0 0 calc((100% / var(--zero-items-per-row, 1)) - ((var(--zero-gap, 16px) * (var(--zero-items-per-row, 1) - 1)) / var(--zero-items-per-row, 1)));
+      min-height: 120px;
       pointer-events: auto;
+      border: 1px dashed rgba(0,0,0,0.1);
+      box-sizing: border-box;
+      transition: flex var(--zero-panel-transition);
+    }
+
+    /* Force full width if specifically in column direction or single column row */
+    .layout[style*="--zero-direction: column"] slot,
+    .layout[style*="--zero-items-per-row: 1"] slot {
+      flex: 0 0 100%;
     }
   `;
 
-  @property({ type: Number })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.DROPDOWN,
-    displayLabel: "Columns",
-    fieldMappings: "columns",
-    optionItems: [
-      { label: "1 Column", value: 1 },
-      { label: "2 Columns", value: 2 },
-      { label: "3 Columns", value: 3 },
-      { label: "4 Columns", value: 4 },
-    ],
-  })
-  columns = 2;
+  @property({ type: String }) direction = "row";
 
-  @property({ type: Number })
+  @property({ type: Number, attribute: "total-columns" })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
     uiComponentType: UserInterfaceType.NUMBER_INPUT,
-    displayLabel: "Gap (px)",
-    fieldMappings: "gap",
+    displayLabel: "Total Slots (Areas)",
+    fieldMappings: "totalColumns",
   })
-  gap = 16;
+  totalColumns = 2;
 
-  @property({ type: Number, attribute: "min-column-width" })
+  @property({ type: Number, attribute: "items-per-row" })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.NUMBER_INPUT,
-    displayLabel: "Min Column Width (px)",
-    fieldMappings: "minColumnWidth",
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Items per Row",
+    fieldMappings: "itemsPerRow",
   })
-  minColumnWidth = 220;
+  itemsPerRow = 2;
+
+  @property({ type: String }) justify = "flex-start";
+  @property({ type: String }) align = "stretch";
+  @property({ type: Number }) gap = 16;
+
+  @property({ type: Boolean })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Visible",
+    fieldMappings: "visible",
+  })
+  visible = true;
 
   @property({ type: Boolean, attribute: "enable-header" })
   @RendererAttribute({
@@ -209,19 +223,11 @@ export class ZeroPanelLayout extends LitElement {
   handleSlotChange() {
     this.dispatchEvent(
       new CustomEvent("slotchange", {
-        detail: { columns: this.normalizedColumns },
+        detail: { totalColumns: this.totalColumns },
         bubbles: true,
         composed: true,
       }),
     );
-  }
-
-  private get normalizedColumns(): number {
-    const value = Number(this.columns);
-    if (!Number.isFinite(value)) {
-      return 1;
-    }
-    return Math.min(4, Math.max(1, Math.trunc(value)));
   }
 
   toggleExpanded() {
@@ -236,11 +242,8 @@ export class ZeroPanelLayout extends LitElement {
   }
 
   render() {
-    const styles = [
-      `--zero-panel-columns:var(--zero-panel-columns-override, ${this.normalizedColumns})`,
-      `--zero-panel-gap:var(--zero-panel-gap-override, ${Math.max(0, Number(this.gap) || 0)}px)`,
-      `--zero-panel-min-col:var(--zero-panel-min-col-override, ${Math.max(120, Number(this.minColumnWidth) || 220)}px)`,
-    ].join(";");
+    if (!this.visible) return html``;
+    const totalSlots = Math.max(1, Math.min(12, Number(this.totalColumns) || 1));
 
     return html`
       <div class="panel-container">
@@ -254,8 +257,8 @@ export class ZeroPanelLayout extends LitElement {
         ` : ""}
         <div class="content-wrapper">
           <div class="content-inner">
-            <div class="layout" style=${styles}>
-              ${Array.from({ length: this.normalizedColumns }).map(
+            <div class="layout" style="--zero-items-per-row: ${this.itemsPerRow || 1}">
+              ${Array.from({ length: totalSlots }).map(
                 (_, i) => html`<slot name="col-${i + 1}" @slotchange=${i === 0 ? this.handleSlotChange : null}></slot>`
               )}
             </div>
@@ -265,3 +268,4 @@ export class ZeroPanelLayout extends LitElement {
     `;
   }
 }
+

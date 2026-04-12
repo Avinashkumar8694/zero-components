@@ -50,15 +50,23 @@ function publishPackage(pkgName) {
         }
     }
     
-    // Create package.json in target directory
+    // Read source package.json to preserve metadata (like 'zero' config)
+    const srcPkgJsonPath = path.join(packagesDir, pkgName, 'package.json');
+    let srcPkgJson = {};
+    if (fs.existsSync(srcPkgJsonPath)) {
+        srcPkgJson = JSON.parse(fs.readFileSync(srcPkgJsonPath, 'utf8'));
+    }
+
+    // Prepare published package.json (merging source metadata)
     const packageJson = {
+        ...srcPkgJson,
         name: pkgName,
         version: version,
-        description: `Published from zero-components: ${pkgName}`,
+        description: srcPkgJson.description || `Published from zero-components: ${pkgName}`,
         main: `${pkgName}.js`,
-        keywords: getKeywords(pkgName),
-        author: "Zero Components",
-        license: "MIT"
+        keywords: [...new Set([...(srcPkgJson.keywords || []), ...getKeywords(pkgName)])],
+        author: srcPkgJson.author || "Zero Components",
+        license: srcPkgJson.license || "MIT"
     };
     
     fs.writeFileSync(

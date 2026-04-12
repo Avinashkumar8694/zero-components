@@ -1,18 +1,11 @@
 {
   "installedPlugins": [
+    "nrenderer",
+    "open-popup-directive",
+    "attribute-window",
     "zero-uiv-themes",
-    "zero-uiv-radio",
-    "zero-uiv-radio-glow",
-    "zero-uiv-slider-glow",
-    "zero-uiv-table-frosted",
-    "zero-uiv-button-glitch",
-    "zero-uiv-table-glitch",
-    "zero-uiv-input-glow",
-    "zero-uiv-table-blocky",
-    "zero-uiv-table",
-    "zero-uiv-card",
-    "code-editor"
+    "popup-dropdown"
   ],
-  "activeProvider": "zero-uiv-themes",
-  "activeTheme": "cyber"
+  "activeProvider": "",
+  "activeTheme": ""
 }

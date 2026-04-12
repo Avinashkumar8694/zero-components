@@ -8,9 +8,10 @@
 import 'reflect-metadata';
 class RegisterPluginClass {
     constructor() {
-        // Initialize with existing data if available
-        this.modules = (window.zero && window.zero.modules) || {};
-        this.components = (window.zero && window.zero.components) || {};
+        // Safe access to existing window.zero data
+        const existingData = window.zero || {};
+        this.modules = existingData.modules || {};
+        this.components = existingData.components || {};
         // Attach the element-connected event listener
         this.attachListeners();
     }
@@ -59,13 +60,20 @@ class RegisterPluginClass {
     }
 }
 
-// Ensure the class is available globally on window.zero
-if (!window.zero) {
-    window.zero = new RegisterPluginClass();
-} else {
+// Ensure the class is available globally on window.zero without destructive replacement
+if (!window.zero || typeof window.zero.registerPlugins !== 'function') {
     const existing = window.zero;
     const instance = new RegisterPluginClass();
-    // Merge while preserving references if possible, but simplest is to replace with the instance that already pulled in 'existing' data
+    
+    // Merge existing properties if they exist
+    if (existing && typeof existing === 'object') {
+        Object.keys(existing).forEach(key => {
+            if (!instance[key]) {
+                instance[key] = existing[key];
+            }
+        });
+    }
+    
     window.zero = instance;
 }
 

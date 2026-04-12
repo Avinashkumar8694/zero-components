@@ -6,8 +6,11 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "zero-gen build",
-        "start": "zero-gen start",
-        "serve": "zero-gen serve"
+        "start": "npx concurrently \"npm run dev\" \"npm run api\"",
+        "dev": "zero-gen start",
+        "api": "node server/index.js",
+        "serve": "node server/index.js",
+        "stop": "lsof -ti:3000,5555 | xargs kill -9 2>/dev/null || true"
     },
     "keywords": [],
     "author": "",
@@ -23,6 +26,7 @@
     "dependencies": {
         "cors": "^2.8.5",
         "express": "^4.19.2",
-        "zero-annotation": "^1.0.4"
+        "zero-annotation": "^1.0.6",
+        "zero-gen": "^1.0.8"
     }
 }

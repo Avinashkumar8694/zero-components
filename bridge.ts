@@ -100,20 +100,27 @@
 
     const loadedScripts = new Set();
     (window as any).loadPlugin = (id: string, customMainPath?: string) => {
-        if (loadedScripts.has(id)) return Promise.resolve();
-        console.log(`[Bridge] Dynamically loading plugin (LIVE): ${id}`);
+        if (loadedScripts.has(id)) {
+            console.log(`[Bridge] Plugin ${id} already loaded, skipping.`);
+            return Promise.resolve();
+        }
+        
+        console.log(`[Bridge] Dynamically loading plugin: ${id}`);
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.type = 'module';
+            // Use discovery-provided path or fallback to convention
             script.src = customMainPath || `/packages/${id}/src/index.ts`;
             
+            console.log(`[Bridge] Injecting script for ${id}: ${script.src}`);
+            
             script.onload = () => {
-
+                console.log(`[Bridge] Script loaded successfully for: ${id}`);
                 loadedScripts.add(id);
                 resolve(true);
             };
             script.onerror = () => {
-                console.error(`Failed to load plugin script: ${id}`);
+                console.error(`[Bridge] Failed to load plugin script for: ${id} from ${script.src}`);
                 reject();
             };
             document.head.appendChild(script);
@@ -141,16 +148,18 @@
 
     // 4. Initial Sync from Server
     async function initSync() {
+        console.log('[Bridge] Starting sync with API server...');
         try {
-            // ... discovery logic ...
             const discRes = await fetch(`http://localhost:5555/discovery`);
             const discoveryInfo = await discRes.json();
             const allPlugins = [...(discoveryInfo.components || []), ...(discoveryInfo.themes || [])];
+            console.log(`[Bridge] Discovered ${allPlugins.length} potential plugins from server`);
 
             const res = await fetch(CONFIG_URL);
             const config = await res.json();
             if (config) {
                 const installed = config.installedPlugins || [];
+                console.log('[Bridge] Local config sync: Installed plugins =', installed);
                 localStorage.setItem('zero-installed-plugins', JSON.stringify(installed));
                 
                 // Only sync from server if server has a value, otherwise use current local
@@ -160,7 +169,14 @@
                 // Inject all installed plugins
                 for (const id of installed) {
                     const plugin = allPlugins.find(p => p.id === id);
-                    await (window as any).loadPlugin(id, plugin?.main);
+                    if (plugin) {
+                        console.log(`[Bridge] Preparing to load installed plugin: ${id}`);
+                        await (window as any).loadPlugin(id, plugin.main);
+                    } else {
+                        console.warn(`[Bridge] Plugin ${id} is installed but not found in discovery information.`);
+                        // Try loading from fallback path anyway
+                        await (window as any).loadPlugin(id);
+                    }
                 }
 
                 // Update manager state
@@ -170,6 +186,7 @@
                     if (config.activeTheme) manager.setActiveTheme(config.activeTheme);
                 }
                 
+                console.log('[Bridge] Initial sync complete. Dispatching plugins-ready.');
                 window.dispatchEvent(new CustomEvent('plugins-ready'));
             }
 

@@ -79,13 +79,13 @@ export class AttributeWindow extends LitElement {
         placeholderText: '',
         fieldMappings: 'AttributeWindowAttributes',
     })
-    set AttributeWindowAttributes(data:any){
-            const _t = typeof data == 'string' ? JSON.parse(data) : data;
-            this.attr = Array.isArray(_t) ? _t : [];
-            this.firstUpdated();
+    set AttributeWindowAttributes(data: any) {
+        const _t = typeof data == 'string' ? JSON.parse(data) : data;
+        this.attr = Array.isArray(_t) ? _t : [];
+        this.firstUpdated();
     }
 
-    get AttributeWindowAttributes(){
+    get AttributeWindowAttributes() {
         return this.attr;
     }
 
@@ -114,14 +114,16 @@ export class AttributeWindow extends LitElement {
     }
 
     firstUpdated() {
-        const name = 'attribute-window';
-        globalThis.zeroComponents = {} as Record<string, any>;
-        const customElement = document.createElement(name) as any;
+        const name = 'zero-attribute-window'; // Matches elementSelector in decorator
+        globalThis.zeroComponents = globalThis.zeroComponents || {};
 
+        // If index.ts hasn't registered us yet, we can do it here safely
         if (!globalThis.zeroComponents[name]) {
-            globalThis.zeroComponents[name] = [];
+            globalThis.zeroComponents[name] = [this];
+        } else if (!globalThis.zeroComponents[name].includes(this)) {
+            globalThis.zeroComponents[name].push(this);
         }
-        globalThis.zeroComponents[name].push(customElement);
+
         this.prepareAttributeWindow(name);
     }
     prepareAttributeWindow(componentName: string) {
@@ -151,7 +153,7 @@ export class AttributeWindow extends LitElement {
 
     createInputElement(key: string, config: RendererAttributeConfiguration | any, customElement: HTMLElement) {
         const themeModule = getThemeManager()?.getActiveTheme();
-        
+
         const inputElement = document.createElement('div');
         inputElement.className = 'dynamic-input-container';
 
@@ -174,7 +176,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(textInput);
                 break;
-    
+
             case UserInterfaceType.PASSWORD_INPUT:
                 const passwordInput = document.createElement('input');
                 passwordInput.className = 'uiv-input';
@@ -187,7 +189,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(passwordInput);
                 break;
-                
+
             case UserInterfaceType.TEXTAREA:
                 const textarea = document.createElement('textarea');
                 textarea.className = 'uiv-textarea';
@@ -200,7 +202,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(textarea);
                 break;
-    
+
             case UserInterfaceType.CHECKBOX:
                 const toggleSwitch = document.createElement('input');
                 toggleSwitch.className = 'uiv-input';
@@ -212,7 +214,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(toggleSwitch);
                 break;
-    
+
             case UserInterfaceType.RADIO_BUTTON:
                 const radioGroup = document.createElement('div');
                 (config.optionItems as DropdownOptionItem[]).forEach(option => {
@@ -227,19 +229,19 @@ export class AttributeWindow extends LitElement {
                     radioInput.addEventListener('change', (e) => {
                         customElement[key] = (e.target as HTMLInputElement).value;
                     });
-    
+
                     const radioLabel = document.createElement('label');
                     radioLabel.className = 'uiv-label';
                     radioLabel.htmlFor = radioInput.id;
                     radioLabel.textContent = option.label.toString();
-                    
+
                     radioWrapper.appendChild(radioInput);
                     radioWrapper.appendChild(radioLabel);
                     radioGroup.appendChild(radioWrapper);
                 });
                 inputElement.appendChild(radioGroup);
                 break;
-    
+
             case UserInterfaceType.DROPDOWN:
                 const dropdown = document.createElement('select');
                 dropdown.className = 'uiv-select';
@@ -255,7 +257,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(dropdown);
                 break;
-    
+
             case UserInterfaceType.MULTI_SELECT:
                 const multiSelect = document.createElement('select');
                 multiSelect.className = 'uiv-select';
@@ -272,7 +274,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(multiSelect);
                 break;
-                
+
             case UserInterfaceType.RANGE_SLIDER:
                 const rangeSlider = document.createElement('input');
                 rangeSlider.className = 'uiv-input';
@@ -286,7 +288,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(rangeSlider);
                 break;
-                
+
             case UserInterfaceType.COLOR_PICKER:
                 const colorPicker = document.createElement('input');
                 colorPicker.className = 'uiv-input';
@@ -298,7 +300,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(colorPicker);
                 break;
-    
+
             case UserInterfaceType.FILE_INPUT:
                 const fileInput = document.createElement('input');
                 fileInput.className = 'uiv-input';
@@ -309,7 +311,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(fileInput);
                 break;
-    
+
             case UserInterfaceType.DATE_PICKER:
                 const datePicker = document.createElement('input');
                 datePicker.className = 'uiv-input';
@@ -321,7 +323,7 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(datePicker);
                 break;
-                
+
             case UserInterfaceType.NUMBER_INPUT:
                 const numberInput = document.createElement('input');
                 numberInput.className = 'uiv-input';
@@ -344,9 +346,9 @@ export class AttributeWindow extends LitElement {
                 });
                 inputElement.appendChild(popup_dropdown);
                 break;
-    
+
             // Add cases for other UserInterfaceTypes as needed
-    
+
             default:
                 const defaultInput = document.createElement('input');
                 defaultInput.type = 'text';

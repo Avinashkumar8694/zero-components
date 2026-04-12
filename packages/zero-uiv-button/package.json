@@ -4,7 +4,13 @@
   "description": "Unified Uiverse-inspired button component with multi-theme support",
   "main": "zero-uiv-button.ts",
   "type": "module",
-  "keywords": ["lit", "web-component", "button", "uiverse", "multi-theme"],
+  "keywords": [
+    "lit",
+    "web-component",
+    "button",
+    "uiverse",
+    "multi-theme"
+  ],
   "author": "Zero Components",
   "license": "MIT",
   "zero": {
@@ -12,7 +18,7 @@
   },
   "dependencies": {
     "lit": "^3.0.0",
-    "zero-annotation": "workspace:*",
-    "zero-uiv-themes": "workspace:*"
+    "zero-annotation": "^1.0.6",
+    "zero-uiv-themes": "*"
   }
 }

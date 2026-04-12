@@ -362,7 +362,20 @@ const updateComponentList = () => {
     const registeredComponents = Object.keys(globalThis.zeroComponents).filter(key => {
         // Deriving plugin ID from key (selector-version)
         const id = key.substring(0, key.lastIndexOf('-')) || key;
-        return (window as any).isPluginInstalled(id);
+        const isInstalled = (window as any).isPluginInstalled(id);
+        
+        if (isInstalled) return true;
+        
+        // Fallback: Some plugins are named 'code-editor' in discovery but register as 'zero-code-editor'
+        if (id.startsWith('zero-')) {
+            const strippedId = id.substring(5);
+            if ((window as any).isPluginInstalled(strippedId)) {
+                console.log(`[Dashboard] Mapping component ${id} to installed plugin ${strippedId}`);
+                return true;
+            }
+        }
+        
+        return false;
     });
     
     if (list) {

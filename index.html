@@ -233,6 +233,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            overflow: auto;
         }
 
         .controls-pane {
@@ -362,8 +363,8 @@
 
             <div id="previewView" style="display: none;">
                 <div
-                    style="width: 100%; height: calc(100vh - 150px); display: flex; align-items: center; justify-content: center;">
-                    <div class="preview-pane" id="mainPreview" style="width: 100%; max-width: 1200px; height: 100%;">
+                    style="width: 100%; min-height: calc(100vh - 150px); display: flex; align-items: center; justify-content: center;">
+                    <div class="preview-pane" id="mainPreview" style="width: 100%; max-width: 1200px; min-height: 400px;">
                         <!-- Component rendered here -->
                     </div>
                 </div>

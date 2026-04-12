@@ -5,11 +5,12 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "zero-gen build",
-        "start": "npx concurrently \"npm run dev\" \"npm run api\"",
-        "dev": "../zero-gen/src/zero-gen.js start",
-        "api": "../zero-gen/src/zero-gen.js serve",
-        "serve": "../zero-gen/src/zero-gen.js serve",
+        "build": "node build-actions.js",
+        "start": "npx concurrently \"npm run dashboard\" \"npm run api\"",
+        "dev": "npx concurrently \"npm run dashboard\" \"npm run api\"",
+        "serve": "zero-gen serve",
+        "api": "zero-gen serve",
+        "dashboard": "zero-gen start",
         "stop": "lsof -ti:3000,5555 | xargs kill -9 2>/dev/null || true",
         "publish": "node publish-to-marketplace.js",
         "publish:all": "node publish-to-marketplace.js all",
@@ -30,7 +31,7 @@
     "dependencies": {
         "cors": "^2.8.5",
         "express": "^4.19.2",
-        "zero-annotation": "file:zero-annotation-1.0.6.tgz",
-        "zero-gen": "^1.0.8"
+        "zero-annotation": "1.0.7",
+        "zero-gen": "^1.0.9"
     }
 }

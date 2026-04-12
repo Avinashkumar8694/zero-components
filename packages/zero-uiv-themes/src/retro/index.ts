@@ -23,6 +23,7 @@ export const retroGlobalTokens = {
         
         // App Dashboard Tokens
         '--uiv-app-bg': '#000500',
+        '--uiv-bg-primary': '#000500',
         '--uiv-app-sidebar-bg': '#001a00',
         '--uiv-app-sidebar-text': '#39ff14',
         '--uiv-app-header-bg': '#001a00',

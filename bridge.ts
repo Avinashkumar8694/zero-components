@@ -112,37 +112,36 @@
         
         console.log(`[Bridge] Dynamically loading plugin: ${id}`);
         return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.type = 'module';
-            
-            let src = customMainPath;
-            if (!src) {
-                src = `/packages/${id}/src/index.ts`;
-            }
-            
-            console.log(`[Bridge] Injecting script for ${id}: ${src}`);
-            script.src = src;
-            
-            script.onload = () => {
-                console.log(`[Bridge] Script loaded successfully for: ${id}`);
-                loadedScripts.add(id);
-                resolve(true);
-            };
-            script.onerror = () => {
-                console.warn(`[Bridge] First attempt failed for ${id}, trying fallback path...`);
-                const fallbackSrc = `/packages/${id}/${id}.ts`;
-                script.src = fallbackSrc;
+            const tryLoad = (path: string, isFallback: boolean = false) => {
+                const script = document.createElement('script');
+                script.type = 'module';
+                script.src = path;
+                
+                console.log(`[Bridge] Injecting script for ${id} (${isFallback ? 'fallback' : 'primary'}): ${path}`);
+                
                 script.onload = () => {
-                    console.log(`[Bridge] Script loaded successfully for: ${id} from fallback`);
+                    console.log(`[Bridge] Script loaded successfully for: ${id}`);
                     loadedScripts.add(id);
                     resolve(true);
                 };
+                
                 script.onerror = () => {
-                    console.error(`[Bridge] Failed to load plugin script for: ${id} from both paths`);
-                    reject();
+                    if (!isFallback) {
+                        console.warn(`[Bridge] Primary path failed for ${id}, trying fallback...`);
+                        // Use the alternative common path
+                        const fallbackPath = path.includes('/src/') ? `/packages/${id}/${id}.ts` : `/packages/${id}/src/index.ts`;
+                        tryLoad(fallbackPath, true);
+                    } else {
+                        console.error(`[Bridge] Failed to load plugin script for: ${id} from all paths`);
+                        reject();
+                    }
                 };
+                
+                document.head.appendChild(script);
             };
-            document.head.appendChild(script);
+
+            const initialPath = customMainPath || `/packages/${id}/${id}.ts`;
+            tryLoad(initialPath);
         });
     };
 

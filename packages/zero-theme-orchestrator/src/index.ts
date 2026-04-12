@@ -78,6 +78,17 @@ export class ThemeOrchestrator extends EventTarget {
         if (this.providers.has(providerId)) {
             this.providers.delete(providerId);
             delete this.activeThemes[providerId];
+            
+            // If the root provider was removed, attempt to promote another one
+            if (this.rootProviderId === providerId) {
+                const remaining = this.getProviders();
+                if (remaining.length > 0) {
+                    this.setRootProvider(remaining[0].id);
+                } else {
+                    this.rootProviderId = '';
+                }
+            }
+            
             console.log(`[ThemeOrchestrator] Unregistered provider: ${providerId}`);
             this.dispatchEvent(new CustomEvent('providers-changed'));
         }

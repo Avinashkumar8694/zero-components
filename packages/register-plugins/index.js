@@ -108,12 +108,7 @@ class RegisterPluginClass {
             metadata: componentMetadata || { selector: name.split('-').slice(0,-1).join('-'), version: name.split('-').pop() }
         };
 
-        // Also register under base selector as a "latest/default" version fallback
-        if (componentMetadata?.selector && componentMetadata.selector !== name) {
-            this.components[componentMetadata.selector] = this.components[name];
-        }
-        
-        console.log(`[Zero] Registry: SUCCESS. Registered '${name}' and '${componentMetadata?.selector || ""}' fallback.`);
+        console.log(`[Zero] Registry: SUCCESS. Registered '${name}'.`);
         
         window.dispatchEvent(new CustomEvent('zero-element:metadata-ready', {
             detail: { element: name }

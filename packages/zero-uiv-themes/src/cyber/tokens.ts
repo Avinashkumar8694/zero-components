@@ -20,6 +20,7 @@ export const cyberGlobalTokens: ThemeTokens = {
     
     // App Dashboard Tokens
     '--uiv-app-bg': '#0a0a0c',
+    '--uiv-bg-primary': '#0a0a0c',
     '--uiv-app-sidebar-bg': '#121216',
     '--uiv-app-sidebar-text': '#ffffff',
     '--uiv-app-header-bg': '#121216',

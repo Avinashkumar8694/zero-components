@@ -20,6 +20,7 @@ export const glassGlobalTokens: ThemeTokens = {
     
     // App Dashboard Tokens
     '--uiv-app-bg': '#02041a',
+    '--uiv-bg-primary': '#02041a',
     '--uiv-app-sidebar-bg': 'rgba(2, 4, 32, 0.4)',
     '--uiv-app-sidebar-text': '#ffffff',
     '--uiv-app-header-bg': 'rgba(2, 4, 32, 0.4)',

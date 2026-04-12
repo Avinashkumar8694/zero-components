@@ -9,15 +9,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Application Standard Variables - Synchronized with Orchestrator */
             --bg-color: var(--uiv-app-bg, #0f172a);
             --sidebar-bg: var(--uiv-app-sidebar-bg, rgba(30, 41, 59, 0.7));
             --sidebar-text: var(--uiv-app-sidebar-text, var(--uiv-app-text-color, #f1f5f9));
+            --header-bg: var(--uiv-app-header-bg, rgba(15, 23, 42, 0.8));
             --card-bg: var(--uiv-app-card-bg, rgba(30, 41, 59, 0.5));
             --text-color: var(--uiv-app-text-color, #f1f5f9);
             --text-muted: var(--uiv-app-text-muted, #94a3b8);
             --accent-color: var(--uiv-app-accent-color, #38bdf8);
+            --accent-transparent: var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.15));
             --border-color: var(--uiv-app-border-color, rgba(51, 65, 85, 0.5));
             --glass-blur: var(--uiv-app-glass-blur, blur(12px));
+            --transition: all 0.4s ease;
         }
 
         body {
@@ -218,8 +222,6 @@
 
     <script type="module" src="/packages/register-plugins/index.js"></script>
     <script type="module" src="/packages/zero-theme-orchestrator/src/index.ts"></script>
-    <script type="module" src="/packages/zero-uiv-themes/src/index.ts"></script>
-    <script type="module" src="/packages/zero-standard-themes/src/index.ts"></script>
     <script type="module" src="./index.ts"></script>
     <script>
         function toggleDevMode() {
@@ -303,15 +305,23 @@
             const syncSlider = document.getElementById('syncModeSlider');
             if (syncSlider) syncSlider.style.backgroundColor = isSync ? 'var(--accent-color)' : 'var(--border-color)';
 
-            const providers = manager.getProviders();
+            const allProviders = manager.getProviders();
+            // Filter only installed providers
+            const providers = allProviders.filter(p => {
+                const isInstalled = window.isPluginInstalled ? window.isPluginInstalled(p.id) : false;
+                // Also allow the default orchestrator if it's considered foundational
+                return isInstalled || p.id === 'zero-uiv-themes'; 
+            });
+
             if (!providersSettings) return;
 
             if (providers.length === 0) {
                 providersSettings.innerHTML = `
-                    <div class="settings-card" style="text-align: center;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
-                        <h3>No Theme Providers Found</h3>
-                        <p style="color: var(--text-muted);">Please wait for providers to register or <a href="#" onclick="renderSettings()" style="color: var(--accent-color)">click here to refresh</a>.</p>
+                    <div class="settings-card" style="text-align: center; padding: 4rem;">
+                        <i class="fas fa-shopping-bag" style="font-size: 3rem; color: var(--text-muted); opacity: 0.3; margin-bottom: 1.5rem;"></i>
+                        <h3 style="margin-bottom: 0.5rem;">No Themes Installed</h3>
+                        <p style="color: var(--text-muted); margin-bottom: 2rem;">Install theme providers from the Marketplace to configure them here.</p>
+                        <a href="marketplace.html" class="btn btn-primary" style="display: inline-flex; text-decoration: none;">Go to Marketplace</a>
                     </div>
                 `;
                 return;

@@ -113,7 +113,7 @@ const setupRoutes = (app, basePath) => {
 
     // Discovery API - Scan packages directory for live development mode
     router.get('/discovery', async (req, res) => {
-        const targetDir = path.resolve(__dirname, '../../packages');
+        const targetDir = path.resolve(__dirname, '../packages');
         if (!fs.existsSync(targetDir)) return res.json({ components: [], themes: [] });
 
         try {

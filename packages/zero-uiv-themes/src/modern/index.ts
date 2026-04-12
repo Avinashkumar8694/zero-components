@@ -24,6 +24,7 @@ export const modernGlobalTokens = {
         
         // App Dashboard Tokens
         '--uiv-app-bg': '#000000',
+        '--uiv-bg-primary': '#000000',
         '--uiv-app-sidebar-bg': '#0a0a0a',
         '--uiv-app-sidebar-text': '#f8fafc',
         '--uiv-app-header-bg': '#0f0f0f',

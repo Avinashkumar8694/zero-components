@@ -1,9 +1,6 @@
 {
   "installedPlugins": [
-    "code-editor",
-    "zero-uiv-themes",
-    "zero-date-picker",
-    "zero-input-widgets"
+    "code-editor"
   ],
   "activeProvider": "",
   "activeTheme": ""

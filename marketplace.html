@@ -11,13 +11,14 @@
             /* Application Standard Variables - Synchronized with Orchestrator */
             --bg-color: var(--uiv-app-bg, #0f172a);
             --sidebar-bg: var(--uiv-app-sidebar-bg, rgba(30, 41, 59, 0.7));
+            --sidebar-text: var(--uiv-app-sidebar-text, var(--uiv-app-text-color, #f1f5f9));
             --header-bg: var(--uiv-app-header-bg, rgba(15, 23, 42, 0.8));
             --card-bg: var(--uiv-app-card-bg, rgba(30, 41, 59, 0.5));
             --text-color: var(--uiv-app-text-color, #f1f5f9);
             --text-muted: var(--uiv-app-text-muted, #94a3b8);
             --accent-color: var(--uiv-app-accent-color, #38bdf8);
+            --accent-transparent: var(--uiv-app-accent-transparent, rgba(56, 189, 248, 0.15));
             --border-color: var(--uiv-app-border-color, rgba(51, 65, 85, 0.5));
-            --sidebar-text: var(--uiv-app-sidebar-text, #f1f5f9);
             --glass-blur: var(--uiv-app-glass-blur, blur(12px));
             --transition: all 0.4s ease;
         }
@@ -245,7 +246,6 @@
 
     <script type="module" src="/packages/register-plugins/index.js"></script>
     <script type="module" src="/packages/zero-theme-orchestrator/src/index.ts"></script>
-    <script type="module" src="/packages/zero-uiv-themes/src/index.ts"></script>
     <script type="module">
         import './bridge.ts';
         import './index.ts';

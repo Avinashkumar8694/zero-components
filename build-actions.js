@@ -36,16 +36,24 @@ async function buildAll() {
             console.warn(`⚠️ zero-gen build had warnings for ${pkg} (e.g. missing assets), proceeding with action build anyway`);
         }
 
-        // 2. Build action.ts
+        // Ensure target directory exists for all packages
+        const outDir = path.join(pluginsDir, pkg);
+        if (!fs.existsSync(outDir)) {
+            fs.mkdirSync(outDir, { recursive: true });
+        }
+
+        // Copy metadata for ALL packages (not just those with action.ts)
+        const metadataFiles = ['package.json', 'README.md'];
+        metadataFiles.forEach(file => {
+            const srcPath = path.join(pkgPath, file);
+            if (fs.existsSync(srcPath)) {
+                fs.copyFileSync(srcPath, path.join(outDir, file));
+            }
+        });
+
+        // 2. Build action.ts if it exists
         const actionFile = path.join(pkgPath, 'action.ts');
         if (fs.existsSync(actionFile)) {
-            const outDir = path.join(pluginsDir, pkg);
-            
-            // Ensure output directory exists (zero-gen build creates it, but just in case)
-            if (!fs.existsSync(outDir)) {
-                fs.mkdirSync(outDir, { recursive: true });
-            }
-
             const outPath = path.join(outDir, 'action.js');
             
             try {
@@ -55,11 +63,12 @@ async function buildAll() {
                     outfile: outPath,
                     format: 'esm',
                     target: 'es2022',
-                    minify: false,
-                    // externalize everything we don't want bundled
-                    external: ['reflect-metadata', 'zero-annotation']
+                    minify: true,
+                    // No external dependencies for standalone builds
+                    external: []
                 });
-                console.log(`✅ Built ${pkg}/action.ts -> server/plugins/${pkg}/action.js`);
+
+                console.log(`✅ Built ${pkg}/action.ts (standalone/minified) -> server/plugins/${pkg}/action.js`);
             } catch (err) {
                 console.error(`❌ Failed to build ${pkg}/action.ts:`, err);
             }

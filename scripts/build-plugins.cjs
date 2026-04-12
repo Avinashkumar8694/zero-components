@@ -41,16 +41,8 @@ function buildPackage(packageName) {
 
         const outputFile = path.join(targetDir, `${packageName}.js`);
 
-        // Custom require shim for browser environment
-        const shim = `var require = (m) => {
-            if (m === 'lit') return window.lit;
-            if (m === 'lit/decorators.js') return window['lit/decorators.js'];
-            if (m === 'zero-annotation') return window['zero-annotation'];
-            throw new Error('Dynamic require of ' + m + ' not supported in plugin bundle');
-        };`;
-
-        // Build bundle using IIFE and assuming globals are available on window
-        execSync(`npx esbuild ${entryPoint} --bundle --minify --format=iife --platform=browser --outfile=${outputFile} --external:lit --external:lit/decorators.js --external:zero-annotation --banner:js="${shim}"`, {
+        // Build standalone bundle using IIFE
+        execSync(`npx esbuild ${entryPoint} --bundle --minify --format=iife --platform=browser --outfile=${outputFile}`, {
             stdio: 'inherit'
         });
 
@@ -67,7 +59,13 @@ function buildPackage(packageName) {
 
         const assetsSrc = path.join(pkgPath, 'assets');
         if (fs.existsSync(assetsSrc) && fs.lstatSync(assetsSrc).isDirectory()) {
-            execSync(`cp -R ${assetsSrc} ${targetDir}/`);
+            try {
+                execSync(`cp -R ${assetsSrc} ${targetDir}/`);
+            } catch (cpErr) {
+                console.warn(`⚠️ Warning: Failed to copy assets for ${packageName}: ${cpErr.message}`);
+            }
+        } else {
+            console.log(`ℹ️ No assets directory found for ${packageName}, skipping copy.`);
         }
 
         console.log(`Successfully built ${packageName}! -> ${targetDir}`);

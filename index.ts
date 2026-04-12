@@ -14,15 +14,29 @@ declare global {
     }
 }
 
-// Initialize global components object
+// Initialize global components object (instances store)
+(window as any).zero = (window as any).zero || { components: {}, modules: {} };
 globalThis.zeroComponents = {} as Record<string, any>;
 let activeComponentName: string | null = null;
 
 // 1. Move Listeners to top level so they catch early registration events
 window.addEventListener('element-connected', (event: CustomEvent) => {
     const element = event.detail.element;
-    console.log('Component Loaded:', element);
-    updateComponentList(); 
+    // Handle both cases: when element is an HTMLElement with localName or a LitElement instance
+    const elementName = element?.localName || element?.tagName?.toLowerCase();
+    console.log('Component Loaded:', elementName);
+    if (elementName) {
+        // Store instance for exploration/modification - ONLY if it's a real DOM element
+        if (element instanceof Node) {
+            if (!globalThis.zeroComponents[elementName]) {
+                globalThis.zeroComponents[elementName] = [];
+            }
+            if (!globalThis.zeroComponents[elementName].includes(element)) {
+                globalThis.zeroComponents[elementName].push(element);
+            }
+        }
+        updateComponentList(); 
+    }
 });
 
 window.addEventListener('zero-element:metadata-ready', (event: any) => {
@@ -37,18 +51,48 @@ window.addEventListener('plugins-updated', () => {
 });
 
 window.addEventListener('zero-element:component-load', (event: any) => {
-    const metadata = event.detail.element;
-    if (metadata && metadata.selector) {
-        const fullSelector = `${metadata.selector}-${metadata.version}`;
-        console.log('[Registry] Registering component:', fullSelector);
-        // Ensure zeroLibrary or componentRegistry has this metadata
-        (window as any).zeroLibrary = (window as any).zeroLibrary || {};
-        (window as any).zeroLibrary[fullSelector] = metadata;
+    console.log('[Registry] Received component-load event:', event.detail);
+    
+    // Support both new 'element' structure and legacy direct detail structure
+    let metadata = event.detail.element || event.detail;
+    
+    if (!metadata) {
+        console.warn('[Registry] component-load event received but metadata is null/undefined', event.detail);
+        return;
+    }
+
+    // If metadata is actually a class constructor, extract from Reflect
+    if (typeof metadata === 'function' && metadata.prototype) {
+        metadata = Reflect.getMetadata('ZeroComponent', metadata.prototype);
+        console.log('[Registry] Extracted metadata from constructor via Reflect');
+    }
+    
+    if (metadata && (metadata.selector || metadata.elementSelector)) {
+        const selector = metadata.selector || metadata.elementSelector;
+        const fullSelector = `${selector}-${metadata.version || '1.0.0'}`;
+        console.log('[Registry] Registering component via ZeroRegistry:', fullSelector, metadata);
         
-        registerComponent(fullSelector, {
-            inputs: metadata.inputs,
-            outputs: metadata.outputs
-        });
+        // Also get attributes metadata to populate inputs if available
+        let inputs = {};
+        const source = event.detail.element || event.detail;
+        if (typeof source === 'function' && source.prototype) {
+            const attrMetadata = Reflect.getMetadata('ZeroAttribute', source.prototype) || [];
+            inputs = attrMetadata.filter((input: any) => !input.eventTrigger).reduce((acc: any, { fieldMappings, ...rest }: any) => {
+                acc[fieldMappings] = { ...rest };
+                return acc;
+            }, {});
+        }
+
+        // Register in unified ZeroRegistry
+        if ((window as any).ZeroRegistry?.registerComponent) {
+            (window as any).ZeroRegistry.registerComponent(fullSelector, {
+                inputs: (Object.keys(inputs).length > 0) ? inputs : (metadata.inputs || {}),
+                outputs: metadata.outputs || { events: [] },
+                metadata: metadata
+            });
+        }
+    } else {
+        console.warn('[Registry] Could not resolve valid selector for component', metadata);
     }
 });
 
@@ -256,26 +300,15 @@ const createInputElement = (key: string, config: any, customElement: HTMLElement
 };
 
 
-const registerComponent = (name: string, config: { inputs?: any; outputs?: any }) => {
-    const { inputs = {}, outputs = { events: [] } } = config;
-
-    const customElement = document.createElement(name) as any;
-
-    if (!globalThis.zeroComponents[name]) {
-        globalThis.zeroComponents[name] = [];
+const registerComponent = (name: string, config: any) => {
+    if ((window as any).ZeroRegistry?.registerComponent) {
+        (window as any).ZeroRegistry.registerComponent(name, config);
+    } else {
+        // Fallback for extreme cases
+        (window as any).zero = (window as any).zero || { components: {} };
+        (window as any).zero.components[name] = config;
     }
-    globalThis.zeroComponents[name].push(customElement);
-
-    // Update the UI to show the component in the list
     updateComponentList();
-
-    // If this is the active component, refresh its nav
-    if (activeComponentName === name) {
-        updateNavForComponent(name);
-    }
-
-    // Try to attach output listeners immediately (if metadata is already there)
-    attachOutputListeners(name);
 };
 
 const attachOutputListeners = (name: string) => {
@@ -358,8 +391,9 @@ const updateComponentList = () => {
     const list = document.getElementById('quickNavList');
     const grid = document.getElementById('exploreView');
     
-    // Filter out components that are no longer installed in localStorage
-    const registeredComponents = Object.keys(globalThis.zeroComponents).filter(key => {
+    // Source available components from the registry
+    const registry = (window as any).zero?.components || {};
+    const registeredComponents = Object.keys(registry).filter(key => {
         // Deriving plugin ID from key (selector-version)
         const id = key.substring(0, key.lastIndexOf('-')) || key;
         const isInstalled = (window as any).isPluginInstalled(id);
@@ -370,7 +404,6 @@ const updateComponentList = () => {
         if (id.startsWith('zero-')) {
             const strippedId = id.substring(5);
             if ((window as any).isPluginInstalled(strippedId)) {
-                console.log(`[Dashboard] Mapping component ${id} to installed plugin ${strippedId}`);
                 return true;
             }
         }
@@ -384,12 +417,9 @@ const updateComponentList = () => {
             const item = document.createElement('a');
             item.className = 'nav-item';
             
-            // Fetch metadata for better display
-            const config = (window as any).zero?.components?.[key] || 
-                           (window as any).zeroLibrary?.[key] || 
-                           (window as any).componentRegistry?.[key];
-            
-            const displayName = config?.componentMetadata?.name || key.substring(0, key.lastIndexOf('-') || key.length);
+            const config = registry[key];
+            const metadata = config?.metadata || config?.componentMetadata;
+            const displayName = metadata?.name || key.substring(0, key.lastIndexOf('-') || key.length);
             const displaySelector = key;
             
             item.innerHTML = `
@@ -399,9 +429,19 @@ const updateComponentList = () => {
                 </div>
             `;
             item.href = '#';
-            item.onclick = () => {
+            item.onclick = (e) => {
+                e.preventDefault();
                 activeComponentName = key;
-                displayComponent(globalThis.zeroComponents[key][0]);
+                
+                // AUTO-INSTANTIATION: Create instance if it doesn't exist or is invalid
+                let instance = globalThis.zeroComponents[key]?.[0];
+                if (!instance || !(instance instanceof Node)) {
+                    console.log(`[Dashboard] Creating new instance for ${key}`);
+                    instance = document.createElement(key);
+                    globalThis.zeroComponents[key] = [instance]; // Reset with real instance
+                }
+                
+                displayComponent(instance);
                 showPreview(key);
                 updateNavForComponent(key);
             };
@@ -415,11 +455,9 @@ const updateComponentList = () => {
             grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);"><h3>No components added yet</h3><p>Go to the <a href="marketplace.html" style="color: var(--accent-color)">Marketplace</a> to browse and add components.</p></div>';
         }
         registeredComponents.forEach(key => {
-            const config = (window as any).zero?.components?.[key] || 
-                           (window as any).zeroLibrary?.[key] || 
-                           (window as any).componentRegistry?.[key];
-            
-            const displayName = config?.componentMetadata?.name || key.substring(0, key.lastIndexOf('-') || key.length);
+            const config = registry[key];
+            const metadata = config?.metadata || config?.componentMetadata;
+            const displayName = metadata?.name || key.substring(0, key.lastIndexOf('-') || key.length);
             const displaySelector = key;
 
             const card = document.createElement('div');
@@ -434,27 +472,32 @@ const updateComponentList = () => {
                     <div style="font-size: 2rem; color: var(--accent-color); margin-bottom: 1rem;"><i class="fas fa-puzzle-piece"></i></div>
                     <h3 style="margin: 0; font-size: 1.1rem;">${displayName}</h3>
                     <div style="color: var(--text-muted); font-size: 0.75rem; font-family: monospace; margin-top: 0.25rem;">${displaySelector}</div>
-                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.75rem;">${config?.componentMetadata?.title || 'Dynamic Lit component with active theme support.'}</p>
+                    <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 0.75rem;">${metadata?.title || 'Dynamic Lit component with active theme support.'}</p>
                 </div>
             `;
 
-            // Handle remove button click
             const removeBtn = card.querySelector('.remove-plugin');
             removeBtn?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if (confirm(`Are you sure you want to remove the plugin "${displayName}"?`)) {
                     const pluginId = key.substring(0, key.lastIndexOf('-')) || key;
                     (window as any).uninstallPlugin(pluginId);
-                    // UI refresh is handled by the Bridge's custom event below or immediate call
                     updateComponentList();
                 }
             });
 
-            // Handle card content click
-            const cardContent = card.querySelector('.card-content');
-            cardContent?.addEventListener('click', () => {
+            card.querySelector('.card-content')?.addEventListener('click', () => {
                 activeComponentName = key;
-                displayComponent(globalThis.zeroComponents[key][0]);
+                
+                // AUTO-INSTANTIATION: Create instance if it doesn't exist or is invalid
+                let instance = globalThis.zeroComponents[key]?.[0];
+                if (!instance || !(instance instanceof Node)) {
+                    console.log(`[Dashboard] Creating new instance for ${key}`);
+                    instance = document.createElement(key);
+                    globalThis.zeroComponents[key] = [instance]; // Reset with real instance
+                }
+
+                displayComponent(instance);
                 showPreview(key);
                 updateNavForComponent(key);
             });
@@ -468,7 +511,12 @@ const displayComponent = (component: HTMLElement) => {
     const preview = document.getElementById('mainPreview');
     if (preview) {
         preview.innerHTML = '';
-        preview.appendChild(component);
+        if (component instanceof Node) {
+            preview.appendChild(component);
+        } else {
+            console.error('[Dashboard] Attempted to append an invalid Node to preview:', component);
+            preview.innerHTML = '<div style="padding: 2rem; color: var(--uiv-status-danger);">Error: Component failed to instantiate correctly.</div>';
+        }
     }
 };
 
@@ -549,9 +597,37 @@ const showPreview = (name: string) => {
 // Initialization
 document.addEventListener('DOMContentLoaded', async () => {
     initializeStyles();
+    
+    // Debug: Log all component-related events
+    window.addEventListener('element-connected', (e: any) => {
+        console.log('[Debug] element-connected:', e.detail?.element?.localName || e.detail?.element);
+    });
+    window.addEventListener('zero-element:component-load', (e: any) => {
+        console.log('[Debug] zero-element:component-load:', e.detail?.element);
+    });
+    window.addEventListener('zero-element:metadata-ready', (e: any) => {
+        console.log('[Debug] zero-element:metadata-ready:', e.detail?.element);
+    });
+    window.addEventListener('plugins-ready', () => {
+        console.log('[Debug] plugins-ready received');
+    });
+    
     await loadComponents();
     updateComponentList();
     showExplore(); // Ensure explorer is shown initially
+    
+    // Fallback: If no components registered after 5 seconds, try to load them manually
+    setTimeout(() => {
+        const components = globalThis.zeroComponents;
+        const zeroComponents = window.zero?.components;
+        console.log('[Debug] Fallback check - globalThis.zeroComponents:', Object.keys(components));
+        console.log('[Debug] Fallback check - window.zero.components:', Object.keys(zeroComponents || {}));
+        
+        if (Object.keys(components).length === 0 && Object.keys(zeroComponents || {}).length === 0) {
+            console.log('[Debug] No components registered, dispatching manual check');
+            window.dispatchEvent(new CustomEvent('plugins-updated'));
+        }
+    }, 5000);
 });
 
 window.addEventListener('plugins-updated', () => {

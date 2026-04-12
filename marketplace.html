@@ -255,7 +255,7 @@
 
         async function fetchDiscovery() {
             try {
-                const res = await fetch('http://localhost:5555/discovery');
+                const res = await fetch('http://localhost:5555/service/discovery');
                 discovery = await res.json();
                 renderMarket();
             } catch (e) { console.error('Discovery failed', e); }

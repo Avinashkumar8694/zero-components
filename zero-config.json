@@ -1,10 +1,10 @@
 {
   "installedPlugins": [
-    "nrenderer",
     "open-popup-directive",
     "attribute-window",
     "zero-uiv-themes",
-    "popup-dropdown"
+    "popup-dropdown",
+    "popup-dropdown-directive"
   ],
   "activeProvider": "",
   "activeTheme": ""

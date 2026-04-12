@@ -92,7 +92,13 @@ const setupRoutes = (app, basePath) => {
         }
         fs.readFile(configPath, 'utf8', (err, data) => {
             if (err) return res.status(500).json({ error: 'Failed to read config' });
-            res.json(JSON.parse(data));
+            try {
+                const config = data.trim() ? JSON.parse(data) : { installedPlugins: [], activeProvider: '', activeTheme: '' };
+                res.json(config);
+            } catch (parseError) {
+                console.warn('[Server] Failed to parse config JSON, returning default', parseError);
+                res.json({ installedPlugins: [], activeProvider: '', activeTheme: '' });
+            }
         });
     });
 

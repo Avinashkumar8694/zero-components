@@ -3,24 +3,29 @@
 (function() {
     console.log('[Bridge] Initializing global library bridge...');
     
-    // 1. Component Registration Bridge
-    const componentRegistry: any = {};
+    // 1. Component Registration Bridge (Source from unified ZeroRegistry)
+    const getRegistry = () => (window as any).ZeroRegistry;
+    
     window.addEventListener('zero-element:component-load', (event: any) => {
-        const metadata = event.detail.element;
-        if (metadata && metadata.selector) {
-            const fullSelector = `${metadata.selector}-${metadata.version}`;
+        // Support both new 'element' structure and legacy direct detail structure
+        const metadata = event.detail.element || event.detail;
+        
+        if (metadata && (metadata.selector || metadata.elementSelector)) {
+            const selector = metadata.selector || metadata.elementSelector;
+            const fullSelector = `${selector}-${metadata.version || '1.0.0'}`;
             console.log('[Bridge] Bridging component load:', fullSelector);
-            componentRegistry[fullSelector] = metadata;
+            
+            // Dispatch legacy event for backward compatibility
             window.dispatchEvent(new CustomEvent('element-connected', {
                 detail: { element: { localName: fullSelector } }
             }));
         }
     });
 
-    (window as any).componentRegistry = componentRegistry;
-    (window as any).getZeroMetadata = (tagName: string) => componentRegistry[tagName];
+    (window as any).componentRegistry = (window as any).zero?.components || {};
+    (window as any).getZeroMetadata = (tagName: string) => (window as any).zero?.components?.[tagName];
 
-    const CONFIG_URL = 'http://localhost:5555/config';
+    const CONFIG_URL = 'http://localhost:5555/service/config';
 
     async function pushConfig() {
         try {
@@ -109,10 +114,14 @@
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.type = 'module';
-            // Use discovery-provided path or fallback to convention
-            script.src = customMainPath || `/packages/${id}/src/index.ts`;
             
-            console.log(`[Bridge] Injecting script for ${id}: ${script.src}`);
+            let src = customMainPath;
+            if (!src) {
+                src = `/packages/${id}/src/index.ts`;
+            }
+            
+            console.log(`[Bridge] Injecting script for ${id}: ${src}`);
+            script.src = src;
             
             script.onload = () => {
                 console.log(`[Bridge] Script loaded successfully for: ${id}`);
@@ -120,8 +129,18 @@
                 resolve(true);
             };
             script.onerror = () => {
-                console.error(`[Bridge] Failed to load plugin script for: ${id} from ${script.src}`);
-                reject();
+                console.warn(`[Bridge] First attempt failed for ${id}, trying fallback path...`);
+                const fallbackSrc = `/packages/${id}/${id}.ts`;
+                script.src = fallbackSrc;
+                script.onload = () => {
+                    console.log(`[Bridge] Script loaded successfully for: ${id} from fallback`);
+                    loadedScripts.add(id);
+                    resolve(true);
+                };
+                script.onerror = () => {
+                    console.error(`[Bridge] Failed to load plugin script for: ${id} from both paths`);
+                    reject();
+                };
             };
             document.head.appendChild(script);
         });
@@ -150,7 +169,7 @@
     async function initSync() {
         console.log('[Bridge] Starting sync with API server...');
         try {
-            const discRes = await fetch(`http://localhost:5555/discovery`);
+            const discRes = await fetch(`http://localhost:5555/service/discovery`);
             const discoveryInfo = await discRes.json();
             const allPlugins = [...(discoveryInfo.components || []), ...(discoveryInfo.themes || [])];
             console.log(`[Bridge] Discovered ${allPlugins.length} potential plugins from server`);

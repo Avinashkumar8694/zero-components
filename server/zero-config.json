@@ -1,7 +1,7 @@
 {
   "installedPlugins": [
-    "nrenderer",
-    "code-editor"
+    "code-editor",
+    "zero-uiv-themes"
   ],
   "activeProvider": "",
   "activeTheme": ""

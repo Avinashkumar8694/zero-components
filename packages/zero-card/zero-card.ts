@@ -1,4 +1,5 @@
 // @environment page
+import type { ZeroStudioTemplate } from "zero-annotation";
 import { RendererAttribute, RendererComponent, applyGlobalStyles, AttributeType, UserInterfaceType } from "zero-annotation";
 import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
@@ -13,6 +14,25 @@ import { property } from "lit/decorators.js";
 })
 @applyGlobalStyles()
 export class ZeroCard extends LitElement {
+  static getStudioTemplate(): ZeroStudioTemplate {
+    return {
+      kind: "card",
+      templateHtml: [
+        "<div style='display:grid;gap:8px;padding:14px;border-radius:18px;border:1px solid rgba(148,163,184,0.16);background:linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,250,252,0.94));'>",
+        "<strong style='font-size:0.95rem;color:#132238;'>{{display:title}}</strong>",
+        "<div style='font-size:0.8rem;color:#64748b;'>{{display:subtitle}}</div>",
+        "<div style='font-size:0.74rem;color:#64748b;'>title mode: {{mode:title}}</div>",
+        "{{children}}",
+        "</div>"
+      ].join(""),
+      titleProp: "title",
+      subtitleProp: "subtitle",
+      dynamicHints: ["$.card_title", "$.card_subtitle"],
+      badges: ["Card"],
+      placeholderLines: ["$.card_title", "$.card_subtitle", "{{item.note}}"],
+    };
+  }
+
   static styles = css`
     :host {
       display: block;

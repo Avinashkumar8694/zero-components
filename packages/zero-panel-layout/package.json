@@ -2,7 +2,7 @@
   "name": "zero-panel-layout",
   "version": "1.0.0",
   "description": "Responsive panel layout component with 1-4 column options",
-  "main": "zero-panel-layout.ts",
+  "main": "index.ts",
   "type": "module",
   "keywords": [
     "lit",

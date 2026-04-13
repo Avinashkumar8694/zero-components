@@ -1,9 +1,26 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:grid;gap:8px;padding:12px;border-radius:14px;border:1px solid rgba(148,163,184,0.18);background:rgba(255,255,255,0.96);'>",
+        "<label style='font-size:0.78rem;font-weight:700;color:#334155;'>{{display:label}}</label>",
+        "<div style='border:1px solid rgba(148,163,184,0.28);border-radius:10px;padding:11px 14px;background:#fff;color:#94a3b8;'>{{display:placeholder}}</div>",
+        "<div style='display:flex;gap:8px;flex-wrap:wrap;'>",
+        "<span style='padding:3px 8px;border-radius:999px;background:rgba(219,234,254,0.85);color:#1d4ed8;font-size:0.72rem;font-weight:700;'>value: {{mode:value}}</span>",
+        "<span style='padding:3px 8px;border-radius:999px;background:rgba(240,253,250,0.9);color:#0f766e;font-size:0.72rem;font-weight:700;'>required: {{display:required}}</span>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Input'],
+};
 
 /**
  * A configurable text input component with global styling.
@@ -22,6 +39,31 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroTextInput extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) {
+            return studioTemplate;
+        }
+
+        const label = escapeStudio(config.studio.display.label || 'Text Input');
+        const placeholder = escapeStudio(config.studio.display.placeholder || 'Enter value');
+        const valueMode = escapeStudio(config.studio.mode.value || 'static');
+        const required = escapeStudio(config.studio.display.required || 'false');
+
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='display:grid;gap:8px;padding:12px;border-radius:14px;border:1px solid rgba(148,163,184,0.18);background:rgba(255,255,255,0.96);'>",
+                `<label style='font-size:0.78rem;font-weight:700;color:#334155;'>${label}</label>`,
+                `<div style='border:1px solid rgba(148,163,184,0.28);border-radius:10px;padding:11px 14px;background:#fff;color:#94a3b8;'>${placeholder}</div>`,
+                "<div style='display:flex;gap:8px;flex-wrap:wrap;'>",
+                `<span style='padding:3px 8px;border-radius:999px;background:rgba(219,234,254,0.85);color:#1d4ed8;font-size:0.72rem;font-weight:700;'>value: ${valueMode}</span>`,
+                `<span style='padding:3px 8px;border-radius:999px;background:rgba(240,253,250,0.9);color:#0f766e;font-size:0.72rem;font-weight:700;'>required: ${required}</span>`,
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     static styles = css`
         :host {
             display: block;
@@ -264,4 +306,13 @@ export class ZeroTextInput extends LitElement {
             </div>
         `;
     }
+}
+
+function escapeStudio(value: string): string {
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 }

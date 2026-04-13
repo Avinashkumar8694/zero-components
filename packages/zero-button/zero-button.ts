@@ -1,7 +1,24 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotation";
 import { RendererAttribute, RendererComponent, applyGlobalStyles, AttributeType, UserInterfaceType } from "zero-annotation";
 import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
+
+export const studioTemplate: ZeroStudioTemplate = {
+  kind: "button",
+  templateHtml: [
+    "<div style='display:grid;gap:8px;'>",
+    "<button type='button' style='border:0;border-radius:999px;padding:12px 16px;background:#16324f;color:#f8fafc;font-weight:700;justify-self:start;'>{{display:label}}</button>",
+    "<div style='display:flex;gap:8px;flex-wrap:wrap;'>",
+    "<span style='padding:3px 8px;border-radius:999px;background:rgba(219,234,254,0.85);color:#1d4ed8;font-size:0.72rem;font-weight:700;'>label: {{mode:label}}</span>",
+    "<span style='padding:3px 8px;border-radius:999px;background:rgba(254,242,242,0.9);color:#b91c1c;font-size:0.72rem;font-weight:700;'>variant: {{display:variant}}</span>",
+    "</div>",
+    "</div>"
+  ].join(""),
+  labelProp: "label",
+  dynamicHints: ["$.button_label", "$.cta_text"],
+  badges: ["Action"],
+};
 
 @RendererComponent({
   name: "zero-button",
@@ -13,6 +30,29 @@ import { property } from "lit/decorators.js";
 })
 @applyGlobalStyles()
 export class ZeroButton extends LitElement {
+  static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+    if (!config) {
+      return studioTemplate;
+    }
+
+    const labelDisplay = escapeStudio(config.studio.display.label || "{{display:label}}");
+    const labelMode = escapeStudio(config.studio.mode.label || "static");
+    const variantDisplay = escapeStudio(config.studio.display.variant || "{{display:variant}}");
+
+    return {
+      ...studioTemplate,
+      templateHtml: [
+        "<div style='display:grid;gap:8px;'>",
+        `<button type='button' style='border:0;border-radius:999px;padding:12px 16px;background:#16324f;color:#f8fafc;font-weight:700;justify-self:start;'>${labelDisplay}</button>`,
+        "<div style='display:flex;gap:8px;flex-wrap:wrap;'>",
+        `<span style='padding:3px 8px;border-radius:999px;background:rgba(219,234,254,0.85);color:#1d4ed8;font-size:0.72rem;font-weight:700;'>label: ${labelMode}</span>`,
+        `<span style='padding:3px 8px;border-radius:999px;background:rgba(254,242,242,0.9);color:#b91c1c;font-size:0.72rem;font-weight:700;'>variant: ${variantDisplay}</span>`,
+        "</div>",
+        "</div>"
+      ].join(""),
+    };
+  }
+
   static styles = css`
     :host {
       display: inline-block;
@@ -129,4 +169,13 @@ export class ZeroButton extends LitElement {
       </button>
     `;
   }
+}
+
+function escapeStudio(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }

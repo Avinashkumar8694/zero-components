@@ -115,9 +115,12 @@
             const tryLoad = (path: string, isFallback: boolean = false) => {
                 const script = document.createElement('script');
                 script.type = 'module';
-                script.src = path;
                 
-                console.log(`[Bridge] Injecting script for ${id} (${isFallback ? 'fallback' : 'primary'}): ${path}`);
+                // Add cache-busting timestamp to ensure fresh load even if version is same
+                const cacheBustPath = `${path}${path.includes('?') ? '&' : '?'}cb=${Date.now()}`;
+                script.src = cacheBustPath;
+                
+                console.log(`[Bridge] Injecting script for ${id} (${isFallback ? 'fallback' : 'primary'}): ${cacheBustPath}`);
                 
                 script.onload = () => {
                     console.log(`[Bridge] Script loaded successfully for: ${id}`);

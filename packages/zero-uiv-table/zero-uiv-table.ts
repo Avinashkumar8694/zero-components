@@ -1,3 +1,4 @@
+import type { ZeroStudioTemplate } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
@@ -13,6 +14,40 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivTable extends LitElement {
+    static getStudioTemplate(): ZeroStudioTemplate {
+        return {
+            kind: "table",
+            templateHtml: [
+                "<div style='display:grid;gap:10px;padding:12px;border-radius:16px;border:1px solid rgba(148,163,184,0.2);background:rgba(255,255,255,0.96);'>",
+                "<div style='display:flex;justify-content:space-between;align-items:center;gap:8px;'>",
+                "<strong style='font-size:0.92rem;color:var(--zs-text);'>Table · {{display:theme}}</strong>",
+                "<span style='font-size:0.76rem;color:var(--zs-text-muted);'>columns: {{mode:columns}} · rows: {{mode:data}}</span>",
+                "</div>",
+                "<div style='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;border-radius:10px;overflow:hidden;background:rgba(148,163,184,0.18);'>",
+                "<div style='padding:9px 10px;background:#e0f2fe;color:#0f172a;font-size:0.78rem;font-weight:700;'>label_1</div>",
+                "<div style='padding:9px 10px;background:#e0f2fe;color:#0f172a;font-size:0.78rem;font-weight:700;'>label_2</div>",
+                "<div style='padding:9px 10px;background:#e0f2fe;color:#0f172a;font-size:0.78rem;font-weight:700;'>label_3</div>",
+                "<div style='padding:9px 10px;background:#fff;color:#64748b;font-size:0.76rem;'>{{row.id}}</div>",
+                "<div style='padding:9px 10px;background:#fff;color:#64748b;font-size:0.76rem;'>{{row.name}}</div>",
+                "<div style='padding:9px 10px;background:#fff;color:#64748b;font-size:0.76rem;'>{{row.status}}</div>",
+                "</div>",
+                "<div style='font-size:0.74rem;color:var(--zs-text-muted);'>rows source: {{display:data}}</div>",
+                "</div>"
+            ].join(""),
+            titleProp: "theme",
+            columnsProp: "columns",
+            dataProp: "data",
+            emptyText: "Configure static columns, dynamic columns, and row mapping",
+            dynamicHints: ["$.table.columns", "$.table.rows", "{{row.id}}", "{{row.name}}"],
+            badges: ["Static Columns", "Dynamic Rows"],
+            sampleHeaders: ["label_1", "label_2", "label_3"],
+            sampleRows: [
+                ["{{row.id}}", "{{row.name}}", "{{row.status}}"],
+                ["$.row_var.id", "$.row_var.name", "$.row_var.status"],
+            ],
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

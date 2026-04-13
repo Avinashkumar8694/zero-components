@@ -1,4 +1,5 @@
 // @environment page
+import type { ZeroStudioTemplate } from "zero-annotation";
 import { RendererAttribute, RendererComponent, applyGlobalStyles, AttributeType, UserInterfaceType } from "zero-annotation";
 import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
@@ -13,6 +14,23 @@ import { property } from "lit/decorators.js";
 })
 @applyGlobalStyles()
 export class ZeroText extends LitElement {
+  static getStudioTemplate(): ZeroStudioTemplate {
+    return {
+      kind: "text",
+      templateHtml: [
+        "<div style='display:grid;gap:6px;padding:10px 12px;border-radius:12px;border:1px solid rgba(148,163,184,0.18);background:rgba(255,255,255,0.95);'>",
+        "<div style='font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--zs-text-muted);'>Text</div>",
+        "<p style='margin:0;color:#475569;line-height:1.55;font-size:0.9rem;'>{{display:text}}</p>",
+        "<div style='font-size:0.74rem;color:var(--zs-text-muted);'>mode: {{mode:text}}</div>",
+        "</div>"
+      ].join(""),
+      textProp: "text",
+      dynamicHints: ["$.label", "{{row.description}}"],
+      badges: ["Text"],
+      placeholderLines: ["$.headline", "{{row.description}}"],
+    };
+  }
+
   static styles = css`
     :host {
       display: block;

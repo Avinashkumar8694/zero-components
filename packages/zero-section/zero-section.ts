@@ -1,125 +1,169 @@
-// @environment page
-import { RendererAttribute, RendererComponent, applyGlobalStyles, AttributeType, UserInterfaceType } from "zero-annotation";
-import { LitElement, css, html } from "lit";
-import { property } from "lit/decorators.js";
+import { html, css } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import { RendererComponent, RendererAttribute, AttributeType, UserInterfaceType } from "zero-annotation";
+import { ZeroLayoutBase } from "../zero-panel-layout/zero-layout-base";
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotation";
+import { CSSResultGroup } from "lit";
 
+/**
+ * ZeroSection
+ * Professional decorative container for high-end web blocks.
+ */
 @RendererComponent({
   name: "zero-section",
   version: "1.0.0",
-  title: "Section",
+  title: "Section Block",
   elementSelector: "zero-section",
   group: "Layout",
   iconName: "section-icon.png",
 })
-@applyGlobalStyles()
-export class ZeroSection extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-      width: 100%;
-      --zero-section-header-padding: 8px 20px;
-    }
+@customElement("zero-section")
+export class ZeroSection extends ZeroLayoutBase {
+  protected get overridePrefix() { return "zero-section"; }
 
-    section {
-      width: 100%;
-      box-sizing: border-box;
-      padding: var(--zero-section-padding, 32px 20px);
-      background: var(--zero-section-bg, transparent);
-    }
+  static styles: CSSResultGroup = [
+    ZeroLayoutBase.styles,
+    css`
+      .section-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        /* Consumes standardized responsive variables */
+        background-image: var(--zero-section-bg-url, none);
+        border: var(--zero-section-border-w, 0px) solid var(--zero-section-border-c, transparent);
+      }
+      
+      .background-video {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover;
+        z-index: 0;
+      }
 
-    .section-header {
-      max-width: var(--zero-section-max-width, 1200px);
-      margin: 0 auto 12px;
-      padding: var(--zero-section-header-padding);
-      border-bottom: 2px solid rgba(0, 0, 0, 0.05);
-      font-weight: 700;
-      color: var(--zero-text-muted, #64748b);
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+      .content-layer {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        height: 100%;
+      }
 
-    .inner {
-      max-width: var(--zero-section-max-width, 1200px);
-      margin: 0 auto;
-    }
-  `;
+      :host([parallax]) .section-inner {
+        background-attachment: fixed;
+      }
+    `
+  ];
 
-  @property({ type: Number, attribute: "max-width" }) maxWidth = 1200;
-  @property({ type: Number }) padding = 32;
-  @property({ type: String, attribute: "background-color" }) backgroundColor = "transparent";
-  
-  @property({ type: Boolean, attribute: "enable-header" }) 
+  @property({ type: String })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.CHECKBOX,
-    displayLabel: "Show Header",
-    fieldMappings: "enableHeader"
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Background Image",
+    fieldMappings: "backgroundImage",
+    categoryLabel: "Appearance"
   })
-  enableHeader = false;
+  backgroundImage = "";
 
   @property({ type: String })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
     uiComponentType: UserInterfaceType.TEXT_INPUT,
-    displayLabel: "Section Label",
-    fieldMappings: "label"
+    displayLabel: "Background Video (URL)",
+    fieldMappings: "backgroundVideo",
+    categoryLabel: "Appearance"
   })
-  label = "";
+  backgroundVideo = "";
 
+  @property({ type: Boolean, reflect: true })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.NUMBER_INPUT,
-    displayLabel: "Max Width",
-    fieldMappings: "maxWidth"
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Enable Parallax",
+    fieldMappings: "parallax",
+    categoryLabel: "Appearance"
   })
-  get maxWidthConfig() {
-    return this.maxWidth;
-  }
-  set maxWidthConfig(value: number) {
-    this.maxWidth = Number(value) || 1200;
-  }
+  parallax = false;
 
+  @property({ type: String, attribute: "border-width" })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.NUMBER_INPUT,
-    displayLabel: "Padding",
-    fieldMappings: "padding"
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Border Width",
+    fieldMappings: "borderWidth",
+    categoryLabel: "Appearance"
   })
-  get paddingConfig() {
-    return this.padding;
-  }
-  set paddingConfig(value: number) {
-    this.padding = Number(value) || 32;
-  }
+  borderWidth = "0px";
 
+  @property({ type: String, attribute: "border-color" })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.COLOR_PICKER,
-    displayLabel: "Background",
-    fieldMappings: "backgroundColor"
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Border Color",
+    fieldMappings: "borderColor",
+    categoryLabel: "Appearance"
   })
-  get backgroundConfig() {
-    return this.backgroundColor;
+  borderColor = "transparent";
+
+  static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+    const label = config?.props?.label || "Section Block";
+    return {
+      kind: "section",
+      slots: [
+        { id: "default", label: "Section Content", dropzone: true }
+      ],
+      templateHtml: `
+        <div style="padding:48px 24px; border:2px dashed rgba(100,116,139,0.25); border-radius:12px; background:rgba(255,255,255,0.6); min-height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; margin:20px 0;">
+           <span style="font-size:0.65rem; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:0.05em;">${label}</span>
+           <div style="width:100%; display:flex; flex-direction:column; gap:8px;">
+              <zero-studio-slot name="default"></zero-studio-slot>
+           </div>
+        </div>
+      `,
+      badges: ["Section", "Content"]
+    };
   }
-  set backgroundConfig(value: string) {
-    this.backgroundColor = value || "transparent";
+
+  protected computeInternalStyles(): string {
+    const pref = this.overridePrefix;
+    let base = super.computeInternalStyles();
+    
+    // Support responsive background image overrides
+    const bgUrl = `var(--${pref}-background-image-override, ${this.backgroundImage ? `url(${this.backgroundImage})` : 'none'})`;
+    base += `; --zero-section-bg-url: ${bgUrl}`;
+    
+    // Support responsive border overrides
+    const bWidth = `var(--${pref}-border-width-override, ${this.borderWidth})`;
+    const bColor = `var(--${pref}-border-color-override, ${this.borderColor})`;
+    base += `; --zero-section-border-w: ${bWidth}; --zero-section-border-c: ${bColor}`;
+    
+    return base;
   }
 
   render() {
-    const styleValue = [
-      `--zero-section-max-width:var(--zero-section-max-width-override, ${Math.max(280, Number(this.maxWidth) || 1200)}px)`,
-      `--zero-section-padding:var(--zero-section-padding-override, ${Math.max(0, Number(this.padding) || 0)}px 20px)`,
-      `--zero-section-bg:${this.backgroundColor || "transparent"}`
-    ].join(";");
-
     return html`
-      <section style=${styleValue}>
-        ${this.enableHeader && this.label ? html`<div class="section-header">${this.label}</div>` : ""}
-        <div class="inner">
-          <slot></slot>
+      <div style=${this.computeBaseStyles()}>
+        <div class="zero-internal-container" 
+             style=${this.computeInternalStyles()}
+             @mousemove=${this.handleMouseMove}
+             @mouseleave=${this.handleMouseLeave}>
+          ${this.renderDropIndicators()}
+          <div class="section-inner">
+            ${this.backgroundVideo ? html`
+              <video class="background-video" autoplay muted loop playsinline>
+                <source src=${this.backgroundVideo} type="video/mp4">
+              </video>
+            ` : ""}
+            <div class="content-layer">
+              <slot name="default"></slot>
+              <slot></slot>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
     `;
   }
 }

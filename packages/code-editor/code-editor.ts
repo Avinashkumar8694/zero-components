@@ -1,10 +1,27 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 
 import { LitElement, html, css, CSSResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:grid;gap:0;border:1px solid rgba(30,41,59,0.22);border-radius:14px;overflow:hidden;background:#0f172a;color:#e2e8f0;'>",
+        "<div style='display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#1e293b;font-size:0.74rem;'>",
+        "<strong>{{display:language}}</strong><span>{{display:theme}}</span>",
+        "</div>",
+        "<div style='display:grid;grid-template-columns:50px 1fr;min-height:180px;'>",
+        "<div style='padding:12px 8px;background:#111827;color:#64748b;font-size:0.72rem;line-height:1.6;text-align:right;'>1<br/>2<br/>3<br/>4</div>",
+        "<div style='padding:12px 14px;font-family:monospace;font-size:0.78rem;line-height:1.6;white-space:pre;color:#cbd5e1;'>{{display:code}}</div>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    badges: ['Editor', 'Code'],
+};
 
 /**
  * Represents a Monaco-like code editor component with syntax highlighting and advanced features.
@@ -22,7 +39,33 @@ const getThemeManager = () => (window as any).zeroThemeManager;
     iconName: 'code-icon.png',
 })
 @applyGlobalStyles()
-export class CodeEditor extends LitElement {    static styles = css`
+export class CodeEditor extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) {
+            return studioTemplate;
+        }
+
+        const language = escapeStudio(config.studio.display.language || 'javascript');
+        const theme = escapeStudio(config.studio.display.theme || 'dark');
+        const code = escapeStudio(config.studio.display.code || 'function example() {}');
+
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='display:grid;gap:0;border:1px solid rgba(30,41,59,0.22);border-radius:14px;overflow:hidden;background:#0f172a;color:#e2e8f0;'>",
+                "<div style='display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#1e293b;font-size:0.74rem;'>",
+                `<strong>${language}</strong><span>${theme}</span>`,
+                "</div>",
+                "<div style='display:grid;grid-template-columns:50px 1fr;min-height:180px;'>",
+                "<div style='padding:12px 8px;background:#111827;color:#64748b;font-size:0.72rem;line-height:1.6;text-align:right;'>1<br/>2<br/>3<br/>4</div>",
+                `<div style='padding:12px 14px;font-family:monospace;font-size:0.78rem;line-height:1.6;white-space:pre-wrap;color:#cbd5e1;'>${code}</div>`,
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
+    static styles = css`
         :host {
             display: block;
             width: 100%;
@@ -818,4 +861,13 @@ class CodeEditor {
             </div>
         `;
     }
+}
+
+function escapeStudio(value: string): string {
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 }

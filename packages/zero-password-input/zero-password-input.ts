@@ -1,9 +1,26 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:grid;gap:8px;padding:12px;border-radius:14px;border:1px solid rgba(148,163,184,0.18);background:rgba(255,255,255,0.96);'>",
+        "<label style='font-size:0.78rem;font-weight:700;color:#334155;'>{{display:label}}</label>",
+        "<div style='display:flex;align-items:center;border:1px solid rgba(148,163,184,0.28);border-radius:10px;padding:11px 14px;background:#fff;color:#94a3b8;'>{{display:placeholder}}<span style='margin-left:auto;color:#64748b;'>•••</span></div>",
+        "<div style='display:flex;gap:8px;flex-wrap:wrap;'>",
+        "<span style='padding:3px 8px;border-radius:999px;background:rgba(219,234,254,0.85);color:#1d4ed8;font-size:0.72rem;font-weight:700;'>toggle: {{display:showToggle}}</span>",
+        "<span style='padding:3px 8px;border-radius:999px;background:rgba(255,247,237,0.95);color:#9a3412;font-size:0.72rem;font-weight:700;'>strength: {{display:showStrengthMeter}}</span>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Input', 'Password'],
+};
 
 /**
  * A configurable password input component with show/hide functionality.
@@ -22,6 +39,31 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroPasswordInput extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) {
+            return studioTemplate;
+        }
+
+        const label = escapeStudio(config.studio.display.label || 'Password');
+        const placeholder = escapeStudio(config.studio.display.placeholder || 'Enter password');
+        const showToggle = escapeStudio(config.studio.display.showToggle || 'true');
+        const showStrength = escapeStudio(config.studio.display.showStrengthMeter || 'false');
+
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='display:grid;gap:8px;padding:12px;border-radius:14px;border:1px solid rgba(148,163,184,0.18);background:rgba(255,255,255,0.96);'>",
+                `<label style='font-size:0.78rem;font-weight:700;color:#334155;'>${label}</label>`,
+                `<div style='display:flex;align-items:center;border:1px solid rgba(148,163,184,0.28);border-radius:10px;padding:11px 14px;background:#fff;color:#94a3b8;'>${placeholder}<span style='margin-left:auto;color:#64748b;'>•••</span></div>`,
+                "<div style='display:flex;gap:8px;flex-wrap:wrap;'>",
+                `<span style='padding:3px 8px;border-radius:999px;background:rgba(219,234,254,0.85);color:#1d4ed8;font-size:0.72rem;font-weight:700;'>toggle: ${showToggle}</span>`,
+                `<span style='padding:3px 8px;border-radius:999px;background:rgba(255,247,237,0.95);color:#9a3412;font-size:0.72rem;font-weight:700;'>strength: ${showStrength}</span>`,
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     static styles = css`
         :host {
             display: block;
@@ -324,4 +366,13 @@ export class ZeroPasswordInput extends LitElement {
             </div>
         `;
     }
+}
+
+function escapeStudio(value: string): string {
+    return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
 }

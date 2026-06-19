@@ -1,8 +1,12 @@
 // @environment page
-import type { ZeroStudioTemplate } from "zero-annotation";
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotation";
 import { RendererAttribute, RendererComponent, applyGlobalStyles, AttributeType, UserInterfaceType } from "zero-annotation";
 import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
+
+function escapeStudio(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
   name: "zero-text",
@@ -14,20 +18,25 @@ import { property } from "lit/decorators.js";
 })
 @applyGlobalStyles()
 export class ZeroText extends LitElement {
-  static getStudioTemplate(): ZeroStudioTemplate {
+  static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+    if (!config) return {
+      kind: 'text',
+      templateHtml: "<p style='margin:0;color:var(--uiv-text-color,#4b5563);font-size:16px;line-height:1.65;'>{{display:text}}</p>",
+      textProp: 'text',
+      badges: ['Text']
+    };
+
+    const textDisplay = escapeStudio(config.studio.display.text || "Add descriptive text here.");
+    const size = (config.props?.size ?? config.studio.props?.size) || 16;
+    const weight = (config.props?.weight ?? config.studio.props?.weight) || 400;
+    const color = (config.props?.color ?? config.studio.props?.color) || 'var(--uiv-text-color, #4b5563)';
+    const maxWidth = (config.props?.maxWidth ?? config.studio.props?.maxWidth);
+
     return {
-      kind: "text",
-      templateHtml: [
-        "<div style='display:grid;gap:6px;padding:10px 12px;border-radius:12px;border:1px solid rgba(148,163,184,0.18);background:rgba(255,255,255,0.95);'>",
-        "<div style='font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--zs-text-muted);'>Text</div>",
-        "<p style='margin:0;color:#475569;line-height:1.55;font-size:0.9rem;'>{{display:text}}</p>",
-        "<div style='font-size:0.74rem;color:var(--zs-text-muted);'>mode: {{mode:text}}</div>",
-        "</div>"
-      ].join(""),
-      textProp: "text",
-      dynamicHints: ["$.label", "{{row.description}}"],
-      badges: ["Text"],
-      placeholderLines: ["$.headline", "{{row.description}}"],
+      kind: 'text',
+      templateHtml: `<p style='margin:0;color:${color};font-size:${size}px;font-weight:${weight};line-height:1.65; ${maxWidth ? 'max-width:' + maxWidth + 'px;' : ''}'>${textDisplay}</p>`,
+      textProp: 'text',
+      badges: ['Text']
     };
   }
 

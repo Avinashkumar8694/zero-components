@@ -41,24 +41,28 @@ export const studioTemplate: ZeroStudioTemplate = {
 @applyGlobalStyles()
 export class CodeEditor extends LitElement {
     static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
-        if (!config) {
-            return studioTemplate;
-        }
+        if (!config) return studioTemplate;
 
-        const language = escapeStudio(config.studio.display.language || 'javascript');
-        const theme = escapeStudio(config.studio.display.theme || 'dark');
-        const code = escapeStudio(config.studio.display.code || 'function example() {}');
+        const languageDisplay = escapeStudio(config.studio.display.language || 'javascript');
+        const themeDisplay = escapeStudio(config.studio.display.theme || 'dark');
+        const codeDisplay = escapeStudio(config.studio.display.code || 'function example() {}');
+        
+        const isLight = themeDisplay === 'light';
+        const bg = isLight ? '#ffffff' : '#1e1e1e';
+        const headerBg = isLight ? '#f3f3f3' : '#252526';
+        const text = isLight ? '#333' : '#d4d4d4';
+        const border = 'var(--uiv-border-color, #d1d5db)';
 
         return {
             ...studioTemplate,
             templateHtml: [
-                "<div style='display:grid;gap:0;border:1px solid rgba(30,41,59,0.22);border-radius:14px;overflow:hidden;background:#0f172a;color:#e2e8f0;'>",
-                "<div style='display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#1e293b;font-size:0.74rem;'>",
-                `<strong>${language}</strong><span>${theme}</span>`,
+                `<div style='display:grid;grid-template-rows:auto 1fr;border:1px solid ${border};border-radius:8px;overflow:hidden;background:${bg};color:${text};font-family:monospace;'>`,
+                `<div style='display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:${headerBg};border-bottom:1px solid ${border};font-size:12px;'>`,
+                `<strong>${languageDisplay}</strong><span>${themeDisplay}</span>`,
                 "</div>",
-                "<div style='display:grid;grid-template-columns:50px 1fr;min-height:180px;'>",
-                "<div style='padding:12px 8px;background:#111827;color:#64748b;font-size:0.72rem;line-height:1.6;text-align:right;'>1<br/>2<br/>3<br/>4</div>",
-                `<div style='padding:12px 14px;font-family:monospace;font-size:0.78rem;line-height:1.6;white-space:pre-wrap;color:#cbd5e1;'>${code}</div>`,
+                "<div style='display:grid;grid-template-columns:40px 1fr;min-height:150px;'>",
+                `<div style='padding:12px 8px;background:${headerBg};color:#858585;font-size:12px;text-align:right;border-right:1px solid ${border};'>1<br/>2<br/>3</div>`,
+                `<div style='padding:12px;font-size:13px;line-height:1.4;white-space:pre-wrap;'>${codeDisplay}</div>`,
                 "</div>",
                 "</div>"
             ].join(""),

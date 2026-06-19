@@ -1,4 +1,5 @@
 // @environment common
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotation";
 import {
   RendererAttribute,
   RendererComponent,
@@ -8,6 +9,24 @@ import {
 } from "zero-annotation";
 import { LitElement, css, html } from "lit";
 import { property, customElement } from "lit/decorators.js";
+
+export const studioTemplate: ZeroStudioTemplate = {
+  kind: "generic",
+  slots: [
+    { id: "content", label: "Custom Content", dropzone: true, accepts: [] },
+  ],
+  templateHtml: [
+    "<div style='display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px;border-radius:12px;border:1px solid rgba(148,163,184,0.15);background:rgba(255,255,255,0.95);'>",
+    "<div style='width:36px;height:36px;border:3px solid rgba(0,0,0,0.1);border-top-color:var(--uiv-status-primary,#3b82f6);border-radius:50%;'></div>",
+    "<span style='font-size:0.8rem;color:var(--uiv-text-muted,#64748b);'>{{display:text}}</span>",
+    "<div style='width:100%;min-height:24px;border:1px dashed rgba(148,163,184,0.25);border-radius:6px;padding:4px;'>",
+    "<zero-studio-slot name='content'></zero-studio-slot>",
+    "</div>",
+    "</div>"
+  ].join(""),
+  textProp: "text",
+  badges: ["Feedback", "Loader"],
+};
 
 @RendererComponent({
   name: "zero-loader",
@@ -20,6 +39,27 @@ import { property, customElement } from "lit/decorators.js";
 @applyGlobalStyles()
 @customElement("zero-loader")
 export class ZeroLoader extends LitElement {
+  static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+    if (!config) return studioTemplate;
+
+    const textDisplay = escapeStudio(config.studio.display.text || "Loading...");
+    const primary = 'var(--uiv-primary-color, #3b82f6)';
+    const muted = 'var(--uiv-text-muted, #64748b)';
+
+    return {
+      ...studioTemplate,
+      templateHtml: [
+        "<div style='display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;font-family:inherit;'>",
+        `<div style='width:36px;height:36px;border:3px solid rgba(0,0,0,0.1);border-top-color:${primary};border-radius:50%;'></div>`,
+        `<div style='font-size:14px;color:${muted};font-weight:500;margin-top:8px;'>${textDisplay}</div>`,
+        "<div style='width:100%;min-height:30px;border:2px dashed rgba(148,163,184,0.3);border-radius:8px;padding:8px;margin-top:10px;'>",
+        "<zero-studio-slot name='content'></zero-studio-slot>",
+        "</div>",
+        "</div>"
+      ].join(""),
+    };
+  }
+
   static styles = css`
     :host {
       display: inline-block;
@@ -71,7 +111,7 @@ export class ZeroLoader extends LitElement {
       height: 100%;
       border-radius: 50%;
       border: 4px solid var(--zero-spinner-track, rgba(0, 0, 0, 0.1));
-      border-top-color: var(--zero-spinner-color, var(--zs-brand, #3b82f6));
+      border-top-color: var(--zero-spinner-color, var(--uiv-status-primary, #3b82f6));
       animation: spin 1s linear infinite;
     }
 
@@ -79,7 +119,7 @@ export class ZeroLoader extends LitElement {
       font-family: var(--zero-font-family, system-ui, sans-serif);
       font-size: var(--zero-font-size, 16px);
       font-weight: 500;
-      color: var(--zero-text-color, #475569);
+      color: var(--zero-text-color, var(--uiv-text-muted, #475569));
       text-align: center;
       margin: 0;
     }
@@ -183,7 +223,7 @@ export class ZeroLoader extends LitElement {
     ].join(";");
     
     // The inner container needs background tracking for full screen mode
-    const containerStyle = this.fullScreen ? `background-color: ${this.backgroundColor || 'var(--zs-panel, #ffffff)'}` : `background-color: ${this.backgroundColor}`;
+    const containerStyle = this.fullScreen ? `background-color: ${this.backgroundColor || 'var(--uiv-bg-surface, #ffffff)'}` : `background-color: ${this.backgroundColor}`;
 
     return html`
       <div style=${styleVariables}>
@@ -204,4 +244,8 @@ export class ZeroLoader extends LitElement {
       </div>
     `;
   }
+}
+
+function escapeStudio(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }

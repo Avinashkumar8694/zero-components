@@ -1,4 +1,5 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
@@ -12,6 +13,28 @@ const getThemeManager = () => (window as any).zeroThemeManager;
  * @class ZeroNumberInput
  * @extends {LitElement}
  */
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='padding:8px 12px;border-radius:8px;border:1px solid rgba(148,163,184,0.2);background:rgba(255,255,255,0.95);display:flex;align-items:center;gap:8px;'>",
+        "<div style='flex:1;'>",
+        "<div style='font-size:0.65rem;color:var(--uiv-text-muted,#94a3b8);font-weight:600;margin-bottom:2px;'>{{display:label}}</div>",
+        "<div style='font-size:0.85rem;color:var(--uiv-text-color,#1e293b);font-weight:500;'>{{display:value}}</div>",
+        "</div>",
+        "<div style='display:flex;flex-direction:column;gap:2px;'>",
+        "<span style='font-size:0.6rem;color:#94a3b8;cursor:pointer;'>▲</span>",
+        "<span style='font-size:0.6rem;color:#94a3b8;cursor:pointer;'>▼</span>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Form', 'Number'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 @RendererComponent({
     name: 'zero-number-input',
     version: '1.0.0',
@@ -22,6 +45,35 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroNumberInput extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Number');
+        const valueDisplay = escapeStudio(config.studio.display.value || '0');
+        const showStep = !!(config.props?.showStepControls ?? config.studio.props?.showStepControls);
+        const primary = 'var(--uiv-primary-color, #6c63ff)';
+        const text = 'var(--uiv-text-color, #333)';
+        const border = 'var(--uiv-border-color, #ddd)';
+        const bg = 'var(--uiv-surface-color, #fff)';
+
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='display:block;width:100%;font-family:inherit;'>",
+                `<label style='display:block;margin-bottom:8px;font-size:14px;font-weight:500;color:${text};'>${labelDisplay}</label>`,
+                "<div style='display:flex;align-items:center;'>",
+                `<div style='flex:1;padding:8px 12px;border:1px solid ${border};border-radius:8px;font-size:14px;background:${bg};color:${text};box-shadow:var(--uiv-shadow-depth,none);'>${valueDisplay}</div>`,
+                showStep ? [
+                    "<div style='display:flex;flex-direction:column;margin-left:8px;gap:4px;'>",
+                    `<div style='width:28px;height:18px;border:1px solid ${border};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;background:${bg};color:${text};'>▲</div>`,
+                    `<div style='width:28px;height:18px;border:1px solid ${border};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;background:${bg};color:${text};'>▼</div>`,
+                    "</div>"
+                ].join("") : "",
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     static styles = css`
         :host {
             display: block;

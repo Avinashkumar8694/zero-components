@@ -5,6 +5,7 @@ export * from './packages/popup-dialog/popup-dialog';
 export * from './packages/open-popup-directive/open-popup-directive';
 export * from './packages/popup-dropdown-directive/popup-dropdown-directive';
 export * from './packages/nrenderer/nrenderer';
+export * from './packages/renderer-core/src/index';
 export * from './packages/zero-checkbox/zero-checkbox';
 export * from './packages/zero-color-picker/zero-color-picker';
 export * from './packages/zero-date-picker/zero-date-picker';

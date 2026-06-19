@@ -1,0 +1,10 @@
+{
+  "name": "zero-flow-node-db",
+  "version": "1.0.0",
+  "description": "Flow database node component",
+  "main": "zero-flow-node-db.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "flow-node", "flow-node-type:db"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

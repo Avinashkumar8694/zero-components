@@ -1,7 +1,32 @@
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    slots: [
+        { id: 'default', label: 'Expansion Content', dropzone: true, accepts: [] }
+    ],
+    templateHtml: [
+        "<div style='width:100%;border-radius:12px;border:1px solid var(--uiv-border-color, rgba(148,163,184,0.15));background:var(--uiv-surface-color, rgba(255,255,255,0.95));overflow:hidden;'>",
+        "<div style='padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(148,163,184,0.1);'>",
+        "<span style='font-size:0.85rem;font-weight:600;color:var(--uiv-text-color,#1e293b);'>{{display:headerText}}</span>",
+        "<span style='color:var(--uiv-primary-color,#6366f1);font-size:0.8rem;transform:rotate(180deg);'>▼</span>",
+        "</div>",
+        "<div style='padding:16px;'>",
+        "<zero-studio-slot name='default'></zero-studio-slot>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'headerText',
+    badges: ['Expansion', 'Accordion'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-expansion',
@@ -13,6 +38,26 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivExpansion extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const headerDisplay = escapeStudio(config.studio.display.title || config.studio.display.headerText || 'Expansion Header');
+        const accentCol = (config.props?.accentColor ?? config.studio.props?.accentColor) || 'var(--uiv-primary-color,#6366f1)';
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='width:100%;border-radius:12px;border:1px solid var(--uiv-border-color, rgba(148,163,184,0.15));background:var(--uiv-surface-color, rgba(255,255,255,0.95));overflow:hidden;'>",
+                "<div style='padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(148,163,184,0.1);'>",
+                `<span style='font-size:0.85rem;font-weight:600;color:var(--uiv-text-color,#1e293b);'>${headerDisplay}</span>`,
+                `<span style='color:${accentCol};font-size:0.8rem;transform:rotate(180deg);'>▼</span>`,
+                "</div>",
+                "<div style='padding:16px;'>",
+                "<zero-studio-slot name='default'></zero-studio-slot>",
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

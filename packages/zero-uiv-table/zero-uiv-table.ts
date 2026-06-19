@@ -1,8 +1,12 @@
-import type { ZeroStudioTemplate } from 'zero-annotation';
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-table',
@@ -14,24 +18,47 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivTable extends LitElement {
-    static getStudioTemplate(): ZeroStudioTemplate {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        const columns = (config?.studio?.props?.columns || [
+            { key: 'id', label: 'ID', sortable: true },
+            { key: 'name', label: 'Name', sortable: true },
+            { key: 'status', label: 'Status', sortable: true }
+        ]) as any[];
+        
+        const rows = (config?.studio?.props?.data || [
+            { id: '1', name: 'System Core', status: 'Active' },
+            { id: '2', name: 'Neural Link', status: 'Offline' }
+        ]) as any[];
+
+        let theadHtml = "<thead><tr>";
+        for (const col of columns) {
+            const label = col.label || col.key || '';
+            theadHtml += `<th style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(0,0,0,0.1);font-weight:600;'>${escapeStudio(String(label))}</th>`;
+        }
+        theadHtml += "</tr></thead>";
+
+        let tbodyHtml = "<tbody>";
+        for (let i = 0; i < Math.min(rows.length, 5); i++) {
+            const row = rows[i];
+            const isLast = i === Math.min(rows.length, 5) - 1;
+            const borderStyle = isLast ? '' : 'border-bottom:1px solid rgba(0,0,0,0.05);';
+            tbodyHtml += "<tr>";
+            for (const col of columns) {
+                const val = row[col.key] !== undefined ? String(row[col.key]) : '';
+                tbodyHtml += `<td style='padding:12px 15px;text-align:left;${borderStyle}'>${escapeStudio(val)}</td>`;
+            }
+            tbodyHtml += "</tr>";
+        }
+        tbodyHtml += "</tbody>";
+
         return {
             kind: "table",
             templateHtml: [
-                "<div style='display:grid;gap:10px;padding:12px;border-radius:16px;border:1px solid rgba(148,163,184,0.2);background:rgba(255,255,255,0.96);'>",
-                "<div style='display:flex;justify-content:space-between;align-items:center;gap:8px;'>",
-                "<strong style='font-size:0.92rem;color:var(--zs-text);'>Table · {{display:theme}}</strong>",
-                "<span style='font-size:0.76rem;color:var(--zs-text-muted);'>columns: {{mode:columns}} · rows: {{mode:data}}</span>",
-                "</div>",
-                "<div style='display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;border-radius:10px;overflow:hidden;background:rgba(148,163,184,0.18);'>",
-                "<div style='padding:9px 10px;background:#e0f2fe;color:#0f172a;font-size:0.78rem;font-weight:700;'>label_1</div>",
-                "<div style='padding:9px 10px;background:#e0f2fe;color:#0f172a;font-size:0.78rem;font-weight:700;'>label_2</div>",
-                "<div style='padding:9px 10px;background:#e0f2fe;color:#0f172a;font-size:0.78rem;font-weight:700;'>label_3</div>",
-                "<div style='padding:9px 10px;background:#fff;color:#64748b;font-size:0.76rem;'>{{row.id}}</div>",
-                "<div style='padding:9px 10px;background:#fff;color:#64748b;font-size:0.76rem;'>{{row.name}}</div>",
-                "<div style='padding:9px 10px;background:#fff;color:#64748b;font-size:0.76rem;'>{{row.status}}</div>",
-                "</div>",
-                "<div style='font-size:0.74rem;color:var(--zs-text-muted);'>rows source: {{display:data}}</div>",
+                "<div style='width:100%;overflow-x:auto;'>",
+                "<table style='width:100%;border-collapse:collapse;font-family:inherit;'>",
+                theadHtml,
+                tbodyHtml,
+                "</table>",
                 "</div>"
             ].join(""),
             titleProp: "theme",

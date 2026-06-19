@@ -1,0 +1,48 @@
+{
+  "name": "zero-color-picker",
+  "version": "1.0.0",
+  "description": "A highly configurable color picker component with HSV/HSL support, alpha channel, presets, and eye dropper",
+  "main": "zero-color-picker.ts",
+  "module": "zero-color-picker.js",
+  "types": "zero-color-picker.d.ts",
+  "files": [
+    "zero-color-picker.ts",
+    "zero-color-picker.d.ts",
+    "zero-color-picker.js.map"
+  ],
+  "zero": {
+    "component": true
+  },
+  "keywords": [
+    "web-components",
+    "lit",
+    "color-picker",
+    "color-selector",
+    "hsv",
+    "hsl",
+    "rgb",
+    "alpha",
+    "eyedropper",
+    "zero-components"
+  ],
+  "author": "Zero Components",
+  "license": "MIT",
+  "dependencies": {
+    "lit": "^3.0.0"
+  },
+  "peerDependencies": {
+    "lit": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zero-components/zero-components.git",
+    "directory": "packages/zero-color-picker"
+  },
+  "bugs": {
+    "url": "https://github.com/zero-components/zero-components/issues"
+  },
+  "homepage": "https://github.com/zero-components/zero-components/tree/main/packages/zero-color-picker#readme"
+}

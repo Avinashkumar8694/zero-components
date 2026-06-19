@@ -1,8 +1,24 @@
-import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
-import { LitElement, html, css, TemplateResult } from 'lit';
+import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
+import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+const glowTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='position:relative;width:100%;'>",
+        "<div style='display:block;margin-bottom:8px;font-size:0.9rem;color:var(--uiv-primary-color, #6366f1);letter-spacing:2px;text-transform:uppercase;'>{{display:label}}</div>",
+        "<div style='width:100%;padding:12px 16px;background:var(--uiv-surface-color, #ffffff);border:2px solid var(--uiv-border-color, rgba(128,128,128,0.2));border-radius:8px;color:var(--uiv-text-color, #1e293b);font-size:1rem;box-shadow:0 2px 4px rgba(0,0,0,0.05);box-sizing:border-box;'>{{display:placeholder}}</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Glow', 'Effect'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-input-glow',
@@ -14,6 +30,23 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivInputGlow extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return glowTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Glow Input');
+        const placeholderDisplay = escapeStudio(config.studio.display.placeholder || 'Enter text...');
+        const glowColor = (config.props?.glowColor ?? config.studio.props?.glowColor);
+        const colorVar = glowColor ? glowColor : 'var(--uiv-primary-color, #6366f1)';
+        return {
+            ...glowTemplate,
+            templateHtml: [
+                "<div style='position:relative;width:100%;'>",
+                `<div style='display:block;margin-bottom:8px;font-size:0.9rem;color:${colorVar};letter-spacing:2px;text-transform:uppercase;'>${labelDisplay}</div>`,
+                `<div style='width:100%;padding:12px 16px;background:var(--uiv-surface-color, #ffffff);border:2px solid var(--uiv-border-color, rgba(128,128,128,0.2));border-radius:8px;color:var(--uiv-text-color, #1e293b);font-size:1rem;box-shadow:0 0 10px ${colorVar};box-sizing:border-box;'>${placeholderDisplay}</div>`,
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

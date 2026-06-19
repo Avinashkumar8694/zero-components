@@ -1,4 +1,4 @@
-// @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig } from 'zero-annotation';
 
 import { LitElement, html, css, CSSResult } from 'lit';
@@ -6,13 +6,21 @@ import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
 
-/**
- * Represents a user profile form with various input fields.
- * 
- * @export
- * @class UserProfileForm
- * @extends {LitElement}
- */
+export const editorTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='border:1px solid #e2e8f0;border-radius:8px;background:#fff;padding:8px;box-shadow:0 1px 3px rgba(0,0,0,0.05);width:100%;'>",
+        "<div style='display:flex;gap:6px;border-bottom:1px solid #e2e8f0;padding-bottom:8px;margin-bottom:8px;'>",
+        "<div style='width:24px;height:24px;border-radius:4px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px;color:#333;'>B</div>",
+        "<div style='width:24px;height:24px;border-radius:4px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;font-style:italic;font-size:12px;color:#333;'>I</div>",
+        "<div style='width:24px;height:24px;border-radius:4px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;text-decoration:underline;font-size:12px;color:#333;'>U</div>",
+        "</div>",
+        "<div style='padding:8px;color:#64748b;font-size:0.85rem;min-height:50px;'>Write your rich text content here...</div>",
+        "</div>"
+    ].join(""),
+    badges: ['Rich Text', 'Editor'],
+};
+
 @RendererComponent({
   name: 'rich-text-editor',
   version: '1.0.0',
@@ -23,6 +31,27 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class RichTextEditor extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        const bg = 'var(--uiv-surface-color, #fff)';
+        const border = 'var(--uiv-border-color, #ddd)';
+        const text = 'var(--uiv-text-color, #333)';
+        const headerBg = 'var(--uiv-bg-surface, #f5f5f5)';
+
+        return {
+            ...editorTemplate,
+            templateHtml: [
+                `<div style='border:1px solid ${border};border-radius:8px;background:${bg};overflow:hidden;width:100%;font-family:inherit;'>`,
+                `<div style='display:flex;gap:8px;background:${headerBg};padding:8px;border-bottom:1px solid ${border};'>`,
+                "<div style='width:24px;height:24px;border:1px solid rgba(0,0,0,0.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:12px;'>B</div>",
+                "<div style='width:24px;height:24px;border:1px solid rgba(0,0,0,0.1);border-radius:4px;display:flex;align-items:center;justify-content:center;font-style:italic;font-size:12px;'>I</div>",
+                "<div style='width:24px;height:24px;border:1px solid rgba(0,0,0,0.1);border-radius:4px;display:flex;align-items:center;justify-content:center;text-decoration:underline;font-size:12px;'>U</div>",
+                "</div>",
+                `<div style='padding:16px;color:${text};font-size:14px;min-height:80px;opacity:0.6;'>Write your rich text content here...</div>`,
+                "</div>"
+            ].join(""),
+        };
+    }
+
   content = ``;
   @property({ type: String }) 
   @RendererAttribute({

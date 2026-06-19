@@ -1,6 +1,7 @@
 {
   "installedPlugins": [
-    "code-editor"
+    "code-editor",
+    "zero-standard-themes"
   ],
   "activeProvider": "",
   "activeTheme": ""

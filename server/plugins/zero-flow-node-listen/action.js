@@ -1,0 +1,1 @@
+async function u(t,i,n){let o=String(t.channel??""),r=Number(t.timeoutMs??1e4);if(!o.trim())throw new Error("Listen node has no channel configured");let e=null;return n&&(n.log?.(`[Listen] Waiting on channel "${o}"...`),e=await n.waitFor(o,r)),{output:{...i,listenPayload:e},next:null}}export{u as execute};

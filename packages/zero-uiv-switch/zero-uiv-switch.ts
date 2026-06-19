@@ -1,7 +1,25 @@
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='position:relative;display:inline-block;width:50px;height:28px;'>",
+        "<span style='position:absolute;top:0;left:0;right:0;bottom:0;background-color:var(--uiv-border-color,#e2e8f0);border-radius:34px;box-shadow:inset 0 2px 4px rgba(0,0,0,0.1);'>",
+        "<div style='position:absolute;height:20px;width:20px;left:4px;bottom:4px;background-color:white;border-radius:50%;box-shadow:0 2px 5px rgba(0,0,0,0.2);'></div>",
+        "</span>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Switch', 'Uiverse'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-switch',
@@ -13,6 +31,25 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivSwitch extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const checked = (config.props?.checked ?? config.studio.props?.checked);
+        const accentCol = (config.props?.accentColor ?? config.studio.props?.accentColor) || 'var(--uiv-primary-color,#6366f1)';
+        const bgCol = checked ? accentCol : 'var(--uiv-border-color,#e2e8f0)';
+        const thumbTrans = checked ? 'translateX(22px)' : 'none';
+
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='position:relative;display:inline-block;width:50px;height:28px;'>",
+                `<span style='position:absolute;top:0;left:0;right:0;bottom:0;background-color:${bgCol};border-radius:34px;box-shadow:inset 0 2px 4px rgba(0,0,0,0.1);'>`,
+                `<div style='position:absolute;height:20px;width:20px;left:4px;bottom:4px;background-color:white;border-radius:50%;box-shadow:0 2px 5px rgba(0,0,0,0.2);transform:${thumbTrans};'></div>`,
+                "</span>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

@@ -1,0 +1,1 @@
+async function a(n,e,o){let s=String(n.operation??"query"),r=String(n.model??""),u=String(n.sql??`SELECT * FROM ${r} WHERE id = ?`),i=Array.isArray(n.params)?n.params:[e.id],t=[];return o&&(o.log?.(`[DB] Executing "${s}" on ${r}`),t=await o.db.query(u,i)),{output:{...e,result:t.length===1?t[0]:t,totalCount:t.length},next:null}}export{a as execute};

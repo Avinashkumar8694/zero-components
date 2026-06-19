@@ -1,0 +1,16 @@
+{
+  "name": "zero-standard-themes",
+  "version": "1.0.0",
+  "description": "Standard theme system for Zero components",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "lit": "^3.1.2"
+  },
+  "zeroPlugin": {
+    "type": "theme",
+    "name": "Zero Standard Themes",
+    "description": "Collection of standard themes (Cyber, Glass, Modern, etc.)"
+  }
+}

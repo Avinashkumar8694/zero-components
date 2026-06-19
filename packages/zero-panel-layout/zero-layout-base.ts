@@ -7,11 +7,42 @@ import {
 } from "zero-annotation";
 
 /**
+ * Slot definition for Studio drag-and-drop discovery.
+ * Declare `static slots: ZeroSlotDefinition[]` on any container component so
+ * the Studio can read dropzone metadata without parsing template HTML.
+ */
+export type ZeroSlotDefinition = {
+  /** Matches the `name` attribute on the `<slot>` element in render() */
+  id: string;
+  /** Human-readable label shown in the Studio drop zone */
+  label: string;
+  /** Optional list of component name patterns that can be dropped here */
+  accepts?: string[];
+  /** If false, this slot is excluded from Studio drop zones */
+  dropzone?: boolean;
+  /** Groups multiple slots under a shared flex/grid anchor */
+  anchor?: string;
+};
+
+/**
  * ZeroLayoutBase
  * Professional core engine for all Zero Layout components.
  * Standardizes Styling, Logic, and Interaction for Runtime-Studio Parity.
  */
 export class ZeroLayoutBase extends LitElement {
+  /**
+   * Studio slot metadata. Override in subclasses to declare drop zones.
+   * The Studio reads this static field directly — no template HTML parsing needed.
+   */
+  static slots: ZeroSlotDefinition[] = [];
+  @property({ type: Object, attribute: 'responsive-props' })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    displayLabel: "Responsive Overrides",
+    fieldMappings: "responsiveProps",
+  })
+  responsiveProps: Record<string, any> = {};
+
   static styles: CSSResultGroup = css`
     :host {
       display: block;
@@ -424,6 +455,65 @@ export class ZeroLayoutBase extends LitElement {
   })
   public toggleExpanded() { 
     if (this.expanded) this.collapse(); else this.expand();
+  }
+
+  // --- Responsive Engine ---
+
+  /**
+   * Generates a <style> tag with media queries based on responsiveProps.
+   * Ensures parity between Studio and Renderer for mobile/tablet/desktop overrides.
+   */
+  protected renderResponsiveStyles() {
+    if (!this.responsiveProps || Object.keys(this.responsiveProps).length === 0) return html``;
+
+    const pref = this.overridePrefix;
+    const breakpoints = {
+      mobile: "@media screen and (max-width: 767px)",
+      tablet: "@media screen and (min-width: 768px) and (max-width: 1024px)",
+      desktop: "@media screen and (min-width: 1025px)"
+    };
+
+    // Properties we support for responsive overrides
+    const propMap: Record<string, string> = {
+      width: "width",
+      height: "height",
+      margin: "margin",
+      padding: "padding",
+      gap: "gap",
+      direction: "direction",
+      justify: "justify",
+      align: "align",
+      itemsPerRow: "items-per-row",
+      columns: "items-per-row", // Alias support
+      totalColumns: "total-columns",
+      opacity: "opacity",
+      zIndex: "z-index",
+      backgroundColor: "background-color",
+      borderRadius: "border-radius",
+      elevation: "elevation",
+      wrap: "wrap"
+    };
+
+    let cssText = "";
+
+    Object.entries(breakpoints).forEach(([bp, query]) => {
+      const overrides = this.responsiveProps[bp];
+      if (!overrides) return;
+
+      let bpStyles = "";
+      Object.entries(overrides).forEach(([key, value]) => {
+        const targetVar = propMap[key];
+        if (targetVar) {
+          bpStyles += `--${pref}-${targetVar}-override: ${value};\n`;
+        }
+      });
+
+      if (bpStyles) {
+        cssText += `${query} {\n  :host {\n    ${bpStyles}  }\n}\n`;
+      }
+    });
+
+    return cssText ? html`<style>${cssText}</style>` : html``;
   }
 
   // --- Visual Logic ---

@@ -1,0 +1,1 @@
+async function a(n,o,t){let e=String(n.template??"notification"),r=String(n.to??""),i=String(n.subject??""),s=n.params??o;return t&&(t.log?.(`[Email] Sending "${e}" to ${r}`),await t.mailer.send(r,e,{...s,subject:i})),{output:o,next:null}}export{a as execute};

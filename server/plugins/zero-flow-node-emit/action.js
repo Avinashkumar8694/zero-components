@@ -1,0 +1,1 @@
+async function r(n,o,e){let t=String(n.eventName??"flow.completed"),i=n.payload!==void 0?n.payload:o;return e&&(e.log?.(`[Emit] Triggering event: "${t}"`),e.emit(t,i)),{output:o,emitted:{eventName:t,payload:i},next:null}}export{r as execute};

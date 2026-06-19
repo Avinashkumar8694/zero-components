@@ -1,0 +1,1 @@
+async function a(e,o,n){let t=n?.flowInput??o??{};if(n){for(let[r,u]of Object.entries(t))n.setData(r,u);n.setLocal("__metadata",{nodeType:"start",entryRole:String(e.entryRole??"default"),timestamp:new Date().toISOString()})}return{output:t,next:null}}export{a as execute};

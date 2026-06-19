@@ -1,8 +1,31 @@
-import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
+import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const frostedTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    slots: [
+        { id: 'default', label: 'Expansion Content', dropzone: true, accepts: [] }
+    ],
+    templateHtml: [
+        "<div style='width:100%;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:12px;box-shadow:var(--uiv-shadow-depth, 0 4px 6px -1px rgba(0, 0, 0, 0.1));'>",
+        "<div style='display:flex;align-items:center;justify-content:space-between;padding:16px 24px;font-weight:600;color:var(--uiv-primary-color, #ffffff);border-bottom:1px solid rgba(255,255,255,0.2);background:rgba(255, 255, 255, 0.05);'>",
+        "<span>{{display:label}}</span><span style='transform:rotate(180deg);'>▼</span>",
+        "</div>",
+        "<div style='padding:20px 24px;color:var(--uiv-text-color, #ffffff);'>",
+        "<zero-studio-slot name='default'></zero-studio-slot>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'title',
+    badges: ['Frosted', 'Glassmorphism'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-expansion-frosted',
@@ -14,6 +37,24 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivExpansionFrosted extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return frostedTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.title || 'Frosted Panel');
+        return {
+            ...frostedTemplate,
+            templateHtml: [
+                "<div style='width:100%;background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.2);border-radius:12px;box-shadow:var(--uiv-shadow-depth, 0 4px 6px -1px rgba(0, 0, 0, 0.1));'>",
+                "<div style='display:flex;align-items:center;justify-content:space-between;padding:16px 24px;font-weight:600;color:var(--uiv-primary-color, #ffffff);border-bottom:1px solid rgba(255,255,255,0.2);background:rgba(255, 255, 255, 0.05);'>",
+                `<span>${labelDisplay}</span><span style='transform:rotate(180deg);'>▼</span>`,
+                "</div>",
+                "<div style='padding:20px 24px;color:var(--uiv-text-color, #ffffff);'>",
+                "<zero-studio-slot name='default'></zero-studio-slot>",
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

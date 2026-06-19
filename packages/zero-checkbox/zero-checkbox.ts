@@ -1,4 +1,5 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
@@ -12,6 +13,22 @@ const getThemeManager = () => (window as any).zeroThemeManager;
  * @class ZeroCheckbox
  * @extends {LitElement}
  */
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;border:1px solid rgba(148,163,184,0.15);background:rgba(255,255,255,0.95);'>",
+        "<div style='width:18px;height:18px;border-radius:4px;border:2px solid var(--uiv-primary-color,#6c63ff);'></div>",
+        "<span style='font-size:0.8rem;color:var(--uiv-text-color,#1e293b);'>{{display:label}}</span>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Form', 'Checkbox'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 @RendererComponent({
     name: 'zero-checkbox',
     version: '1.0.0',
@@ -22,6 +39,20 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroCheckbox extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Checkbox');
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;border:1px solid rgba(148,163,184,0.15);background:rgba(255,255,255,0.95);'>",
+                "<div style='width:18px;height:18px;border-radius:4px;border:2px solid var(--uiv-primary-color,#6c63ff);'></div>",
+                `<span style='font-size:0.8rem;color:var(--uiv-text-color,#1e293b);'>${labelDisplay}</span>`,
+                "</div>"
+            ].join(""),
+        };
+    }
+
     static styles = css`
         :host {
             display: block;

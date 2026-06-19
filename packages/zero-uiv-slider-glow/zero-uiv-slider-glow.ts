@@ -1,8 +1,31 @@
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const glowTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(0,210,255,0.3);box-shadow:0 0 15px rgba(0,210,255,0.2);'>",
+        "<div style='display:flex;justify-content:space-between;font-size:0.75rem;font-weight:600;color:var(--uiv-text-color,#1e293b);'>",
+        "<span>{{display:label}}</span>",
+        "<span style='color:#00d2ff;text-shadow:0 0 5px #00d2ff;'>{{display:value}}</span>",
+        "</div>",
+        "<div style='height:6px;border-radius:3px;background:rgba(0,210,255,0.1);position:relative;margin:8px 0;'>",
+        "<div style='position:absolute;left:0;width:50%;height:100%;background:#00d2ff;border-radius:3px;box-shadow:0 0 10px #00d2ff;'></div>",
+        "<div style='position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #00d2ff;box-shadow:0 0 15px #00d2ff;'></div>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Glow', 'Effect'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-slider-glow',
@@ -14,6 +37,39 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivSliderGlow extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return glowTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Glow Slider');
+        const valueDisplay = escapeStudio(config.studio.display.value || (config.props?.value ?? config.studio.props?.value)?.toString() || '50');
+        
+        const primary = 'var(--uiv-primary-color, #00d2ff)';
+        const bg = 'var(--uiv-bg-color, #050801)';
+
+        let perc = 50;
+        if (config.studio.props) {
+            const v = Number((config.props?.value ?? config.studio.props?.value)) || 50;
+            const mn = Number((config.props?.min ?? config.studio.props?.min)) || 0;
+            const mx = Number((config.props?.max ?? config.studio.props?.max)) || 100;
+            perc = Math.max(0, Math.min(100, ((v - mn) / (mx - mn)) * 100));
+        }
+
+        return {
+            ...glowTemplate,
+            templateHtml: [
+                "<div style='display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;background:" + bg + ";border:1px solid " + primary + ";box-shadow:0 0 15px " + primary + ";'>",
+                "<div style='display:flex;justify-content:space-between;font-size:0.75rem;font-weight:600;color:var(--uiv-text-color,#fff);text-transform:uppercase;letter-spacing:2px;'>",
+                `<span>${labelDisplay}</span>`,
+                `<span style='color:${primary};text-shadow:0 0 5px ${primary};'>${valueDisplay}%</span>`,
+                "</div>",
+                "<div style='height:6px;border-radius:3px;background:rgba(0,0,0,0.3);position:relative;margin:8px 0;box-shadow:inset 0 0 5px " + primary + ";'>",
+                `<div style='position:absolute;left:0;width:${perc}%;height:100%;background:${primary};border-radius:3px;box-shadow:0 0 10px ${primary};'></div>`,
+                `<div style='position:absolute;left:${perc}%;top:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:${primary};box-shadow:0 0 5px ${primary}, 0 0 15px ${primary};'></div>`,
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: Number })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

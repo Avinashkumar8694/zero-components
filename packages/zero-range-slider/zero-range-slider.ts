@@ -1,4 +1,5 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
@@ -12,6 +13,27 @@ const getThemeManager = () => (window as any).zeroThemeManager;
  * @class ZeroRangeSlider
  * @extends {LitElement}
  */
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='padding:10px 14px;border-radius:8px;border:1px solid rgba(148,163,184,0.15);background:rgba(255,255,255,0.95);'>",
+        "<div style='font-size:0.65rem;color:var(--uiv-text-muted,#94a3b8);font-weight:600;margin-bottom:6px;'>{{display:label}}</div>",
+        "<div style='height:4px;border-radius:2px;background:rgba(148,163,184,0.2);position:relative;'>",
+        "<div style='position:absolute;left:20%;right:40%;height:100%;background:var(--uiv-primary-color,#6c63ff);border-radius:2px;'></div>",
+        "</div>",
+        "<div style='display:flex;justify-content:space-between;margin-top:4px;font-size:0.6rem;color:#94a3b8;'>",
+        "<span>{{display:min}}</span><span>{{display:max}}</span>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Form', 'Slider'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 @RendererComponent({
     name: 'zero-range-slider',
     version: '1.0.0',
@@ -22,6 +44,50 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroRangeSlider extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Range Slider');
+        const primary = 'var(--uiv-primary-color, #6c63ff)';
+        const bg = 'var(--uiv-surface-color, #ffffff)';
+        const border = 'var(--uiv-border-color, rgba(148,163,184,0.15))';
+        const textMuted = 'var(--uiv-text-muted, #94a3b8)';
+
+        const props = config.studio.props || {};
+        const mn = Number(props.min) || 0;
+        const mx = Number(props.max) || 100;
+        const val1 = Number(props.value) || 50;
+        const val2 = Number(props.secondValue) || 75;
+        const dual = !!props.dualRange;
+
+        const range = mx - mn;
+        let leftBound = 0;
+        let rightBound = 0;
+
+        if (dual) {
+            const low = Math.min(val1, val2);
+            const high = Math.max(val1, val2);
+            leftBound = ((low - mn) / range) * 100;
+            rightBound = 100 - (((high - mn) / range) * 100);
+        } else {
+            leftBound = 0;
+            rightBound = 100 - (((val1 - mn) / range) * 100);
+        }
+
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                `<div style='padding:12px;border-radius:8px;border:1px solid ${border};background:${bg};box-shadow:var(--uiv-shadow-depth, 0 1px 3px rgba(0,0,0,0.05));'>`,
+                `<div style='font-size:0.75rem;color:${textMuted};font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;'>${labelDisplay}</div>`,
+                "<div style='height:6px;border-radius:3px;background:rgba(148,163,184,0.15);position:relative;margin:12px 0;'>",
+                `<div style='position:absolute;left:${leftBound}%;right:${rightBound}%;height:100%;background:${primary};border-radius:3px;box-shadow:var(--uiv-border-glow);'></div>`,
+                `<div style='position:absolute;left:${dual ? leftBound : leftBound + (100 - rightBound)}%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#ffffff;border:3px solid ${primary};box-shadow:0 3px 6px rgba(0,0,0,0.2);'></div>`,
+                dual ? `<div style='position:absolute;left:${100 - rightBound}%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#ffffff;border:3px solid ${primary};box-shadow:0 3px 6px rgba(0,0,0,0.2);'></div>` : '',
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     static styles = css`
         :host {
             display: block;

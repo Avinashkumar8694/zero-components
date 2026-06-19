@@ -1,0 +1,10 @@
+{
+  "name": "zero-heading",
+  "version": "1.0.0",
+  "description": "Configurable heading component",
+  "main": "zero-heading.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "heading", "text", "typography"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

@@ -1,0 +1,13 @@
+{
+  "name": "zero-uiv-checkbox-tick",
+  "version": "1.0.0",
+  "description": "Uiverse-inspired Classic Tick checkbox component",
+  "main": "zero-uiv-checkbox-tick.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "checkbox", "tick", "uiverse"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
+}

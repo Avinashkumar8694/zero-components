@@ -1,8 +1,31 @@
-import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
+import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const blockyTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    slots: [
+        { id: 'default', label: 'Expansion Content', dropzone: true, accepts: [] }
+    ],
+    templateHtml: [
+        "<div style='width:100%;background:var(--uiv-surface-color, #ffffff);border:4px solid var(--uiv-primary-color, #1e293b);border-radius:0px;box-shadow:6px 6px 0 var(--uiv-primary-color, #1e293b);'>",
+        "<div style='display:flex;align-items:center;justify-content:space-between;padding:16px 24px;font-weight:900;color:var(--uiv-primary-color, #1e293b);border-bottom:4px solid var(--uiv-primary-color, #1e293b);background:rgba(30, 41, 59, 0.03);text-transform:uppercase;'>",
+        "<span>{{display:label}}</span><span style='transform:rotate(180deg);'>▼</span>",
+        "</div>",
+        "<div style='padding:20px 24px;color:var(--uiv-text-color, #1e293b);'>",
+        "<zero-studio-slot name='default'></zero-studio-slot>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'title',
+    badges: ['Blocky', 'Container'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-expansion-blocky',
@@ -14,6 +37,24 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivExpansionBlocky extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return blockyTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.title || 'BLOCKY PANEL');
+        return {
+            ...blockyTemplate,
+            templateHtml: [
+                "<div style='width:100%;background:var(--uiv-surface-color, #ffffff);border:4px solid var(--uiv-primary-color, #1e293b);border-radius:0px;box-shadow:6px 6px 0 var(--uiv-primary-color, #1e293b);'>",
+                "<div style='display:flex;align-items:center;justify-content:space-between;padding:16px 24px;font-weight:900;color:var(--uiv-primary-color, #1e293b);border-bottom:4px solid var(--uiv-primary-color, #1e293b);background:rgba(30, 41, 59, 0.03);text-transform:uppercase;'>",
+                `<span>${labelDisplay}</span><span style='transform:rotate(180deg);'>▼</span>`,
+                "</div>",
+                "<div style='padding:20px 24px;color:var(--uiv-text-color, #1e293b);'>",
+                "<zero-studio-slot name='default'></zero-studio-slot>",
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

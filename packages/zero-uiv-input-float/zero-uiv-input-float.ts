@@ -1,8 +1,24 @@
-import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
+import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const floatTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='position:relative;width:100%;padding-top:16px;'>",
+        "<div style='position:absolute;top:0;left:0;font-size:0.65rem;color:var(--uiv-primary-color,#6366f1);font-weight:600;'>{{display:label}}</div>",
+        "<div style='padding:8px 0;border-bottom:2px solid var(--uiv-primary-color,#6366f1);font-size:0.85rem;color:var(--uiv-text-color,#1e293b);'>{{display:placeholder}}</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Float', 'Material'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-input-float',
@@ -14,6 +30,27 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivInputFloat extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return floatTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Float Label');
+        const hasValue = !!(config.props?.value ?? config.studio.props?.value);
+        const primary = 'var(--uiv-primary-color, #6366f1)';
+        const text = 'var(--uiv-text-color, #333)';
+        const border = 'var(--uiv-border-color, rgba(128,128,128,0.2))';
+        const muted = 'var(--uiv-text-muted, #999)';
+
+        return {
+            ...floatTemplate,
+            templateHtml: [
+                "<div style='position:relative;padding-top:20px;width:100%;'>",
+                `<div style='width:100%;padding:10px 0;font-size:1rem;color:${text};border-bottom:2px solid ${hasValue ? primary : border};'>&nbsp;</div>`,
+                `<label style='position:absolute;left:0;transition:all 0.3s;pointer-events:none;color:${hasValue ? primary : muted}; top:${hasValue ? '0' : '25px'}; font-size:${hasValue ? '0.75rem' : '1rem'};'>${labelDisplay}</label>`,
+                `<span style='position:absolute;bottom:0;left:0;right:0;height:2px;background:${primary};width:${hasValue ? '100%' : '0'};transition:0.4s; z-index:1;'></span>`,
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

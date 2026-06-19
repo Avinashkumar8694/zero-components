@@ -1,6 +1,18 @@
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
+
+export const orbitTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:flex;align-items:center;justify-content:center;padding:24px;'>",
+        "<div style='width:30px;height:30px;border:4px solid #e2e8f0;border-top-color:#3b82f6;border-radius:50%;'></div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Loader', 'Orbit'],
+};
 
 @RendererComponent({
     name: 'zero-uiv-loader-orbit',
@@ -12,6 +24,25 @@ import { property } from 'lit/decorators.js';
 })
 @applyGlobalStyles()
 export class ZeroUivLoaderOrbit extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return orbitTemplate;
+        const size = (config.props?.size ?? config.studio.props?.size) || 50;
+        const color = 'var(--uiv-primary-color, #6366f1)';
+        const accent = 'var(--uiv-secondary-color, #8b5cf6)';
+        
+        return {
+            ...orbitTemplate,
+            templateHtml: [
+                `<div style='width:${size}px;height:${size}px;position:relative;display:flex;justify-content:center;align-items:center;'>`,
+                `<div style='width:${size * 0.3}px;height:${size * 0.3}px;background:${color};border-radius:50%;box-shadow:0 0 15px ${color};'></div>`,
+                `<div style='position:absolute;width:100%;height:100%;border:2px solid rgba(255,255,255,0.05);border-radius:50%;'>`,
+                `<div style='position:absolute;top:0;left:50%;width:${size * 0.2}px;height:${size * 0.2}px;background:${accent};border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 10px ${accent};'></div>`,
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     static styles = css`
         :host {
             --uiv-loader-color: var(--uiv-primary-color, #6366f1);

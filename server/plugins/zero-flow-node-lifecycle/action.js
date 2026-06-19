@@ -1,0 +1,1 @@
+async function i(e,t,n){let o=String(e.hookType??"onInit");return n&&(n.log?.(`[Lifecycle] Hook triggered: "${o}"`),n.setLocal("__lifecycle",{hookType:o,timestamp:new Date().toISOString(),flowInput:n.flowInput})),{output:{...t,hookType:o},next:null}}export{i as execute};

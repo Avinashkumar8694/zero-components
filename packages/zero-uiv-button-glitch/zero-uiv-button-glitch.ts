@@ -1,8 +1,26 @@
-import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
+import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const glitchTemplate: ZeroStudioTemplate = {
+    kind: 'button',
+    templateHtml: [
+        "<div style='position:relative;display:inline-block;'>",
+        "<button style='position:relative;padding:10px 30px;font-size:1.2rem;font-weight:800;background:var(--uiv-primary-color, #6366f1);color:#000;border:none;text-transform:uppercase;letter-spacing:2px;clip-path:polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);'>",
+        "{{display:label}}",
+        "</button>",
+        "<span style='position:absolute;right:-10px;bottom:-5px;background:var(--uiv-accent-color, #ec4899);color:#fff;font-size:0.65rem;padding:2px 8px;font-weight:900;transform:skew(-15deg);box-shadow:2px 2px 0 rgba(0,0,0,0.2);'>{{display:tag}}</span>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Glitch', 'Cyberpunk'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-button-glitch',
@@ -14,6 +32,26 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivButtonGlitch extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return glitchTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'GLITCH');
+        const tagDisplay = escapeStudio(config.studio.display.tag || 'V2.0');
+        const glowColor = (config.props?.glowColor ?? config.studio.props?.glowColor);
+        const colorVar = glowColor ? glowColor : 'var(--uiv-accent-color, #ec4899)';
+        
+        return {
+            ...glitchTemplate,
+            templateHtml: [
+                "<div style='position:relative;display:inline-block;'>",
+                "<button style='position:relative;padding:10px 30px;font-size:1.2rem;font-weight:800;background:var(--uiv-primary-color, #6366f1);color:#000;border:none;text-transform:uppercase;letter-spacing:2px;clip-path:polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);'>",
+                labelDisplay,
+                "</button>",
+                `<span style='position:absolute;right:-10px;bottom:-5px;background:${colorVar};color:#fff;font-size:0.65rem;padding:2px 8px;font-weight:900;transform:skew(-15deg);box-shadow:2px 2px 0 rgba(0,0,0,0.2);'>${tagDisplay}</span>`,
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

@@ -1,0 +1,13 @@
+{
+  "name": "zero-uiv-tooltip-modern",
+  "version": "1.0.0",
+  "description": "Uiverse-inspired Modern tooltip component",
+  "main": "zero-uiv-tooltip-modern.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "tooltip", "modern", "uiverse"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
+}

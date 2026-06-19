@@ -1,0 +1,10 @@
+{
+  "name": "zero-card",
+  "version": "1.0.0",
+  "description": "Surface card container with header and slot content",
+  "main": "zero-card.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "card", "surface"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

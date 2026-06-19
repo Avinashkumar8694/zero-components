@@ -1,8 +1,25 @@
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const heartTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:flex;align-items:center;gap:12px;padding:8px;border-radius:8px;'>",
+        "<div style='font-size:1.5rem;color:#ef4444;transition:all 0.2s;text-shadow:0 2px 4px rgba(239,68,68,0.3);'>❤</div>",
+        "<span style='font-size:0.85rem;color:var(--uiv-text-color,#1e293b);font-weight:500;'>{{display:label}}</span>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Heart', 'Like'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-checkbox-heart',
@@ -14,6 +31,28 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivCheckboxHeart extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return heartTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Heart Checkbox');
+        const checked = !!(config.props?.checked ?? config.studio.props?.checked);
+        const primary = 'var(--uiv-primary-color, #ff4d4d)';
+        const text = 'var(--uiv-text-color, #333)';
+        const heartCol = checked ? primary : '#ccc';
+
+        return {
+            ...heartTemplate,
+            templateHtml: [
+                "<div style='display:flex;align-items:center;gap:12px;padding:8px;border-radius:8px;'>",
+                "<div style='position:relative;width:20px;height:20px;background:" + heartCol + ";transform:rotate(-45deg);margin-right:15px;transition:0.3s; " + (checked ? "filter:drop-shadow(0 0 5px " + primary + ");" : "") + "'>",
+                "<div style='position:absolute;width:20px;height:20px;background:" + heartCol + ";border-radius:50%;top:-10px;left:0;'></div>",
+                "<div style='position:absolute;width:20px;height:20px;background:" + heartCol + ";border-radius:50%;top:0;left:10px;'></div>",
+                "</div>",
+                `<span style='font-size:1rem;color:${text};font-weight:600;'>${labelDisplay}</span>`,
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

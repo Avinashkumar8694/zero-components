@@ -1,8 +1,41 @@
-import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
+import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const glitchTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='width:100%;overflow-x:auto;padding:2px;'>",
+        "<table style='width:100%;border-collapse:collapse;font-family:monospace;background:rgba(0, 0, 0, 0.8);border:2px solid #ff003c;'>",
+        "<thead><tr>",
+        "<th style='padding:15px;text-align:left;border-bottom:2px solid #ff003c;background:rgba(255, 0, 60, 0.1);color:#ff003c;font-weight:700;text-transform:uppercase;letter-spacing:2px;'>ID</th>",
+        "<th style='padding:15px;text-align:left;border-bottom:2px solid #ff003c;background:rgba(255, 0, 60, 0.1);color:#ff003c;font-weight:700;text-transform:uppercase;letter-spacing:2px;'>NAME</th>",
+        "<th style='padding:15px;text-align:left;border-bottom:2px solid #ff003c;background:rgba(255, 0, 60, 0.1);color:#ff003c;font-weight:700;text-transform:uppercase;letter-spacing:2px;'>STATUS</th>",
+        "</tr></thead>",
+        "<tbody>",
+        "<tr>",
+        "<td style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(255, 0, 60, 0.2);color:#fff;'>SYS-01</td>",
+        "<td style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(255, 0, 60, 0.2);color:#fff;'>CORE_DRIVE</td>",
+        "<td style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(255, 0, 60, 0.2);color:#fff;'>ACTIVE</td>",
+        "</tr>",
+        "<tr>",
+        "<td style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(255, 0, 60, 0.2);color:#fff;'>SYS-02</td>",
+        "<td style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(255, 0, 60, 0.2);color:#fff;'>NEURAL_LINK</td>",
+        "<td style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(255, 0, 60, 0.2);color:#fff;'>STANDBY</td>",
+        "</tr>",
+        "</tbody>",
+        "</table>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Glitch', 'Cyberpunk'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-table-glitch',
@@ -14,6 +47,52 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivTableGlitch extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        const columns = (config?.studio?.props?.columns || [
+            { key: 'id', label: 'ID', sortable: true },
+            { key: 'name', label: 'NAME', sortable: true },
+            { key: 'status', label: 'STATUS', sortable: true }
+        ]) as any[];
+        
+        const rows = (config?.studio?.props?.data || [
+            { id: 'SYS-01', name: 'CORE_DRIVE', status: 'ACTIVE' },
+            { id: 'SYS-02', name: 'NEURAL_LINK', status: 'STANDBY' }
+        ]) as any[];
+
+        let theadHtml = "<thead><tr>";
+        for (const col of columns) {
+            const label = col.label || col.key || '';
+            theadHtml += `<th style='padding:15px;text-align:left;border-bottom:2px solid #ff003c;background:rgba(255, 0, 60, 0.1);color:#ff003c;font-weight:700;text-transform:uppercase;letter-spacing:2px;'>${escapeStudio(String(label))}</th>`;
+        }
+        theadHtml += "</tr></thead>";
+
+        let tbodyHtml = "<tbody>";
+        for (let r = 0; r < Math.min(rows.length, 5); r++) {
+            const row = rows[r];
+            const isLastRow = r === Math.min(rows.length, 5) - 1;
+            const borderBottom = isLastRow ? '' : 'border-bottom:1px solid rgba(255, 0, 60, 0.2);';
+            tbodyHtml += "<tr>";
+            for (const col of columns) {
+                const val = row[col.key] !== undefined ? String(row[col.key]) : '';
+                tbodyHtml += `<td style='padding:12px 15px;text-align:left;${borderBottom}color:#fff;'>${escapeStudio(val)}</td>`;
+            }
+            tbodyHtml += "</tr>";
+        }
+        tbodyHtml += "</tbody>";
+
+        return {
+            ...glitchTemplate,
+            templateHtml: [
+                "<div style='width:100%;overflow-x:auto;padding:2px;'>",
+                "<table style='width:100%;border-collapse:collapse;font-family:monospace;background:rgba(0, 0, 0, 0.8);border:2px solid #ff003c;'>",
+                theadHtml,
+                tbodyHtml,
+                "</table>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: Array })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

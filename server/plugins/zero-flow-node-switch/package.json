@@ -1,0 +1,10 @@
+{
+  "name": "zero-flow-node-switch",
+  "version": "1.0.0",
+  "description": "Flow switch node component",
+  "main": "zero-flow-node-switch.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "flow-node", "flow-node-type:switch"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

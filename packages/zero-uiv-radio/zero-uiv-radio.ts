@@ -1,7 +1,26 @@
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:flex;align-items:center;gap:12px;padding:8px;border-radius:8px;'>",
+        "<div style='width:20px;height:20px;border-radius:50%;border:2px solid var(--uiv-primary-color,#6366f1);display:flex;align-items:center;justify-content:center;'>",
+        "<div style='width:10px;height:10px;border-radius:50%;background:var(--uiv-primary-color,#6366f1);'></div>",
+        "</div>",
+        "<span style='font-size:0.85rem;color:var(--uiv-text-color,#1e293b);font-weight:500;'>{{display:label}}</span>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Radio', 'Uiverse'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-radio',
@@ -13,6 +32,23 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivRadio extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Radio Option');
+        const accentCol = (config.props?.accentColor ?? config.studio.props?.accentColor) || 'var(--uiv-primary-color,#6366f1)';
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='display:flex;align-items:center;gap:12px;padding:8px;border-radius:8px;'>",
+                `<div style='width:20px;height:20px;border-radius:50%;border:2px solid ${accentCol};display:flex;align-items:center;justify-content:center;'>`,
+                `<div style='width:10px;height:10px;border-radius:50%;background:${accentCol};'></div>`,
+                "</div>",
+                `<span style='font-size:0.85rem;color:var(--uiv-text-color,#1e293b);font-weight:500;'>${labelDisplay}</span>`,
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

@@ -1,4 +1,5 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -13,6 +14,25 @@ interface DatePickerSettings {
   firstDayOfWeek?: number; // 0-6
 }
 
+export const studioTemplate: ZeroStudioTemplate = {
+  kind: 'generic',
+  templateHtml: [
+    "<div style='padding:10px 14px;border-radius:8px;border:1px solid rgba(148,163,184,0.2);background:rgba(255,255,255,0.95);display:flex;justify-content:space-between;align-items:center;'>",
+    "<div>",
+    "<div style='font-size:0.65rem;color:var(--uiv-text-muted,#94a3b8);font-weight:600;margin-bottom:2px;'>{{display:label}}</div>",
+    "<div style='font-size:0.8rem;color:var(--uiv-text-color,#1e293b);'>{{display:placeholder}}</div>",
+    "</div>",
+    "<span style='font-size:1rem;'>\uD83D\uDCC5</span>",
+    "</div>"
+  ].join(""),
+  labelProp: 'label',
+  badges: ['Form', 'Date'],
+};
+
+function escapeStudio(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 @RendererComponent({
   name: 'zero-date-picker',
   version: '1.0.0',
@@ -24,6 +44,29 @@ interface DatePickerSettings {
 @applyGlobalStyles()
 @customElement('zero-date-picker')
 export class ZeroDatePicker extends LitElement {
+  static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+    if (!config) return studioTemplate;
+    const labelDisplay = escapeStudio(config.studio.display.label || 'Date Picker');
+    const placeholderDisplay = escapeStudio(config.studio.display.placeholder || 'Select date...');
+    
+    const bg = 'var(--uiv-surface-color, #ffffff)';
+    const text = 'var(--uiv-text-color, #1e293b)';
+    const muted = 'var(--uiv-text-muted, #94a3b8)';
+    const border = 'var(--uiv-border-color, rgba(148,163,184,0.2))';
+
+    return { 
+      ...studioTemplate, 
+      templateHtml: [
+        "<div style='display:grid;gap:6px;'>",
+        labelDisplay ? `<div style='font-size:14px;font-weight:500;color:${text};'>${labelDisplay}</div>` : "",
+        `<div style='padding:10px 14px;border-radius:8px;border:1px solid ${border};background:${bg};display:flex;justify-content:space-between;align-items:center;min-height:40px;'>`,
+        `<span style='font-size:16px;color:${muted};'>${placeholderDisplay}</span>`,
+        `<span style='font-size:18px;color:${muted};'>\uD83D\uDCC5</span>`,
+        "</div>",
+        "</div>"
+      ].join("") 
+    };
+  }
   // Basic Properties
   @property({ type: String })
   @RendererAttribute({

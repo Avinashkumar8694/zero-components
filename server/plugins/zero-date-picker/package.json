@@ -1,0 +1,45 @@
+{
+  "name": "zero-date-picker",
+  "version": "1.0.0",
+  "description": "A highly configurable date picker component with calendar view, range selection, and advanced features",
+  "main": "zero-date-picker.ts",
+  "module": "zero-date-picker.js",
+  "types": "zero-date-picker.d.ts",
+  "files": [
+    "zero-date-picker.js",
+    "zero-date-picker.d.ts",
+    "zero-date-picker.js.map"
+  ],
+  "zero": {
+    "component": true
+  },
+  "keywords": [
+    "web-components",
+    "lit",
+    "date-picker",
+    "calendar",
+    "date-range",
+    "date-selector",
+    "zero-components"
+  ],
+  "author": "Zero Components",
+  "license": "MIT",
+  "dependencies": {
+    "lit": "^3.0.0"
+  },
+  "peerDependencies": {
+    "lit": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zero-components/zero-components.git",
+    "directory": "packages/zero-date-picker"
+  },
+  "bugs": {
+    "url": "https://github.com/zero-components/zero-components/issues"
+  },
+  "homepage": "https://github.com/zero-components/zero-components/tree/main/packages/zero-date-picker#readme"
+}

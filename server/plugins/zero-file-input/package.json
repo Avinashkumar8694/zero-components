@@ -1,0 +1,45 @@
+{
+  "name": "zero-file-input",
+  "version": "1.0.0",
+  "description": "A highly configurable file input component with drag & drop, preview, and upload progress",
+  "main": "zero-file-input.ts",
+  "module": "zero-file-input.js",
+  "types": "zero-file-input.d.ts",
+  "files": [
+    "zero-file-input.js",
+    "zero-file-input.d.ts",
+    "zero-file-input.js.map"
+  ],
+  "zero": {
+    "component": true
+  },
+  "keywords": [
+    "web-components",
+    "lit",
+    "file-input",
+    "upload",
+    "drag-drop",
+    "file-picker",
+    "zero-components"
+  ],
+  "author": "Zero Components",
+  "license": "MIT",
+  "dependencies": {
+    "lit": "^3.0.0"
+  },
+  "peerDependencies": {
+    "lit": "^3.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zero-components/zero-components.git",
+    "directory": "packages/zero-file-input"
+  },
+  "bugs": {
+    "url": "https://github.com/zero-components/zero-components/issues"
+  },
+  "homepage": "https://github.com/zero-components/zero-components/tree/main/packages/zero-file-input#readme"
+}

@@ -1,4 +1,5 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -12,6 +13,23 @@ interface FileItem {
   error?: string;
 }
 
+export const studioTemplate: ZeroStudioTemplate = {
+  kind: 'generic',
+  templateHtml: [
+    "<div style='padding:20px;border-radius:12px;border:2px dashed rgba(148,163,184,0.3);background:rgba(255,255,255,0.95);text-align:center;'>",
+    "<div style='font-size:0.7rem;color:var(--uiv-text-muted,#94a3b8);font-weight:600;margin-bottom:8px;'>{{display:label}}</div>",
+    "<div style='font-size:1.5rem;margin-bottom:6px;'>📁</div>",
+    "<div style='font-size:0.75rem;color:var(--uiv-text-color,#64748b);'>{{display:placeholder}}</div>",
+    "</div>"
+  ].join(""),
+  labelProp: 'label',
+  badges: ['Form', 'File Upload'],
+};
+
+function escapeStudio(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 @RendererComponent({
   name: 'zero-file-input',
   version: '1.0.0',
@@ -22,7 +40,28 @@ interface FileItem {
 })
 @applyGlobalStyles()
 @customElement('zero-file-input')
-export class ZeroFileInput extends LitElement {  // Basic Properties
+export class ZeroFileInput extends LitElement {
+  static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+    if (!config) return studioTemplate;
+    const labelDisplay = escapeStudio(config.studio.display.label || 'File Input');
+    const placeholderDisplay = escapeStudio(config.studio.display.placeholder || 'Choose files or drag and drop');
+    const border = 'var(--uiv-border-color, rgba(148,163,184,0.3))';
+    const text = 'var(--uiv-text-color, #1e293b)';
+    const muted = 'var(--uiv-text-muted, #94a3b8)';
+    const bg = 'var(--uiv-surface-color, #fff)';
+
+    return {
+      ...studioTemplate,
+      templateHtml: [
+        `<div style='padding:20px;border-radius:12px;border:2px dashed ${border};background:${bg};text-align:center;'>`,
+        `<div style='font-size:0.7rem;color:${muted};font-weight:600;margin-bottom:8px;'>${labelDisplay}</div>`,
+        "<div style='font-size:1.5rem;margin-bottom:6px;'>📁</div>",
+        `<div style='font-size:0.75rem;color:${text};'>${placeholderDisplay}</div>`,
+        "</div>"
+      ].join(""),
+    };
+  }
+  // Basic Properties
   @property({ type: String })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,

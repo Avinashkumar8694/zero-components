@@ -1,7 +1,24 @@
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:flex;flex-direction:column;gap:4px;width:100%;'>",
+        "<div style='font-size:0.75rem;font-weight:600;color:var(--uiv-text-color,#1e293b);'>{{display:label}}</div>",
+        "<div style='padding:10px 14px;border-radius:8px;border:1px solid rgba(148,163,184,0.3);background:rgba(255,255,255,0.95);font-size:0.85rem;color:var(--uiv-text-muted,#94a3b8);'>{{display:placeholder}}</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Input', 'Uiverse'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-input',
@@ -13,6 +30,21 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivInput extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Input Label');
+        const placeholderDisplay = escapeStudio(config.studio.display.placeholder || 'Enter text...');
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='display:flex;flex-direction:column;gap:4px;width:100%;'>",
+                `<div style='font-size:0.75rem;font-weight:600;color:var(--uiv-text-color,#1e293b);'>${labelDisplay}</div>`,
+                `<div style='padding:10px 14px;border-radius:8px;border:1px solid rgba(148,163,184,0.3);background:rgba(255,255,255,0.95);font-size:0.85rem;color:var(--uiv-text-muted,#94a3b8);'>${placeholderDisplay}</div>`,
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

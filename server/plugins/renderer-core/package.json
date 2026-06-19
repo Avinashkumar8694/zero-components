@@ -1,0 +1,17 @@
+{
+  "name": "@zero/renderer-core",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "lit": "^3.2.1",
+    "@zero/schema": "file:../../../studio-platform/packages/schema",
+    "@zero/auth-config": "file:../../../studio-platform/packages/auth-config",
+    "zero-annotation": "^1.0.10"
+  }
+}

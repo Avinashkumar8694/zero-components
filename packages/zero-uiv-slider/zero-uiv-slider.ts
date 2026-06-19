@@ -1,7 +1,30 @@
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;background:rgba(255,255,255,0.95);border:1px solid rgba(148,163,184,0.15);'>",
+        "<div style='display:flex;justify-content:space-between;font-size:0.75rem;font-weight:600;color:var(--uiv-text-color,#1e293b);'>",
+        "<span>{{display:label}}</span>",
+        "<span style='color:var(--uiv-primary-color,#6366f1);'>{{display:value}}</span>",
+        "</div>",
+        "<div style='height:6px;border-radius:3px;background:rgba(148,163,184,0.2);position:relative;margin:8px 0;'>",
+        "<div style='position:absolute;left:0;width:50%;height:100%;background:var(--uiv-primary-color,#6366f1);border-radius:3px;'></div>",
+        "<div style='position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#ffffff;border:2px solid var(--uiv-primary-color,#6366f1);box-shadow:0 2px 4px rgba(0,0,0,0.1);'></div>",
+        "</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Slider', 'Uiverse'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-slider',
@@ -13,6 +36,37 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivSlider extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Value');
+        const valueDisplay = escapeStudio(config.studio.display.value || (config.props?.value ?? config.studio.props?.value)?.toString() || '50');
+        const accentCol = (config.props?.accentColor ?? config.studio.props?.accentColor) || 'var(--uiv-primary-color,#6366f1)';
+        
+        let perc = 50;
+        if (config.studio.props) {
+            const v = Number((config.props?.value ?? config.studio.props?.value)) || 50;
+            const mn = Number((config.props?.min ?? config.studio.props?.min)) || 0;
+            const mx = Number((config.props?.max ?? config.studio.props?.max)) || 100;
+            perc = Math.max(0, Math.min(100, ((v - mn) / (mx - mn)) * 100));
+        }
+
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;background:rgba(255,255,255,0.95);border:1px solid rgba(148,163,184,0.15);'>",
+                "<div style='display:flex;justify-content:space-between;font-size:0.75rem;font-weight:600;color:var(--uiv-text-color,#1e293b);'>",
+                `<span>${labelDisplay}</span>`,
+                `<span style='color:${accentCol};'>${valueDisplay}</span>`,
+                "</div>",
+                "<div style='height:6px;border-radius:3px;background:rgba(148,163,184,0.2);position:relative;margin:8px 0;'>",
+                `<div style='position:absolute;left:0;width:${perc}%;height:100%;background:${accentCol};border-radius:3px;'></div>`,
+                `<div style='position:absolute;left:${perc}%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:#ffffff;border:2px solid ${accentCol};box-shadow:0 2px 4px rgba(0,0,0,0.1);'></div>`,
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

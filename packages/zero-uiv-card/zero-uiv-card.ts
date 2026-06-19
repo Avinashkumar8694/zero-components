@@ -1,7 +1,34 @@
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'card',
+    slots: [
+        { id: 'header', label: 'Card Header', dropzone: true, accepts: [] },
+        { id: 'default', label: 'Card Content', dropzone: true, accepts: [] },
+        { id: 'footer', label: 'Card Footer', dropzone: true, accepts: [] },
+    ],
+    templateHtml: [
+        "<div style='width:320px;min-height:220px;padding:32px;border-radius:16px;display:flex;flex-direction:column;gap:20px;background:var(--uiv-surface-color,#ffffff);border:1px solid var(--uiv-border-color,#e2e8f0);box-shadow:var(--uiv-shadow-depth,0 4px 6px -1px rgba(0,0,0,0.1));box-sizing:border-box;'>",
+        "<zero-studio-slot name='header'></zero-studio-slot>",
+        "<h3 style='font-size:1.5rem;font-weight:800;margin:0;color:var(--uiv-primary-color,#6366f1);letter-spacing:-0.02em;'>{{display:title}}</h3>",
+        "<div style='font-size:1rem;line-height:1.7;color:var(--uiv-text-color,#1e293b);opacity:0.9;'>",
+        "{{display:content}}",
+        "<zero-studio-slot name='default'></zero-studio-slot>",
+        "</div>",
+        "<zero-studio-slot name='footer'></zero-studio-slot>",
+        "</div>"
+    ].join(""),
+    titleProp: 'title',
+    badges: ['Card', 'Container'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-card',
@@ -13,6 +40,26 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivCard extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const titleDisplay = escapeStudio(config.studio.display.title || 'Card Title');
+        const contentDisplay = escapeStudio(config.studio.display.content || '');
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='width:320px;min-height:220px;padding:32px;border-radius:16px;display:flex;flex-direction:column;gap:20px;background:var(--uiv-surface-color,#ffffff);border:1px solid var(--uiv-border-color,#e2e8f0);box-shadow:var(--uiv-shadow-depth,0 4px 6px -1px rgba(0,0,0,0.1));box-sizing:border-box;'>",
+                "<zero-studio-slot name='header'></zero-studio-slot>",
+                `<h3 style='font-size:1.5rem;font-weight:800;margin:0;color:var(--uiv-primary-color,#6366f1);letter-spacing:-0.02em;'>${titleDisplay}</h3>`,
+                "<div style='font-size:1rem;line-height:1.7;color:var(--uiv-text-color,#1e293b);opacity:0.9;'>",
+                contentDisplay,
+                "<zero-studio-slot name='default'></zero-studio-slot>",
+                "</div>",
+                "<zero-studio-slot name='footer'></zero-studio-slot>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

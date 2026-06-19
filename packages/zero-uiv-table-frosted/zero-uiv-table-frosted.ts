@@ -1,8 +1,41 @@
-import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
+import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property, state } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const frostedTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='width:100%;overflow-x:auto;padding:2px;'>",
+        "<table style='width:100%;border-collapse:collapse;font-family:inherit;background:rgba(255,255,255,0.1);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,0.2);border-radius:12px;overflow:hidden;'>",
+        "<thead><tr>",
+        "<th style='padding:15px;text-align:left;border-bottom:1px solid rgba(255, 255, 255, 0.2);color:#fff;font-weight:600;background:rgba(255, 255, 255, 0.1);'>ID</th>",
+        "<th style='padding:15px;text-align:left;border-bottom:1px solid rgba(255, 255, 255, 0.2);color:#fff;font-weight:600;background:rgba(255, 255, 255, 0.1);'>Name</th>",
+        "<th style='padding:15px;text-align:left;border-bottom:1px solid rgba(255, 255, 255, 0.2);color:#fff;font-weight:600;background:rgba(255, 255, 255, 0.1);'>Status</th>",
+        "</tr></thead>",
+        "<tbody>",
+        "<tr>",
+        "<td style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(255, 255, 255, 0.05);color:#fff;'>1</td>",
+        "<td style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(255, 255, 255, 0.05);color:#fff;'>UI Kit</td>",
+        "<td style='padding:12px 15px;text-align:left;border-bottom:1px solid rgba(255, 255, 255, 0.05);color:#fff;'>In Review</td>",
+        "</tr>",
+        "<tr>",
+        "<td style='padding:12px 15px;text-align:left;color:#fff;'>2</td>",
+        "<td style='padding:12px 15px;text-align:left;color:#fff;'>Design System</td>",
+        "<td style='padding:12px 15px;text-align:left;color:#fff;'>Approved</td>",
+        "</tr>",
+        "</tbody>",
+        "</table>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Frosted', 'Glassmorphism'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-table-frosted',
@@ -14,6 +47,52 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivTableFrosted extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        const columns = (config?.studio?.props?.columns || [
+            { key: 'id', label: 'ID', sortable: true },
+            { key: 'name', label: 'Name', sortable: true },
+            { key: 'status', label: 'Status', sortable: true }
+        ]) as any[];
+        
+        const rows = (config?.studio?.props?.data || [
+            { id: '1', name: 'UI Kit', status: 'In Review' },
+            { id: '2', name: 'Design System', status: 'Approved' }
+        ]) as any[];
+
+        let theadHtml = "<thead><tr>";
+        for (const col of columns) {
+            const label = col.label || col.key || '';
+            theadHtml += `<th style='padding:15px;text-align:left;border-bottom:1px solid rgba(255, 255, 255, 0.2);color:#fff;font-weight:600;background:rgba(255, 255, 255, 0.1);'>${escapeStudio(String(label))}</th>`;
+        }
+        theadHtml += "</tr></thead>";
+
+        let tbodyHtml = "<tbody>";
+        for (let r = 0; r < Math.min(rows.length, 5); r++) {
+            const row = rows[r];
+            const isLastRow = r === Math.min(rows.length, 5) - 1;
+            const borderBottom = isLastRow ? '' : 'border-bottom:1px solid rgba(255, 255, 255, 0.05);';
+            tbodyHtml += "<tr>";
+            for (const col of columns) {
+                const val = row[col.key] !== undefined ? String(row[col.key]) : '';
+                tbodyHtml += `<td style='padding:12px 15px;text-align:left;${borderBottom}color:#fff;'>${escapeStudio(val)}</td>`;
+            }
+            tbodyHtml += "</tr>";
+        }
+        tbodyHtml += "</tbody>";
+
+        return {
+            ...frostedTemplate,
+            templateHtml: [
+                "<div style='width:100%;overflow-x:auto;padding:2px;'>",
+                "<table style='width:100%;border-collapse:collapse;font-family:inherit;background:rgba(255,255,255,0.1);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,0.2);border-radius:12px;overflow:hidden;'>",
+                theadHtml,
+                tbodyHtml,
+                "</table>",
+                "</div>"
+            ].join(""),
+        };
+    }
+
     @property({ type: Array })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

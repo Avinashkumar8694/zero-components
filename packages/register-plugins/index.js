@@ -91,13 +91,29 @@ class RegisterPluginClass {
             }
         }
 
+        let instance = null;
+        try {
+            instance = new constructor();
+        } catch (e) {
+            console.info(`[Zero] Registry: Could not instantiate '${name}' to detect defaults:`, e);
+        }
+
         this.components[name] = {
             class: constructor,
             inputs: inputsMetadata
                 .filter(input => !input.eventTrigger)
                 .reduce((acc, { fieldMappings, ...rest }) => {
                     const key = fieldMappings || rest.name;
-                    if (key) acc[key] = { ...rest };
+                    if (key) {
+                        let defaultValue = rest.initialValue;
+                        if (defaultValue === undefined && instance && instance[key] !== undefined) {
+                            defaultValue = instance[key];
+                        }
+                        acc[key] = { 
+                            defaultValue,
+                            ...rest 
+                        };
+                    }
                     return acc;
                 }, {}),
             outputs: { 

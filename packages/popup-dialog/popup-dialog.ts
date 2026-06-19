@@ -1,4 +1,4 @@
-// @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig } from 'zero-annotation';
 
 import { LitElement, html, css, CSSResult } from 'lit';
@@ -6,13 +6,23 @@ import { property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
-/**
- * Represents a user profile form with various input fields.
- * 
- * @export
- * @class UserProfileForm
- * @extends {LitElement}
- */
+
+export const dialogTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='border:1px solid rgba(0,0,0,0.1);border-radius:12px;background:#ffffff;box-shadow:0 10px 25px rgba(0,0,0,0.1);min-width:250px;overflow:hidden;'>",
+        "<div style='display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(0,0,0,0.05);background:#f8fafc;'>",
+        "<span style='font-weight:600;color:#1e293b;font-size:0.9rem;'>Popup Dialog</span>",
+        "<span style='color:#94a3b8;'>✖</span>",
+        "</div>",
+        "<div style='padding:20px;font-size:0.85rem;color:#64748b;display:flex;align-items:center;justify-content:center;min-height:80px;'>",
+        "[ Dynamic Content Placeholder ]",
+        "</div>",
+        "</div>"
+    ].join(""),
+    badges: ['Popup', 'Dialog'],
+};
+
 @RendererComponent({
     name: 'popup-dialog',
     version: '1.0.0',
@@ -23,6 +33,28 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class PopupDialog extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        const bg = 'var(--uiv-surface-color, #fff)';
+        const border = 'var(--uiv-border-color, #ddd)';
+        const text = 'var(--uiv-text-color, #333)';
+        const muted = 'var(--uiv-text-muted, #666)';
+        const shadow = 'var(--uiv-shadow-depth, 0 4px 12px rgba(0, 0, 0, 0.1))';
+
+        return {
+            ...dialogTemplate,
+            templateHtml: [
+                `<div style='border:1px solid ${border};border-radius:12px;background:${bg};box-shadow:${shadow};min-width:250px;overflow:hidden;font-family:inherit;'>`,
+                `<div style='display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid ${border};background:rgba(0,0,0,0.02);'>`,
+                `<span style='font-weight:600;color:${text};font-size:14px;'>Popup Dialog</span>`,
+                `<span style='color:${muted};cursor:pointer;'>✖</span>`,
+                "</div>",
+                `<div style='padding:24px;font-size:14px;color:${muted};display:flex;align-items:center;justify-content:center;min-height:100px;border:1px dashed rgba(0,0,0,0.05);margin:12px;border-radius:8px;'>`,
+                "[ Dynamic Content Placeholder ]",
+                "</div>",
+                "</div>"
+            ].join(""),
+        };
+    }
 
     @property({ type: Boolean }) open = false;
     @property({ type: Boolean }) hasBackdrop = true;

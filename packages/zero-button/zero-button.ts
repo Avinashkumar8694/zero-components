@@ -31,23 +31,32 @@ export const studioTemplate: ZeroStudioTemplate = {
 @applyGlobalStyles()
 export class ZeroButton extends LitElement {
   static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
-    if (!config) {
-      return studioTemplate;
-    }
+    if (!config) return studioTemplate;
 
-    const labelDisplay = escapeStudio(config.studio.display.label || "{{display:label}}");
-    const labelMode = escapeStudio(config.studio.mode.label || "static");
-    const variantDisplay = escapeStudio(config.studio.display.variant || "{{display:variant}}");
+    const labelDisplay = escapeStudio(config.studio.display.label || "Button");
+    const variant = (config.props?.variant ?? config.studio.props?.variant) || "primary";
+    const fullWidth = !!(config.props?.fullWidth ?? config.studio.props?.fullWidth);
+    
+    // Determine styles based on variant
+    let bg = 'var(--uiv-primary-color, #16324f)';
+    let color = '#f8fafc';
+    let border = 'none';
+    
+    if (variant === 'secondary') {
+      bg = 'var(--uiv-surface-color, #f5efe6)';
+      color = 'var(--uiv-text-color, #132238)';
+      border = '1px solid rgba(19, 34, 56, 0.12)';
+    } else if (variant === 'ghost') {
+      bg = 'transparent';
+      color = 'var(--uiv-primary-color, #16324f)';
+      border = '1px dashed var(--uiv-primary-color, rgba(22, 50, 79, 0.28))';
+    }
 
     return {
       ...studioTemplate,
       templateHtml: [
-        "<div style='display:grid;gap:8px;'>",
-        `<button type='button' style='border:0;border-radius:999px;padding:12px 16px;background:#16324f;color:#f8fafc;font-weight:700;justify-self:start;'>${labelDisplay}</button>`,
-        "<div style='display:flex;gap:8px;flex-wrap:wrap;'>",
-        `<span style='padding:3px 8px;border-radius:999px;background:rgba(219,234,254,0.85);color:#1d4ed8;font-size:0.72rem;font-weight:700;'>label: ${labelMode}</span>`,
-        `<span style='padding:3px 8px;border-radius:999px;background:rgba(254,242,242,0.9);color:#b91c1c;font-size:0.72rem;font-weight:700;'>variant: ${variantDisplay}</span>`,
-        "</div>",
+        `<div style='display:inline-block; ${fullWidth ? 'width:100%;' : ''}'>`,
+        `<button type='button' style='width:100%; border:${border}; border-radius:999px; padding:12px 18px; background:${bg}; color:${color}; font-weight:700; cursor:pointer; font-family:inherit; font-size:14px;'>${labelDisplay}</button>`,
         "</div>"
       ].join(""),
     };

@@ -1,0 +1,16 @@
+{
+  "name": "zero-uiv-themes",
+  "version": "1.0.0",
+  "description": "Modular theme system for Zero UIV components",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
+  "types": "src/index.ts",
+  "dependencies": {
+    "lit": "^3.1.2"
+  },
+  "zeroPlugin": {
+    "type": "theme",
+    "name": "Zero UIV Themes",
+    "description": "Premium Uiverse-inspired theme provider"
+  }
+}

@@ -1,8 +1,23 @@
-import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
+import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { property } from 'lit/decorators.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
+
+export const glowTemplate: ZeroStudioTemplate = {
+    kind: 'button',
+    templateHtml: [
+        "<button style='position:relative;padding:10px 25px;color:var(--uiv-primary-color, #00d2ff);background:transparent;font-size:1.1rem;font-weight:bold;text-transform:uppercase;letter-spacing:4px;border:2px solid var(--uiv-primary-color, #00d2ff);border-radius:4px;cursor:pointer;outline:none;box-shadow:0 0 5px var(--uiv-primary-color, #00d2ff);'>",
+        "{{display:label}}",
+        "</button>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Glow', 'Effect'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 
 @RendererComponent({
     name: 'zero-uiv-button-glow',
@@ -14,6 +29,22 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroUivButtonGlow extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return glowTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Glow Button');
+        const glowColor = (config.props?.glowColor ?? config.studio.props?.glowColor);
+        const colorVar = glowColor ? glowColor : 'var(--uiv-primary-color, #00d2ff)';
+        
+        return {
+            ...glowTemplate,
+            templateHtml: [
+                `<button style='position:relative;padding:10px 25px;color:${colorVar};background:transparent;font-size:1.1rem;font-weight:bold;text-transform:uppercase;letter-spacing:4px;border:2px solid ${colorVar};border-radius:4px;cursor:pointer;outline:none;box-shadow:0 0 5px ${colorVar};'>`,
+                labelDisplay,
+                "</button>"
+            ].join(""),
+        };
+    }
+
     @property({ type: String })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,

@@ -23,7 +23,7 @@ async function buildAll() {
 
     for (const pkg of packages) {
         if (pkg.startsWith('.')) continue; // skip hidden files
-        if (targetPackage && pkg !== targetPackage) continue; // skip non-target
+        if (targetPackage && targetPackage !== 'all' && pkg !== targetPackage) continue; // skip non-target
 
         const pkgPath = path.join(packagesDir, pkg);
         

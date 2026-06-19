@@ -1,4 +1,5 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig } from 'zero-annotation';
@@ -12,6 +13,25 @@ interface ColorFormat {
   hsv: { h: number; s: number; v: number };
 }
 
+export const studioTemplate: ZeroStudioTemplate = {
+  kind: 'generic',
+  templateHtml: [
+    "<div style='padding:10px 14px;border-radius:8px;border:1px solid rgba(148,163,184,0.2);background:rgba(255,255,255,0.95);display:flex;align-items:center;gap:10px;'>",
+    "<div style='width:24px;height:24px;border-radius:6px;background:var(--uiv-primary-color,#6c63ff);border:1px solid rgba(0,0,0,0.1);'></div>",
+    "<div>",
+    "<div style='font-size:0.65rem;color:var(--uiv-text-muted,#94a3b8);font-weight:600;'>{{display:label}}</div>",
+    "<div style='font-size:0.75rem;color:var(--uiv-text-color,#1e293b);font-family:monospace;'>{{display:value}}</div>",
+    "</div>",
+    "</div>"
+  ].join(""),
+  labelProp: 'label',
+  badges: ['Form', 'Color'],
+};
+
+function escapeStudio(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 @RendererComponent({
   name: 'zero-color-picker',
   version: '1.0.0',
@@ -23,6 +43,27 @@ interface ColorFormat {
 @applyGlobalStyles()
 @customElement('zero-color-picker')
 export class ZeroColorPicker extends LitElement {
+  static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+    if (!config) return studioTemplate;
+    const labelDisplay = escapeStudio(config.studio.display.label || 'Color Picker');
+    const valueDisplay = escapeStudio(config.studio.display.value || '#000000');
+    const text = 'var(--uiv-text-color, #333)';
+    const border = 'var(--uiv-border-color, #e0e0e0)';
+    const bg = 'var(--uiv-surface-color, #fff)';
+
+    return {
+      ...studioTemplate,
+      templateHtml: [
+        "<div style='display:block;width:100%;font-family:inherit;'>",
+        `<label style='display:block;margin-bottom:8px;font-size:14px;font-weight:500;color:${text};'>${labelDisplay}</label>`,
+        "<div style='position:relative;display:flex;align-items:center;'>",
+        `<div style='width:100%;height:36px;padding:0 12px;border:1px solid ${border};border-radius:8px;font-size:14px;background:${bg};color:${text};display:flex;align-items:center;'>${valueDisplay}</div>`,
+        `<div style='position:absolute;right:8px;width:28px;height:20px;border-radius:4px;border:1px solid ${border};background:${valueDisplay};'></div>`,
+        "</div>",
+        "</div>"
+      ].join(""),
+    };
+  }
   @property({ type: String })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,

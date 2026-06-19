@@ -40,25 +40,16 @@ export const studioTemplate: ZeroStudioTemplate = {
 @applyGlobalStyles()
 export class ZeroTextInput extends LitElement {
     static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
-        if (!config) {
-            return studioTemplate;
-        }
-
+        if (!config) return studioTemplate;
         const label = escapeStudio(config.studio.display.label || 'Text Input');
         const placeholder = escapeStudio(config.studio.display.placeholder || 'Enter value');
-        const valueMode = escapeStudio(config.studio.mode.value || 'static');
-        const required = escapeStudio(config.studio.display.required || 'false');
-
+        
         return {
             ...studioTemplate,
             templateHtml: [
-                "<div style='display:grid;gap:8px;padding:12px;border-radius:14px;border:1px solid rgba(148,163,184,0.18);background:rgba(255,255,255,0.96);'>",
-                `<label style='font-size:0.78rem;font-weight:700;color:#334155;'>${label}</label>`,
-                `<div style='border:1px solid rgba(148,163,184,0.28);border-radius:10px;padding:11px 14px;background:#fff;color:#94a3b8;'>${placeholder}</div>`,
-                "<div style='display:flex;gap:8px;flex-wrap:wrap;'>",
-                `<span style='padding:3px 8px;border-radius:999px;background:rgba(219,234,254,0.85);color:#1d4ed8;font-size:0.72rem;font-weight:700;'>value: ${valueMode}</span>`,
-                `<span style='padding:3px 8px;border-radius:999px;background:rgba(240,253,250,0.9);color:#0f766e;font-size:0.72rem;font-weight:700;'>required: ${required}</span>`,
-                "</div>",
+                "<div style='display:block;width:100%;font-family:inherit;'>",
+                `<label style='display:block;margin-bottom:8px;font-size:14px;font-weight:500;color:var(--uiv-text-color,#333);'>${label}</label>`,
+                `<div style='width:100%;padding:12px 16px;border:1px solid var(--uiv-border-color,#ddd);border-radius:8px;font-size:14px;background:var(--uiv-surface-color,#fff);color:var(--uiv-text-muted,#94a3b8);box-shadow:var(--uiv-shadow-depth,none);'>${placeholder}</div>`,
                 "</div>"
             ].join(""),
         };

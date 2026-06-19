@@ -1,0 +1,10 @@
+{
+  "name": "zero-flow-node-lifecycle",
+  "version": "1.0.0",
+  "description": "Flow lifecycle node component",
+  "main": "zero-flow-node-lifecycle.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "flow-node", "flow-node-type:lifecycle"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

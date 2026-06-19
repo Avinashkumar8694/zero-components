@@ -1,4 +1,5 @@
 // @environment page
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
@@ -12,6 +13,22 @@ const getThemeManager = () => (window as any).zeroThemeManager;
  * @class ZeroTextarea
  * @extends {LitElement}
  */
+export const studioTemplate: ZeroStudioTemplate = {
+    kind: 'generic',
+    templateHtml: [
+        "<div style='padding:10px 14px;border-radius:8px;border:1px solid rgba(148,163,184,0.2);background:rgba(255,255,255,0.95);min-height:60px;'>",
+        "<div style='font-size:0.7rem;color:var(--uiv-text-muted,#94a3b8);margin-bottom:4px;font-weight:600;'>{{display:label}}</div>",
+        "<div style='font-size:0.8rem;color:var(--uiv-text-color,#64748b);opacity:0.6;'>{{display:placeholder}}</div>",
+        "</div>"
+    ].join(""),
+    labelProp: 'label',
+    badges: ['Form', 'Textarea'],
+};
+
+function escapeStudio(value: string): string {
+    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
 @RendererComponent({
     name: 'zero-textarea',
     version: '1.0.0',
@@ -22,6 +39,25 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class ZeroTextarea extends LitElement {
+    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+        if (!config) return studioTemplate;
+        const labelDisplay = escapeStudio(config.studio.display.label || 'Textarea');
+        const placeholderDisplay = escapeStudio(config.studio.display.placeholder || 'Enter text...');
+        const text = 'var(--uiv-text-color, #333)';
+        const border = 'var(--uiv-border-color, #ddd)';
+        const bg = 'var(--uiv-surface-color, #fff)';
+
+        return {
+            ...studioTemplate,
+            templateHtml: [
+                "<div style='display:block;width:100%;font-family:inherit;'>",
+                `<label style='display:block;margin-bottom:8px;font-size:14px;font-weight:500;color:${text};'>${labelDisplay}</label>`,
+                `<div style='width:100%;padding:12px;border:1px solid ${border};border-radius:12px;font-size:14px;background:${bg};color:var(--uiv-text-muted,#94a3b8);min-height:100px;box-shadow:var(--uiv-shadow-depth,none);'>${placeholderDisplay}</div>`,
+                "</div>"
+            ].join(""),
+        };
+    }
+
     static styles = css`
         :host {
             display: block;

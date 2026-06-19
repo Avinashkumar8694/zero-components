@@ -40,24 +40,20 @@ export const studioTemplate: ZeroStudioTemplate = {
 @applyGlobalStyles()
 export class ZeroPasswordInput extends LitElement {
     static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
-        if (!config) {
-            return studioTemplate;
-        }
-
+        if (!config) return studioTemplate;
         const label = escapeStudio(config.studio.display.label || 'Password');
         const placeholder = escapeStudio(config.studio.display.placeholder || 'Enter password');
-        const showToggle = escapeStudio(config.studio.display.showToggle || 'true');
-        const showStrength = escapeStudio(config.studio.display.showStrengthMeter || 'false');
-
+        const showToggle = !!(config.props?.showToggle ?? config.studio.props?.showToggle);
+        
+        // Match actual render() structure with theme classes
         return {
             ...studioTemplate,
             templateHtml: [
-                "<div style='display:grid;gap:8px;padding:12px;border-radius:14px;border:1px solid rgba(148,163,184,0.18);background:rgba(255,255,255,0.96);'>",
-                `<label style='font-size:0.78rem;font-weight:700;color:#334155;'>${label}</label>`,
-                `<div style='display:flex;align-items:center;border:1px solid rgba(148,163,184,0.28);border-radius:10px;padding:11px 14px;background:#fff;color:#94a3b8;'>${placeholder}<span style='margin-left:auto;color:#64748b;'>•••</span></div>`,
-                "<div style='display:flex;gap:8px;flex-wrap:wrap;'>",
-                `<span style='padding:3px 8px;border-radius:999px;background:rgba(219,234,254,0.85);color:#1d4ed8;font-size:0.72rem;font-weight:700;'>toggle: ${showToggle}</span>`,
-                `<span style='padding:3px 8px;border-radius:999px;background:rgba(255,247,237,0.95);color:#9a3412;font-size:0.72rem;font-weight:700;'>strength: ${showStrength}</span>`,
+                "<div style='display:block;width:100%;font-family:inherit;'>",
+                `<label style='display:block;margin-bottom:8px;font-size:14px;font-weight:500;color:var(--uiv-text-color,#333);'>${label}</label>`,
+                "<div style='position:relative;display:flex;align-items:center;'>",
+                `<div style='width:100%;padding:12px 16px;border:1px solid var(--uiv-border-color,#ddd);border-radius:8px;font-size:14px;background:var(--uiv-surface-color,#fff);color:var(--uiv-text-muted,#94a3b8);box-shadow:var(--uiv-shadow-depth,none);'>${placeholder}</div>`,
+                showToggle ? "<span style='position:absolute;right:12px;opacity:0.6;'>👁️</span>" : "",
                 "</div>",
                 "</div>"
             ].join(""),

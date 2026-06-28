@@ -13,6 +13,55 @@ const packagesDir = path.join(__dirname, 'packages');
 const pluginsDir = path.join(__dirname, 'server', 'plugins');
 const marketplaceDir = path.join(__dirname, '../zero-marketplace/packages');
 
+// Metadata scanning helper functions
+function prettifyName(name) {
+    return name
+        .replace(/^@[^/]+\//, "")
+        .replace(/[-_]/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function scanPackageMetadata(pkgName, packageRoot, defaultTags, description, version) {
+    // If studio.registry.json exists in package root, load it directly
+    const registryJsonPath = path.join(packageRoot, 'studio.registry.json');
+    if (fs.existsSync(registryJsonPath)) {
+        try {
+            console.log(`ℹ️  Reading metadata from studio.registry.json for ${pkgName}`);
+            const data = JSON.parse(fs.readFileSync(registryJsonPath, 'utf8'));
+            if (Array.isArray(data)) {
+                return data.map(comp => ({
+                    ...comp,
+                    source: "marketplace",
+                    publishableAsNode: comp.publishableAsNode !== undefined ? comp.publishableAsNode : true,
+                    lifecycleHooks: comp.lifecycleHooks || ["onInit", "onDestroy", "onChanges", "afterRender"]
+                }));
+            }
+        } catch (e) {
+            console.warn(`⚠️  Failed to read studio.registry.json:`, e.message);
+        }
+    }
+
+    // Default metadata for single-component packages (detailed properties are loaded dynamically from the Lit class in browser)
+    return [
+        {
+            componentName: pkgName,
+            title: prettifyName(pkgName),
+            description: description,
+            version: version,
+            elementSelector: pkgName,
+            tags: defaultTags,
+            category: "Layout",
+            group: "Layout",
+            properties: [],
+            events: [],
+            slots: [],
+            lifecycleHooks: ["onInit", "onDestroy", "onChanges", "afterRender"],
+            source: "marketplace",
+            publishableAsNode: true
+        }
+    ];
+}
+
 function getPackageVersion(pkgName) {
     const pkgJsonPath = path.join(packagesDir, pkgName, 'package.json');
     if (fs.existsSync(pkgJsonPath)) {
@@ -57,6 +106,16 @@ function publishPackage(pkgName) {
         srcPkgJson = JSON.parse(fs.readFileSync(srcPkgJsonPath, 'utf8'));
     }
 
+    // Scan the package directory for components to build the complete metadata registry
+    const packageRoot = path.join(packagesDir, pkgName);
+    const scannedMetadata = scanPackageMetadata(
+        pkgName,
+        packageRoot,
+        getKeywords(pkgName),
+        srcPkgJson.description || `Published from zero-components: ${pkgName}`,
+        version
+    );
+
     // Prepare published package.json (merging source metadata)
     const packageJson = {
         ...srcPkgJson,
@@ -66,13 +125,18 @@ function publishPackage(pkgName) {
         main: `${pkgName}.js`,
         keywords: [...new Set([...(srcPkgJson.keywords || []), ...getKeywords(pkgName)])],
         author: srcPkgJson.author || "Zero Components",
-        license: srcPkgJson.license || "MIT"
+        license: srcPkgJson.license || "MIT",
+        zero: {
+            ...srcPkgJson.zero,
+            components: scannedMetadata
+        }
     };
     
     fs.writeFileSync(
         path.join(targetDir, 'package.json'),
         JSON.stringify(packageJson, null, 2)
     );
+
     
     // Copy README if exists
     const readmeSrc = path.join(packagesDir, pkgName, 'README.md');

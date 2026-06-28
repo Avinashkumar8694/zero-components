@@ -371,7 +371,7 @@ var Ge;
       var o = n.next();
       return o.done ? !1 : o;
     }
-    function je(n) {
+    function He(n) {
       var o = n.return;
       o && o.call(n);
     }
@@ -429,7 +429,7 @@ var Ge;
                   return;
                 var k = Ie(S);
                 if (k.isProviderFor(p, $))
-                  return je(E), k;
+                  return He(E), k;
               }
           }
         }
@@ -534,15 +534,15 @@ var Ge;
         if (g($))
           return p;
         for (var E = $.keys(), S = De(E), k = 0; ; ) {
-          var He = Ue(S);
-          if (!He)
+          var je = Ue(S);
+          if (!je)
             return p.length = k, p;
-          var kt = Ie(He);
+          var kt = Ie(je);
           try {
             p[k] = kt;
           } catch (xt) {
             try {
-              je(S);
+              He(S);
             } finally {
               throw xt;
             }
@@ -851,10 +851,10 @@ function Ut(i) {
       throw new Error("Invalid configuration provided to RendererComponent decorator");
   };
 }
-function jt(i) {
+function Ht(i) {
   return Ut(i);
 }
-function Ht(i) {
+function jt(i) {
   return function(e) {
     class t extends e {
       constructor() {
@@ -905,7 +905,7 @@ function zt(i) {
   return function(e, t) {
     try {
       Lt(i);
-      const r = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const r = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let s = !0;
       if (typeof t == "string") {
         try {
@@ -926,7 +926,7 @@ function tt(i) {
 }
 var oe;
 (function(i) {
-  i.TEXT_INPUT = "text-input", i.PASSWORD_INPUT = "password-input", i.DROPDOWN = "dropdown", i.CHECKBOX = "checkbox", i.RADIO_BUTTON = "radio-button", i.RANGE_SLIDER = "range-slider", i.FILE_INPUT = "file-input", i.DATE_PICKER = "date-picker", i.COLOR_PICKER = "color-picker", i.NUMBER_INPUT = "number-input", i.TEXTAREA = "textarea", i.MULTI_SELECT = "multi-select", i.POPUP_DROPDOWN = "popup-dropdown", i.LAYOUT_PICKER = "layout-picker", i.RESPONSIVE_OVERRIDE = "responsive-override", i.IMAGE_PICKER = "image-picker";
+  i.TEXT_INPUT = "text-input", i.PASSWORD_INPUT = "password-input", i.DROPDOWN = "dropdown", i.CHECKBOX = "checkbox", i.RADIO_BUTTON = "radio-button", i.RANGE_SLIDER = "range-slider", i.FILE_INPUT = "file-input", i.DATE_PICKER = "date-picker", i.COLOR_PICKER = "color-picker", i.NUMBER_INPUT = "number-input", i.TEXTAREA = "textarea", i.MULTI_SELECT = "multi-select", i.POPUP_DROPDOWN = "popup-dropdown", i.LAYOUT_PICKER = "layout-picker", i.RESPONSIVE_OVERRIDE = "responsive-override", i.IMAGE_PICKER = "image-picker", i.CHIPS = "chips";
 })(oe || (oe = {}));
 var ae;
 (function(i) {
@@ -1220,7 +1220,7 @@ B.elementStyles = [], B.shadowRootOptions = { mode: "open" }, B[X("elementProper
  */
 const Y = globalThis, qe = (i) => i, ue = Y.trustedTypes, Ze = ue ? ue.createPolicy("lit-html", { createHTML: (i) => i }) : void 0, nt = "$lit$", D = `lit$${Math.random().toFixed(9).slice(2)}$`, it = "?" + D, Qt = `<${it}>`, L = document, Q = () => L.createComment(""), K = (i) => i === null || typeof i != "object" && typeof i != "function", be = Array.isArray, Kt = (i) => be(i) || typeof (i == null ? void 0 : i[Symbol.iterator]) == "function", ve = `[ 	
 \f\r]`, Z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Xe = /-->/g, Ye = />/g, U = RegExp(`>|${ve}(?:([^\\s"'>=/]+)(${ve}*=${ve}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Je = /'/g, Qe = /"/g, st = /^(?:script|style|textarea|title)$/i, er = (i) => (e, ...t) => ({ _$litType$: i, strings: e, values: t }), tr = er(1), V = Symbol.for("lit-noChange"), C = Symbol.for("lit-nothing"), Ke = /* @__PURE__ */ new WeakMap(), j = L.createTreeWalker(L, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Je = /'/g, Qe = /"/g, st = /^(?:script|style|textarea|title)$/i, er = (i) => (e, ...t) => ({ _$litType$: i, strings: e, values: t }), tr = er(1), V = Symbol.for("lit-noChange"), C = Symbol.for("lit-nothing"), Ke = /* @__PURE__ */ new WeakMap(), H = L.createTreeWalker(L, 129);
 function ot(i, e) {
   if (!be(i) || !i.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return Ze !== void 0 ? Ze.createHTML(e) : e;
@@ -1243,11 +1243,11 @@ class ee {
     this.parts = [];
     let l = 0, u = 0;
     const _ = e.length - 1, y = this.parts, [A, b] = rr(e, t);
-    if (this.el = ee.createElement(A, r), j.currentNode = this.el.content, t === 2 || t === 3) {
+    if (this.el = ee.createElement(A, r), H.currentNode = this.el.content, t === 2 || t === 3) {
       const w = this.el.content.firstChild;
       w.replaceWith(...w.childNodes);
     }
-    for (; (s = j.nextNode()) !== null && y.length < _; ) {
+    for (; (s = H.nextNode()) !== null && y.length < _; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const w of s.getAttributeNames()) if (w.endsWith(nt)) {
           const T = b[u++], R = s.getAttribute(w).split(D), N = /([.?@])?(.*)/.exec(T);
@@ -1257,7 +1257,7 @@ class ee {
           const w = s.textContent.split(D), T = w.length - 1;
           if (T > 0) {
             s.textContent = ue ? ue.emptyScript : "";
-            for (let R = 0; R < T; R++) s.append(w[R], Q()), j.nextNode(), y.push({ type: 2, index: ++l });
+            for (let R = 0; R < T; R++) s.append(w[R], Q()), H.nextNode(), y.push({ type: 2, index: ++l });
             s.append(w[T], Q());
           }
         }
@@ -1293,16 +1293,16 @@ class nr {
   }
   u(e) {
     const { el: { content: t }, parts: r } = this._$AD, s = ((e == null ? void 0 : e.creationScope) ?? L).importNode(t, !0);
-    j.currentNode = s;
-    let l = j.nextNode(), u = 0, _ = 0, y = r[0];
+    H.currentNode = s;
+    let l = H.nextNode(), u = 0, _ = 0, y = r[0];
     for (; y !== void 0; ) {
       if (u === y.index) {
         let A;
         y.type === 2 ? A = new te(l, l.nextSibling, this, e) : y.type === 1 ? A = new y.ctor(l, y.name, y.strings, this, e) : y.type === 6 && (A = new ar(l, this, e)), this._$AV.push(A), y = r[++_];
       }
-      u !== (y == null ? void 0 : y.index) && (l = j.nextNode(), u++);
+      u !== (y == null ? void 0 : y.index) && (l = H.nextNode(), u++);
     }
-    return j.currentNode = L, s;
+    return H.currentNode = L, s;
   }
   p(e) {
     let t = 0;
@@ -1454,7 +1454,7 @@ const lr = (i, e, t) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const H = globalThis;
+const j = globalThis;
 class J extends B {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
@@ -1481,10 +1481,10 @@ class J extends B {
   }
 }
 var et;
-J._$litElement$ = !0, J.finalized = !0, (et = H.litElementHydrateSupport) == null || et.call(H, { LitElement: J });
-const ge = H.litElementPolyfillSupport;
+J._$litElement$ = !0, J.finalized = !0, (et = j.litElementHydrateSupport) == null || et.call(j, { LitElement: J });
+const ge = j.litElementPolyfillSupport;
 ge == null || ge({ LitElement: J });
-(H.litElementVersions ?? (H.litElementVersions = [])).push("4.2.2");
+(j.litElementVersions ?? (j.litElementVersions = [])).push("4.2.2");
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -1568,8 +1568,8 @@ re([
   tt({ attributeType: ae.PROPERTY, uiComponentType: oe.TEXTAREA, displayLabel: "Description", fieldMappings: "description" })
 ], z.prototype, "descriptionConfig", 1);
 z = re([
-  jt({ name: "zero-flow-node-lifecycle", version: "1.0.0", title: "Lifecycle", elementSelector: "zero-flow-node-lifecycle", group: "Flow Nodes", iconName: "flow-start-node.png" }),
-  Ht()
+  Ht({ name: "zero-flow-node-lifecycle", version: "1.0.0", title: "Lifecycle", elementSelector: "zero-flow-node-lifecycle", group: "Flow Nodes", iconName: "flow-start-node.png" }),
+  jt()
 ], z);
 export {
   z as ZeroFlowNodeLifecycle

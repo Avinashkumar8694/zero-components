@@ -271,8 +271,8 @@ export class ZeroTabPanel extends ZeroLayoutBase {
   @property({ type: String })
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
-    displayLabel: "Tabs (Comma Separated)",
+    uiComponentType: UserInterfaceType.CHIPS,
+    displayLabel: "Tabs",
     fieldMappings: "tabs",
     categoryLabel: "Tabs Config"
   })
@@ -330,6 +330,23 @@ export class ZeroTabPanel extends ZeroLayoutBase {
     return this.tabs.split(",").map(t => t.trim()).filter(Boolean);
   }
 
+  // --- Triggers (Events) ---
+
+  @RendererAttribute({
+    attributeType: AttributeType.EVENT,
+    displayLabel: "On Tab Change",
+    eventTrigger: "tabchange",
+    categoryLabel: "Triggers"
+  })
+  get onTabChange() { return "tabchange"; }
+
+  // --- Actions ---
+
+  @RendererAttribute({
+    attributeType: AttributeType.ACTION,
+    displayLabel: "Select Tab",
+    categoryLabel: "Actions"
+  })
   selectTab(index: number) {
     this.activeIndex = index;
     this.dispatchEvent(new CustomEvent("tabchange", { detail: { activeIndex: index } }));
@@ -411,6 +428,254 @@ export class ZeroTabPanel extends ZeroLayoutBase {
               return html`
                 <div class="tab-pane" style="display: ${isActive ? 'flex' : 'none'}; width: 100%;">
                   <slot name="tab-${index + 1}"></slot>
+                </div>
+              `;
+            })}
+          </div>
+          ${this.renderDropIndicators()}
+        </div>
+      </div>
+    `;
+  }
+}
+
+// ─── Stepper Panel Component ───────────────────────────────────────────
+
+@RendererComponent({
+  name: "zero-stepper-panel",
+  version: "1.0.0",
+  title: "Stepper Panel",
+  elementSelector: "zero-stepper-panel",
+  group: "Layout",
+  iconName: "stepper-panel-icon.png",
+})
+@customElement("zero-stepper-panel")
+export class ZeroStepperPanel extends ZeroLayoutBase {
+  protected get overridePrefix() { return "zero-stepper-panel"; }
+
+  // Exclude static slots to fall back to dynamic slots in getStudioTemplate
+  static slots: ZeroSlotDefinition[] = [];
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHIPS,
+    displayLabel: "Steps",
+    fieldMappings: "steps",
+    categoryLabel: "Steps Config"
+  })
+  steps = "Step 1, Step 2, Step 3";
+
+  @property({ type: Boolean, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Linear Mode",
+    fieldMappings: "linear",
+    categoryLabel: "Steps Config"
+  })
+  linear = false;
+
+  @property({ type: Number, reflect: true, attribute: "active-index" })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.NUMBER_INPUT,
+    displayLabel: "Active Step Index",
+    fieldMappings: "activeIndex",
+    categoryLabel: "Steps Config"
+  })
+  activeIndex = 0;
+
+  @property({ type: String, attribute: "header-bg" })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.COLOR_PICKER,
+    displayLabel: "Header Background",
+    fieldMappings: "headerBg",
+    categoryLabel: "Appearance"
+  })
+  headerBg = "#f8fafc";
+
+  @property({ type: String, attribute: "active-step-color" })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.COLOR_PICKER,
+    displayLabel: "Active Step Color",
+    fieldMappings: "activeStepColor",
+    categoryLabel: "Appearance"
+  })
+  activeStepColor = "#0e5aed";
+
+  @property({ type: String, attribute: "border-color" })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.COLOR_PICKER,
+    displayLabel: "Border Color",
+    fieldMappings: "borderColor",
+    categoryLabel: "Appearance"
+  })
+  borderColor = "#e2e8f0";
+
+  constructor() {
+    super();
+    this.backgroundColor = "#ffffff";
+    this.borderRadius = "12px";
+    this.padding = "16px";
+    this.direction = "column";
+  }
+
+  getStepList() {
+    return this.steps.split(",").map(t => t.trim()).filter(Boolean);
+  }
+
+  // --- Triggers (Events) ---
+
+  @RendererAttribute({
+    attributeType: AttributeType.EVENT,
+    displayLabel: "On Step Change",
+    eventTrigger: "stepchange",
+    categoryLabel: "Triggers"
+  })
+  get onStepChange() { return "stepchange"; }
+
+  // --- Actions ---
+
+  selectStep(index: number) {
+    if (this.linear) {
+      if (index > this.activeIndex + 1) {
+        return; // block jumping forward in linear mode
+      }
+    }
+    this.activeIndex = index;
+    this.dispatchEvent(new CustomEvent("stepchange", { detail: { activeIndex: index } }));
+  }
+
+  @RendererAttribute({
+    attributeType: AttributeType.ACTION,
+    displayLabel: "Next Step",
+    categoryLabel: "Actions"
+  })
+  next() {
+    const stepList = this.getStepList();
+    if (this.activeIndex < stepList.length - 1) {
+      this.selectStep(this.activeIndex + 1);
+    }
+  }
+
+  @RendererAttribute({
+    attributeType: AttributeType.ACTION,
+    displayLabel: "Previous Step",
+    categoryLabel: "Actions"
+  })
+  previous() {
+    if (this.activeIndex > 0) {
+      this.selectStep(this.activeIndex - 1);
+    }
+  }
+
+  @RendererAttribute({
+    attributeType: AttributeType.ACTION,
+    displayLabel: "Reset Stepper",
+    categoryLabel: "Actions"
+  })
+  reset() {
+    this.selectStep(0);
+  }
+
+  static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+    const stepsVal = config?.props?.steps || "Step 1, Step 2, Step 3";
+    const activeIndex = Number(config?.props?.activeIndex ?? 0);
+    const stepList = stepsVal.split(",").map((t: string) => t.trim()).filter(Boolean);
+    
+    const slots = stepList.map((step: string, i: number) => ({
+      id: `step-${i + 1}`,
+      label: step,
+      dropzone: true,
+      accepts: ["zero-section"]
+    }));
+
+    const headerBg = config?.props?.headerBg || "#f8fafc";
+    const borderColor = config?.props?.borderColor || "#e2e8f0";
+    const activeStepColor = config?.props?.activeStepColor || "#0e5aed";
+    const padding = config?.props?.padding || "16px";
+    
+    const templateHtml = `
+      <div style="border:1px solid ${borderColor}; border-radius:12px; background:#fff; overflow:hidden; width:100%;">
+        <div style="background:${headerBg}; display:flex; align-items:center; justify-content:center; padding:16px; border-bottom:1px solid ${borderColor}; width:100%; box-sizing:border-box; overflow-x:auto; gap:16px;">
+          ${stepList.map((step: string, i: number) => {
+            const isActive = activeIndex === i;
+            const isCompleted = i < activeIndex;
+            const circleBg = isActive ? activeStepColor : (isCompleted ? '#10b981' : '#e2e8f0');
+            const circleColor = isActive || isCompleted ? '#fff' : '#64748b';
+            const labelColor = isActive ? '#0f172a' : '#64748b';
+            
+            return `
+              <div data-tab-index="${i}" style="display:flex; align-items:center; gap:8px; cursor:pointer; flex-shrink:0;">
+                <div style="width:28px; height:28px; border-radius:50%; background:${circleBg}; color:${circleColor}; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700;">
+                  ${isCompleted ? '✓' : i + 1}
+                </div>
+                <span style="font-size:0.85rem; font-weight:600; color:${labelColor};">${step}</span>
+              </div>
+              ${i < stepList.length - 1 ? `
+                <div style="flex-grow:1; min-width:32px; height:2px; background:${isCompleted ? '#10b981' : '#e2e8f0'}; max-width:80px;"></div>
+              ` : ''}
+            `;
+          }).join("")}
+        </div>
+        <div style="padding:${padding}; min-height:100px;">
+          ${stepList.map((step: string, i: number) => {
+            const isActive = activeIndex === i;
+            return `
+              <div style="display:${isActive ? 'block' : 'none'};">
+                <zero-studio-slot name="step-${i + 1}"></zero-studio-slot>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    `;
+
+    return {
+      kind: "panel",
+      slots,
+      templateHtml,
+      badges: ["Stepper"],
+      emptyText: "Drag and Drop Elements here"
+    };
+  }
+
+  render() {
+    const stepList = this.getStepList();
+    return html`
+      ${this.renderResponsiveStyles()}
+      <div style=${this.computeBaseStyles()}>
+        <div class="zero-internal-container" style="border: 1px solid rgba(0,0,0,0.08); overflow: hidden; ${this.computeInternalStyles()}">
+          <div class="stepper-header-bar" style="background: ${this.headerBg}; display: flex; align-items: center; justify-content: center; padding: 16px; border-bottom: 1px solid ${this.borderColor || 'rgba(0,0,0,0.08)'}; width: 100%; box-sizing: border-box; overflow-x: auto; gap: 16px;">
+            ${stepList.map((step, index) => {
+              const isActive = this.activeIndex === index;
+              const isCompleted = index < this.activeIndex;
+              const circleBg = isActive ? this.activeStepColor : (isCompleted ? '#10b981' : '#e2e8f0');
+              const circleColor = isActive || isCompleted ? '#fff' : '#64748b';
+              const labelColor = isActive ? '#0f172a' : '#64748b';
+              return html`
+                <div class="step-indicator-wrapper" style="display: flex; align-items: center; gap: 8px; cursor: pointer; flex-shrink: 0;" @click=${() => this.selectStep(index)}>
+                  <div class="step-circle" style="width: 28px; height: 28px; border-radius: 50%; background: ${circleBg}; color: ${circleColor}; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; transition: all 0.2s ease;">
+                    ${isCompleted ? '✓' : index + 1}
+                  </div>
+                  <span class="step-label" style="font-size: 0.85rem; font-weight: 600; color: ${labelColor};">${step}</span>
+                </div>
+                ${index < stepList.length - 1 ? html`
+                  <div class="step-line" style="flex-grow: 1; min-width: 32px; height: 2px; background: ${isCompleted ? '#10b981' : '#e2e8f0'}; max-width: 80px; transition: background 0.2s ease;"></div>
+                ` : ''}
+              `;
+            })}
+          </div>
+          <div class="stepper-content-area" style="padding: ${this.padding}; width: 100%; box-sizing: border-box; min-height: 100px;">
+            ${stepList.map((_, index) => {
+              const isActive = this.activeIndex === index;
+              return html`
+                <div class="step-pane" style="display: ${isActive ? 'flex' : 'none'}; width: 100%;">
+                  <slot name="step-${index + 1}"></slot>
                 </div>
               `;
             })}

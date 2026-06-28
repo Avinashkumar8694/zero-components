@@ -61,7 +61,7 @@ var qe;
       } : function(i, o) {
         return i[o];
       }
-    }, $ = Object.getPrototypeOf(Function), M = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : kt(), I = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Nt(), D = typeof WeakMap == "function" ? WeakMap : Ut(), F = s ? Symbol.for("@reflect-metadata:registry") : void 0, ae = Mt(), Se = Pt(ae);
+    }, $ = Object.getPrototypeOf(Function), P = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : kt(), I = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Nt(), D = typeof WeakMap == "function" ? WeakMap : Ut(), F = s ? Symbol.for("@reflect-metadata:registry") : void 0, ae = Pt(), Se = Mt(ae);
     function ht(i, o, a, d) {
       if (b(a)) {
         if (!Ue(i))
@@ -86,7 +86,7 @@ var qe;
           throw new TypeError();
         if (!b(y) && !Ct(y))
           throw new TypeError();
-        Me(i, o, d, y);
+        Pe(i, o, d, y);
       }
       return a;
     }
@@ -94,7 +94,7 @@ var qe;
     function ft(i, o, a, d) {
       if (!S(a))
         throw new TypeError();
-      return b(d) || (d = L(d)), Me(i, o, a, d);
+      return b(d) || (d = L(d)), Pe(i, o, a, d);
     }
     e("defineMetadata", ft);
     function vt(i, o, a) {
@@ -124,7 +124,7 @@ var qe;
     function gt(i, o) {
       if (!S(i))
         throw new TypeError();
-      return b(o) || (o = L(o)), Pe(i, o);
+      return b(o) || (o = L(o)), Me(i, o);
     }
     e("getMetadataKeys", gt);
     function _t(i, o) {
@@ -204,7 +204,7 @@ var qe;
       if (!b(d))
         return d.OrdinaryGetOwnMetadata(i, o, a);
     }
-    function Me(i, o, a, d) {
+    function Pe(i, o, a, d) {
       var y = Q(
         a,
         d,
@@ -213,11 +213,11 @@ var qe;
       );
       y.OrdinaryDefineOwnMetadata(i, o, a, d);
     }
-    function Pe(i, o) {
+    function Me(i, o) {
       var a = Re(i, o), d = ve(i);
       if (d === null)
         return a;
-      var y = Pe(d, o);
+      var y = Me(d, o);
       if (y.length <= 0)
         return a;
       if (a.length <= 0)
@@ -438,7 +438,7 @@ var qe;
       }
       function c(v, _) {
         var A = y.get(v), x;
-        return b(A) || (x = A.get(_)), b(x) && (x = g(v, _), b(x) || (b(A) && (A = new M(), y.set(v, A)), A.set(_, x))), x;
+        return b(A) || (x = A.get(_)), b(x) && (x = g(v, _), b(x) || (b(A) && (A = new P(), y.set(v, A)), A.set(_, x))), x;
       }
       function h(v) {
         if (b(v))
@@ -453,12 +453,12 @@ var qe;
           if (!b(x))
             return !1;
           var H = y.get(v);
-          b(H) && (H = new M(), y.set(v, H)), H.set(_, A);
+          b(H) && (H = new P(), y.set(v, H)), H.set(_, A);
         }
         return !0;
       }
     }
-    function Mt() {
+    function Pt() {
       var i;
       return !b(F) && S(t.Reflect) && Object.isExtensible(t.Reflect) && (i = t.Reflect[F]), b(i) && (i = Ot()), !b(F) && S(t.Reflect) && Object.isExtensible(t.Reflect) && Object.defineProperty(t.Reflect, F, {
         enumerable: !1,
@@ -467,7 +467,7 @@ var qe;
         value: i
       }), i;
     }
-    function Pt(i) {
+    function Mt(i) {
       var o = new D(), a = {
         isProviderFor: function(h, p) {
           var v = o.get(h);
@@ -485,13 +485,13 @@ var qe;
         if (b(_)) {
           if (!v)
             return;
-          _ = new M(), o.set(h, _), A = !0;
+          _ = new P(), o.set(h, _), A = !0;
         }
         var x = _.get(p);
         if (b(x)) {
           if (!v)
             return;
-          if (x = new M(), _.set(p, x), !i.setProvider(h, p, a))
+          if (x = new P(), _.set(p, x), !i.setProvider(h, p, a))
             throw _.delete(p), A && o.delete(h), new Error("Wrong provider for target.");
         }
         return x;
@@ -699,7 +699,7 @@ var qe;
         /** @class */
         function() {
           function o() {
-            this._map = new M();
+            this._map = new P();
           }
           return Object.defineProperty(o.prototype, "size", {
             get: function() {
@@ -881,7 +881,7 @@ function Vt(r) {
         }
         if (l && m) {
           const w = new CSSStyleSheet(), $ = (E = l.sheet) == null ? void 0 : E.cssRules;
-          $ && (Array.from($).forEach((M) => w.insertRule(M.cssText)), f.adoptedStyleSheets = [...f.adoptedStyleSheets, w]);
+          $ && (Array.from($).forEach((P) => w.insertRule(P.cssText)), f.adoptedStyleSheets = [...f.adoptedStyleSheets, w]);
         } else if (l) {
           const w = l.cloneNode(!0);
           f.appendChild(w);
@@ -905,7 +905,7 @@ function qt(r) {
   return function(e, t) {
     try {
       Gt(r);
-      const n = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const n = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let s = !0;
       if (typeof t == "string") {
         try {
@@ -926,7 +926,7 @@ function U(r) {
 }
 var N;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
 })(N || (N = {}));
 var R;
 (function(r) {
@@ -1230,8 +1230,8 @@ const sr = (r, e) => {
   let s, l = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", u = K;
   for (let m = 0; m < t; m++) {
     const f = r[m];
-    let E, w, $ = -1, M = 0;
-    for (; M < f.length && (u.lastIndex = M, w = u.exec(f), w !== null); ) M = u.lastIndex, u === K ? w[1] === "!--" ? u = Qe : w[1] !== void 0 ? u = Ke : w[2] !== void 0 ? (dt.test(w[2]) && (s = RegExp("</" + w[2], "g")), u = V) : w[3] !== void 0 && (u = V) : u === V ? w[0] === ">" ? (u = s ?? K, $ = -1) : w[1] === void 0 ? $ = -2 : ($ = u.lastIndex - w[2].length, E = w[1], u = w[3] === void 0 ? V : w[3] === '"' ? tt : et) : u === tt || u === et ? u = V : u === Qe || u === Ke ? u = K : (u = V, s = void 0);
+    let E, w, $ = -1, P = 0;
+    for (; P < f.length && (u.lastIndex = P, w = u.exec(f), w !== null); ) P = u.lastIndex, u === K ? w[1] === "!--" ? u = Qe : w[1] !== void 0 ? u = Ke : w[2] !== void 0 ? (dt.test(w[2]) && (s = RegExp("</" + w[2], "g")), u = V) : w[3] !== void 0 && (u = V) : u === V ? w[0] === ">" ? (u = s ?? K, $ = -1) : w[1] === void 0 ? $ = -2 : ($ = u.lastIndex - w[2].length, E = w[1], u = w[3] === void 0 ? V : w[3] === '"' ? tt : et) : u === tt || u === et ? u = V : u === Qe || u === Ke ? u = K : (u = V, s = void 0);
     const I = u === V && r[m + 1].startsWith("/>") ? " " : "";
     l += u === K ? f + rr : $ >= 0 ? (n.push(E), f.slice(0, $) + lt + f.slice($) + z + I) : f + z + ($ === -2 ? m : I);
   }
@@ -1250,15 +1250,15 @@ class se {
     for (; (s = G.nextNode()) !== null && f.length < m; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const $ of s.getAttributeNames()) if ($.endsWith(lt)) {
-          const M = w[u++], I = s.getAttribute($).split(z), D = /([.?@])?(.*)/.exec(M);
+          const P = w[u++], I = s.getAttribute($).split(z), D = /([.?@])?(.*)/.exec(P);
           f.push({ type: 1, index: l, name: D[2], strings: I, ctor: D[1] === "." ? ar : D[1] === "?" ? lr : D[1] === "@" ? ur : he }), s.removeAttribute($);
         } else $.startsWith(z) && (f.push({ type: 6, index: l }), s.removeAttribute($));
         if (dt.test(s.tagName)) {
-          const $ = s.textContent.split(z), M = $.length - 1;
-          if (M > 0) {
+          const $ = s.textContent.split(z), P = $.length - 1;
+          if (P > 0) {
             s.textContent = ce ? ce.emptyScript : "";
-            for (let I = 0; I < M; I++) s.append($[I], ne()), G.nextNode(), f.push({ type: 2, index: ++l });
-            s.append($[M], ne());
+            for (let I = 0; I < P; I++) s.append($[I], ne()), G.nextNode(), f.push({ type: 2, index: ++l });
+            s.append($[P], ne());
           }
         }
       } else if (s.nodeType === 8) if (s.data === ut) f.push({ type: 2, index: l });
@@ -1542,7 +1542,7 @@ const nt = () => window.zeroThemeManager, it = {
 function st(r) {
   return r.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
-let P = class extends re {
+let M = class extends re {
   constructor() {
     super(...arguments), this.value = 0, this.label = "Number Input", this.placeholder = "Enter number", this.min = 0, this.max = 100, this.step = 1, this.required = !1, this.disabled = !1, this.showStepControls = !0, this.unitLabel = "", this.errorMessage = "", this.showError = !1;
   }
@@ -1654,7 +1654,7 @@ let P = class extends re {
         `;
   }
 };
-P.styles = Ft`
+M.styles = Ft`
         :host {
             display: block;
             width: 100%;
@@ -1747,7 +1747,7 @@ k([
     displayLabel: "Value",
     fieldMappings: "value"
   })
-], P.prototype, "value", 2);
+], M.prototype, "value", 2);
 k([
   j({ type: String }),
   U({
@@ -1757,7 +1757,7 @@ k([
     placeholderText: "Enter label text",
     fieldMappings: "label"
   })
-], P.prototype, "label", 2);
+], M.prototype, "label", 2);
 k([
   j({ type: String }),
   U({
@@ -1767,7 +1767,7 @@ k([
     placeholderText: "Enter placeholder text",
     fieldMappings: "placeholder"
   })
-], P.prototype, "placeholder", 2);
+], M.prototype, "placeholder", 2);
 k([
   j({ type: Number }),
   U({
@@ -1776,7 +1776,7 @@ k([
     displayLabel: "Minimum Value",
     fieldMappings: "min"
   })
-], P.prototype, "min", 2);
+], M.prototype, "min", 2);
 k([
   j({ type: Number }),
   U({
@@ -1785,7 +1785,7 @@ k([
     displayLabel: "Maximum Value",
     fieldMappings: "max"
   })
-], P.prototype, "max", 2);
+], M.prototype, "max", 2);
 k([
   j({ type: Number }),
   U({
@@ -1794,7 +1794,7 @@ k([
     displayLabel: "Step",
     fieldMappings: "step"
   })
-], P.prototype, "step", 2);
+], M.prototype, "step", 2);
 k([
   j({ type: Boolean }),
   U({
@@ -1803,7 +1803,7 @@ k([
     displayLabel: "Required",
     fieldMappings: "required"
   })
-], P.prototype, "required", 2);
+], M.prototype, "required", 2);
 k([
   j({ type: Boolean }),
   U({
@@ -1812,7 +1812,7 @@ k([
     displayLabel: "Disabled",
     fieldMappings: "disabled"
   })
-], P.prototype, "disabled", 2);
+], M.prototype, "disabled", 2);
 k([
   j({ type: Boolean }),
   U({
@@ -1821,7 +1821,7 @@ k([
     displayLabel: "Show Step Controls",
     fieldMappings: "showStepControls"
   })
-], P.prototype, "showStepControls", 2);
+], M.prototype, "showStepControls", 2);
 k([
   j({ type: String }),
   U({
@@ -1831,7 +1831,7 @@ k([
     placeholderText: "e.g., kg, cm, %",
     fieldMappings: "unitLabel"
   })
-], P.prototype, "unitLabel", 2);
+], M.prototype, "unitLabel", 2);
 k([
   j({ type: String }),
   U({
@@ -1841,7 +1841,7 @@ k([
     placeholderText: "Enter error message",
     fieldMappings: "errorMessage"
   })
-], P.prototype, "errorMessage", 2);
+], M.prototype, "errorMessage", 2);
 k([
   j({ type: Boolean }),
   U({
@@ -1850,22 +1850,22 @@ k([
     displayLabel: "Show Error",
     fieldMappings: "showError"
   })
-], P.prototype, "showError", 2);
+], M.prototype, "showError", 2);
 k([
   U({
     attributeType: R.EVENT,
     displayLabel: "On Input",
     eventTrigger: "input"
   })
-], P.prototype, "handleInput", 1);
+], M.prototype, "handleInput", 1);
 k([
   U({
     attributeType: R.EVENT,
     displayLabel: "On Change",
     eventTrigger: "change"
   })
-], P.prototype, "handleChange", 1);
-P = k([
+], M.prototype, "handleChange", 1);
+M = k([
   Bt({
     name: "zero-number-input",
     version: "1.0.0",
@@ -1875,8 +1875,8 @@ P = k([
     iconName: "number-input-icon.png"
   }),
   Vt()
-], P);
+], M);
 export {
-  P as ZeroNumberInput,
+  M as ZeroNumberInput,
   it as studioTemplate
 };

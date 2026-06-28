@@ -3,7 +3,7 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ge = globalThis, Ce = ge.ShadowRoot && (ge.ShadyCSS === void 0 || ge.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, ze = Symbol(), Qe = /* @__PURE__ */ new WeakMap();
+const ge = globalThis, Te = ge.ShadowRoot && (ge.ShadyCSS === void 0 || ge.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, ze = Symbol(), Qe = /* @__PURE__ */ new WeakMap();
 let ht = class {
   constructor(e, t, r) {
     if (this._$cssResult$ = !0, r !== ze) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
@@ -12,7 +12,7 @@ let ht = class {
   get styleSheet() {
     let e = this.o;
     const t = this.t;
-    if (Ce && e === void 0) {
+    if (Te && e === void 0) {
       const r = t !== void 0 && t.length === 1;
       r && (e = Qe.get(t)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), r && Qe.set(t, e));
     }
@@ -22,23 +22,23 @@ let ht = class {
     return this.cssText;
   }
 };
-const Ut = (i) => new ht(typeof i == "string" ? i : i + "", void 0, ze), ft = (i, ...e) => {
+const Ht = (i) => new ht(typeof i == "string" ? i : i + "", void 0, ze), ft = (i, ...e) => {
   const t = i.length === 1 ? i[0] : e.reduce((r, n, d) => r + ((l) => {
     if (l._$cssResult$ === !0) return l.cssText;
     if (typeof l == "number") return l;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + l + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(n) + i[d + 1], i[0]);
   return new ht(t, i, ze);
-}, Ht = (i, e) => {
-  if (Ce) i.adoptedStyleSheets = e.map((t) => t instanceof CSSStyleSheet ? t : t.styleSheet);
+}, Ut = (i, e) => {
+  if (Te) i.adoptedStyleSheets = e.map((t) => t instanceof CSSStyleSheet ? t : t.styleSheet);
   else for (const t of e) {
     const r = document.createElement("style"), n = ge.litNonce;
     n !== void 0 && r.setAttribute("nonce", n), r.textContent = t.cssText, i.appendChild(r);
   }
-}, Ke = Ce ? (i) => i : (i) => i instanceof CSSStyleSheet ? ((e) => {
+}, Ke = Te ? (i) => i : (i) => i instanceof CSSStyleSheet ? ((e) => {
   let t = "";
   for (const r of e.cssRules) t += r.cssText;
-  return Ut(t);
+  return Ht(t);
 })(i) : i;
 /**
  * @license
@@ -159,7 +159,7 @@ let K = class extends HTMLElement {
   }
   createRenderRoot() {
     const e = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return Ht(e, this.constructor.elementStyles), e;
+    return Ut(e, this.constructor.elementStyles), e;
   }
   connectedCallback() {
     var e;
@@ -548,8 +548,8 @@ class le extends K {
 }
 var pt;
 le._$litElement$ = !0, le.finalized = !0, (pt = Z.litElementHydrateSupport) == null || pt.call(Z, { LitElement: le });
-const Te = Z.litElementPolyfillSupport;
-Te == null || Te({ LitElement: le });
+const Ce = Z.litElementPolyfillSupport;
+Ce == null || Ce({ LitElement: le });
 (Z.litElementVersions ?? (Z.litElementVersions = [])).push("4.2.2");
 /**
  * @license
@@ -653,7 +653,7 @@ var ut;
       } : function(o, a) {
         return o[a];
       }
-    }, w = Object.getPrototypeOf(Function), j = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : It(), N = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : jt(), L = typeof WeakMap == "function" ? WeakMap : Nt(), H = n ? Symbol.for("@reflect-metadata:registry") : void 0, J = Ct(), he = zt(J);
+    }, w = Object.getPrototypeOf(Function), j = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : It(), N = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : jt(), L = typeof WeakMap == "function" ? WeakMap : Nt(), U = n ? Symbol.for("@reflect-metadata:registry") : void 0, J = Tt(), he = zt(J);
     function fe(o, a, s, u) {
       if (m(s)) {
         if (!Be(o))
@@ -668,7 +668,7 @@ var ut;
           throw new TypeError();
         if (!M(u) && !m(u) && !Q(u))
           throw new TypeError();
-        return Q(u) && (u = void 0), s = U(s), xt(o, a, s, u);
+        return Q(u) && (u = void 0), s = H(s), xt(o, a, s, u);
       }
     }
     e("decorate", fe);
@@ -686,51 +686,51 @@ var ut;
     function $e(o, a, s, u) {
       if (!M(s))
         throw new TypeError();
-      return m(u) || (u = U(u)), De(o, a, s, u);
+      return m(u) || (u = H(u)), De(o, a, s, u);
     }
     e("defineMetadata", $e);
     function Ee(o, a, s) {
       if (!M(a))
         throw new TypeError();
-      return m(s) || (s = U(s)), je(o, a, s);
+      return m(s) || (s = H(s)), je(o, a, s);
     }
     e("hasMetadata", Ee);
     function ye(o, a, s) {
       if (!M(a))
         throw new TypeError();
-      return m(s) || (s = U(s)), Se(o, a, s);
+      return m(s) || (s = H(s)), Se(o, a, s);
     }
     e("hasOwnMetadata", ye);
     function bt(o, a, s) {
       if (!M(a))
         throw new TypeError();
-      return m(s) || (s = U(s)), Ne(o, a, s);
+      return m(s) || (s = H(s)), Ne(o, a, s);
     }
     e("getMetadata", bt);
     function wt(o, a, s) {
       if (!M(a))
         throw new TypeError();
-      return m(s) || (s = U(s)), Le(o, a, s);
+      return m(s) || (s = H(s)), Le(o, a, s);
     }
     e("getOwnMetadata", wt);
     function _t(o, a) {
       if (!M(o))
         throw new TypeError();
-      return m(a) || (a = U(a)), Ue(o, a);
+      return m(a) || (a = H(a)), He(o, a);
     }
     e("getMetadataKeys", _t);
     function $t(o, a) {
       if (!M(o))
         throw new TypeError();
-      return m(a) || (a = U(a)), He(o, a);
+      return m(a) || (a = H(a)), Ue(o, a);
     }
     e("getOwnMetadataKeys", $t);
     function Et(o, a, s) {
       if (!M(a))
         throw new TypeError();
-      if (m(s) || (s = U(s)), !M(a))
+      if (m(s) || (s = H(s)), !M(a))
         throw new TypeError();
-      m(s) || (s = U(s));
+      m(s) || (s = H(s));
       var u = ne(
         a,
         s,
@@ -753,11 +753,11 @@ var ut;
     }
     function xt(o, a, s, u) {
       for (var v = o.length - 1; v >= 0; --v) {
-        var z = o[v], T = z(a, s, u);
-        if (!m(T) && !Q(T)) {
-          if (!M(T))
+        var z = o[v], C = z(a, s, u);
+        if (!m(C) && !Q(C)) {
+          if (!M(C))
             throw new TypeError();
-          u = T;
+          u = C;
         }
       }
       return u;
@@ -805,26 +805,26 @@ var ut;
       );
       v.OrdinaryDefineOwnMetadata(o, a, s, u);
     }
-    function Ue(o, a) {
-      var s = He(o, a), u = Pe(o);
+    function He(o, a) {
+      var s = Ue(o, a), u = Pe(o);
       if (u === null)
         return s;
-      var v = Ue(u, a);
+      var v = He(u, a);
       if (v.length <= 0)
         return s;
       if (s.length <= 0)
         return v;
-      for (var z = new N(), T = [], b = 0, c = s; b < c.length; b++) {
+      for (var z = new N(), C = [], b = 0, c = s; b < c.length; b++) {
         var p = c[b], h = z.has(p);
-        h || (z.add(p), T.push(p));
+        h || (z.add(p), C.push(p));
       }
       for (var f = 0, _ = v; f < _.length; f++) {
         var p = _[f], h = z.has(p);
-        h || (z.add(p), T.push(p));
+        h || (z.add(p), C.push(p));
       }
-      return T;
+      return C;
     }
-    function He(o, a) {
+    function Ue(o, a) {
       var s = ne(
         o,
         a,
@@ -913,7 +913,7 @@ var ut;
     function Rt(o) {
       return "" + o;
     }
-    function U(o) {
+    function H(o) {
       var a = Ot(o);
       return Pt(a) ? a : Rt(a);
     }
@@ -977,16 +977,16 @@ var ut;
       var v = u.constructor;
       return typeof v != "function" || v === o ? a : v;
     }
-    function Tt() {
+    function Ct() {
       var o;
-      !m(H) && typeof t.Reflect < "u" && !(H in t.Reflect) && typeof t.Reflect.defineMetadata == "function" && (o = kt(t.Reflect));
+      !m(U) && typeof t.Reflect < "u" && !(U in t.Reflect) && typeof t.Reflect.defineMetadata == "function" && (o = kt(t.Reflect));
       var a, s, u, v = new L(), z = {
-        registerProvider: T,
+        registerProvider: C,
         getProvider: c,
         setProvider: h
       };
       return z;
-      function T(f) {
+      function C(f) {
         if (!Object.isExtensible(z))
           throw new Error("Cannot add provider to a frozen registry.");
         switch (!0) {
@@ -1050,9 +1050,9 @@ var ut;
         return !0;
       }
     }
-    function Ct() {
+    function Tt() {
       var o;
-      return !m(H) && M(t.Reflect) && Object.isExtensible(t.Reflect) && (o = t.Reflect[H]), m(o) && (o = Tt()), !m(H) && M(t.Reflect) && Object.isExtensible(t.Reflect) && Object.defineProperty(t.Reflect, H, {
+      return !m(U) && M(t.Reflect) && Object.isExtensible(t.Reflect) && (o = t.Reflect[U]), m(o) && (o = Ct()), !m(U) && M(t.Reflect) && Object.isExtensible(t.Reflect) && Object.defineProperty(t.Reflect, U, {
         enumerable: !1,
         configurable: !1,
         writable: !1,
@@ -1065,7 +1065,7 @@ var ut;
           var f = a.get(p);
           return m(f) ? !1 : f.has(h);
         },
-        OrdinaryDefineOwnMetadata: T,
+        OrdinaryDefineOwnMetadata: C,
         OrdinaryHasOwnMetadata: v,
         OrdinaryGetOwnMetadata: z,
         OrdinaryOwnMetadataKeys: b,
@@ -1107,7 +1107,7 @@ var ut;
         if (!m(_))
           return _.get(p);
       }
-      function T(p, h, f, _) {
+      function C(p, h, f, _) {
         var S = u(
           f,
           _,
@@ -1159,10 +1159,10 @@ var ut;
       }
     }
     function kt(o) {
-      var a = o.defineMetadata, s = o.hasOwnMetadata, u = o.getOwnMetadata, v = o.getOwnMetadataKeys, z = o.deleteMetadata, T = new L(), b = {
+      var a = o.defineMetadata, s = o.hasOwnMetadata, u = o.getOwnMetadata, v = o.getOwnMetadataKeys, z = o.deleteMetadata, C = new L(), b = {
         isProviderFor: function(c, p) {
-          var h = T.get(c);
-          return !m(h) && h.has(p) ? !0 : v(c, p).length ? (m(h) && (h = new N(), T.set(c, h)), h.add(p), !0) : !1;
+          var h = C.get(c);
+          return !m(h) && h.has(p) ? !0 : v(c, p).length ? (m(h) && (h = new N(), C.set(c, h)), h.add(p), !0) : !1;
         },
         OrdinaryDefineOwnMetadata: a,
         OrdinaryHasOwnMetadata: s,
@@ -1257,7 +1257,7 @@ var ut;
           }, b.prototype.values = function() {
             return new s(this._keys, this._values, z);
           }, b.prototype.entries = function() {
-            return new s(this._keys, this._values, T);
+            return new s(this._keys, this._values, C);
           }, b.prototype["@@iterator"] = function() {
             return this.entries();
           }, b.prototype[l] = function() {
@@ -1282,7 +1282,7 @@ var ut;
       function z(b, c) {
         return c;
       }
-      function T(b, c) {
+      function C(b, c) {
         return [b, c];
       }
     }
@@ -1383,7 +1383,7 @@ var ut;
           c[h] = Math.random() * 255 | 0;
         return c;
       }
-      function T(c) {
+      function C(c) {
         if (typeof Uint8Array == "function") {
           var p = new Uint8Array(c);
           return typeof crypto < "u" ? crypto.getRandomValues(p) : typeof msCrypto < "u" ? msCrypto.getRandomValues(p) : z(p, c), p;
@@ -1391,7 +1391,7 @@ var ut;
         return z(new Array(c), c);
       }
       function b() {
-        var c = T(o);
+        var c = C(o);
         c[6] = c[6] & 79 | 64, c[8] = c[8] & 191 | 128;
         for (var p = "", h = 0; h < o; ++h) {
           var f = c[h];
@@ -1456,7 +1456,7 @@ function pr(i) {
   return function(e, t) {
     try {
       cr(i);
-      const r = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const r = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let n = !0;
       if (typeof t == "string") {
         try {
@@ -1472,12 +1472,12 @@ function pr(i) {
     }
   };
 }
-function C(i) {
+function T(i) {
   return pr(i);
 }
 var I;
 (function(i) {
-  i.TEXT_INPUT = "text-input", i.PASSWORD_INPUT = "password-input", i.DROPDOWN = "dropdown", i.CHECKBOX = "checkbox", i.RADIO_BUTTON = "radio-button", i.RANGE_SLIDER = "range-slider", i.FILE_INPUT = "file-input", i.DATE_PICKER = "date-picker", i.COLOR_PICKER = "color-picker", i.NUMBER_INPUT = "number-input", i.TEXTAREA = "textarea", i.MULTI_SELECT = "multi-select", i.POPUP_DROPDOWN = "popup-dropdown", i.LAYOUT_PICKER = "layout-picker", i.RESPONSIVE_OVERRIDE = "responsive-override", i.IMAGE_PICKER = "image-picker";
+  i.TEXT_INPUT = "text-input", i.PASSWORD_INPUT = "password-input", i.DROPDOWN = "dropdown", i.CHECKBOX = "checkbox", i.RADIO_BUTTON = "radio-button", i.RANGE_SLIDER = "range-slider", i.FILE_INPUT = "file-input", i.DATE_PICKER = "date-picker", i.COLOR_PICKER = "color-picker", i.NUMBER_INPUT = "number-input", i.TEXTAREA = "textarea", i.MULTI_SELECT = "multi-select", i.POPUP_DROPDOWN = "popup-dropdown", i.LAYOUT_PICKER = "layout-picker", i.RESPONSIVE_OVERRIDE = "responsive-override", i.IMAGE_PICKER = "image-picker", i.CHIPS = "chips";
 })(I || (I = {}));
 var A;
 (function(i) {
@@ -1721,7 +1721,7 @@ R([
 ], x.prototype, "activeEdge", 2);
 R([
   P({ type: Boolean, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.CHECKBOX,
     displayLabel: "Visible",
@@ -1731,7 +1731,7 @@ R([
 ], x.prototype, "visible", 2);
 R([
   P({ type: Number, reflect: !0, attribute: "z-index" }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.NUMBER_INPUT,
     displayLabel: "Z-Index",
@@ -1741,7 +1741,7 @@ R([
 ], x.prototype, "zIndex", 2);
 R([
   P({ type: Number, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RANGE_SLIDER,
     displayLabel: "Opacity",
@@ -1751,7 +1751,7 @@ R([
 ], x.prototype, "opacity", 2);
 R([
   P({ type: String, attribute: "custom-class" }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.TEXT_INPUT,
     displayLabel: "Custom CSS Class",
@@ -1761,7 +1761,7 @@ R([
 ], x.prototype, "customClass", 2);
 R([
   P({ type: String, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RESPONSIVE_OVERRIDE,
     displayLabel: "Width",
@@ -1771,7 +1771,7 @@ R([
 ], x.prototype, "width", 2);
 R([
   P({ type: String, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RESPONSIVE_OVERRIDE,
     displayLabel: "Height",
@@ -1781,7 +1781,7 @@ R([
 ], x.prototype, "height", 2);
 R([
   P({ type: String, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RESPONSIVE_OVERRIDE,
     displayLabel: "Margin",
@@ -1791,7 +1791,7 @@ R([
 ], x.prototype, "margin", 2);
 R([
   P({ type: String, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RESPONSIVE_OVERRIDE,
     displayLabel: "Padding",
@@ -1800,7 +1800,7 @@ R([
   })
 ], x.prototype, "padding", 2);
 R([
-  C({
+  T({
     attributeType: A.EVENT,
     displayLabel: "On Click",
     eventTrigger: "click",
@@ -1824,7 +1824,7 @@ R([
 ], x.prototype, "itemsPerRow", 2);
 R([
   P({ type: String, attribute: "background-color", reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.COLOR_PICKER,
     displayLabel: "Background Color",
@@ -1834,7 +1834,7 @@ R([
 ], x.prototype, "backgroundColor", 2);
 R([
   P({ type: String, attribute: "border-radius", reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.TEXT_INPUT,
     displayLabel: "Corner Radius",
@@ -1844,7 +1844,7 @@ R([
 ], x.prototype, "borderRadius", 2);
 R([
   P({ type: String, reflect: !0, attribute: "elevation" }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.DROPDOWN,
     displayLabel: "Elevation (Shadow)",
@@ -1859,14 +1859,14 @@ R([
   })
 ], x.prototype, "elevation", 2);
 R([
-  C({
+  T({
     attributeType: A.ACTION,
     displayLabel: "Show Component",
     categoryLabel: "Actions"
   })
 ], x.prototype, "show", 1);
 R([
-  C({
+  T({
     attributeType: A.ACTION,
     displayLabel: "Hide Component",
     categoryLabel: "Actions"
@@ -1905,10 +1905,10 @@ let G = class extends x {
     return "zero-stack";
   }
   static getStudioTemplate(i) {
-    var L, H;
+    var L, U;
     if (!i) return ct;
     V(i.studio.display.label || "Stack");
-    const e = ((L = i.studio.props) == null ? void 0 : L.direction) || "column", t = V(i.props.wrap || "nowrap"), r = V(i.props.justify || "flex-start"), n = V(i.props.align || "stretch"), d = V(i.props.gap || "0px"), l = V(i.props.padding || "0px"), g = V(i.props.backgroundColor || "transparent"), y = V(i.props.borderColor || "transparent"), $ = V(i.props.borderRadius || "0px"), E = i.props.responsiveProps || ((H = i.studio.props) == null ? void 0 : H.responsiveProps) || {};
+    const e = ((L = i.studio.props) == null ? void 0 : L.direction) || "column", t = V(i.props.wrap || "nowrap"), r = V(i.props.justify || "flex-start"), n = V(i.props.align || "stretch"), d = V(i.props.gap || "0px"), l = V(i.props.padding || "0px"), g = V(i.props.backgroundColor || "transparent"), y = V(i.props.borderColor || "transparent"), $ = V(i.props.borderRadius || "0px"), E = i.props.responsiveProps || ((U = i.studio.props) == null ? void 0 : U.responsiveProps) || {};
     let w = "";
     const j = {
       mobile: "@media screen and (max-width: 767px)",
@@ -2007,7 +2007,7 @@ G.styles = [
 ];
 re([
   P({ type: String, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RESPONSIVE_OVERRIDE,
     displayLabel: "Direction",
@@ -2022,7 +2022,7 @@ re([
 ], G.prototype, "direction", 2);
 re([
   P({ type: String, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RESPONSIVE_OVERRIDE,
     displayLabel: "Justify",
@@ -2038,7 +2038,7 @@ re([
 ], G.prototype, "justify", 2);
 re([
   P({ type: String, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RESPONSIVE_OVERRIDE,
     displayLabel: "Align",
@@ -2054,7 +2054,7 @@ re([
 ], G.prototype, "align", 2);
 re([
   P({ type: String, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RESPONSIVE_OVERRIDE,
     displayLabel: "Gap",
@@ -2064,7 +2064,7 @@ re([
 ], G.prototype, "gap", 2);
 re([
   P({ type: String, reflect: !0 }),
-  C({
+  T({
     attributeType: A.PROPERTY,
     uiComponentType: I.RESPONSIVE_OVERRIDE,
     displayLabel: "Wrap",

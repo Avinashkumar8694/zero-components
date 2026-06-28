@@ -1,6 +1,6 @@
-var Dt = Object.defineProperty;
-var Ht = (r, e, t) => e in r ? Dt(r, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : r[e] = t;
-var Ge = (r, e, t) => Ht(r, typeof e != "symbol" ? e + "" : e, t);
+var Ht = Object.defineProperty;
+var Dt = (r, e, t) => e in r ? Ht(r, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : r[e] = t;
+var Ge = (r, e, t) => Dt(r, typeof e != "symbol" ? e + "" : e, t);
 var Be = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
@@ -355,7 +355,7 @@ var We;
         return a;
       }
     }
-    function De(i) {
+    function He(i) {
       var o = je(i, u);
       if (!le(o))
         throw new TypeError();
@@ -364,7 +364,7 @@ var We;
         throw new TypeError();
       return a;
     }
-    function He(i) {
+    function De(i) {
       return i.value;
     }
     function Ie(i) {
@@ -423,11 +423,11 @@ var We;
             if (a.isProviderFor(p, b))
               return o;
             if (!m(d))
-              for (var A = De(d); ; ) {
+              for (var A = He(d); ; ) {
                 var x = Ie(A);
                 if (!x)
                   return;
-                var R = He(x);
+                var R = De(x);
                 if (R.isProviderFor(p, b))
                   return ze(A), R;
               }
@@ -533,11 +533,11 @@ var We;
         );
         if (m(b))
           return p;
-        for (var A = b.keys(), x = De(A), R = 0; ; ) {
+        for (var A = b.keys(), x = He(A), R = 0; ; ) {
           var Le = Ie(x);
           if (!Le)
             return p.length = R, p;
-          var Ut = He(Le);
+          var Ut = De(Le);
           try {
             p[R] = Ut;
           } catch (jt) {
@@ -905,7 +905,7 @@ function Wt(r) {
   return function(e, t) {
     try {
       Bt(r);
-      const n = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const n = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let s = !0;
       if (typeof t == "string") {
         try {
@@ -926,7 +926,7 @@ function ie(r) {
 }
 var L;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
 })(L || (L = {}));
 var G;
 (function(r) {
@@ -1219,7 +1219,7 @@ F.elementStyles = [], F.shadowRootOptions = { mode: "open" }, F[Q("elementProper
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const K = globalThis, Ye = (r) => r, ce = K.trustedTypes, Xe = ce ? ce.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, at = "$lit$", U = `lit$${Math.random().toFixed(9).slice(2)}$`, lt = "?" + U, tr = `<${lt}>`, B = document, te = () => B.createComment(""), re = (r) => r === null || typeof r != "object" && typeof r != "function", Ae = Array.isArray, rr = (r) => Ae(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", me = `[ 	
-\f\r]`, J = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Je = /-->/g, Qe = />/g, H = RegExp(`>|${me}(?:([^\\s"'>=/]+)(${me}*=${me}*(?:[^ 	
+\f\r]`, J = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Je = /-->/g, Qe = />/g, D = RegExp(`>|${me}(?:([^\\s"'>=/]+)(${me}*=${me}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), Ke = /'/g, et = /"/g, ut = /^(?:script|style|textarea|title)$/i, nr = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), tt = nr(1), q = Symbol.for("lit-noChange"), C = Symbol.for("lit-nothing"), rt = /* @__PURE__ */ new WeakMap(), I = B.createTreeWalker(B, 129);
 function dt(r, e) {
   if (!Ae(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
@@ -1231,8 +1231,8 @@ const ir = (r, e) => {
   for (let _ = 0; _ < t; _++) {
     const v = r[_];
     let E, w, $ = -1, P = 0;
-    for (; P < v.length && (u.lastIndex = P, w = u.exec(v), w !== null); ) P = u.lastIndex, u === J ? w[1] === "!--" ? u = Je : w[1] !== void 0 ? u = Qe : w[2] !== void 0 ? (ut.test(w[2]) && (s = RegExp("</" + w[2], "g")), u = H) : w[3] !== void 0 && (u = H) : u === H ? w[0] === ">" ? (u = s ?? J, $ = -1) : w[1] === void 0 ? $ = -2 : ($ = u.lastIndex - w[2].length, E = w[1], u = w[3] === void 0 ? H : w[3] === '"' ? et : Ke) : u === et || u === Ke ? u = H : u === Je || u === Qe ? u = J : (u = H, s = void 0);
-    const T = u === H && r[_ + 1].startsWith("/>") ? " " : "";
+    for (; P < v.length && (u.lastIndex = P, w = u.exec(v), w !== null); ) P = u.lastIndex, u === J ? w[1] === "!--" ? u = Je : w[1] !== void 0 ? u = Qe : w[2] !== void 0 ? (ut.test(w[2]) && (s = RegExp("</" + w[2], "g")), u = D) : w[3] !== void 0 && (u = D) : u === D ? w[0] === ">" ? (u = s ?? J, $ = -1) : w[1] === void 0 ? $ = -2 : ($ = u.lastIndex - w[2].length, E = w[1], u = w[3] === void 0 ? D : w[3] === '"' ? et : Ke) : u === et || u === Ke ? u = D : u === Je || u === Qe ? u = J : (u = D, s = void 0);
+    const T = u === D && r[_ + 1].startsWith("/>") ? " " : "";
     l += u === J ? v + tr : $ >= 0 ? (n.push(E), v.slice(0, $) + at + v.slice($) + U + T) : v + U + ($ === -2 ? _ : T);
   }
   return [dt(r, l + (r[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), n];
@@ -1544,7 +1544,7 @@ const nt = () => window.zeroThemeManager, it = {
 function vr(r) {
   return r.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
-let D = class extends ee {
+let H = class extends ee {
   constructor() {
     super(...arguments), this.theme = "modern", this.title = "Expansion Panel", this.expanded = !1, this.disabled = !1, this.accentColor = "";
   }
@@ -1601,7 +1601,7 @@ let D = class extends ee {
         ` : tt`<div class="expansion-panel ${this.theme}"></div>`;
   }
 };
-D.styles = Ft`
+H.styles = Ft`
         :host {
             display: block;
             width: 100%;
@@ -1679,7 +1679,7 @@ Y([
       { label: "Neon", value: "neon" }
     ]
   })
-], D.prototype, "theme", 2);
+], H.prototype, "theme", 2);
 Y([
   oe({ type: String }),
   ie({
@@ -1688,7 +1688,7 @@ Y([
     displayLabel: "Title",
     fieldMappings: "title"
   })
-], D.prototype, "title", 2);
+], H.prototype, "title", 2);
 Y([
   oe({ type: Boolean }),
   ie({
@@ -1697,7 +1697,7 @@ Y([
     displayLabel: "Expanded",
     fieldMappings: "expanded"
   })
-], D.prototype, "expanded", 2);
+], H.prototype, "expanded", 2);
 Y([
   oe({ type: Boolean }),
   ie({
@@ -1706,7 +1706,7 @@ Y([
     displayLabel: "Disabled",
     fieldMappings: "disabled"
   })
-], D.prototype, "disabled", 2);
+], H.prototype, "disabled", 2);
 Y([
   oe({ type: String }),
   ie({
@@ -1715,8 +1715,8 @@ Y([
     displayLabel: "Accent Color",
     fieldMappings: "accentColor"
   })
-], D.prototype, "accentColor", 2);
-D = Y([
+], H.prototype, "accentColor", 2);
+H = Y([
   Lt({
     name: "zero-uiv-expansion",
     version: "1.0.0",
@@ -1726,8 +1726,8 @@ D = Y([
     iconName: "expansion-icon.png"
   }),
   Gt()
-], D);
+], H);
 export {
-  D as ZeroUivExpansion,
+  H as ZeroUivExpansion,
   it as studioTemplate
 };

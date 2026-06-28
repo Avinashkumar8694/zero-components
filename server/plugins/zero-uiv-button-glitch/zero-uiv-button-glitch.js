@@ -1,5 +1,5 @@
-var He = Object.defineProperty;
-var De = (r, t, e) => t in r ? He(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
+var Ie = Object.defineProperty;
+var De = (r, t, e) => t in r ? Ie(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
 var Gt = (r, t, e) => De(r, typeof t != "symbol" ? t + "" : t, e);
 var Bt = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
 /*! *****************************************************************************
@@ -288,7 +288,7 @@ var Vt;
         case 5:
           return i;
       }
-      var a = "string", c = It(i, l);
+      var a = "string", c = Ht(i, l);
       if (c !== void 0) {
         var v = c.call(i, a);
         if (O(v))
@@ -347,7 +347,7 @@ var Vt;
     function pt(i, o) {
       return i === o || i !== i && o !== o;
     }
-    function It(i, o) {
+    function Ht(i, o) {
       var a = i[o];
       if (a != null) {
         if (!at(a))
@@ -355,8 +355,8 @@ var Vt;
         return a;
       }
     }
-    function Ht(i) {
-      var o = It(i, u);
+    function It(i) {
+      var o = Ht(i, u);
       if (!at(o))
         throw new TypeError();
       var a = o.call(i);
@@ -423,7 +423,7 @@ var Vt;
             if (a.isProviderFor(p, b))
               return o;
             if (!g(c))
-              for (var A = Ht(c); ; ) {
+              for (var A = It(c); ; ) {
                 var S = jt(A);
                 if (!S)
                   return;
@@ -533,18 +533,18 @@ var Vt;
         );
         if (g(b))
           return p;
-        for (var A = b.keys(), S = Ht(A), k = 0; ; ) {
+        for (var A = b.keys(), S = It(A), k = 0; ; ) {
           var zt = jt(S);
           if (!zt)
             return p.length = k, p;
           var Ue = Dt(zt);
           try {
             p[k] = Ue;
-          } catch (Ie) {
+          } catch (He) {
             try {
               Lt(S);
             } finally {
-              throw Ie;
+              throw He;
             }
           }
           k++;
@@ -905,7 +905,7 @@ function Ve(r) {
   return function(t, e) {
     try {
       Be(r);
-      const n = Reflect.getMetadata("ZeroAttribute", t) || [];
+      const n = [...Reflect.getMetadata("ZeroAttribute", t) || []];
       let s = !0;
       if (typeof e == "string") {
         try {
@@ -926,7 +926,7 @@ function it(r) {
 }
 var F;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
 })(F || (F = {}));
 var z;
 (function(r) {
@@ -979,7 +979,7 @@ const We = (r) => new oe(typeof r == "string" ? r : r + "", void 0, $t), Fe = (r
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Ze, defineProperty: Xe, getOwnPropertyDescriptor: Ye, getOwnPropertyNames: Je, getOwnPropertySymbols: Qe, getPrototypeOf: Ke } = Object, I = globalThis, qt = I.trustedTypes, tr = qt ? qt.emptyScript : "", _t = I.reactiveElementPolyfillSupport, Q = (r, t) => r, ut = { toAttribute(r, t) {
+const { is: Ze, defineProperty: Xe, getOwnPropertyDescriptor: Ye, getOwnPropertyNames: Je, getOwnPropertySymbols: Qe, getPrototypeOf: Ke } = Object, H = globalThis, qt = H.trustedTypes, tr = qt ? qt.emptyScript : "", _t = H.reactiveElementPolyfillSupport, Q = (r, t) => r, ut = { toAttribute(r, t) {
   switch (t) {
     case Boolean:
       r = r ? tr : null;
@@ -1008,7 +1008,7 @@ const { is: Ze, defineProperty: Xe, getOwnPropertyDescriptor: Ye, getOwnProperty
   }
   return e;
 } }, Et = (r, t) => !Ze(r, t), Zt = { attribute: !0, type: String, converter: ut, reflect: !1, useDefault: !1, hasChanged: Et };
-Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), I.litPropertyMetadata ?? (I.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
+Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), H.litPropertyMetadata ?? (H.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
 let W = class extends HTMLElement {
   static addInitializer(t) {
     this._$Ei(), (this.l ?? (this.l = [])).push(t);
@@ -1212,7 +1212,7 @@ let W = class extends HTMLElement {
   firstUpdated(t) {
   }
 };
-W.elementStyles = [], W.shadowRootOptions = { mode: "open" }, W[Q("elementProperties")] = /* @__PURE__ */ new Map(), W[Q("finalized")] = /* @__PURE__ */ new Map(), _t == null || _t({ ReactiveElement: W }), (I.reactiveElementVersions ?? (I.reactiveElementVersions = [])).push("2.1.2");
+W.elementStyles = [], W.shadowRootOptions = { mode: "open" }, W[Q("elementProperties")] = /* @__PURE__ */ new Map(), W[Q("finalized")] = /* @__PURE__ */ new Map(), _t == null || _t({ ReactiveElement: W }), (H.reactiveElementVersions ?? (H.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -1538,7 +1538,7 @@ const re = () => window.zeroThemeManager, ne = {
 function ie(r) {
   return r.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
-let H = class extends tt {
+let I = class extends tt {
   constructor() {
     super(...arguments), this.label = "GLITCH", this.tag = "V2.0", this.disabled = !1, this.glowColor = "", this.onClickEvent = "click";
   }
@@ -1581,7 +1581,7 @@ let H = class extends tt {
         `;
   }
 };
-H.styles = Fe`
+I.styles = Fe`
         :host {
             display: inline-block;
             --btn-p: var(--uiv-primary-color, #6366f1);
@@ -1664,7 +1664,7 @@ X([
     displayLabel: "Label",
     fieldMappings: "label"
   })
-], H.prototype, "label", 2);
+], I.prototype, "label", 2);
 X([
   dt({ type: String }),
   it({
@@ -1673,7 +1673,7 @@ X([
     displayLabel: "Tag Text",
     fieldMappings: "tag"
   })
-], H.prototype, "tag", 2);
+], I.prototype, "tag", 2);
 X([
   dt({ type: Boolean }),
   it({
@@ -1682,7 +1682,7 @@ X([
     displayLabel: "Disabled",
     fieldMappings: "disabled"
   })
-], H.prototype, "disabled", 2);
+], I.prototype, "disabled", 2);
 X([
   dt({ type: String }),
   it({
@@ -1691,15 +1691,15 @@ X([
     displayLabel: "Glow Color Overlay",
     fieldMappings: "glowColor"
   })
-], H.prototype, "glowColor", 2);
+], I.prototype, "glowColor", 2);
 X([
   it({
     attributeType: z.EVENT,
     eventTrigger: "click",
     displayLabel: "On Click"
   })
-], H.prototype, "onClickEvent", 2);
-H = X([
+], I.prototype, "onClickEvent", 2);
+I = X([
   ze({
     name: "zero-uiv-button-glitch",
     version: "1.0.0",
@@ -1709,8 +1709,8 @@ H = X([
     iconName: "button-icon.png"
   }),
   Ge()
-], H);
+], I);
 export {
-  H as ZeroUivButtonGlitch,
+  I as ZeroUivButtonGlitch,
   ne as glitchTemplate
 };

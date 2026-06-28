@@ -61,7 +61,7 @@ var We;
       } : function(n, a) {
         return n[a];
       }
-    }, b = Object.getPrototypeOf(Function), S = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Rt(), C = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : kt(), H = typeof WeakMap == "function" ? WeakMap : Nt(), L = s ? Symbol.for("@reflect-metadata:registry") : void 0, X = Ot(), Ae = Ct(X);
+    }, b = Object.getPrototypeOf(Function), S = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Rt(), O = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : kt(), H = typeof WeakMap == "function" ? WeakMap : Nt(), L = s ? Symbol.for("@reflect-metadata:registry") : void 0, X = Ct(), Ae = Ot(X);
     function ht(n, a, o, d) {
       if (m(o)) {
         if (!Ve(n))
@@ -86,7 +86,7 @@ var We;
           throw new TypeError();
         if (!m(g) && !Tt(g))
           throw new TypeError();
-        Ce(n, a, d, g);
+        Oe(n, a, d, g);
       }
       return o;
     }
@@ -94,7 +94,7 @@ var We;
     function pt(n, a, o, d) {
       if (!T(o))
         throw new TypeError();
-      return m(d) || (d = D(d)), Ce(n, a, o, d);
+      return m(d) || (d = D(d)), Oe(n, a, o, d);
     }
     e("defineMetadata", pt);
     function ft(n, a, o) {
@@ -118,7 +118,7 @@ var We;
     function gt(n, a, o) {
       if (!T(a))
         throw new TypeError();
-      return m(o) || (o = D(o)), Oe(n, a, o);
+      return m(o) || (o = D(o)), Ce(n, a, o);
     }
     e("getOwnMetadata", gt);
     function mt(n, a) {
@@ -189,12 +189,12 @@ var We;
     function Pe(n, a, o) {
       var d = fe(n, a, o);
       if (d)
-        return Oe(n, a, o);
+        return Ce(n, a, o);
       var g = ye(a);
       if (!q(g))
         return Pe(n, g, o);
     }
-    function Oe(n, a, o) {
+    function Ce(n, a, o) {
       var d = ee(
         a,
         o,
@@ -204,7 +204,7 @@ var We;
       if (!m(d))
         return d.OrdinaryGetOwnMetadata(n, a, o);
     }
-    function Ce(n, a, o, d) {
+    function Oe(n, a, o, d) {
       var g = ee(
         o,
         d,
@@ -222,7 +222,7 @@ var We;
         return o;
       if (o.length <= 0)
         return g;
-      for (var M = new C(), P = [], $ = 0, h = o; $ < h.length; $++) {
+      for (var M = new O(), P = [], $ = 0, h = o; $ < h.length; $++) {
         var c = h[$], p = M.has(c);
         p || (M.add(c), P.push(c));
       }
@@ -411,7 +411,7 @@ var We;
           case o === v:
             break;
           default:
-            d === void 0 && (d = new C()), d.add(v);
+            d === void 0 && (d = new O()), d.add(v);
             break;
         }
       }
@@ -458,7 +458,7 @@ var We;
         return !0;
       }
     }
-    function Ot() {
+    function Ct() {
       var n;
       return !m(L) && T(t.Reflect) && Object.isExtensible(t.Reflect) && (n = t.Reflect[L]), m(n) && (n = Pt()), !m(L) && T(t.Reflect) && Object.isExtensible(t.Reflect) && Object.defineProperty(t.Reflect, L, {
         enumerable: !1,
@@ -467,7 +467,7 @@ var We;
         value: n
       }), n;
     }
-    function Ct(n) {
+    function Ot(n) {
       var a = new H(), o = {
         isProviderFor: function(c, p) {
           var v = a.get(c);
@@ -570,7 +570,7 @@ var We;
       var a = n.defineMetadata, o = n.hasOwnMetadata, d = n.getOwnMetadata, g = n.getOwnMetadataKeys, M = n.deleteMetadata, P = new H(), $ = {
         isProviderFor: function(h, c) {
           var p = P.get(h);
-          return !m(p) && p.has(c) ? !0 : g(h, c).length ? (m(p) && (p = new C(), P.set(h, p)), p.add(c), !0) : !1;
+          return !m(p) && p.has(c) ? !0 : g(h, c).length ? (m(p) && (p = new O(), P.set(h, p)), p.add(c), !0) : !1;
         },
         OrdinaryDefineOwnMetadata: a,
         OrdinaryHasOwnMetadata: o,
@@ -905,7 +905,7 @@ function Gt(r) {
   return function(e, t) {
     try {
       zt(r);
-      const i = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const i = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let s = !0;
       if (typeof t == "string") {
         try {
@@ -926,7 +926,7 @@ function I(r) {
 }
 var V;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
 })(V || (V = {}));
 var k;
 (function(r) {
@@ -1232,8 +1232,8 @@ const nr = (r, e) => {
     const f = r[y];
     let E, w, b = -1, S = 0;
     for (; S < f.length && (l.lastIndex = S, w = l.exec(f), w !== null); ) S = l.lastIndex, l === te ? w[1] === "!--" ? l = Qe : w[1] !== void 0 ? l = Ke : w[2] !== void 0 ? (ut.test(w[2]) && (s = RegExp("</" + w[2], "g")), l = G) : w[3] !== void 0 && (l = G) : l === G ? w[0] === ">" ? (l = s ?? te, b = -1) : w[1] === void 0 ? b = -2 : (b = l.lastIndex - w[2].length, E = w[1], l = w[3] === void 0 ? G : w[3] === '"' ? tt : et) : l === tt || l === et ? l = G : l === Qe || l === Ke ? l = te : (l = G, s = void 0);
-    const C = l === G && r[y + 1].startsWith("/>") ? " " : "";
-    u += l === te ? f + tr : b >= 0 ? (i.push(E), f.slice(0, b) + ot + f.slice(b) + B + C) : f + B + (b === -2 ? y : C);
+    const O = l === G && r[y + 1].startsWith("/>") ? " " : "";
+    u += l === te ? f + tr : b >= 0 ? (i.push(E), f.slice(0, b) + ot + f.slice(b) + B + O) : f + B + (b === -2 ? y : O);
   }
   return [dt(r, u + (r[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), i];
 };
@@ -1250,14 +1250,14 @@ class oe {
     for (; (s = W.nextNode()) !== null && f.length < y; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const b of s.getAttributeNames()) if (b.endsWith(ot)) {
-          const S = w[l++], C = s.getAttribute(b).split(B), H = /([.?@])?(.*)/.exec(S);
-          f.push({ type: 1, index: u, name: H[2], strings: C, ctor: H[1] === "." ? ar : H[1] === "?" ? or : H[1] === "@" ? lr : pe }), s.removeAttribute(b);
+          const S = w[l++], O = s.getAttribute(b).split(B), H = /([.?@])?(.*)/.exec(S);
+          f.push({ type: 1, index: u, name: H[2], strings: O, ctor: H[1] === "." ? ar : H[1] === "?" ? or : H[1] === "@" ? lr : pe }), s.removeAttribute(b);
         } else b.startsWith(B) && (f.push({ type: 6, index: u }), s.removeAttribute(b));
         if (ut.test(s.tagName)) {
           const b = s.textContent.split(B), S = b.length - 1;
           if (S > 0) {
             s.textContent = ce ? ce.emptyScript : "";
-            for (let C = 0; C < S; C++) s.append(b[C], se()), W.nextNode(), f.push({ type: 2, index: ++u });
+            for (let O = 0; O < S; O++) s.append(b[O], se()), W.nextNode(), f.push({ type: 2, index: ++u });
             s.append(b[S], se());
           }
         }
@@ -1541,27 +1541,27 @@ const it = () => window.zeroThemeManager, nt = {
 function vr(r) {
   return r.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
-let O = class extends ne {
+let C = class extends ne {
   constructor() {
     super(...arguments), this.value = 50, this.min = 0, this.max = 100, this.step = 1, this.label = "Range Slider", this.unit = "", this.dualRange = !1, this.secondValue = 75, this.showTooltip = !1, this.showValueInputs = !1, this.showStepControls = !1, this.disabled = !1, this.errorMessage = "", this.showError = !1, this.showTooltipState = !1;
   }
   static getStudioTemplate(r) {
     if (!r) return nt;
     const e = vr(r.studio.display.label || "Range Slider"), t = "var(--uiv-primary-color, #6c63ff)", i = "var(--uiv-surface-color, #ffffff)", s = "var(--uiv-border-color, rgba(148,163,184,0.15))", u = "var(--uiv-text-muted, #94a3b8)", l = r.studio.props || {}, y = Number(l.min) || 0, f = Number(l.max) || 100, E = Number(l.value) || 50, w = Number(l.secondValue) || 75, b = !!l.dualRange, S = f - y;
-    let C = 0, H = 0;
+    let O = 0, H = 0;
     if (b) {
       const L = Math.min(E, w), X = Math.max(E, w);
-      C = (L - y) / S * 100, H = 100 - (X - y) / S * 100;
+      O = (L - y) / S * 100, H = 100 - (X - y) / S * 100;
     } else
-      C = 0, H = 100 - (E - y) / S * 100;
+      O = 0, H = 100 - (E - y) / S * 100;
     return {
       ...nt,
       templateHtml: [
         `<div style='padding:12px;border-radius:8px;border:1px solid ${s};background:${i};box-shadow:var(--uiv-shadow-depth, 0 1px 3px rgba(0,0,0,0.05));'>`,
         `<div style='font-size:0.75rem;color:${u};font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;'>${e}</div>`,
         "<div style='height:6px;border-radius:3px;background:rgba(148,163,184,0.15);position:relative;margin:12px 0;'>",
-        `<div style='position:absolute;left:${C}%;right:${H}%;height:100%;background:${t};border-radius:3px;box-shadow:var(--uiv-border-glow);'></div>`,
-        `<div style='position:absolute;left:${b ? C : C + (100 - H)}%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#ffffff;border:3px solid ${t};box-shadow:0 3px 6px rgba(0,0,0,0.2);'></div>`,
+        `<div style='position:absolute;left:${O}%;right:${H}%;height:100%;background:${t};border-radius:3px;box-shadow:var(--uiv-border-glow);'></div>`,
+        `<div style='position:absolute;left:${b ? O : O + (100 - H)}%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#ffffff;border:3px solid ${t};box-shadow:0 3px 6px rgba(0,0,0,0.2);'></div>`,
         b ? `<div style='position:absolute;left:${100 - H}%;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;border-radius:50%;background:#ffffff;border:3px solid ${t};box-shadow:0 3px 6px rgba(0,0,0,0.2);'></div>` : "",
         "</div>",
         "</div>"
@@ -1746,7 +1746,7 @@ let O = class extends ne {
         `;
   }
 };
-O.styles = Yt`
+C.styles = Yt`
         :host {
             display: block;
             width: 100%;
@@ -1890,7 +1890,7 @@ N([
     displayLabel: "Value",
     fieldMappings: "value"
   })
-], O.prototype, "value", 2);
+], C.prototype, "value", 2);
 N([
   U({ type: Number }),
   I({
@@ -1899,7 +1899,7 @@ N([
     displayLabel: "Min Value",
     fieldMappings: "min"
   })
-], O.prototype, "min", 2);
+], C.prototype, "min", 2);
 N([
   U({ type: Number }),
   I({
@@ -1908,7 +1908,7 @@ N([
     displayLabel: "Max Value",
     fieldMappings: "max"
   })
-], O.prototype, "max", 2);
+], C.prototype, "max", 2);
 N([
   U({ type: Number }),
   I({
@@ -1917,7 +1917,7 @@ N([
     displayLabel: "Step",
     fieldMappings: "step"
   })
-], O.prototype, "step", 2);
+], C.prototype, "step", 2);
 N([
   U({ type: String }),
   I({
@@ -1927,7 +1927,7 @@ N([
     placeholderText: "Enter label text",
     fieldMappings: "label"
   })
-], O.prototype, "label", 2);
+], C.prototype, "label", 2);
 N([
   U({ type: String }),
   I({
@@ -1937,7 +1937,7 @@ N([
     placeholderText: "e.g., px, %, $",
     fieldMappings: "unit"
   })
-], O.prototype, "unit", 2);
+], C.prototype, "unit", 2);
 N([
   U({ type: Boolean }),
   I({
@@ -1946,7 +1946,7 @@ N([
     displayLabel: "Dual Range",
     fieldMappings: "dualRange"
   })
-], O.prototype, "dualRange", 2);
+], C.prototype, "dualRange", 2);
 N([
   U({ type: Number }),
   I({
@@ -1955,7 +1955,7 @@ N([
     displayLabel: "Second Value",
     fieldMappings: "secondValue"
   })
-], O.prototype, "secondValue", 2);
+], C.prototype, "secondValue", 2);
 N([
   U({ type: Boolean }),
   I({
@@ -1964,7 +1964,7 @@ N([
     displayLabel: "Show Tooltip",
     fieldMappings: "showTooltip"
   })
-], O.prototype, "showTooltip", 2);
+], C.prototype, "showTooltip", 2);
 N([
   U({ type: Boolean }),
   I({
@@ -1973,7 +1973,7 @@ N([
     displayLabel: "Show Value Inputs",
     fieldMappings: "showValueInputs"
   })
-], O.prototype, "showValueInputs", 2);
+], C.prototype, "showValueInputs", 2);
 N([
   U({ type: Boolean }),
   I({
@@ -1982,7 +1982,7 @@ N([
     displayLabel: "Show Step Controls",
     fieldMappings: "showStepControls"
   })
-], O.prototype, "showStepControls", 2);
+], C.prototype, "showStepControls", 2);
 N([
   U({ type: Boolean }),
   I({
@@ -1991,7 +1991,7 @@ N([
     displayLabel: "Disabled",
     fieldMappings: "disabled"
   })
-], O.prototype, "disabled", 2);
+], C.prototype, "disabled", 2);
 N([
   U({ type: String }),
   I({
@@ -2001,7 +2001,7 @@ N([
     placeholderText: "Enter error message",
     fieldMappings: "errorMessage"
   })
-], O.prototype, "errorMessage", 2);
+], C.prototype, "errorMessage", 2);
 N([
   U({ type: Boolean }),
   I({
@@ -2010,18 +2010,18 @@ N([
     displayLabel: "Show Error",
     fieldMappings: "showError"
   })
-], O.prototype, "showError", 2);
+], C.prototype, "showError", 2);
 N([
   U({ type: Boolean })
-], O.prototype, "showTooltipState", 2);
+], C.prototype, "showTooltipState", 2);
 N([
   I({
     attributeType: k.EVENT,
     displayLabel: "On Change",
     eventTrigger: "change"
   })
-], O.prototype, "handleChange", 1);
-O = N([
+], C.prototype, "handleChange", 1);
+C = N([
   Lt({
     name: "zero-range-slider",
     version: "1.0.0",
@@ -2031,8 +2031,8 @@ O = N([
     iconName: "range-slider-icon.png"
   }),
   Bt()
-], O);
+], C);
 export {
-  O as ZeroRangeSlider,
+  C as ZeroRangeSlider,
   nt as studioTemplate
 };

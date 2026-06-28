@@ -1,6 +1,6 @@
-var Ut = Object.defineProperty;
-var zt = (r, e, t) => e in r ? Ut(r, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : r[e] = t;
-var Ve = (r, e, t) => zt(r, typeof e != "symbol" ? e + "" : e, t);
+var zt = Object.defineProperty;
+var Ht = (r, e, t) => e in r ? zt(r, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : r[e] = t;
+var Ve = (r, e, t) => Ht(r, typeof e != "symbol" ? e + "" : e, t);
 var qe = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
@@ -61,7 +61,7 @@ var Ge;
       } : function(a, s) {
         return a[s];
       }
-    }, $ = Object.getPrototypeOf(Function), T = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Rt(), R = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Lt(), z = typeof WeakMap == "function" ? WeakMap : Nt(), J = i ? Symbol.for("@reflect-metadata:registry") : void 0, oe = Tt(), Ce = kt(oe);
+    }, $ = Object.getPrototypeOf(Function), T = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Rt(), R = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Lt(), H = typeof WeakMap == "function" ? WeakMap : Nt(), J = i ? Symbol.for("@reflect-metadata:registry") : void 0, oe = Tt(), Ce = kt(oe);
     function ht(a, s, o, c) {
       if (m(o)) {
         if (!je(a))
@@ -288,7 +288,7 @@ var Ge;
         case 5:
           return a;
       }
-      var o = "string", c = Ue(a, l);
+      var o = "string", c = ze(a, l);
       if (c !== void 0) {
         var y = c.call(a, o);
         if (A(y))
@@ -347,7 +347,7 @@ var Ge;
     function ge(a, s) {
       return a === s || a !== a && s !== s;
     }
-    function Ue(a, s) {
+    function ze(a, s) {
       var o = a[s];
       if (o != null) {
         if (!le(o))
@@ -355,8 +355,8 @@ var Ge;
         return o;
       }
     }
-    function ze(a) {
-      var s = Ue(a, u);
+    function He(a) {
+      var s = ze(a, u);
       if (!le(s))
         throw new TypeError();
       var o = s.call(a);
@@ -364,7 +364,7 @@ var Ge;
         throw new TypeError();
       return o;
     }
-    function He(a) {
+    function Ue(a) {
       return a.value;
     }
     function Ie(a) {
@@ -388,7 +388,7 @@ var Ge;
     function Mt() {
       var a;
       !m(J) && typeof t.Reflect < "u" && !(J in t.Reflect) && typeof t.Reflect.defineMetadata == "function" && (a = Pt(t.Reflect));
-      var s, o, c, y = new z(), O = {
+      var s, o, c, y = new H(), O = {
         registerProvider: C,
         getProvider: d,
         setProvider: f
@@ -423,11 +423,11 @@ var Ge;
             if (o.isProviderFor(g, w))
               return s;
             if (!m(c))
-              for (var S = ze(c); ; ) {
+              for (var S = He(c); ; ) {
                 var E = Ie(S);
                 if (!E)
                   return;
-                var L = He(E);
+                var L = Ue(E);
                 if (L.isProviderFor(g, w))
                   return We(S), L;
               }
@@ -468,7 +468,7 @@ var Ge;
       }), a;
     }
     function kt(a) {
-      var s = new z(), o = {
+      var s = new H(), o = {
         isProviderFor: function(h, f) {
           var g = s.get(h);
           return m(g) ? !1 : g.has(f);
@@ -533,11 +533,11 @@ var Ge;
         );
         if (m(w))
           return g;
-        for (var S = w.keys(), E = ze(S), L = 0; ; ) {
+        for (var S = w.keys(), E = He(S), L = 0; ; ) {
           var Be = Ie(E);
           if (!Be)
             return g.length = L, g;
-          var jt = He(Be);
+          var jt = Ue(Be);
           try {
             g[L] = jt;
           } catch (Dt) {
@@ -567,7 +567,7 @@ var Ge;
       }
     }
     function Pt(a) {
-      var s = a.defineMetadata, o = a.hasOwnMetadata, c = a.getOwnMetadata, y = a.getOwnMetadataKeys, O = a.deleteMetadata, C = new z(), _ = {
+      var s = a.defineMetadata, o = a.hasOwnMetadata, c = a.getOwnMetadata, y = a.getOwnMetadataKeys, O = a.deleteMetadata, C = new H(), _ = {
         isProviderFor: function(d, h) {
           var f = C.get(d);
           return !m(f) && f.has(h) ? !0 : y(d, h).length ? (m(f) && (f = new R(), C.set(d, f)), f.add(h), !0) : !1;
@@ -813,12 +813,12 @@ var Ge;
     }
   });
 })(Ge || (Ge = {}));
-function Ht(r) {
+function Ut(r) {
   return typeof r.name == "string" && typeof r.version == "string" && typeof r.title == "string" && typeof r.elementSelector == "string" && typeof r.group == "string" && typeof r.iconName == "string";
 }
 function It(r) {
   return function(e) {
-    if (Ht(r)) {
+    if (Ut(r)) {
       const t = {
         version: r.version,
         name: r.name,
@@ -905,7 +905,7 @@ function qt(r) {
   return function(e, t) {
     try {
       Vt(r);
-      const n = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const n = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let i = !0;
       if (typeof t == "string") {
         try {
@@ -924,10 +924,10 @@ function qt(r) {
 function W(r) {
   return qt(r);
 }
-var U;
+var z;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
-})(U || (U = {}));
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
+})(z || (z = {}));
 var D;
 (function(r) {
   r.PROPERTY = "property", r.EVENT = "event", r.ACTION = "action";
@@ -1218,7 +1218,7 @@ Z.elementStyles = [], Z.shadowRootOptions = { mode: "open" }, Z[ee("elementPrope
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const te = globalThis, Xe = (r) => r, he = te.trustedTypes, Qe = he ? he.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, lt = "$lit$", H = `lit$${Math.random().toFixed(9).slice(2)}$`, ut = "?" + H, rr = `<${ut}>`, G = document, ne = () => G.createComment(""), ie = (r) => r === null || typeof r != "object" && typeof r != "function", Ae = Array.isArray, nr = (r) => Ae(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", be = `[ 	
+const te = globalThis, Xe = (r) => r, he = te.trustedTypes, Qe = he ? he.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, lt = "$lit$", U = `lit$${Math.random().toFixed(9).slice(2)}$`, ut = "?" + U, rr = `<${ut}>`, G = document, ne = () => G.createComment(""), ie = (r) => r === null || typeof r != "object" && typeof r != "function", Ae = Array.isArray, nr = (r) => Ae(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", be = `[ 	
 \f\r]`, K = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ke = /-->/g, et = />/g, B = RegExp(`>|${be}(?:([^\\s"'>=/]+)(${be}*=${be}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), tt = /'/g, rt = /"/g, ct = /^(?:script|style|textarea|title)$/i, ir = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), ue = ir(1), Y = Symbol.for("lit-noChange"), M = Symbol.for("lit-nothing"), nt = /* @__PURE__ */ new WeakMap(), V = G.createTreeWalker(G, 129);
 function dt(r, e) {
@@ -1233,7 +1233,7 @@ const ar = (r, e) => {
     let x, b, $ = -1, T = 0;
     for (; T < p.length && (u.lastIndex = T, b = u.exec(p), b !== null); ) T = u.lastIndex, u === K ? b[1] === "!--" ? u = Ke : b[1] !== void 0 ? u = et : b[2] !== void 0 ? (ct.test(b[2]) && (i = RegExp("</" + b[2], "g")), u = B) : b[3] !== void 0 && (u = B) : u === B ? b[0] === ">" ? (u = i ?? K, $ = -1) : b[1] === void 0 ? $ = -2 : ($ = u.lastIndex - b[2].length, x = b[1], u = b[3] === void 0 ? B : b[3] === '"' ? rt : tt) : u === rt || u === tt ? u = B : u === Ke || u === et ? u = K : (u = B, i = void 0);
     const R = u === B && r[v + 1].startsWith("/>") ? " " : "";
-    l += u === K ? p + rr : $ >= 0 ? (n.push(x), p.slice(0, $) + lt + p.slice($) + H + R) : p + H + ($ === -2 ? v : R);
+    l += u === K ? p + rr : $ >= 0 ? (n.push(x), p.slice(0, $) + lt + p.slice($) + U + R) : p + U + ($ === -2 ? v : R);
   }
   return [dt(r, l + (r[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), n];
 };
@@ -1250,11 +1250,11 @@ class ae {
     for (; (i = V.nextNode()) !== null && p.length < v; ) {
       if (i.nodeType === 1) {
         if (i.hasAttributes()) for (const $ of i.getAttributeNames()) if ($.endsWith(lt)) {
-          const T = b[u++], R = i.getAttribute($).split(H), z = /([.?@])?(.*)/.exec(T);
-          p.push({ type: 1, index: l, name: z[2], strings: R, ctor: z[1] === "." ? or : z[1] === "?" ? lr : z[1] === "@" ? ur : pe }), i.removeAttribute($);
-        } else $.startsWith(H) && (p.push({ type: 6, index: l }), i.removeAttribute($));
+          const T = b[u++], R = i.getAttribute($).split(U), H = /([.?@])?(.*)/.exec(T);
+          p.push({ type: 1, index: l, name: H[2], strings: R, ctor: H[1] === "." ? or : H[1] === "?" ? lr : H[1] === "@" ? ur : pe }), i.removeAttribute($);
+        } else $.startsWith(U) && (p.push({ type: 6, index: l }), i.removeAttribute($));
         if (ct.test(i.tagName)) {
-          const $ = i.textContent.split(H), T = $.length - 1;
+          const $ = i.textContent.split(U), T = $.length - 1;
           if (T > 0) {
             i.textContent = he ? he.emptyScript : "";
             for (let R = 0; R < T; R++) i.append($[R], ne()), V.nextNode(), p.push({ type: 2, index: ++l });
@@ -1264,7 +1264,7 @@ class ae {
       } else if (i.nodeType === 8) if (i.data === ut) p.push({ type: 2, index: l });
       else {
         let $ = -1;
-        for (; ($ = i.data.indexOf(H, $ + 1)) !== -1; ) p.push({ type: 7, index: l }), $ += H.length - 1;
+        for (; ($ = i.data.indexOf(U, $ + 1)) !== -1; ) p.push({ type: 7, index: l }), $ += U.length - 1;
       }
       l++;
     }
@@ -2086,7 +2086,7 @@ P([
   N({ type: String }),
   W({
     attributeType: D.PROPERTY,
-    uiComponentType: U.TEXTAREA,
+    uiComponentType: z.TEXTAREA,
     displayLabel: "Code Content",
     placeholderText: "Enter your code here...",
     fieldMappings: "code"
@@ -2096,7 +2096,7 @@ P([
   N({ type: Array }),
   W({
     attributeType: D.PROPERTY,
-    uiComponentType: U.TEXTAREA,
+    uiComponentType: z.TEXTAREA,
     displayLabel: "Available Languages",
     placeholderText: "JSON array of language options or actual array",
     fieldMappings: "languages",
@@ -2109,7 +2109,7 @@ P([
   N({ type: String }),
   W({
     attributeType: D.PROPERTY,
-    uiComponentType: U.DROPDOWN,
+    uiComponentType: z.DROPDOWN,
     displayLabel: "Language",
     optionItems: [
       { value: "javascript", label: "JavaScript" },
@@ -2128,7 +2128,7 @@ P([
   N({ type: String }),
   W({
     attributeType: D.PROPERTY,
-    uiComponentType: U.DROPDOWN,
+    uiComponentType: z.DROPDOWN,
     displayLabel: "Theme",
     optionItems: [
       { value: "dark", label: "Dark" },
@@ -2141,7 +2141,7 @@ P([
   N({ type: Boolean }),
   W({
     attributeType: D.PROPERTY,
-    uiComponentType: U.CHECKBOX,
+    uiComponentType: z.CHECKBOX,
     displayLabel: "Show Line Numbers",
     fieldMappings: "showLineNumbers"
   })
@@ -2150,7 +2150,7 @@ P([
   N({ type: Boolean }),
   W({
     attributeType: D.PROPERTY,
-    uiComponentType: U.CHECKBOX,
+    uiComponentType: z.CHECKBOX,
     displayLabel: "Show Minimap",
     fieldMappings: "showMinimap"
   })
@@ -2159,7 +2159,7 @@ P([
   N({ type: Boolean }),
   W({
     attributeType: D.PROPERTY,
-    uiComponentType: U.CHECKBOX,
+    uiComponentType: z.CHECKBOX,
     displayLabel: "Word Wrap",
     fieldMappings: "wordWrap"
   })

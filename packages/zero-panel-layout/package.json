@@ -16,6 +16,23 @@
   "zero": {
     "component": true,
     "category": "Layout",
+    "components": [
+      {
+        "tag": "zero-tab-panel",
+        "title": "Tab Panel",
+        "category": "Layout"
+      },
+      {
+        "tag": "zero-expansion-panel",
+        "title": "Expansion Panel",
+        "category": "Layout"
+      },
+      {
+        "tag": "zero-stepper-panel",
+        "title": "Stepper Panel",
+        "category": "Layout"
+      }
+    ],
     "features": [
       "Responsive Columns",
       "Total Slot Control",

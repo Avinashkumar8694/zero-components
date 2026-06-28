@@ -61,22 +61,22 @@ var Xe;
       } : function(i, a) {
         return i[a];
       }
-    }, w = Object.getPrototypeOf(Function), C = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : zt(), U = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Gt(), z = typeof WeakMap == "function" ? WeakMap : Bt(), F = o ? Symbol.for("@reflect-metadata:registry") : void 0, ce = jt(), Oe = Ht(ce);
+    }, w = Object.getPrototypeOf(Function), M = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : zt(), U = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Gt(), z = typeof WeakMap == "function" ? WeakMap : Bt(), F = o ? Symbol.for("@reflect-metadata:registry") : void 0, ce = Ht(), Oe = jt(ce);
     function _t(i, a, s, c) {
       if (b(s)) {
-        if (!je(i))
+        if (!He(i))
           throw new TypeError();
-        if (!He(a))
+        if (!je(a))
           throw new TypeError();
-        return Mt(i, a);
+        return Ct(i, a);
       } else {
-        if (!je(i))
+        if (!He(i))
           throw new TypeError();
         if (!x(a))
           throw new TypeError();
         if (!x(c) && !b(c) && !Z(c))
           throw new TypeError();
-        return Z(c) && (c = void 0), s = H(s), Ct(i, a, s, c);
+        return Z(c) && (c = void 0), s = j(s), Mt(i, a, s, c);
       }
     }
     e("decorate", _t);
@@ -94,51 +94,51 @@ var Xe;
     function wt(i, a, s, c) {
       if (!x(s))
         throw new TypeError();
-      return b(c) || (c = H(c)), ke(i, a, s, c);
+      return b(c) || (c = j(c)), ke(i, a, s, c);
     }
     e("defineMetadata", wt);
     function Et(i, a, s) {
       if (!x(a))
         throw new TypeError();
-      return b(s) || (s = H(s)), Me(i, a, s);
+      return b(s) || (s = j(s)), Ce(i, a, s);
     }
     e("hasMetadata", Et);
     function Tt(i, a, s) {
       if (!x(a))
         throw new TypeError();
-      return b(s) || (s = H(s)), ve(i, a, s);
+      return b(s) || (s = j(s)), ve(i, a, s);
     }
     e("hasOwnMetadata", Tt);
     function At(i, a, s) {
       if (!x(a))
         throw new TypeError();
-      return b(s) || (s = H(s)), Ce(i, a, s);
+      return b(s) || (s = j(s)), Me(i, a, s);
     }
     e("getMetadata", At);
     function xt(i, a, s) {
       if (!x(a))
         throw new TypeError();
-      return b(s) || (s = H(s)), Re(i, a, s);
+      return b(s) || (s = j(s)), Re(i, a, s);
     }
     e("getOwnMetadata", xt);
     function St(i, a) {
       if (!x(i))
         throw new TypeError();
-      return b(a) || (a = H(a)), Ie(i, a);
+      return b(a) || (a = j(a)), Ie(i, a);
     }
     e("getMetadataKeys", St);
     function Pt(i, a) {
       if (!x(i))
         throw new TypeError();
-      return b(a) || (a = H(a)), Ne(i, a);
+      return b(a) || (a = j(a)), Ne(i, a);
     }
     e("getOwnMetadataKeys", Pt);
     function Ot(i, a, s) {
       if (!x(a))
         throw new TypeError();
-      if (b(s) || (s = H(s)), !x(a))
+      if (b(s) || (s = j(s)), !x(a))
         throw new TypeError();
-      b(s) || (s = H(s));
+      b(s) || (s = j(s));
       var c = ee(
         a,
         s,
@@ -148,18 +148,18 @@ var Xe;
       return b(c) ? !1 : c.OrdinaryDeleteMetadata(i, a, s);
     }
     e("deleteMetadata", Ot);
-    function Mt(i, a) {
+    function Ct(i, a) {
       for (var s = i.length - 1; s >= 0; --s) {
         var c = i[s], v = c(a);
         if (!b(v) && !Z(v)) {
-          if (!He(v))
+          if (!je(v))
             throw new TypeError();
           a = v;
         }
       }
       return a;
     }
-    function Ct(i, a, s, c) {
+    function Mt(i, a, s, c) {
       for (var v = i.length - 1; v >= 0; --v) {
         var P = i[v], S = P(a, s, c);
         if (!b(S) && !Z(S)) {
@@ -170,12 +170,12 @@ var Xe;
       }
       return c;
     }
-    function Me(i, a, s) {
+    function Ce(i, a, s) {
       var c = ve(i, a, s);
       if (c)
         return !0;
       var v = be(a);
-      return Z(v) ? !1 : Me(i, v, s);
+      return Z(v) ? !1 : Ce(i, v, s);
     }
     function ve(i, a, s) {
       var c = ee(
@@ -186,13 +186,13 @@ var Xe;
       );
       return b(c) ? !1 : De(c.OrdinaryHasOwnMetadata(i, a, s));
     }
-    function Ce(i, a, s) {
+    function Me(i, a, s) {
       var c = ve(i, a, s);
       if (c)
         return Re(i, a, s);
       var v = be(a);
       if (!Z(v))
-        return Ce(i, v, s);
+        return Me(i, v, s);
     }
     function Re(i, a, s) {
       var c = ee(
@@ -321,17 +321,17 @@ var Xe;
     function Nt(i) {
       return "" + i;
     }
-    function H(i) {
+    function j(i) {
       var a = kt(i);
       return Rt(a) ? a : Nt(a);
     }
-    function je(i) {
+    function He(i) {
       return Array.isArray ? Array.isArray(i) : i instanceof Object ? i instanceof Array : Object.prototype.toString.call(i) === "[object Array]";
     }
     function de(i) {
       return typeof i == "function";
     }
-    function He(i) {
+    function je(i) {
       return typeof i == "function";
     }
     function Ut(i) {
@@ -438,7 +438,7 @@ var Xe;
       }
       function d(y, _) {
         var T = v.get(y), A;
-        return b(T) || (A = T.get(_)), b(A) && (A = m(y, _), b(A) || (b(T) && (T = new C(), v.set(y, T)), T.set(_, A))), A;
+        return b(T) || (A = T.get(_)), b(A) && (A = m(y, _), b(A) || (b(T) && (T = new M(), v.set(y, T)), T.set(_, A))), A;
       }
       function p(y) {
         if (b(y))
@@ -453,12 +453,12 @@ var Xe;
           if (!b(A))
             return !1;
           var D = v.get(y);
-          b(D) && (D = new C(), v.set(y, D)), D.set(_, T);
+          b(D) && (D = new M(), v.set(y, D)), D.set(_, T);
         }
         return !0;
       }
     }
-    function jt() {
+    function Ht() {
       var i;
       return !b(F) && x(t.Reflect) && Object.isExtensible(t.Reflect) && (i = t.Reflect[F]), b(i) && (i = Dt()), !b(F) && x(t.Reflect) && Object.isExtensible(t.Reflect) && Object.defineProperty(t.Reflect, F, {
         enumerable: !1,
@@ -467,7 +467,7 @@ var Xe;
         value: i
       }), i;
     }
-    function Ht(i) {
+    function jt(i) {
       var a = new z(), s = {
         isProviderFor: function(p, h) {
           var y = a.get(p);
@@ -485,13 +485,13 @@ var Xe;
         if (b(_)) {
           if (!y)
             return;
-          _ = new C(), a.set(p, _), T = !0;
+          _ = new M(), a.set(p, _), T = !0;
         }
         var A = _.get(h);
         if (b(A)) {
           if (!y)
             return;
-          if (A = new C(), _.set(h, A), !i.setProvider(p, h, s))
+          if (A = new M(), _.set(h, A), !i.setProvider(p, h, s))
             throw _.delete(h), T && a.delete(p), new Error("Wrong provider for target.");
         }
         return A;
@@ -699,7 +699,7 @@ var Xe;
         /** @class */
         function() {
           function a() {
-            this._map = new C();
+            this._map = new M();
           }
           return Object.defineProperty(a.prototype, "size", {
             get: function() {
@@ -881,7 +881,7 @@ function ht(r) {
         }
         if (l && g) {
           const $ = new CSSStyleSheet(), w = (E = l.sheet) == null ? void 0 : E.cssRules;
-          w && (Array.from(w).forEach((C) => $.insertRule(C.cssText)), f.adoptedStyleSheets = [...f.adoptedStyleSheets, $]);
+          w && (Array.from(w).forEach((M) => $.insertRule(M.cssText)), f.adoptedStyleSheets = [...f.adoptedStyleSheets, $]);
         } else if (l) {
           const $ = l.cloneNode(!0);
           f.appendChild($);
@@ -905,7 +905,7 @@ function Jt(r) {
   return function(e, t) {
     try {
       Zt(r);
-      const n = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const n = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let o = !0;
       if (typeof t == "string") {
         try {
@@ -926,12 +926,12 @@ function k(r) {
 }
 var R;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
 })(R || (R = {}));
-var M;
+var C;
 (function(r) {
   r.PROPERTY = "property", r.EVENT = "event", r.ACTION = "action";
-})(M || (M = {}));
+})(C || (C = {}));
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -1230,8 +1230,8 @@ const cr = (r, e) => {
   let o, l = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", u = te;
   for (let g = 0; g < t; g++) {
     const f = r[g];
-    let E, $, w = -1, C = 0;
-    for (; C < f.length && (u.lastIndex = C, $ = u.exec(f), $ !== null); ) C = u.lastIndex, u === te ? $[1] === "!--" ? u = tt : $[1] !== void 0 ? u = rt : $[2] !== void 0 ? (bt.test($[2]) && (o = RegExp("</" + $[2], "g")), u = V) : $[3] !== void 0 && (u = V) : u === V ? $[0] === ">" ? (u = o ?? te, w = -1) : $[1] === void 0 ? w = -2 : (w = u.lastIndex - $[2].length, E = $[1], u = $[3] === void 0 ? V : $[3] === '"' ? it : nt) : u === it || u === nt ? u = V : u === tt || u === rt ? u = te : (u = V, o = void 0);
+    let E, $, w = -1, M = 0;
+    for (; M < f.length && (u.lastIndex = M, $ = u.exec(f), $ !== null); ) M = u.lastIndex, u === te ? $[1] === "!--" ? u = tt : $[1] !== void 0 ? u = rt : $[2] !== void 0 ? (bt.test($[2]) && (o = RegExp("</" + $[2], "g")), u = V) : $[3] !== void 0 && (u = V) : u === V ? $[0] === ">" ? (u = o ?? te, w = -1) : $[1] === void 0 ? w = -2 : (w = u.lastIndex - $[2].length, E = $[1], u = $[3] === void 0 ? V : $[3] === '"' ? it : nt) : u === it || u === nt ? u = V : u === tt || u === rt ? u = te : (u = V, o = void 0);
     const U = u === V && r[g + 1].startsWith("/>") ? " " : "";
     l += u === te ? f + sr : w >= 0 ? (n.push(E), f.slice(0, w) + vt + f.slice(w) + G + U) : f + G + (w === -2 ? g : U);
   }
@@ -1250,15 +1250,15 @@ class le {
     for (; (o = W.nextNode()) !== null && f.length < g; ) {
       if (o.nodeType === 1) {
         if (o.hasAttributes()) for (const w of o.getAttributeNames()) if (w.endsWith(vt)) {
-          const C = $[u++], U = o.getAttribute(w).split(G), z = /([.?@])?(.*)/.exec(C);
+          const M = $[u++], U = o.getAttribute(w).split(G), z = /([.?@])?(.*)/.exec(M);
           f.push({ type: 1, index: l, name: z[2], strings: U, ctor: z[1] === "." ? pr : z[1] === "?" ? hr : z[1] === "@" ? fr : ye }), o.removeAttribute(w);
         } else w.startsWith(G) && (f.push({ type: 6, index: l }), o.removeAttribute(w));
         if (bt.test(o.tagName)) {
-          const w = o.textContent.split(G), C = w.length - 1;
-          if (C > 0) {
+          const w = o.textContent.split(G), M = w.length - 1;
+          if (M > 0) {
             o.textContent = fe ? fe.emptyScript : "";
-            for (let U = 0; U < C; U++) o.append(w[U], ae()), W.nextNode(), f.push({ type: 2, index: ++l });
-            o.append(w[C], ae());
+            for (let U = 0; U < M; U++) o.append(w[U], ae()), W.nextNode(), f.push({ type: 2, index: ++l });
+            o.append(w[M], ae());
           }
         }
       } else if (o.nodeType === 8) if (o.data === gt) f.push({ type: 2, index: l });
@@ -1517,7 +1517,7 @@ function N(r) {
     return o.constructor.createProperty(l, n), u ? Object.getOwnPropertyDescriptor(o, l) : void 0;
   })(r, e, t);
 }
-var mr = Object.defineProperty, _r = Object.getOwnPropertyDescriptor, j = (r, e, t, n) => {
+var mr = Object.defineProperty, _r = Object.getOwnPropertyDescriptor, H = (r, e, t, n) => {
   for (var o = n > 1 ? void 0 : n ? _r(e, t) : e, l = r.length - 1, u; l >= 0; l--)
     (u = r[l]) && (o = (n ? u(e, t, o) : u(o)) || o);
   return n && o && mr(e, t, o), o;
@@ -1720,10 +1720,10 @@ I.styles = yt`
             box-shadow: 2px 2px 0px #000;
         }
     `;
-j([
+H([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.DROPDOWN,
     displayLabel: "Theme",
     fieldMappings: "theme",
@@ -1736,86 +1736,86 @@ j([
     ]
   })
 ], I.prototype, "theme", 2);
-j([
+H([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.TEXT_INPUT,
     displayLabel: "Label",
     fieldMappings: "label"
   })
 ], I.prototype, "label", 2);
-j([
+H([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.TEXT_INPUT,
     displayLabel: "Placeholder",
     fieldMappings: "placeholder"
   })
 ], I.prototype, "placeholder", 2);
-j([
+H([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.TEXT_INPUT,
     displayLabel: "Value",
     fieldMappings: "value"
   })
 ], I.prototype, "value", 2);
-j([
+H([
   N({ type: Boolean }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.CHECKBOX,
     displayLabel: "Error State",
     fieldMappings: "error"
   })
 ], I.prototype, "error", 2);
-j([
+H([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.TEXT_INPUT,
     displayLabel: "Error Message",
     fieldMappings: "errorText"
   })
 ], I.prototype, "errorText", 2);
-j([
+H([
   N({ type: Boolean }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.CHECKBOX,
     displayLabel: "Disabled",
     fieldMappings: "disabled"
   })
 ], I.prototype, "disabled", 2);
-j([
+H([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.TEXT_INPUT,
     displayLabel: "Corner Tag (Cyber-only)",
     fieldMappings: "cornerTag"
   })
 ], I.prototype, "cornerTag", 2);
-j([
+H([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.COLOR_PICKER,
     displayLabel: "Accent Color Overlay",
     fieldMappings: "accentColor"
   })
 ], I.prototype, "accentColor", 2);
-j([
+H([
   k({
-    attributeType: M.EVENT,
+    attributeType: C.EVENT,
     eventTrigger: "input",
     displayLabel: "On Input"
   })
 ], I.prototype, "onInputEvent", 2);
-I = j([
+I = H([
   pt({
     name: "zero-uiv-input",
     version: "1.0.0",
@@ -1961,7 +1961,7 @@ L.styles = yt`
 X([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.TEXT_INPUT,
     displayLabel: "Label",
     fieldMappings: "label"
@@ -1970,7 +1970,7 @@ X([
 X([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.TEXT_INPUT,
     displayLabel: "Placeholder",
     fieldMappings: "placeholder"
@@ -1979,7 +1979,7 @@ X([
 X([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.TEXT_INPUT,
     displayLabel: "Value",
     fieldMappings: "value"
@@ -1988,7 +1988,7 @@ X([
 X([
   N({ type: String }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.TEXT_INPUT,
     displayLabel: "Corner Tag",
     fieldMappings: "cornerTag"
@@ -1997,7 +1997,7 @@ X([
 X([
   N({ type: Boolean }),
   k({
-    attributeType: M.PROPERTY,
+    attributeType: C.PROPERTY,
     uiComponentType: R.CHECKBOX,
     displayLabel: "Disabled",
     fieldMappings: "disabled"
@@ -2005,7 +2005,7 @@ X([
 ], L.prototype, "disabled", 2);
 X([
   k({
-    attributeType: M.EVENT,
+    attributeType: C.EVENT,
     eventTrigger: "input",
     displayLabel: "On Input"
   })

@@ -61,12 +61,12 @@ var qe;
       } : function(i, a) {
         return i[a];
       }
-    }, w = Object.getPrototypeOf(Function), M = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : kt(), I = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Nt(), D = typeof WeakMap == "function" ? WeakMap : Ut(), F = s ? Symbol.for("@reflect-metadata:registry") : void 0, le = Mt(), xe = Pt(le);
+    }, w = Object.getPrototypeOf(Function), P = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : kt(), H = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Nt(), D = typeof WeakMap == "function" ? WeakMap : Ut(), F = s ? Symbol.for("@reflect-metadata:registry") : void 0, le = Pt(), xe = Mt(le);
     function dt(i, a, o, h) {
       if (m(o)) {
         if (!Ue(i))
           throw new TypeError();
-        if (!Ie(a))
+        if (!He(a))
           throw new TypeError();
         return $t(i, a);
       } else {
@@ -86,7 +86,7 @@ var qe;
           throw new TypeError();
         if (!m(y) && !St(y))
           throw new TypeError();
-        Me(i, a, h, y);
+        Pe(i, a, h, y);
       }
       return o;
     }
@@ -94,7 +94,7 @@ var qe;
     function pt(i, a, o, h) {
       if (!x(o))
         throw new TypeError();
-      return m(h) || (h = j(h)), Me(i, a, o, h);
+      return m(h) || (h = j(h)), Pe(i, a, o, h);
     }
     e("defineMetadata", pt);
     function vt(i, a, o) {
@@ -124,7 +124,7 @@ var qe;
     function _t(i, a) {
       if (!x(i))
         throw new TypeError();
-      return m(a) || (a = j(a)), Pe(i, a);
+      return m(a) || (a = j(a)), Me(i, a);
     }
     e("getMetadataKeys", _t);
     function bt(i, a) {
@@ -152,7 +152,7 @@ var qe;
       for (var o = i.length - 1; o >= 0; --o) {
         var h = i[o], y = h(a);
         if (!m(y) && !Y(y)) {
-          if (!Ie(y))
+          if (!He(y))
             throw new TypeError();
           a = y;
         }
@@ -204,7 +204,7 @@ var qe;
       if (!m(h))
         return h.OrdinaryGetOwnMetadata(i, a, o);
     }
-    function Me(i, a, o, h) {
+    function Pe(i, a, o, h) {
       var y = Q(
         o,
         h,
@@ -213,16 +213,16 @@ var qe;
       );
       y.OrdinaryDefineOwnMetadata(i, a, o, h);
     }
-    function Pe(i, a) {
+    function Me(i, a) {
       var o = Re(i, a), h = ye(i);
       if (h === null)
         return o;
-      var y = Pe(h, a);
+      var y = Me(h, a);
       if (y.length <= 0)
         return o;
       if (o.length <= 0)
         return y;
-      for (var S = new I(), T = [], _ = 0, c = o; _ < c.length; _++) {
+      for (var S = new H(), T = [], _ = 0, c = o; _ < c.length; _++) {
         var d = c[_], f = S.has(d);
         f || (S.add(d), T.push(d));
       }
@@ -288,7 +288,7 @@ var qe;
         case 5:
           return i;
       }
-      var o = "string", h = He(i, l);
+      var o = "string", h = Ie(i, l);
       if (h !== void 0) {
         var y = h.call(i, o);
         if (x(y))
@@ -331,7 +331,7 @@ var qe;
     function ue(i) {
       return typeof i == "function";
     }
-    function Ie(i) {
+    function He(i) {
       return typeof i == "function";
     }
     function St(i) {
@@ -347,7 +347,7 @@ var qe;
     function ve(i, a) {
       return i === a || i !== i && a !== a;
     }
-    function He(i, a) {
+    function Ie(i, a) {
       var o = i[a];
       if (o != null) {
         if (!ue(o))
@@ -356,7 +356,7 @@ var qe;
       }
     }
     function Le(i) {
-      var a = He(i, u);
+      var a = Ie(i, u);
       if (!ue(a))
         throw new TypeError();
       var o = a.call(i);
@@ -411,7 +411,7 @@ var qe;
           case o === p:
             break;
           default:
-            h === void 0 && (h = new I()), h.add(p);
+            h === void 0 && (h = new H()), h.add(p);
             break;
         }
       }
@@ -438,7 +438,7 @@ var qe;
       }
       function c(p, b) {
         var A = y.get(p), C;
-        return m(A) || (C = A.get(b)), m(C) && (C = _(p, b), m(C) || (m(A) && (A = new M(), y.set(p, A)), A.set(b, C))), C;
+        return m(A) || (C = A.get(b)), m(C) && (C = _(p, b), m(C) || (m(A) && (A = new P(), y.set(p, A)), A.set(b, C))), C;
       }
       function d(p) {
         if (m(p))
@@ -453,12 +453,12 @@ var qe;
           if (!m(C))
             return !1;
           var L = y.get(p);
-          m(L) && (L = new M(), y.set(p, L)), L.set(b, A);
+          m(L) && (L = new P(), y.set(p, L)), L.set(b, A);
         }
         return !0;
       }
     }
-    function Mt() {
+    function Pt() {
       var i;
       return !m(F) && x(t.Reflect) && Object.isExtensible(t.Reflect) && (i = t.Reflect[F]), m(i) && (i = Ot()), !m(F) && x(t.Reflect) && Object.isExtensible(t.Reflect) && Object.defineProperty(t.Reflect, F, {
         enumerable: !1,
@@ -467,7 +467,7 @@ var qe;
         value: i
       }), i;
     }
-    function Pt(i) {
+    function Mt(i) {
       var a = new D(), o = {
         isProviderFor: function(d, f) {
           var p = a.get(d);
@@ -485,13 +485,13 @@ var qe;
         if (m(b)) {
           if (!p)
             return;
-          b = new M(), a.set(d, b), A = !0;
+          b = new P(), a.set(d, b), A = !0;
         }
         var C = b.get(f);
         if (m(C)) {
           if (!p)
             return;
-          if (C = new M(), b.set(f, C), !i.setProvider(d, f, o))
+          if (C = new P(), b.set(f, C), !i.setProvider(d, f, o))
             throw b.delete(f), A && a.delete(d), new Error("Wrong provider for target.");
         }
         return C;
@@ -537,14 +537,14 @@ var qe;
           var Be = De(C);
           if (!Be)
             return p.length = L, p;
-          var It = je(Be);
+          var Ht = je(Be);
           try {
-            p[L] = It;
-          } catch (Ht) {
+            p[L] = Ht;
+          } catch (It) {
             try {
               ze(C);
             } finally {
-              throw Ht;
+              throw It;
             }
           }
           L++;
@@ -570,7 +570,7 @@ var qe;
       var a = i.defineMetadata, o = i.hasOwnMetadata, h = i.getOwnMetadata, y = i.getOwnMetadataKeys, S = i.deleteMetadata, T = new D(), _ = {
         isProviderFor: function(c, d) {
           var f = T.get(c);
-          return !m(f) && f.has(d) ? !0 : y(c, d).length ? (m(f) && (f = new I(), T.set(c, f)), f.add(d), !0) : !1;
+          return !m(f) && f.has(d) ? !0 : y(c, d).length ? (m(f) && (f = new H(), T.set(c, f)), f.add(d), !0) : !1;
         },
         OrdinaryDefineOwnMetadata: a,
         OrdinaryHasOwnMetadata: o,
@@ -699,7 +699,7 @@ var qe;
         /** @class */
         function() {
           function a() {
-            this._map = new M();
+            this._map = new P();
           }
           return Object.defineProperty(a.prototype, "size", {
             get: function() {
@@ -881,7 +881,7 @@ function Wt(r) {
         }
         if (l && g) {
           const $ = new CSSStyleSheet(), w = (E = l.sheet) == null ? void 0 : E.cssRules;
-          w && (Array.from(w).forEach((M) => $.insertRule(M.cssText)), v.adoptedStyleSheets = [...v.adoptedStyleSheets, $]);
+          w && (Array.from(w).forEach((P) => $.insertRule(P.cssText)), v.adoptedStyleSheets = [...v.adoptedStyleSheets, $]);
         } else if (l) {
           const $ = l.cloneNode(!0);
           v.appendChild($);
@@ -905,7 +905,7 @@ function qt(r) {
   return function(e, t) {
     try {
       Gt(r);
-      const n = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const n = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let s = !0;
       if (typeof t == "string") {
         try {
@@ -926,7 +926,7 @@ function U(r) {
 }
 var N;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
 })(N || (N = {}));
 var R;
 (function(r) {
@@ -1230,10 +1230,10 @@ const sr = (r, e) => {
   let s, l = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", u = K;
   for (let g = 0; g < t; g++) {
     const v = r[g];
-    let E, $, w = -1, M = 0;
-    for (; M < v.length && (u.lastIndex = M, $ = u.exec(v), $ !== null); ) M = u.lastIndex, u === K ? $[1] === "!--" ? u = Qe : $[1] !== void 0 ? u = Ke : $[2] !== void 0 ? (ht.test($[2]) && (s = RegExp("</" + $[2], "g")), u = W) : $[3] !== void 0 && (u = W) : u === W ? $[0] === ">" ? (u = s ?? K, w = -1) : $[1] === void 0 ? w = -2 : (w = u.lastIndex - $[2].length, E = $[1], u = $[3] === void 0 ? W : $[3] === '"' ? tt : et) : u === tt || u === et ? u = W : u === Qe || u === Ke ? u = K : (u = W, s = void 0);
-    const I = u === W && r[g + 1].startsWith("/>") ? " " : "";
-    l += u === K ? v + rr : w >= 0 ? (n.push(E), v.slice(0, w) + lt + v.slice(w) + z + I) : v + z + (w === -2 ? g : I);
+    let E, $, w = -1, P = 0;
+    for (; P < v.length && (u.lastIndex = P, $ = u.exec(v), $ !== null); ) P = u.lastIndex, u === K ? $[1] === "!--" ? u = Qe : $[1] !== void 0 ? u = Ke : $[2] !== void 0 ? (ht.test($[2]) && (s = RegExp("</" + $[2], "g")), u = W) : $[3] !== void 0 && (u = W) : u === W ? $[0] === ">" ? (u = s ?? K, w = -1) : $[1] === void 0 ? w = -2 : (w = u.lastIndex - $[2].length, E = $[1], u = $[3] === void 0 ? W : $[3] === '"' ? tt : et) : u === tt || u === et ? u = W : u === Qe || u === Ke ? u = K : (u = W, s = void 0);
+    const H = u === W && r[g + 1].startsWith("/>") ? " " : "";
+    l += u === K ? v + rr : w >= 0 ? (n.push(E), v.slice(0, w) + lt + v.slice(w) + z + H) : v + z + (w === -2 ? g : H);
   }
   return [ct(r, l + (r[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), n];
 };
@@ -1250,15 +1250,15 @@ class ae {
     for (; (s = G.nextNode()) !== null && v.length < g; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const w of s.getAttributeNames()) if (w.endsWith(lt)) {
-          const M = $[u++], I = s.getAttribute(w).split(z), D = /([.?@])?(.*)/.exec(M);
-          v.push({ type: 1, index: l, name: D[2], strings: I, ctor: D[1] === "." ? or : D[1] === "?" ? lr : D[1] === "@" ? ur : fe }), s.removeAttribute(w);
+          const P = $[u++], H = s.getAttribute(w).split(z), D = /([.?@])?(.*)/.exec(P);
+          v.push({ type: 1, index: l, name: D[2], strings: H, ctor: D[1] === "." ? or : D[1] === "?" ? lr : D[1] === "@" ? ur : fe }), s.removeAttribute(w);
         } else w.startsWith(z) && (v.push({ type: 6, index: l }), s.removeAttribute(w));
         if (ht.test(s.tagName)) {
-          const w = s.textContent.split(z), M = w.length - 1;
-          if (M > 0) {
+          const w = s.textContent.split(z), P = w.length - 1;
+          if (P > 0) {
             s.textContent = de ? de.emptyScript : "";
-            for (let I = 0; I < M; I++) s.append(w[I], ie()), G.nextNode(), v.push({ type: 2, index: ++l });
-            s.append(w[M], ie());
+            for (let H = 0; H < P; H++) s.append(w[H], ie()), G.nextNode(), v.push({ type: 2, index: ++l });
+            s.append(w[P], ie());
           }
         }
       } else if (s.nodeType === 8) if (s.data === ut) v.push({ type: 2, index: l });
@@ -1511,7 +1511,7 @@ const dr = { attribute: !0, type: String, converter: ce, reflect: !1, hasChanged
   }
   throw Error("Unsupported decorator location: " + n);
 };
-function H(r) {
+function I(r) {
   return (e, t) => typeof t == "object" ? fr(r, e, t) : ((n, s, l) => {
     const u = s.hasOwnProperty(l);
     return s.constructor.createProperty(l, n), u ? Object.getOwnPropertyDescriptor(s, l) : void 0;
@@ -1536,7 +1536,7 @@ const nt = () => window.zeroThemeManager, it = {
 function st(r) {
   return r.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
-let P = class extends ne {
+let M = class extends ne {
   constructor() {
     super(...arguments), this.value = "", this.label = "Textarea", this.placeholder = "Enter your text here...", this.rows = 4, this.maxLength = 0, this.required = !1, this.disabled = !1, this.autoResize = !1, this.showCharacterCount = !0, this.showWordCount = !1, this.errorMessage = "", this.showError = !1;
   }
@@ -1649,7 +1649,7 @@ let P = class extends ne {
         `;
   }
 };
-P.styles = Ft`
+M.styles = Ft`
         :host {
             display: block;
             width: 100%;
@@ -1713,16 +1713,16 @@ P.styles = Ft`
         .character-count.over-limit { color: var(--uiv-color-danger, var(--uiv-status-danger)); font-weight: bold; }
     `;
 k([
-  H({ type: String }),
+  I({ type: String }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.TEXTAREA,
     displayLabel: "Value",
     fieldMappings: "value"
   })
-], P.prototype, "value", 2);
+], M.prototype, "value", 2);
 k([
-  H({ type: String }),
+  I({ type: String }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.TEXT_INPUT,
@@ -1730,9 +1730,9 @@ k([
     placeholderText: "Enter label text",
     fieldMappings: "label"
   })
-], P.prototype, "label", 2);
+], M.prototype, "label", 2);
 k([
-  H({ type: String }),
+  I({ type: String }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.TEXT_INPUT,
@@ -1740,72 +1740,72 @@ k([
     placeholderText: "Enter placeholder text",
     fieldMappings: "placeholder"
   })
-], P.prototype, "placeholder", 2);
+], M.prototype, "placeholder", 2);
 k([
-  H({ type: Number }),
+  I({ type: Number }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.NUMBER_INPUT,
     displayLabel: "Rows",
     fieldMappings: "rows"
   })
-], P.prototype, "rows", 2);
+], M.prototype, "rows", 2);
 k([
-  H({ type: Number }),
+  I({ type: Number }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.NUMBER_INPUT,
     displayLabel: "Max Length",
     fieldMappings: "maxLength"
   })
-], P.prototype, "maxLength", 2);
+], M.prototype, "maxLength", 2);
 k([
-  H({ type: Boolean }),
+  I({ type: Boolean }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.CHECKBOX,
     displayLabel: "Required",
     fieldMappings: "required"
   })
-], P.prototype, "required", 2);
+], M.prototype, "required", 2);
 k([
-  H({ type: Boolean }),
+  I({ type: Boolean }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.CHECKBOX,
     displayLabel: "Disabled",
     fieldMappings: "disabled"
   })
-], P.prototype, "disabled", 2);
+], M.prototype, "disabled", 2);
 k([
-  H({ type: Boolean }),
+  I({ type: Boolean }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.CHECKBOX,
     displayLabel: "Auto Resize",
     fieldMappings: "autoResize"
   })
-], P.prototype, "autoResize", 2);
+], M.prototype, "autoResize", 2);
 k([
-  H({ type: Boolean }),
+  I({ type: Boolean }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.CHECKBOX,
     displayLabel: "Show Character Count",
     fieldMappings: "showCharacterCount"
   })
-], P.prototype, "showCharacterCount", 2);
+], M.prototype, "showCharacterCount", 2);
 k([
-  H({ type: Boolean }),
+  I({ type: Boolean }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.CHECKBOX,
     displayLabel: "Show Word Count",
     fieldMappings: "showWordCount"
   })
-], P.prototype, "showWordCount", 2);
+], M.prototype, "showWordCount", 2);
 k([
-  H({ type: String }),
+  I({ type: String }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.TEXT_INPUT,
@@ -1813,31 +1813,31 @@ k([
     placeholderText: "Enter error message",
     fieldMappings: "errorMessage"
   })
-], P.prototype, "errorMessage", 2);
+], M.prototype, "errorMessage", 2);
 k([
-  H({ type: Boolean }),
+  I({ type: Boolean }),
   U({
     attributeType: R.PROPERTY,
     uiComponentType: N.CHECKBOX,
     displayLabel: "Show Error",
     fieldMappings: "showError"
   })
-], P.prototype, "showError", 2);
+], M.prototype, "showError", 2);
 k([
   U({
     attributeType: R.EVENT,
     displayLabel: "On Input",
     eventTrigger: "input"
   })
-], P.prototype, "handleInput", 1);
+], M.prototype, "handleInput", 1);
 k([
   U({
     attributeType: R.EVENT,
     displayLabel: "On Change",
     eventTrigger: "change"
   })
-], P.prototype, "handleChange", 1);
-P = k([
+], M.prototype, "handleChange", 1);
+M = k([
   Bt({
     name: "zero-textarea",
     version: "1.0.0",
@@ -1847,8 +1847,8 @@ P = k([
     iconName: "textarea-icon.png"
   }),
   Wt()
-], P);
+], M);
 export {
-  P as ZeroTextarea,
+  M as ZeroTextarea,
   it as studioTemplate
 };

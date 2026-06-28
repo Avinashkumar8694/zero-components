@@ -364,14 +364,14 @@ var Bt;
         throw new TypeError();
       return a;
     }
-    function jt(i) {
+    function Ht(i) {
       return i.value;
     }
-    function Dt(i) {
+    function jt(i) {
       var o = i.next();
       return o.done ? !1 : o;
     }
-    function Ht(i) {
+    function Dt(i) {
       var o = i.return;
       o && o.call(i);
     }
@@ -424,12 +424,12 @@ var Bt;
               return o;
             if (!m(h))
               for (var E = zt(h); ; ) {
-                var S = Dt(E);
+                var S = jt(E);
                 if (!S)
                   return;
-                var k = jt(S);
+                var k = Ht(S);
                 if (k.isProviderFor(y, w))
-                  return Ht(E), k;
+                  return Dt(E), k;
               }
           }
         }
@@ -534,15 +534,15 @@ var Bt;
         if (m(w))
           return y;
         for (var E = w.keys(), S = zt(E), k = 0; ; ) {
-          var Lt = Dt(S);
+          var Lt = jt(S);
           if (!Lt)
             return y.length = k, y;
-          var Re = jt(Lt);
+          var Re = Ht(Lt);
           try {
             y[k] = Re;
           } catch (ke) {
             try {
-              Ht(S);
+              Dt(S);
             } finally {
               throw ke;
             }
@@ -851,10 +851,10 @@ function ze(r) {
       throw new Error("Invalid configuration provided to RendererComponent decorator");
   };
 }
-function je(r) {
+function He(r) {
   return ze(r);
 }
-function De(r) {
+function je(r) {
   return function(t) {
     class e extends t {
       constructor() {
@@ -895,7 +895,7 @@ function De(r) {
     return e;
   };
 }
-function He(r) {
+function De(r) {
   var e;
   if (((e = r == null ? void 0 : r.categoryLabel) == null ? void 0 : e.trim()) === "")
     throw new Error("Invalid category for RendererAttributeConfiguration. It cannot be an empty string.");
@@ -904,8 +904,8 @@ function He(r) {
 function Le(r) {
   return function(t, e) {
     try {
-      He(r);
-      const n = Reflect.getMetadata("ZeroAttribute", t) || [];
+      De(r);
+      const n = [...Reflect.getMetadata("ZeroAttribute", t) || []];
       let s = !0;
       if (typeof e == "string") {
         try {
@@ -926,7 +926,7 @@ function ct(r) {
 }
 var F;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
 })(F || (F = {}));
 var q;
 (function(r) {
@@ -979,7 +979,7 @@ const We = (r) => new ne(typeof r == "string" ? r : r + "", void 0, bt), Ge = (r
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Ve, defineProperty: Fe, getOwnPropertyDescriptor: qe, getOwnPropertyNames: Ze, getOwnPropertySymbols: Ye, getPrototypeOf: Xe } = Object, j = globalThis, qt = j.trustedTypes, Je = qt ? qt.emptyScript : "", _t = j.reactiveElementPolyfillSupport, Q = (r, t) => r, lt = { toAttribute(r, t) {
+const { is: Ve, defineProperty: Fe, getOwnPropertyDescriptor: qe, getOwnPropertyNames: Ze, getOwnPropertySymbols: Ye, getPrototypeOf: Xe } = Object, H = globalThis, qt = H.trustedTypes, Je = qt ? qt.emptyScript : "", _t = H.reactiveElementPolyfillSupport, Q = (r, t) => r, lt = { toAttribute(r, t) {
   switch (t) {
     case Boolean:
       r = r ? Je : null;
@@ -1008,7 +1008,7 @@ const { is: Ve, defineProperty: Fe, getOwnPropertyDescriptor: qe, getOwnProperty
   }
   return e;
 } }, At = (r, t) => !Ve(r, t), Zt = { attribute: !0, type: String, converter: lt, reflect: !1, useDefault: !1, hasChanged: At };
-Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), j.litPropertyMetadata ?? (j.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
+Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), H.litPropertyMetadata ?? (H.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
 let V = class extends HTMLElement {
   static addInitializer(t) {
     this._$Ei(), (this.l ?? (this.l = [])).push(t);
@@ -1212,15 +1212,15 @@ let V = class extends HTMLElement {
   firstUpdated(t) {
   }
 };
-V.elementStyles = [], V.shadowRootOptions = { mode: "open" }, V[Q("elementProperties")] = /* @__PURE__ */ new Map(), V[Q("finalized")] = /* @__PURE__ */ new Map(), _t == null || _t({ ReactiveElement: V }), (j.reactiveElementVersions ?? (j.reactiveElementVersions = [])).push("2.1.2");
+V.elementStyles = [], V.shadowRootOptions = { mode: "open" }, V[Q("elementProperties")] = /* @__PURE__ */ new Map(), V[Q("finalized")] = /* @__PURE__ */ new Map(), _t == null || _t({ ReactiveElement: V }), (H.reactiveElementVersions ?? (H.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const K = globalThis, Yt = (r) => r, ht = K.trustedTypes, Xt = ht ? ht.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, ie = "$lit$", z = `lit$${Math.random().toFixed(9).slice(2)}$`, se = "?" + z, Qe = `<${se}>`, W = document, et = () => W.createComment(""), rt = (r) => r === null || typeof r != "object" && typeof r != "function", Et = Array.isArray, Ke = (r) => Et(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", mt = `[ 	
-\f\r]`, J = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Jt = /-->/g, Qt = />/g, D = RegExp(`>|${mt}(?:([^\\s"'>=/]+)(${mt}*=${mt}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Kt = /'/g, te = /"/g, oe = /^(?:script|style|textarea|title)$/i, tr = (r) => (t, ...e) => ({ _$litType$: r, strings: t, values: e }), er = tr(1), Z = Symbol.for("lit-noChange"), P = Symbol.for("lit-nothing"), ee = /* @__PURE__ */ new WeakMap(), H = W.createTreeWalker(W, 129);
+\f\r]`, J = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Jt = /-->/g, Qt = />/g, j = RegExp(`>|${mt}(?:([^\\s"'>=/]+)(${mt}*=${mt}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Kt = /'/g, te = /"/g, oe = /^(?:script|style|textarea|title)$/i, tr = (r) => (t, ...e) => ({ _$litType$: r, strings: t, values: e }), er = tr(1), Z = Symbol.for("lit-noChange"), P = Symbol.for("lit-nothing"), ee = /* @__PURE__ */ new WeakMap(), D = W.createTreeWalker(W, 129);
 function ae(r, t) {
   if (!Et(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return Xt !== void 0 ? Xt.createHTML(t) : t;
@@ -1231,8 +1231,8 @@ const rr = (r, t) => {
   for (let _ = 0; _ < e; _++) {
     const p = r[_];
     let A, b, g = -1, M = 0;
-    for (; M < p.length && (l.lastIndex = M, b = l.exec(p), b !== null); ) M = l.lastIndex, l === J ? b[1] === "!--" ? l = Jt : b[1] !== void 0 ? l = Qt : b[2] !== void 0 ? (oe.test(b[2]) && (s = RegExp("</" + b[2], "g")), l = D) : b[3] !== void 0 && (l = D) : l === D ? b[0] === ">" ? (l = s ?? J, g = -1) : b[1] === void 0 ? g = -2 : (g = l.lastIndex - b[2].length, A = b[1], l = b[3] === void 0 ? D : b[3] === '"' ? te : Kt) : l === te || l === Kt ? l = D : l === Jt || l === Qt ? l = J : (l = D, s = void 0);
-    const T = l === D && r[_ + 1].startsWith("/>") ? " " : "";
+    for (; M < p.length && (l.lastIndex = M, b = l.exec(p), b !== null); ) M = l.lastIndex, l === J ? b[1] === "!--" ? l = Jt : b[1] !== void 0 ? l = Qt : b[2] !== void 0 ? (oe.test(b[2]) && (s = RegExp("</" + b[2], "g")), l = j) : b[3] !== void 0 && (l = j) : l === j ? b[0] === ">" ? (l = s ?? J, g = -1) : b[1] === void 0 ? g = -2 : (g = l.lastIndex - b[2].length, A = b[1], l = b[3] === void 0 ? j : b[3] === '"' ? te : Kt) : l === te || l === Kt ? l = j : l === Jt || l === Qt ? l = J : (l = j, s = void 0);
+    const T = l === j && r[_ + 1].startsWith("/>") ? " " : "";
     u += l === J ? p + Qe : g >= 0 ? (n.push(A), p.slice(0, g) + ie + p.slice(g) + z + T) : p + z + (g === -2 ? _ : T);
   }
   return [ae(r, u + (r[e] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), n];
@@ -1243,11 +1243,11 @@ class nt {
     this.parts = [];
     let u = 0, l = 0;
     const _ = t.length - 1, p = this.parts, [A, b] = rr(t, e);
-    if (this.el = nt.createElement(A, n), H.currentNode = this.el.content, e === 2 || e === 3) {
+    if (this.el = nt.createElement(A, n), D.currentNode = this.el.content, e === 2 || e === 3) {
       const g = this.el.content.firstChild;
       g.replaceWith(...g.childNodes);
     }
-    for (; (s = H.nextNode()) !== null && p.length < _; ) {
+    for (; (s = D.nextNode()) !== null && p.length < _; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const g of s.getAttributeNames()) if (g.endsWith(ie)) {
           const M = b[l++], T = s.getAttribute(g).split(z), I = /([.?@])?(.*)/.exec(M);
@@ -1257,7 +1257,7 @@ class nt {
           const g = s.textContent.split(z), M = g.length - 1;
           if (M > 0) {
             s.textContent = ht ? ht.emptyScript : "";
-            for (let T = 0; T < M; T++) s.append(g[T], et()), H.nextNode(), p.push({ type: 2, index: ++u });
+            for (let T = 0; T < M; T++) s.append(g[T], et()), D.nextNode(), p.push({ type: 2, index: ++u });
             s.append(g[M], et());
           }
         }
@@ -1293,16 +1293,16 @@ class nr {
   }
   u(t) {
     const { el: { content: e }, parts: n } = this._$AD, s = ((t == null ? void 0 : t.creationScope) ?? W).importNode(e, !0);
-    H.currentNode = s;
-    let u = H.nextNode(), l = 0, _ = 0, p = n[0];
+    D.currentNode = s;
+    let u = D.nextNode(), l = 0, _ = 0, p = n[0];
     for (; p !== void 0; ) {
       if (l === p.index) {
         let A;
         p.type === 2 ? A = new it(u, u.nextSibling, this, t) : p.type === 1 ? A = new p.ctor(u, p.name, p.strings, this, t) : p.type === 6 && (A = new ar(u, this, t)), this._$AV.push(A), p = n[++_];
       }
-      l !== (p == null ? void 0 : p.index) && (u = H.nextNode(), l++);
+      l !== (p == null ? void 0 : p.index) && (u = D.nextNode(), l++);
     }
-    return H.currentNode = W, s;
+    return D.currentNode = W, s;
   }
   p(t) {
     let e = 0;
@@ -1642,7 +1642,7 @@ U([
   })
 ], R.prototype, "colorConfig", 1);
 R = U([
-  je({
+  He({
     name: "zero-text",
     version: "1.0.0",
     title: "Text",
@@ -1650,7 +1650,7 @@ R = U([
     group: "Content",
     iconName: "text-icon.png"
   }),
-  De()
+  je()
 ], R);
 export {
   R as ZeroText

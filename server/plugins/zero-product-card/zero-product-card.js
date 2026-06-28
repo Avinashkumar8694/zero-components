@@ -288,7 +288,7 @@ var qt;
         case 5:
           return n;
       }
-      var a = "string", u = Dt(n, l);
+      var a = "string", u = Ht(n, l);
       if (u !== void 0) {
         var g = u.call(n, a);
         if (C(g))
@@ -347,7 +347,7 @@ var qt;
     function vt(n, o) {
       return n === o || n !== n && o !== o;
     }
-    function Dt(n, o) {
+    function Ht(n, o) {
       var a = n[o];
       if (a != null) {
         if (!ct(a))
@@ -355,8 +355,8 @@ var qt;
         return a;
       }
     }
-    function Ht(n) {
-      var o = Dt(n, d);
+    function Dt(n) {
+      var o = Ht(n, d);
       if (!ct(o))
         throw new TypeError();
       var a = o.call(n);
@@ -423,7 +423,7 @@ var qt;
             if (a.isProviderFor(y, w))
               return o;
             if (!b(u))
-              for (var x = Ht(u); ; ) {
+              for (var x = Dt(u); ; ) {
                 var A = Bt(x);
                 if (!A)
                   return;
@@ -533,7 +533,7 @@ var qt;
         );
         if (b(w))
           return y;
-        for (var x = w.keys(), A = Ht(x), j = 0; ; ) {
+        for (var x = w.keys(), A = Dt(x), j = 0; ; ) {
           var Wt = Bt(A);
           if (!Wt)
             return y.length = j, y;
@@ -813,12 +813,12 @@ var qt;
     }
   });
 })(qt || (qt = {}));
-function De(r) {
+function He(r) {
   return typeof r.name == "string" && typeof r.version == "string" && typeof r.title == "string" && typeof r.elementSelector == "string" && typeof r.group == "string" && typeof r.iconName == "string";
 }
-function He(r) {
+function De(r) {
   return function(t) {
-    if (De(r)) {
+    if (He(r)) {
       const e = {
         version: r.version,
         name: r.name,
@@ -852,7 +852,7 @@ function He(r) {
   };
 }
 function ze(r) {
-  return He(r);
+  return De(r);
 }
 function Be(r) {
   return function(t) {
@@ -905,7 +905,7 @@ function We(r) {
   return function(t, e) {
     try {
       Ge(r);
-      const i = Reflect.getMetadata("ZeroAttribute", t) || [];
+      const i = [...Reflect.getMetadata("ZeroAttribute", t) || []];
       let s = !0;
       if (typeof e == "string") {
         try {
@@ -926,12 +926,12 @@ function X(r) {
 }
 var L;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
 })(L || (L = {}));
-var D;
+var H;
 (function(r) {
   r.PROPERTY = "property", r.EVENT = "event", r.ACTION = "action";
-})(D || (D = {}));
+})(H || (H = {}));
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -1218,7 +1218,7 @@ J.elementStyles = [], J.shadowRootOptions = { mode: "open" }, J[it("elementPrope
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const nt = globalThis, Qt = (r) => r, pt = nt.trustedTypes, Kt = pt ? pt.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, le = "$lit$", H = `lit$${Math.random().toFixed(9).slice(2)}$`, de = "?" + H, er = `<${de}>`, q = document, ot = () => q.createComment(""), at = (r) => r === null || typeof r != "object" && typeof r != "function", Mt = Array.isArray, rr = (r) => Mt(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", wt = `[ 	
+const nt = globalThis, Qt = (r) => r, pt = nt.trustedTypes, Kt = pt ? pt.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, le = "$lit$", D = `lit$${Math.random().toFixed(9).slice(2)}$`, de = "?" + D, er = `<${de}>`, q = document, ot = () => q.createComment(""), at = (r) => r === null || typeof r != "object" && typeof r != "function", Mt = Array.isArray, rr = (r) => Mt(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", wt = `[ 	
 \f\r]`, rt = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, te = /-->/g, ee = />/g, W = RegExp(`>|${wt}(?:([^\\s"'>=/]+)(${wt}*=${wt}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), re = /'/g, ie = /"/g, ue = /^(?:script|style|textarea|title)$/i, ir = (r) => (t, ...e) => ({ _$litType$: r, strings: t, values: e }), $t = ir(1), Q = Symbol.for("lit-noChange"), P = Symbol.for("lit-nothing"), ne = /* @__PURE__ */ new WeakMap(), V = q.createTreeWalker(q, 129);
 function ce(r, t) {
@@ -1233,7 +1233,7 @@ const nr = (r, t) => {
     let E, $, m = -1, S = 0;
     for (; S < p.length && (d.lastIndex = S, $ = d.exec(p), $ !== null); ) S = d.lastIndex, d === rt ? $[1] === "!--" ? d = te : $[1] !== void 0 ? d = ee : $[2] !== void 0 ? (ue.test($[2]) && (s = RegExp("</" + $[2], "g")), d = W) : $[3] !== void 0 && (d = W) : d === W ? $[0] === ">" ? (d = s ?? rt, m = -1) : $[1] === void 0 ? m = -2 : (m = d.lastIndex - $[2].length, E = $[1], d = $[3] === void 0 ? W : $[3] === '"' ? ie : re) : d === ie || d === re ? d = W : d === te || d === ee ? d = rt : (d = W, s = void 0);
     const R = d === W && r[v + 1].startsWith("/>") ? " " : "";
-    l += d === rt ? p + er : m >= 0 ? (i.push(E), p.slice(0, m) + le + p.slice(m) + H + R) : p + H + (m === -2 ? v : R);
+    l += d === rt ? p + er : m >= 0 ? (i.push(E), p.slice(0, m) + le + p.slice(m) + D + R) : p + D + (m === -2 ? v : R);
   }
   return [ce(r, l + (r[e] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), i];
 };
@@ -1250,11 +1250,11 @@ class lt {
     for (; (s = V.nextNode()) !== null && p.length < v; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const m of s.getAttributeNames()) if (m.endsWith(le)) {
-          const S = $[d++], R = s.getAttribute(m).split(H), N = /([.?@])?(.*)/.exec(S);
+          const S = $[d++], R = s.getAttribute(m).split(D), N = /([.?@])?(.*)/.exec(S);
           p.push({ type: 1, index: l, name: N[2], strings: R, ctor: N[1] === "." ? or : N[1] === "?" ? ar : N[1] === "@" ? lr : yt }), s.removeAttribute(m);
-        } else m.startsWith(H) && (p.push({ type: 6, index: l }), s.removeAttribute(m));
+        } else m.startsWith(D) && (p.push({ type: 6, index: l }), s.removeAttribute(m));
         if (ue.test(s.tagName)) {
-          const m = s.textContent.split(H), S = m.length - 1;
+          const m = s.textContent.split(D), S = m.length - 1;
           if (S > 0) {
             s.textContent = pt ? pt.emptyScript : "";
             for (let R = 0; R < S; R++) s.append(m[R], ot()), V.nextNode(), p.push({ type: 2, index: ++l });
@@ -1264,7 +1264,7 @@ class lt {
       } else if (s.nodeType === 8) if (s.data === de) p.push({ type: 2, index: l });
       else {
         let m = -1;
-        for (; (m = s.data.indexOf(H, m + 1)) !== -1; ) p.push({ type: 7, index: l }), m += H.length - 1;
+        for (; (m = s.data.indexOf(D, m + 1)) !== -1; ) p.push({ type: 7, index: l }), m += D.length - 1;
       }
       l++;
     }
@@ -1757,7 +1757,7 @@ k([
 ], T.prototype, "variant", 2);
 k([
   X({
-    attributeType: D.PROPERTY,
+    attributeType: H.PROPERTY,
     uiComponentType: L.TEXT_INPUT,
     displayLabel: "Image Source",
     fieldMappings: "image"
@@ -1765,7 +1765,7 @@ k([
 ], T.prototype, "imageConfig", 2);
 k([
   X({
-    attributeType: D.PROPERTY,
+    attributeType: H.PROPERTY,
     uiComponentType: L.TEXT_INPUT,
     displayLabel: "Promo Badge",
     fieldMappings: "badge"
@@ -1773,7 +1773,7 @@ k([
 ], T.prototype, "badgeConfig", 2);
 k([
   X({
-    attributeType: D.PROPERTY,
+    attributeType: H.PROPERTY,
     uiComponentType: L.TEXT_INPUT,
     displayLabel: "Title",
     fieldMappings: "title"
@@ -1781,7 +1781,7 @@ k([
 ], T.prototype, "titleConfig", 2);
 k([
   X({
-    attributeType: D.PROPERTY,
+    attributeType: H.PROPERTY,
     uiComponentType: L.TEXT_INPUT,
     displayLabel: "Price",
     fieldMappings: "price"
@@ -1789,7 +1789,7 @@ k([
 ], T.prototype, "priceConfig", 2);
 k([
   X({
-    attributeType: D.PROPERTY,
+    attributeType: H.PROPERTY,
     uiComponentType: L.TEXT_INPUT,
     displayLabel: "Colors (CSV)",
     fieldMappings: "colors"
@@ -1797,7 +1797,7 @@ k([
 ], T.prototype, "colorsConfig", 2);
 k([
   X({
-    attributeType: D.PROPERTY,
+    attributeType: H.PROPERTY,
     uiComponentType: L.TEXT_INPUT,
     displayLabel: "Description",
     fieldMappings: "description"
@@ -1805,7 +1805,7 @@ k([
 ], T.prototype, "descriptionConfig", 2);
 k([
   X({
-    attributeType: D.PROPERTY,
+    attributeType: H.PROPERTY,
     uiComponentType: L.TEXT_INPUT,
     displayLabel: "Button Label",
     fieldMappings: "buttonLabel"

@@ -1,6 +1,6 @@
-var Ut = Object.defineProperty;
-var Nt = (i, e, t) => e in i ? Ut(i, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[e] = t;
-var Le = (i, e, t) => Nt(i, typeof e != "symbol" ? e + "" : e, t);
+var Nt = Object.defineProperty;
+var Ut = (i, e, t) => e in i ? Nt(i, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : i[e] = t;
+var Le = (i, e, t) => Ut(i, typeof e != "symbol" ? e + "" : e, t);
 var ze = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
 /*! *****************************************************************************
 Copyright (C) Microsoft. All rights reserved.
@@ -61,7 +61,7 @@ var Ge;
       } : function(n, o) {
         return n[o];
       }
-    }, w = Object.getPrototypeOf(Function), R = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Ct(), T = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Rt(), U = typeof WeakMap == "function" ? WeakMap : Tt(), G = s ? Symbol.for("@reflect-metadata:registry") : void 0, ne = Mt(), Ae = Ot(ne);
+    }, w = Object.getPrototypeOf(Function), R = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : Ct(), T = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Rt(), N = typeof WeakMap == "function" ? WeakMap : Tt(), G = s ? Symbol.for("@reflect-metadata:registry") : void 0, ne = Mt(), Ae = Ot(ne);
     function ut(n, o, a, c) {
       if (g(a)) {
         if (!ke(n))
@@ -288,7 +288,7 @@ var Ge;
         case 5:
           return n;
       }
-      var a = "string", c = Ue(n, u);
+      var a = "string", c = Ne(n, u);
       if (c !== void 0) {
         var v = c.call(n, a);
         if (M(v))
@@ -347,7 +347,7 @@ var Ge;
     function fe(n, o) {
       return n === o || n !== n && o !== o;
     }
-    function Ue(n, o) {
+    function Ne(n, o) {
       var a = n[o];
       if (a != null) {
         if (!ie(a))
@@ -355,8 +355,8 @@ var Ge;
         return a;
       }
     }
-    function Ne(n) {
-      var o = Ue(n, l);
+    function Ue(n) {
+      var o = Ne(n, l);
       if (!ie(o))
         throw new TypeError();
       var a = o.call(n);
@@ -367,11 +367,11 @@ var Ge;
     function De(n) {
       return n.value;
     }
-    function Ie(n) {
+    function He(n) {
       var o = n.next();
       return o.done ? !1 : o;
     }
-    function je(n) {
+    function Ie(n) {
       var o = n.return;
       o && o.call(n);
     }
@@ -388,7 +388,7 @@ var Ge;
     function St() {
       var n;
       !g(G) && typeof t.Reflect < "u" && !(G in t.Reflect) && typeof t.Reflect.defineMetadata == "function" && (n = Pt(t.Reflect));
-      var o, a, c, v = new U(), P = {
+      var o, a, c, v = new N(), P = {
         registerProvider: O,
         getProvider: h,
         setProvider: d
@@ -423,13 +423,13 @@ var Ge;
             if (a.isProviderFor(p, $))
               return o;
             if (!g(c))
-              for (var E = Ne(c); ; ) {
-                var S = Ie(E);
+              for (var E = Ue(c); ; ) {
+                var S = He(E);
                 if (!S)
                   return;
                 var k = De(S);
                 if (k.isProviderFor(p, $))
-                  return je(E), k;
+                  return Ie(E), k;
               }
           }
         }
@@ -468,7 +468,7 @@ var Ge;
       }), n;
     }
     function Ot(n) {
-      var o = new U(), a = {
+      var o = new N(), a = {
         isProviderFor: function(f, d) {
           var p = o.get(f);
           return g(p) ? !1 : p.has(d);
@@ -533,16 +533,16 @@ var Ge;
         );
         if (g($))
           return p;
-        for (var E = $.keys(), S = Ne(E), k = 0; ; ) {
-          var He = Ie(S);
-          if (!He)
+        for (var E = $.keys(), S = Ue(E), k = 0; ; ) {
+          var je = He(S);
+          if (!je)
             return p.length = k, p;
-          var kt = De(He);
+          var kt = De(je);
           try {
             p[k] = kt;
           } catch (xt) {
             try {
-              je(S);
+              Ie(S);
             } finally {
               throw xt;
             }
@@ -567,7 +567,7 @@ var Ge;
       }
     }
     function Pt(n) {
-      var o = n.defineMetadata, a = n.hasOwnMetadata, c = n.getOwnMetadata, v = n.getOwnMetadataKeys, P = n.deleteMetadata, O = new U(), m = {
+      var o = n.defineMetadata, a = n.hasOwnMetadata, c = n.getOwnMetadata, v = n.getOwnMetadataKeys, P = n.deleteMetadata, O = new N(), m = {
         isProviderFor: function(h, f) {
           var d = O.get(h);
           return !g(d) && d.has(f) ? !0 : v(h, f).length ? (g(d) && (d = new T(), O.set(h, d)), d.add(f), !0) : !1;
@@ -816,7 +816,7 @@ var Ge;
 function Dt(i) {
   return typeof i.name == "string" && typeof i.version == "string" && typeof i.title == "string" && typeof i.elementSelector == "string" && typeof i.group == "string" && typeof i.iconName == "string";
 }
-function It(i) {
+function Ht(i) {
   return function(e) {
     if (Dt(i)) {
       const t = {
@@ -851,10 +851,10 @@ function It(i) {
       throw new Error("Invalid configuration provided to RendererComponent decorator");
   };
 }
-function jt(i) {
-  return It(i);
+function It(i) {
+  return Ht(i);
 }
-function Ht(i) {
+function jt(i) {
   return function(e) {
     class t extends e {
       constructor() {
@@ -905,7 +905,7 @@ function zt(i) {
   return function(e, t) {
     try {
       Lt(i);
-      const r = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const r = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let s = !0;
       if (typeof t == "string") {
         try {
@@ -926,7 +926,7 @@ function tt(i) {
 }
 var oe;
 (function(i) {
-  i.TEXT_INPUT = "text-input", i.PASSWORD_INPUT = "password-input", i.DROPDOWN = "dropdown", i.CHECKBOX = "checkbox", i.RADIO_BUTTON = "radio-button", i.RANGE_SLIDER = "range-slider", i.FILE_INPUT = "file-input", i.DATE_PICKER = "date-picker", i.COLOR_PICKER = "color-picker", i.NUMBER_INPUT = "number-input", i.TEXTAREA = "textarea", i.MULTI_SELECT = "multi-select", i.POPUP_DROPDOWN = "popup-dropdown", i.LAYOUT_PICKER = "layout-picker", i.RESPONSIVE_OVERRIDE = "responsive-override", i.IMAGE_PICKER = "image-picker";
+  i.TEXT_INPUT = "text-input", i.PASSWORD_INPUT = "password-input", i.DROPDOWN = "dropdown", i.CHECKBOX = "checkbox", i.RADIO_BUTTON = "radio-button", i.RANGE_SLIDER = "range-slider", i.FILE_INPUT = "file-input", i.DATE_PICKER = "date-picker", i.COLOR_PICKER = "color-picker", i.NUMBER_INPUT = "number-input", i.TEXTAREA = "textarea", i.MULTI_SELECT = "multi-select", i.POPUP_DROPDOWN = "popup-dropdown", i.LAYOUT_PICKER = "layout-picker", i.RESPONSIVE_OVERRIDE = "responsive-override", i.IMAGE_PICKER = "image-picker", i.CHIPS = "chips";
 })(oe || (oe = {}));
 var ae;
 (function(i) {
@@ -1218,9 +1218,9 @@ B.elementStyles = [], B.shadowRootOptions = { mode: "open" }, B[X("elementProper
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Y = globalThis, qe = (i) => i, le = Y.trustedTypes, Ze = le ? le.createPolicy("lit-html", { createHTML: (i) => i }) : void 0, nt = "$lit$", N = `lit$${Math.random().toFixed(9).slice(2)}$`, it = "?" + N, Qt = `<${it}>`, L = document, Q = () => L.createComment(""), K = (i) => i === null || typeof i != "object" && typeof i != "function", be = Array.isArray, Kt = (i) => be(i) || typeof (i == null ? void 0 : i[Symbol.iterator]) == "function", ve = `[ 	
-\f\r]`, Z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Xe = /-->/g, Ye = />/g, I = RegExp(`>|${ve}(?:([^\\s"'>=/]+)(${ve}*=${ve}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Je = /'/g, Qe = /"/g, st = /^(?:script|style|textarea|title)$/i, er = (i) => (e, ...t) => ({ _$litType$: i, strings: e, values: t }), tr = er(1), V = Symbol.for("lit-noChange"), C = Symbol.for("lit-nothing"), Ke = /* @__PURE__ */ new WeakMap(), j = L.createTreeWalker(L, 129);
+const Y = globalThis, qe = (i) => i, le = Y.trustedTypes, Ze = le ? le.createPolicy("lit-html", { createHTML: (i) => i }) : void 0, nt = "$lit$", U = `lit$${Math.random().toFixed(9).slice(2)}$`, it = "?" + U, Qt = `<${it}>`, L = document, Q = () => L.createComment(""), K = (i) => i === null || typeof i != "object" && typeof i != "function", be = Array.isArray, Kt = (i) => be(i) || typeof (i == null ? void 0 : i[Symbol.iterator]) == "function", ve = `[ 	
+\f\r]`, Z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Xe = /-->/g, Ye = />/g, H = RegExp(`>|${ve}(?:([^\\s"'>=/]+)(${ve}*=${ve}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Je = /'/g, Qe = /"/g, st = /^(?:script|style|textarea|title)$/i, er = (i) => (e, ...t) => ({ _$litType$: i, strings: e, values: t }), tr = er(1), V = Symbol.for("lit-noChange"), C = Symbol.for("lit-nothing"), Ke = /* @__PURE__ */ new WeakMap(), I = L.createTreeWalker(L, 129);
 function ot(i, e) {
   if (!be(i) || !i.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return Ze !== void 0 ? Ze.createHTML(e) : e;
@@ -1231,9 +1231,9 @@ const rr = (i, e) => {
   for (let _ = 0; _ < t; _++) {
     const y = i[_];
     let A, b, w = -1, R = 0;
-    for (; R < y.length && (l.lastIndex = R, b = l.exec(y), b !== null); ) R = l.lastIndex, l === Z ? b[1] === "!--" ? l = Xe : b[1] !== void 0 ? l = Ye : b[2] !== void 0 ? (st.test(b[2]) && (s = RegExp("</" + b[2], "g")), l = I) : b[3] !== void 0 && (l = I) : l === I ? b[0] === ">" ? (l = s ?? Z, w = -1) : b[1] === void 0 ? w = -2 : (w = l.lastIndex - b[2].length, A = b[1], l = b[3] === void 0 ? I : b[3] === '"' ? Qe : Je) : l === Qe || l === Je ? l = I : l === Xe || l === Ye ? l = Z : (l = I, s = void 0);
-    const T = l === I && i[_ + 1].startsWith("/>") ? " " : "";
-    u += l === Z ? y + Qt : w >= 0 ? (r.push(A), y.slice(0, w) + nt + y.slice(w) + N + T) : y + N + (w === -2 ? _ : T);
+    for (; R < y.length && (l.lastIndex = R, b = l.exec(y), b !== null); ) R = l.lastIndex, l === Z ? b[1] === "!--" ? l = Xe : b[1] !== void 0 ? l = Ye : b[2] !== void 0 ? (st.test(b[2]) && (s = RegExp("</" + b[2], "g")), l = H) : b[3] !== void 0 && (l = H) : l === H ? b[0] === ">" ? (l = s ?? Z, w = -1) : b[1] === void 0 ? w = -2 : (w = l.lastIndex - b[2].length, A = b[1], l = b[3] === void 0 ? H : b[3] === '"' ? Qe : Je) : l === Qe || l === Je ? l = H : l === Xe || l === Ye ? l = Z : (l = H, s = void 0);
+    const T = l === H && i[_ + 1].startsWith("/>") ? " " : "";
+    u += l === Z ? y + Qt : w >= 0 ? (r.push(A), y.slice(0, w) + nt + y.slice(w) + U + T) : y + U + (w === -2 ? _ : T);
   }
   return [ot(i, u + (i[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), r];
 };
@@ -1243,28 +1243,28 @@ class ee {
     this.parts = [];
     let u = 0, l = 0;
     const _ = e.length - 1, y = this.parts, [A, b] = rr(e, t);
-    if (this.el = ee.createElement(A, r), j.currentNode = this.el.content, t === 2 || t === 3) {
+    if (this.el = ee.createElement(A, r), I.currentNode = this.el.content, t === 2 || t === 3) {
       const w = this.el.content.firstChild;
       w.replaceWith(...w.childNodes);
     }
-    for (; (s = j.nextNode()) !== null && y.length < _; ) {
+    for (; (s = I.nextNode()) !== null && y.length < _; ) {
       if (s.nodeType === 1) {
         if (s.hasAttributes()) for (const w of s.getAttributeNames()) if (w.endsWith(nt)) {
-          const R = b[l++], T = s.getAttribute(w).split(N), U = /([.?@])?(.*)/.exec(R);
-          y.push({ type: 1, index: u, name: U[2], strings: T, ctor: U[1] === "." ? ir : U[1] === "?" ? sr : U[1] === "@" ? or : ce }), s.removeAttribute(w);
-        } else w.startsWith(N) && (y.push({ type: 6, index: u }), s.removeAttribute(w));
+          const R = b[l++], T = s.getAttribute(w).split(U), N = /([.?@])?(.*)/.exec(R);
+          y.push({ type: 1, index: u, name: N[2], strings: T, ctor: N[1] === "." ? ir : N[1] === "?" ? sr : N[1] === "@" ? or : ce }), s.removeAttribute(w);
+        } else w.startsWith(U) && (y.push({ type: 6, index: u }), s.removeAttribute(w));
         if (st.test(s.tagName)) {
-          const w = s.textContent.split(N), R = w.length - 1;
+          const w = s.textContent.split(U), R = w.length - 1;
           if (R > 0) {
             s.textContent = le ? le.emptyScript : "";
-            for (let T = 0; T < R; T++) s.append(w[T], Q()), j.nextNode(), y.push({ type: 2, index: ++u });
+            for (let T = 0; T < R; T++) s.append(w[T], Q()), I.nextNode(), y.push({ type: 2, index: ++u });
             s.append(w[R], Q());
           }
         }
       } else if (s.nodeType === 8) if (s.data === it) y.push({ type: 2, index: u });
       else {
         let w = -1;
-        for (; (w = s.data.indexOf(N, w + 1)) !== -1; ) y.push({ type: 7, index: u }), w += N.length - 1;
+        for (; (w = s.data.indexOf(U, w + 1)) !== -1; ) y.push({ type: 7, index: u }), w += U.length - 1;
       }
       u++;
     }
@@ -1293,16 +1293,16 @@ class nr {
   }
   u(e) {
     const { el: { content: t }, parts: r } = this._$AD, s = ((e == null ? void 0 : e.creationScope) ?? L).importNode(t, !0);
-    j.currentNode = s;
-    let u = j.nextNode(), l = 0, _ = 0, y = r[0];
+    I.currentNode = s;
+    let u = I.nextNode(), l = 0, _ = 0, y = r[0];
     for (; y !== void 0; ) {
       if (l === y.index) {
         let A;
         y.type === 2 ? A = new te(u, u.nextSibling, this, e) : y.type === 1 ? A = new y.ctor(u, y.name, y.strings, this, e) : y.type === 6 && (A = new ar(u, this, e)), this._$AV.push(A), y = r[++_];
       }
-      l !== (y == null ? void 0 : y.index) && (u = j.nextNode(), l++);
+      l !== (y == null ? void 0 : y.index) && (u = I.nextNode(), l++);
     }
-    return j.currentNode = L, s;
+    return I.currentNode = L, s;
   }
   p(e) {
     let t = 0;
@@ -1454,7 +1454,7 @@ const ur = (i, e, t) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const H = globalThis;
+const j = globalThis;
 class J extends B {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
@@ -1481,10 +1481,10 @@ class J extends B {
   }
 }
 var et;
-J._$litElement$ = !0, J.finalized = !0, (et = H.litElementHydrateSupport) == null || et.call(H, { LitElement: J });
-const ge = H.litElementPolyfillSupport;
+J._$litElement$ = !0, J.finalized = !0, (et = j.litElementHydrateSupport) == null || et.call(j, { LitElement: J });
+const ge = j.litElementPolyfillSupport;
 ge == null || ge({ LitElement: J });
-(H.litElementVersions ?? (H.litElementVersions = [])).push("4.2.2");
+(j.litElementVersions ?? (j.litElementVersions = [])).push("4.2.2");
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -1556,8 +1556,8 @@ re([
   tt({ attributeType: ae.PROPERTY, uiComponentType: oe.TEXTAREA, displayLabel: "Discovery Hint", fieldMappings: "entryUsage" })
 ], z.prototype, "entryUsageConfig", 1);
 z = re([
-  jt({ name: "zero-flow-node-start", version: "1.0.0", title: "Start Node", elementSelector: "zero-flow-node-start", group: "Flow Nodes", iconName: "flow-start-node.png" }),
-  Ht()
+  It({ name: "zero-flow-node-start", version: "1.0.0", title: "Start Node", elementSelector: "zero-flow-node-start", group: "Flow Nodes", iconName: "flow-start-node.png" }),
+  jt()
 ], z);
 export {
   z as ZeroFlowNodeStart

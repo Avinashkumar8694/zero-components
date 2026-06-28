@@ -364,10 +364,10 @@ var Be;
         throw new TypeError();
       return a;
     }
-    function Ue(i) {
+    function je(i) {
       return i.value;
     }
-    function je(i) {
+    function Ue(i) {
       var o = i.next();
       return o.done ? !1 : o;
     }
@@ -424,10 +424,10 @@ var Be;
               return o;
             if (!g(d))
               for (var E = Ie(d); ; ) {
-                var S = je(E);
+                var S = Ue(E);
                 if (!S)
                   return;
-                var R = Ue(S);
+                var R = je(S);
                 if (R.isProviderFor(p, w))
                   return He(E), R;
               }
@@ -534,10 +534,10 @@ var Be;
         if (g(w))
           return p;
         for (var E = w.keys(), S = Ie(E), R = 0; ; ) {
-          var Ve = je(S);
+          var Ve = Ue(S);
           if (!Ve)
             return p.length = R, p;
-          var Tt = Ue(Ve);
+          var Tt = je(Ve);
           try {
             p[R] = Tt;
           } catch (Nt) {
@@ -813,12 +813,12 @@ var Be;
     }
   });
 })(Be || (Be = {}));
-function Ut(r) {
+function jt(r) {
   return typeof r.name == "string" && typeof r.version == "string" && typeof r.title == "string" && typeof r.elementSelector == "string" && typeof r.group == "string" && typeof r.iconName == "string";
 }
-function jt(r) {
+function Ut(r) {
   return function(e) {
-    if (Ut(r)) {
+    if (jt(r)) {
       const t = {
         version: r.version,
         name: r.name,
@@ -852,7 +852,7 @@ function jt(r) {
   };
 }
 function Ht(r) {
-  return jt(r);
+  return Ut(r);
 }
 function Vt(r) {
   return function(e) {
@@ -905,7 +905,7 @@ function zt(r) {
   return function(e, t) {
     try {
       Lt(r);
-      const n = Reflect.getMetadata("ZeroAttribute", e) || [];
+      const n = [...Reflect.getMetadata("ZeroAttribute", e) || []];
       let s = !0;
       if (typeof t == "string") {
         try {
@@ -926,7 +926,7 @@ function Bt(r) {
 }
 var Ge;
 (function(r) {
-  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker";
+  r.TEXT_INPUT = "text-input", r.PASSWORD_INPUT = "password-input", r.DROPDOWN = "dropdown", r.CHECKBOX = "checkbox", r.RADIO_BUTTON = "radio-button", r.RANGE_SLIDER = "range-slider", r.FILE_INPUT = "file-input", r.DATE_PICKER = "date-picker", r.COLOR_PICKER = "color-picker", r.NUMBER_INPUT = "number-input", r.TEXTAREA = "textarea", r.MULTI_SELECT = "multi-select", r.POPUP_DROPDOWN = "popup-dropdown", r.LAYOUT_PICKER = "layout-picker", r.RESPONSIVE_OVERRIDE = "responsive-override", r.IMAGE_PICKER = "image-picker", r.CHIPS = "chips";
 })(Ge || (Ge = {}));
 var me;
 (function(r) {
@@ -979,7 +979,7 @@ const Gt = (r) => new it(typeof r == "string" ? r : r + "", void 0, $e), Wt = (r
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Ft, defineProperty: Zt, getOwnPropertyDescriptor: Jt, getOwnPropertyNames: Yt, getOwnPropertySymbols: Xt, getPrototypeOf: Qt } = Object, U = globalThis, Fe = U.trustedTypes, Kt = Fe ? Fe.emptyScript : "", pe = U.reactiveElementPolyfillSupport, X = (r, e) => r, ae = { toAttribute(r, e) {
+const { is: Ft, defineProperty: Zt, getOwnPropertyDescriptor: Jt, getOwnPropertyNames: Yt, getOwnPropertySymbols: Xt, getPrototypeOf: Qt } = Object, j = globalThis, Fe = j.trustedTypes, Kt = Fe ? Fe.emptyScript : "", pe = j.reactiveElementPolyfillSupport, X = (r, e) => r, ae = { toAttribute(r, e) {
   switch (e) {
     case Boolean:
       r = r ? Kt : null;
@@ -1008,7 +1008,7 @@ const { is: Ft, defineProperty: Zt, getOwnPropertyDescriptor: Jt, getOwnProperty
   }
   return t;
 } }, be = (r, e) => !Ft(r, e), Ze = { attribute: !0, type: String, converter: ae, reflect: !1, useDefault: !1, hasChanged: be };
-Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), U.litPropertyMetadata ?? (U.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
+Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), j.litPropertyMetadata ?? (j.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
 let W = class extends HTMLElement {
   static addInitializer(e) {
     this._$Ei(), (this.l ?? (this.l = [])).push(e);
@@ -1212,7 +1212,7 @@ let W = class extends HTMLElement {
   firstUpdated(e) {
   }
 };
-W.elementStyles = [], W.shadowRootOptions = { mode: "open" }, W[X("elementProperties")] = /* @__PURE__ */ new Map(), W[X("finalized")] = /* @__PURE__ */ new Map(), pe == null || pe({ ReactiveElement: W }), (U.reactiveElementVersions ?? (U.reactiveElementVersions = [])).push("2.1.2");
+W.elementStyles = [], W.shadowRootOptions = { mode: "open" }, W[X("elementProperties")] = /* @__PURE__ */ new Map(), W[X("finalized")] = /* @__PURE__ */ new Map(), pe == null || pe({ ReactiveElement: W }), (j.reactiveElementVersions ?? (j.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -1517,7 +1517,7 @@ function Z(r) {
     return s.constructor.createProperty(l, n), u ? Object.getOwnPropertyDescriptor(s, l) : void 0;
   })(r, e, t);
 }
-var hr = Object.defineProperty, fr = Object.getOwnPropertyDescriptor, j = (r, e, t, n) => {
+var hr = Object.defineProperty, fr = Object.getOwnPropertyDescriptor, U = (r, e, t, n) => {
   for (var s = n > 1 ? void 0 : n ? fr(e, t) : e, l = r.length - 1, u; l >= 0; l--)
     (u = r[l]) && (s = (n ? u(e, t, s) : u(s)) || s);
   return n && s && hr(e, t, s), s;
@@ -1701,32 +1701,32 @@ T.styles = Wt`
       margin-top: var(--spacing-xs, 5px);
     }
   `;
-j([
+U([
   Z({ type: Boolean })
 ], T.prototype, "enabled", 2);
-j([
+U([
   Z({ type: Array })
 ], T.prototype, "config", 1);
-j([
+U([
   Z({ type: Boolean, reflect: !0 })
 ], T.prototype, "open", 2);
-j([
+U([
   Z({ type: Boolean })
 ], T.prototype, "isValid", 2);
-j([
+U([
   Z({ type: String })
 ], T.prototype, "errorMessage", 2);
-j([
+U([
   Z({ type: String })
 ], T.prototype, "selectedValue", 2);
-j([
+U([
   Bt({
     attributeType: me.EVENT,
     displayLabel: "On Option Selected",
     eventTrigger: "option-selected"
   })
 ], T.prototype, "handleOptionSelected", 1);
-T = j([
+T = U([
   Ht({
     name: "popup-dropdown-directive",
     version: "1.0.0",

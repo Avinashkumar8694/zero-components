@@ -91,10 +91,11 @@ export class ZeroSection extends ZeroLayoutBase {
 
     const labelDisplay = escapeStudio(config.studio.display.label || "Section Block");
 
-    const justify = escapeStudio(config.props.justify || "center");
-    const align = escapeStudio(config.props.align || "center");
-    const gap = escapeStudio(config.props.gap || "12px");
-    const padding = escapeStudio(config.props.padding || "48px 24px");
+    const justify = escapeStudio(config.props.justify || "flex-start");
+    const align = escapeStudio(config.props.align || "stretch");
+    const direction = escapeStudio(config.props.direction || "row");
+    const gap = escapeStudio(config.props.gap || "16px");
+    const padding = escapeStudio(config.props.padding || "0px");
     const backgroundColor = escapeStudio(config.props.backgroundColor || "transparent");
     const borderColor = escapeStudio(config.props.borderColor || "transparent");
     const borderWidth = escapeStudio(config.props.borderWidth || "0px");
@@ -113,6 +114,7 @@ export class ZeroSection extends ZeroLayoutBase {
       gap: "gap",
       justify: "justify",
       align: "align",
+      direction: "direction",
       borderWidth: "border-width",
       borderColor: "border-color",
       backgroundImage: "background-image"
@@ -150,9 +152,10 @@ export class ZeroSection extends ZeroLayoutBase {
           --zero-section-border-w: var(--zero-section-border-width-override, ${borderWidth});
           --zero-section-bg-url: var(--zero-section-background-image-override, ${bgImage});
           --zero-p-border-radius: ${borderRadius};
+          --zero-p-direction: var(--zero-section-direction-override, ${direction});
 
           display: flex;
-          flex-direction: column;
+          flex-direction: var(--zero-p-direction);
           justify-content: var(--zero-p-justify);
           align-items: var(--zero-p-align);
           gap: var(--zero-p-gap);
@@ -169,7 +172,7 @@ export class ZeroSection extends ZeroLayoutBase {
           position: relative;
         ">`,
         `<style>
-          .studio-section-container zero-studio-slot[name='default'] { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+          .studio-section-container zero-studio-slot[name='default'] { width: 100%; display: flex; flex-direction: var(--zero-p-direction); gap: var(--zero-p-gap); }
           ${studioQueries}
         </style>`,
         "<zero-studio-slot name='default'></zero-studio-slot>",
@@ -177,6 +180,67 @@ export class ZeroSection extends ZeroLayoutBase {
       ].join(""),
     };
   }
+
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.DROPDOWN,
+    displayLabel: "Layout Direction",
+    fieldMappings: "direction",
+    categoryLabel: "Layout Settings",
+    initialValue: "row",
+    optionItems: [
+      { label: "Horizontal (Row)", value: "row" },
+      { label: "Vertical (Column)", value: "column" }
+    ]
+  })
+  direction = "row";
+
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.DROPDOWN,
+    displayLabel: "Align Items",
+    fieldMappings: "align",
+    categoryLabel: "Layout Settings",
+    initialValue: "stretch",
+    optionItems: [
+      { label: "Stretch", value: "stretch" },
+      { label: "Start", value: "flex-start" },
+      { label: "Center", value: "center" },
+      { label: "End", value: "flex-end" }
+    ]
+  })
+  align = "stretch";
+
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.DROPDOWN,
+    displayLabel: "Justify Content",
+    fieldMappings: "justify",
+    categoryLabel: "Layout Settings",
+    initialValue: "flex-start",
+    optionItems: [
+      { label: "Start", value: "flex-start" },
+      { label: "Center", value: "center" },
+      { label: "End", value: "flex-end" },
+      { label: "Space Between", value: "space-between" },
+      { label: "Space Around", value: "space-around" }
+    ]
+  })
+  justify = "flex-start";
+
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Gap",
+    fieldMappings: "gap",
+    categoryLabel: "Layout Settings",
+    initialValue: "16px"
+  })
+  gap = "16px";
 
   @property({ type: String })
   @RendererAttribute({

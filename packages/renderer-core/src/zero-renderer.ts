@@ -1,7 +1,7 @@
 import { LitElement, html, PropertyValues } from "lit";
 import { property, customElement } from "lit/decorators.js";
 import { RendererComponent, applyGlobalStyles } from "zero-annotation";
-import { SchemaRenderer } from "./index";
+import { SchemaRenderer } from "./schema-renderer";
 import type { StudioSchema, UIComponentNode } from "@zero/schema";
 
 @RendererComponent({

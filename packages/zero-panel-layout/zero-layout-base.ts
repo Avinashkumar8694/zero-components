@@ -36,11 +36,6 @@ export class ZeroLayoutBase extends LitElement {
    */
   static slots: ZeroSlotDefinition[] = [];
   @property({ type: Object, attribute: 'responsive-props' })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    displayLabel: "Responsive Overrides",
-    fieldMappings: "responsiveProps",
-  })
   responsiveProps: Record<string, any> = {};
 
   static styles: CSSResultGroup = css`
@@ -109,8 +104,18 @@ export class ZeroLayoutBase extends LitElement {
       grid-template-rows: 1fr;
     }
 
-    .zero-layout-content {
+    .zero-layout-content,
+    .tab-pane {
       min-height: 0;
+      display: flex;
+      flex-direction: var(--zero-p-direction, row);
+      flex-wrap: wrap;
+      gap: var(--zero-p-gap, 0px);
+      row-gap: var(--zero-p-row-gap, var(--zero-p-gap, 0px));
+      justify-content: var(--zero-p-justify, flex-start);
+      align-items: var(--zero-p-align, stretch);
+      width: 100%;
+      box-sizing: border-box;
     }
 
     /* Spatial Drop Indicators (30/70 Rule) */
@@ -176,57 +181,6 @@ export class ZeroLayoutBase extends LitElement {
   })
   customClass = "";
 
-  // --- Expansion & Header ---
-
-  @property({ type: Boolean, reflect: true, attribute: "enable-header" })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.CHECKBOX,
-    displayLabel: "Enable Header",
-    fieldMappings: "enableHeader",
-    categoryLabel: "Interaction"
-  })
-  enableHeader = false;
-
-  @property({ type: String })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
-    displayLabel: "Header Label",
-    fieldMappings: "label",
-    categoryLabel: "Interaction"
-  })
-  label = "Panel Header";
-
-  @property({ type: String })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
-    displayLabel: "Icon (Emoji)",
-    fieldMappings: "icon",
-    categoryLabel: "Interaction"
-  })
-  icon = "📄";
-
-  @property({ type: Boolean, reflect: true })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.CHECKBOX,
-    displayLabel: "Expandable",
-    fieldMappings: "expandable",
-    categoryLabel: "Interaction"
-  })
-  expandable = true;
-
-  @property({ type: Boolean, reflect: true })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.CHECKBOX,
-    displayLabel: "Expanded",
-    fieldMappings: "expanded",
-    categoryLabel: "Interaction"
-  })
-  expanded = true;
 
   // --- Dimensions ---
 
@@ -280,88 +234,22 @@ export class ZeroLayoutBase extends LitElement {
   })
   get onClick() { return "click"; }
 
-  @RendererAttribute({
-    attributeType: AttributeType.EVENT,
-    displayLabel: "On Expand",
-    eventTrigger: "expand",
-    categoryLabel: "Triggers"
-  })
-  get onExpand() { return "expand"; }
-
-  @RendererAttribute({
-    attributeType: AttributeType.EVENT,
-    displayLabel: "On Collapse",
-    eventTrigger: "collapse",
-    categoryLabel: "Triggers"
-  })
-  get onCollapse() { return "collapse"; }
 
   // --- Layout ---
 
   @property({ type: String, reflect: true })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
-    displayLabel: "Direction",
-    fieldMappings: "direction",
-    categoryLabel: "Layout",
-    optionItems: [
-        { label: "Row", value: "row" },
-        { label: "Column", value: "column" }
-    ]
-  })
   direction = "row";
 
   @property({ type: String, reflect: true })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
-    displayLabel: "Justify",
-    fieldMappings: "justify",
-    categoryLabel: "Layout",
-    optionItems: [
-        { label: "Start", value: "flex-start" },
-        { label: "Center", value: "center" },
-        { label: "End", value: "flex-end" },
-        { label: "Space Between", value: "space-between" }
-    ]
-  })
   justify = "flex-start";
 
   @property({ type: String, reflect: true })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
-    displayLabel: "Align",
-    fieldMappings: "align",
-    categoryLabel: "Layout",
-    optionItems: [
-        { label: "Start", value: "flex-start" },
-        { label: "Center", value: "center" },
-        { label: "End", value: "flex-end" },
-        { label: "Stretch", value: "stretch" }
-    ]
-  })
   align = "stretch";
 
   @property({ type: String, reflect: true })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
-    displayLabel: "Gap",
-    fieldMappings: "gap",
-    categoryLabel: "Layout"
-  })
   gap = "16px";
 
   @property({ type: Number, reflect: true, attribute: "items-per-row" })
-  @RendererAttribute({
-    attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
-    displayLabel: "Items Per Row",
-    fieldMappings: "itemsPerRow",
-    categoryLabel: "Layout"
-  })
   itemsPerRow = 1;
 
   // --- Appearance ---
@@ -424,38 +312,6 @@ export class ZeroLayoutBase extends LitElement {
     this.requestUpdate();
   }
   
-  @RendererAttribute({
-    attributeType: AttributeType.ACTION,
-    displayLabel: "Expand Panel",
-    categoryLabel: "Actions"
-  })
-  public expand() { 
-    if (this.expandable) {
-      this.expanded = true;
-      this.dispatchEvent(new CustomEvent("expand"));
-    }
-  }
-
-  @RendererAttribute({
-    attributeType: AttributeType.ACTION,
-    displayLabel: "Collapse Panel",
-    categoryLabel: "Actions"
-  })
-  public collapse() { 
-    if (this.expandable) {
-      this.expanded = false;
-      this.dispatchEvent(new CustomEvent("collapse"));
-    }
-  }
-
-  @RendererAttribute({
-    attributeType: AttributeType.ACTION,
-    displayLabel: "Toggle Expand/Collapse",
-    categoryLabel: "Actions"
-  })
-  public toggleExpanded() { 
-    if (this.expanded) this.collapse(); else this.expand();
-  }
 
   // --- Responsive Engine ---
 
@@ -554,10 +410,27 @@ export class ZeroLayoutBase extends LitElement {
     return `calc((100% / ${count}) - ((${gapValue} * (${count} - 1)) / ${count}))`;
   }
 
+  get isStudio(): boolean {
+    if (typeof window === 'undefined') return false;
+    const search = window.location.search || "";
+    if (search.includes("mode=preview") || search.includes("mode=live")) {
+      return false;
+    }
+    try {
+      if (window.parent && (window.parent as any).zeroThemeManager && !search.includes("mode=preview")) {
+        return true;
+      }
+    } catch (e) {}
+    if ((window as any).zeroThemeManager && !search.includes("mode=preview")) {
+      return true;
+    }
+    return false;
+  }
+
   // --- Interaction (Studio) ---
 
   protected handleMouseMove(e: MouseEvent) {
-    if (!window.parent) return; 
+    if (!this.isStudio) return;
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const xPercent = (e.clientX - rect.left) / rect.width;
     const yPercent = (e.clientY - rect.top) / rect.height;
@@ -573,9 +446,13 @@ export class ZeroLayoutBase extends LitElement {
     }
   }
 
-  protected handleMouseLeave() { this.activeEdge = 'none'; }
+  protected handleMouseLeave() { 
+    if (!this.isStudio) return;
+    this.activeEdge = 'none'; 
+  }
 
   protected renderDropIndicators() {
+    if (!this.isStudio) return html``;
     return html`
       <div class="drop-indicator left ${this.activeEdge === 'left' ? 'active' : ''}"></div>
       <div class="drop-indicator right ${this.activeEdge === 'right' ? 'active' : ''}"></div>
@@ -584,14 +461,7 @@ export class ZeroLayoutBase extends LitElement {
     `;
   }
 
-  protected renderHeader() {
-    if (!this.enableHeader) return html``;
-    return html`
-      <div class="zero-layout-header" @click=${this.toggleExpanded}>
-        <span class="icon">${this.icon}</span>
-        <span class="label">${this.label}</span>
-        ${this.expandable ? html`<span class="chevron">▼</span>` : ""}
-      </div>
-    `;
+  renderHeader() {
+    return html``;
   }
 }

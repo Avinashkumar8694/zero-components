@@ -42,6 +42,120 @@ export class ZeroExpansionPanel extends ZeroLayoutBase {
     categoryLabel: "Appearance"
   })
   headerColor = "#1e293b";
+
+  @property({ type: String, attribute: "border-color" })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.COLOR_PICKER,
+    displayLabel: "Border Color",
+    fieldMappings: "borderColor",
+    categoryLabel: "Appearance"
+  })
+  borderColor = "#e2e8f0";
+
+  @property({ type: Boolean, reflect: true, attribute: "enable-header" })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Enable Header",
+    fieldMappings: "enableHeader",
+    categoryLabel: "Interaction"
+  })
+  enableHeader = true;
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Header Label",
+    fieldMappings: "label",
+    categoryLabel: "Interaction"
+  })
+  label = "Panel Header";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Icon (Emoji)",
+    fieldMappings: "icon",
+    categoryLabel: "Interaction"
+  })
+  icon = "📄";
+
+  @property({ type: Boolean, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Expandable",
+    fieldMappings: "expandable",
+    categoryLabel: "Interaction"
+  })
+  expandable = true;
+
+  @property({ type: Boolean, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Expanded",
+    fieldMappings: "expanded",
+    categoryLabel: "Interaction"
+  })
+  expanded = true;
+
+  // --- Triggers (Events) ---
+
+  @RendererAttribute({
+    attributeType: AttributeType.EVENT,
+    displayLabel: "On Expand",
+    eventTrigger: "expand",
+    categoryLabel: "Triggers"
+  })
+  get onExpand() { return "expand"; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.EVENT,
+    displayLabel: "On Collapse",
+    eventTrigger: "collapse",
+    categoryLabel: "Triggers"
+  })
+  get onCollapse() { return "collapse"; }
+
+  // --- Actions ---
+
+  @RendererAttribute({
+    attributeType: AttributeType.ACTION,
+    displayLabel: "Expand Panel",
+    categoryLabel: "Actions"
+  })
+  public expand() { 
+    if (this.expandable) {
+      this.expanded = true;
+      this.dispatchEvent(new CustomEvent("expand"));
+    }
+  }
+
+  @RendererAttribute({
+    attributeType: AttributeType.ACTION,
+    displayLabel: "Collapse Panel",
+    categoryLabel: "Actions"
+  })
+  public collapse() { 
+    if (this.expandable) {
+      this.expanded = false;
+      this.dispatchEvent(new CustomEvent("collapse"));
+    }
+  }
+
+  @RendererAttribute({
+    attributeType: AttributeType.ACTION,
+    displayLabel: "Toggle Expand/Collapse",
+    categoryLabel: "Actions"
+  })
+  public toggleExpanded() { 
+    if (this.expanded) this.collapse(); else this.expand();
+  }
+
   constructor() {
     super();
     this.label = "Expansion Panel";
@@ -51,6 +165,7 @@ export class ZeroExpansionPanel extends ZeroLayoutBase {
     this.backgroundColor = "#ffffff";
     this.borderRadius = "12px";
     this.padding = "16px";
+    this.direction = "column";
   }
 
   static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
@@ -92,14 +207,39 @@ export class ZeroExpansionPanel extends ZeroLayoutBase {
     return html`
       ${this.renderResponsiveStyles()}
       <div style=${this.computeBaseStyles()}>
-        <div class="zero-internal-container" style="border: 1px solid rgba(0,0,0,0.08); overflow: hidden; ${this.computeInternalStyles()}">
-          <div class="zero-layout-header" style="background: ${this.headerBg}; color: ${this.headerColor};" @click=${this.toggleExpanded}>
+        <div
+          class="zero-internal-container"
+          style="
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0;
+            gap: 0;
+            border: 1px solid ${this.borderColor};
+            border-radius: ${this.borderRadius};
+            overflow: hidden;
+            background: ${this.backgroundColor};
+            box-shadow: var(--zero-expansion-panel-elevation-override, ${this.elevation});
+            ${this.computeInternalStyles()}
+          "
+        >
+          <div
+            class="zero-layout-header"
+            style="
+              width: 100%;
+              box-sizing: border-box;
+              background: ${this.headerBg};
+              color: ${this.headerColor};
+              border-bottom: 1px solid ${this.borderColor};
+            "
+            @click=${this.toggleExpanded}
+          >
             ${this.icon ? html`<span class="icon">${this.icon}</span>` : ""}
             <span class="label">${this.label}</span>
             ${this.expandable ? html`<span class="chevron">▼</span>` : ""}
           </div>
-          <div class="zero-layout-body">
-            <div class="zero-layout-content" style="padding: ${this.padding};">
+          <div class="zero-layout-body" style="width: 100%;">
+            <div class="zero-layout-content" style="padding: ${this.padding}; min-height: ${this.expanded ? '80px' : '0px'};">
               <slot name="default"></slot>
               <slot></slot>
             </div>
@@ -183,6 +323,7 @@ export class ZeroTabPanel extends ZeroLayoutBase {
     this.backgroundColor = "#ffffff";
     this.borderRadius = "12px";
     this.padding = "16px";
+    this.direction = "column";
   }
 
   getTabList() {
@@ -268,7 +409,7 @@ export class ZeroTabPanel extends ZeroLayoutBase {
             ${tabList.map((_, index) => {
               const isActive = this.activeIndex === index;
               return html`
-                <div class="tab-pane" style="display: ${isActive ? 'block' : 'none'}; width: 100%;">
+                <div class="tab-pane" style="display: ${isActive ? 'flex' : 'none'}; width: 100%;">
                   <slot name="tab-${index + 1}"></slot>
                 </div>
               `;

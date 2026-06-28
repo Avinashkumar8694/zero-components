@@ -10,8 +10,8 @@
         "dev": "npx concurrently \"npm run dashboard\" \"npm run api\"",
         "serve": "zero-gen serve",
         "api": "zero-gen serve",
-        "dashboard": "zero-gen start -p 3001",
-        "stop": "lsof -ti:3001,5555 | xargs kill -9 2>/dev/null || true",
+        "dashboard": "zero-gen start -p 3002",
+        "stop": "lsof -ti:3002,5555 | xargs kill -9 2>/dev/null || true",
         "publish": "node publish-to-marketplace.js",
         "publish:all": "node publish-to-marketplace.js all",
         "publish:package": "node publish-to-marketplace.js"

@@ -33,6 +33,63 @@ export const studioTemplate: ZeroStudioTemplate = {
 export class Nrenderer extends ZeroLayoutBase {
   protected get overridePrefix() { return "zero-nrenderer"; }
 
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Direction",
+    fieldMappings: "direction",
+    categoryLabel: "Layout",
+    initialValue: "column",
+    optionItems: [
+        { label: "Row", value: "row" },
+        { label: "Column", value: "column" }
+    ]
+  })
+  direction = "column";
+
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Justify",
+    fieldMappings: "justify",
+    categoryLabel: "Layout",
+    optionItems: [
+        { label: "Start", value: "flex-start" },
+        { label: "Center", value: "center" },
+        { label: "End", value: "flex-end" },
+        { label: "Space Between", value: "space-between" }
+    ]
+  })
+  justify = "flex-start";
+
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Align",
+    fieldMappings: "align",
+    categoryLabel: "Layout",
+    optionItems: [
+        { label: "Start", value: "flex-start" },
+        { label: "Center", value: "center" },
+        { label: "End", value: "flex-end" },
+        { label: "Stretch", value: "stretch" }
+    ]
+  })
+  align = "stretch";
+
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Gap",
+    fieldMappings: "gap",
+    categoryLabel: "Layout"
+  })
+  gap = "16px";
+
   static styles = [
     ZeroLayoutBase.styles,
     css`

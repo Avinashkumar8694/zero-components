@@ -1,0 +1,10 @@
+{
+  "name": "zero-column",
+  "version": "1.0.0",
+  "description": "Flexible responsive column container for section layouts",
+  "main": "zero-column.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "column", "layout", "flex"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

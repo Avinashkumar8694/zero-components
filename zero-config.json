@@ -4,7 +4,8 @@
     "attribute-window",
     "zero-uiv-themes",
     "popup-dropdown",
-    "popup-dropdown-directive"
+    "popup-dropdown-directive",
+    "zero-column"
   ],
   "activeProvider": "",
   "activeTheme": ""

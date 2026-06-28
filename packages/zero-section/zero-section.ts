@@ -41,7 +41,7 @@ export class ZeroSection extends ZeroLayoutBase {
   protected get overridePrefix() { return "zero-section"; }
 
   static slots: ZeroSlotDefinition[] = [
-    { id: "default", label: "Section Content", dropzone: true, anchor: "default", accepts: [] },
+    { id: "default", label: "Section Content", dropzone: true, anchor: "default", accepts: ["zero-column"] },
   ];
 
   static styles: CSSResultGroup = [
@@ -72,6 +72,12 @@ export class ZeroSection extends ZeroLayoutBase {
         z-index: 1;
         width: 100%;
         height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: var(--zero-p-direction, row);
+        justify-content: var(--zero-p-justify, flex-start);
+        align-items: var(--zero-p-align, stretch);
+        gap: var(--zero-p-gap, 16px);
       }
 
       :host([parallax]) .section-inner {
@@ -288,6 +294,7 @@ export class ZeroSection1Col extends ZeroLayoutBase {
     const col1Dir = escapeStudio(config?.props?.col1Direction || "column");
     const col1Al = escapeStudio(config?.props?.col1Align || "stretch");
     const col1Just = escapeStudio(config?.props?.col1Justify || "flex-start");
+    const col1Pad = escapeStudio(config?.props?.col1Padding || "16px");
     const col1G = escapeStudio(config?.props?.col1Gap || "16px");
     const col1F = escapeStudio(config?.props?.col1Flex || "1");
 
@@ -299,26 +306,26 @@ export class ZeroSection1Col extends ZeroLayoutBase {
       ],
       templateHtml: `
         <style>
-          .studio-section-outer-\${config?.nodeId || 'default'} {
-            width: \${width};
-            height: \${height};
-            margin: \${margin};
+          .studio-section-outer-${config?.nodeId || 'default'} {
+            width: ${width};
+            height: ${height};
+            margin: ${margin};
             display: block;
             box-sizing: border-box;
           }
-          .studio-internal-container-\${config?.nodeId || 'default'} {
+          .studio-internal-container-${config?.nodeId || 'default'} {
             width: 100%;
             height: 100%;
-            padding: \${padding};
-            background: \${backgroundColor};
-            border-radius: \${borderRadius};
-            box-shadow: \${elevation};
+            padding: ${padding};
+            background: ${backgroundColor};
+            border-radius: ${borderRadius};
+            box-shadow: ${elevation};
             box-sizing: border-box;
           }
         </style>
-        <div class="studio-section-outer-\${config?.nodeId || 'default'}">
-          <div class="studio-internal-container-\${config?.nodeId || 'default'}">
-            <div style="display:flex; flex-direction: \${col1Dir}; align-items: \${col1Al}; justify-content: \${col1Just}; gap: \${col1G}; flex: \${col1F}; width: 100%; height: 100%; box-sizing: border-box;">
+        <div class="studio-section-outer-${config?.nodeId || 'default'}">
+          <div class="studio-internal-container-${config?.nodeId || 'default'}">
+            <div style="display:flex; flex-direction: ${col1Dir}; align-items: ${col1Al}; justify-content: ${col1Just}; padding: ${col1Pad}; gap: ${col1G}; flex: ${col1F}; width: 100%; height: 100%; box-sizing: border-box;">
               <zero-studio-slot name="col1"></zero-studio-slot>
             </div>
           </div>
@@ -330,6 +337,20 @@ export class ZeroSection1Col extends ZeroLayoutBase {
   static slots: ZeroSlotDefinition[] = [
     { id: "col1", label: "Column 1", dropzone: true, anchor: "columns", accepts: [] },
   ];
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.DROPDOWN,
+    displayLabel: "Configure Target",
+    fieldMappings: "activeColIndex",
+    categoryLabel: "Layout Settings",
+    optionItems: [
+      { label: "Section Container", value: "section" },
+      { label: "Column 1", value: "col1" }
+    ]
+  })
+  activeColIndex = "section";
 
   @property({ type: String })
   @RendererAttribute({
@@ -377,6 +398,16 @@ export class ZeroSection1Col extends ZeroLayoutBase {
     ]
   })
   col1Justify = "flex-start";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 1 Padding",
+    fieldMappings: "col1Padding",
+    categoryLabel: "Column 1 Layout"
+  })
+  col1Padding = "16px";
 
   @property({ type: String })
   @RendererAttribute({
@@ -437,7 +468,7 @@ export class ZeroSection1Col extends ZeroLayoutBase {
              @mousemove=${this.handleMouseMove}
              @mouseleave=${this.handleMouseLeave}>
           ${this.renderDropIndicators()}
-          <div class="column col-1" style="display:flex; flex-direction: ${this.col1Direction}; align-items: ${this.col1Align}; justify-content: ${this.col1Justify}; gap: ${this.col1Gap}; flex: ${this.col1Flex}; width: 100%; height: 100%; box-sizing: border-box;">
+          <div class="column col-1" style="display:flex; flex-direction: ${this.col1Direction}; align-items: ${this.col1Align}; justify-content: ${this.col1Justify}; padding: ${this.col1Padding}; gap: ${this.col1Gap}; flex: ${this.col1Flex}; width: 100%; height: 100%; box-sizing: border-box;">
             <slot name="col1"></slot>
           </div>
         </div>
@@ -476,12 +507,14 @@ export class ZeroSection2Col extends ZeroLayoutBase {
     const col1Dir = escapeStudio(config?.props?.col1Direction || "column");
     const col1Al = escapeStudio(config?.props?.col1Align || "stretch");
     const col1Just = escapeStudio(config?.props?.col1Justify || "flex-start");
+    const col1Pad = escapeStudio(config?.props?.col1Padding || "16px");
     const col1G = escapeStudio(config?.props?.col1Gap || "16px");
     const col1F = escapeStudio(config?.props?.col1Flex || "1");
 
     const col2Dir = escapeStudio(config?.props?.col2Direction || "column");
     const col2Al = escapeStudio(config?.props?.col2Align || "stretch");
     const col2Just = escapeStudio(config?.props?.col2Justify || "flex-start");
+    const col2Pad = escapeStudio(config?.props?.col2Padding || "16px");
     const col2G = escapeStudio(config?.props?.col2Gap || "16px");
     const col2F = escapeStudio(config?.props?.col2Flex || "1");
 
@@ -494,46 +527,46 @@ export class ZeroSection2Col extends ZeroLayoutBase {
       ],
       templateHtml: `
         <style>
-          .studio-section-outer-\${config?.nodeId || 'default'} {
-            width: \${width};
-            height: \${height};
-            margin: \${margin};
+          .studio-section-outer-${config?.nodeId || 'default'} {
+            width: ${width};
+            height: ${height};
+            margin: ${margin};
             display: block;
             box-sizing: border-box;
           }
-          .studio-internal-container-\${config?.nodeId || 'default'} {
+          .studio-internal-container-${config?.nodeId || 'default'} {
             width: 100%;
             height: 100%;
-            padding: \${padding};
-            background: \${backgroundColor};
-            border-radius: \${borderRadius};
-            box-shadow: \${elevation};
+            padding: ${padding};
+            background: ${backgroundColor};
+            border-radius: ${borderRadius};
+            box-shadow: ${elevation};
             box-sizing: border-box;
           }
-          .studio-cols-grid-\${config?.nodeId || 'default'} {
+          .studio-cols-grid-${config?.nodeId || 'default'} {
             display: grid;
-            gap: \${gap};
+            gap: ${gap};
             width: 100%;
             height: 100%;
             box-sizing: border-box;
-            grid-template-columns: repeat(\${colsDesktop}, minmax(0, 1fr));
+            grid-template-columns: repeat(${colsDesktop}, minmax(0, 1fr));
           }
           @media (max-width: 1023px) {
-            .studio-cols-grid-\${config?.nodeId || 'default'} {
-              grid-template-columns: repeat(\${colsTablet}, minmax(0, 1fr));
+            .studio-cols-grid-${config?.nodeId || 'default'} {
+              grid-template-columns: repeat(${colsTablet}, minmax(0, 1fr));
             }
           }
           @media (max-width: 767px) {
-            .studio-cols-grid-\${config?.nodeId || 'default'} {
-              grid-template-columns: repeat(\${colsMobile}, minmax(0, 1fr));
+            .studio-cols-grid-${config?.nodeId || 'default'} {
+              grid-template-columns: repeat(${colsMobile}, minmax(0, 1fr));
             }
           }
         </style>
-        <div class="studio-section-outer-\${config?.nodeId || 'default'}">
-          <div class="studio-internal-container-\${config?.nodeId || 'default'}">
-            <div class="studio-cols-grid-\${config?.nodeId || 'default'}">
-              <div style="display:flex; flex-direction: \${col1Dir}; align-items: \${col1Al}; justify-content: \${col1Just}; gap: \${col1G}; flex: \${col1F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
-              <div style="display:flex; flex-direction: \${col2Dir}; align-items: \${col2Al}; justify-content: \${col2Just}; gap: \${col2G}; flex: \${col2F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col2"></zero-studio-slot></div>
+        <div class="studio-section-outer-${config?.nodeId || 'default'}">
+          <div class="studio-internal-container-${config?.nodeId || 'default'}">
+            <div class="studio-cols-grid-${config?.nodeId || 'default'}">
+              <div style="display:flex; flex-direction: ${col1Dir}; align-items: ${col1Al}; justify-content: ${col1Just}; padding: ${col1Pad}; gap: ${col1G}; flex: ${col1F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${col2Dir}; align-items: ${col2Al}; justify-content: ${col2Just}; padding: ${col2Pad}; gap: ${col2G}; flex: ${col2F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col2"></zero-studio-slot></div>
             </div>
           </div>
         </div>
@@ -545,6 +578,21 @@ export class ZeroSection2Col extends ZeroLayoutBase {
     { id: "col1", label: "Column 1", dropzone: true, anchor: "columns", accepts: [] },
     { id: "col2", label: "Column 2", dropzone: true, anchor: "columns", accepts: [] },
   ];
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.DROPDOWN,
+    displayLabel: "Configure Target",
+    fieldMappings: "activeColIndex",
+    categoryLabel: "Layout Settings",
+    optionItems: [
+      { label: "Section Container", value: "section" },
+      { label: "Column 1", value: "col1" },
+      { label: "Column 2", value: "col2" }
+    ]
+  })
+  activeColIndex = "section";
 
   // Column 1
   @property({ type: String })
@@ -593,6 +641,16 @@ export class ZeroSection2Col extends ZeroLayoutBase {
     ]
   })
   col1Justify = "flex-start";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 1 Padding",
+    fieldMappings: "col1Padding",
+    categoryLabel: "Column 1 Layout"
+  })
+  col1Padding = "16px";
 
   @property({ type: String })
   @RendererAttribute({
@@ -661,6 +719,16 @@ export class ZeroSection2Col extends ZeroLayoutBase {
     ]
   })
   col2Justify = "flex-start";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 2 Padding",
+    fieldMappings: "col2Padding",
+    categoryLabel: "Column 2 Layout"
+  })
+  col2Padding = "16px";
 
   @property({ type: String })
   @RendererAttribute({
@@ -748,10 +816,10 @@ export class ZeroSection2Col extends ZeroLayoutBase {
              @mouseleave=${this.handleMouseLeave}>
           ${this.renderDropIndicators()}
           <div class="columns-grid" style=${gridStyleValue}>
-            <div class="column col-1" style="display:flex; flex-direction: ${this.col1Direction}; align-items: ${this.col1Align}; justify-content: ${this.col1Justify}; gap: ${this.col1Gap}; flex: ${this.col1Flex};">
+            <div class="column col-1" style="display:flex; flex-direction: ${this.col1Direction}; align-items: ${this.col1Align}; justify-content: ${this.col1Justify}; padding: ${this.col1Padding}; gap: ${this.col1Gap}; flex: ${this.col1Flex}; width: 100%; height: 100%; box-sizing: border-box;">
               <slot name="col1"></slot>
             </div>
-            <div class="column col-2" style="display:flex; flex-direction: ${this.col2Direction}; align-items: ${this.col2Align}; justify-content: ${this.col2Justify}; gap: ${this.col2Gap}; flex: ${this.col2Flex};">
+            <div class="column col-2" style="display:flex; flex-direction: ${this.col2Direction}; align-items: ${this.col2Align}; justify-content: ${this.col2Justify}; padding: ${this.col2Padding}; gap: ${this.col2Gap}; flex: ${this.col2Flex}; width: 100%; height: 100%; box-sizing: border-box;">
               <slot name="col2"></slot>
             </div>
           </div>
@@ -791,18 +859,21 @@ export class ZeroSection3Col extends ZeroLayoutBase {
     const col1Dir = escapeStudio(config?.props?.col1Direction || "column");
     const col1Al = escapeStudio(config?.props?.col1Align || "stretch");
     const col1Just = escapeStudio(config?.props?.col1Justify || "flex-start");
+    const col1Pad = escapeStudio(config?.props?.col1Padding || "16px");
     const col1G = escapeStudio(config?.props?.col1Gap || "16px");
     const col1F = escapeStudio(config?.props?.col1Flex || "1");
 
     const col2Dir = escapeStudio(config?.props?.col2Direction || "column");
     const col2Al = escapeStudio(config?.props?.col2Align || "stretch");
     const col2Just = escapeStudio(config?.props?.col2Justify || "flex-start");
+    const col2Pad = escapeStudio(config?.props?.col2Padding || "16px");
     const col2G = escapeStudio(config?.props?.col2Gap || "16px");
     const col2F = escapeStudio(config?.props?.col2Flex || "1");
 
     const col3Dir = escapeStudio(config?.props?.col3Direction || "column");
     const col3Al = escapeStudio(config?.props?.col3Align || "stretch");
     const col3Just = escapeStudio(config?.props?.col3Justify || "flex-start");
+    const col3Pad = escapeStudio(config?.props?.col3Padding || "16px");
     const col3G = escapeStudio(config?.props?.col3Gap || "16px");
     const col3F = escapeStudio(config?.props?.col3Flex || "1");
 
@@ -816,47 +887,47 @@ export class ZeroSection3Col extends ZeroLayoutBase {
       ],
       templateHtml: `
         <style>
-          .studio-section-outer-\${config?.nodeId || 'default'} {
-            width: \${width};
-            height: \${height};
-            margin: \${margin};
+          .studio-section-outer-${config?.nodeId || 'default'} {
+            width: ${width};
+            height: ${height};
+            margin: ${margin};
             display: block;
             box-sizing: border-box;
           }
-          .studio-internal-container-\${config?.nodeId || 'default'} {
+          .studio-internal-container-${config?.nodeId || 'default'} {
             width: 100%;
             height: 100%;
-            padding: \${padding};
-            background: \${backgroundColor};
-            border-radius: \${borderRadius};
-            box-shadow: \${elevation};
+            padding: ${padding};
+            background: ${backgroundColor};
+            border-radius: ${borderRadius};
+            box-shadow: ${elevation};
             box-sizing: border-box;
           }
-          .studio-cols-grid-\${config?.nodeId || 'default'} {
+          .studio-cols-grid-${config?.nodeId || 'default'} {
             display: grid;
-            gap: \${gap};
+            gap: ${gap};
             width: 100%;
             height: 100%;
             box-sizing: border-box;
-            grid-template-columns: repeat(\${colsDesktop}, minmax(0, 1fr));
+            grid-template-columns: repeat(${colsDesktop}, minmax(0, 1fr));
           }
           @media (max-width: 1023px) {
-            .studio-cols-grid-\${config?.nodeId || 'default'} {
-              grid-template-columns: repeat(\${colsTablet}, minmax(0, 1fr));
+            .studio-cols-grid-${config?.nodeId || 'default'} {
+              grid-template-columns: repeat(${colsTablet}, minmax(0, 1fr));
             }
           }
           @media (max-width: 767px) {
-            .studio-cols-grid-\${config?.nodeId || 'default'} {
-              grid-template-columns: repeat(\${colsMobile}, minmax(0, 1fr));
+            .studio-cols-grid-${config?.nodeId || 'default'} {
+              grid-template-columns: repeat(${colsMobile}, minmax(0, 1fr));
             }
           }
         </style>
-        <div class="studio-section-outer-\${config?.nodeId || 'default'}">
-          <div class="studio-internal-container-\${config?.nodeId || 'default'}">
-            <div class="studio-cols-grid-\${config?.nodeId || 'default'}">
-              <div style="display:flex; flex-direction: \${col1Dir}; align-items: \${col1Al}; justify-content: \${col1Just}; gap: \${col1G}; flex: \${col1F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
-              <div style="display:flex; flex-direction: \${col2Dir}; align-items: \${col2Al}; justify-content: \${col2Just}; gap: \${col2G}; flex: \${col2F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col2"></zero-studio-slot></div>
-              <div style="display:flex; flex-direction: \${col3Dir}; align-items: \${col3Al}; justify-content: \${col3Just}; gap: \${col3G}; flex: \${col3F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col3"></zero-studio-slot></div>
+        <div class="studio-section-outer-${config?.nodeId || 'default'}">
+          <div class="studio-internal-container-${config?.nodeId || 'default'}">
+            <div class="studio-cols-grid-${config?.nodeId || 'default'}">
+              <div style="display:flex; flex-direction: ${col1Dir}; align-items: ${col1Al}; justify-content: ${col1Just}; padding: ${col1Pad}; gap: ${col1G}; flex: ${col1F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${col2Dir}; align-items: ${col2Al}; justify-content: ${col2Just}; padding: ${col2Pad}; gap: ${col2G}; flex: ${col2F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col2"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${col3Dir}; align-items: ${col3Al}; justify-content: ${col3Just}; padding: ${col3Pad}; gap: ${col3G}; flex: ${col3F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col3"></zero-studio-slot></div>
             </div>
           </div>
         </div>
@@ -869,6 +940,22 @@ export class ZeroSection3Col extends ZeroLayoutBase {
     { id: "col2", label: "Column 2", dropzone: true, anchor: "columns", accepts: [] },
     { id: "col3", label: "Column 3", dropzone: true, anchor: "columns", accepts: [] },
   ];
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.DROPDOWN,
+    displayLabel: "Configure Target",
+    fieldMappings: "activeColIndex",
+    categoryLabel: "Layout Settings",
+    optionItems: [
+      { label: "Section Container", value: "section" },
+      { label: "Column 1", value: "col1" },
+      { label: "Column 2", value: "col2" },
+      { label: "Column 3", value: "col3" }
+    ]
+  })
+  activeColIndex = "section";
 
   // Column 1
   @property({ type: String })
@@ -903,6 +990,16 @@ export class ZeroSection3Col extends ZeroLayoutBase {
     optionItems: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }, { label: "Space Around", value: "space-around" }]
   })
   col1Justify = "flex-start";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 1 Padding",
+    fieldMappings: "col1Padding",
+    categoryLabel: "Column 1 Layout"
+  })
+  col1Padding = "16px";
 
   @property({ type: String })
   @RendererAttribute({
@@ -962,6 +1059,16 @@ export class ZeroSection3Col extends ZeroLayoutBase {
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
     uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 2 Padding",
+    fieldMappings: "col2Padding",
+    categoryLabel: "Column 2 Layout"
+  })
+  col2Padding = "16px";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
     displayLabel: "Col 2 Gap",
     fieldMappings: "col2Gap",
     categoryLabel: "Column 2 Layout"
@@ -1011,6 +1118,16 @@ export class ZeroSection3Col extends ZeroLayoutBase {
     optionItems: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }, { label: "Space Around", value: "space-around" }]
   })
   col3Justify = "flex-start";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 3 Padding",
+    fieldMappings: "col3Padding",
+    categoryLabel: "Column 3 Layout"
+  })
+  col3Padding = "16px";
 
   @property({ type: String })
   @RendererAttribute({
@@ -1098,13 +1215,13 @@ export class ZeroSection3Col extends ZeroLayoutBase {
              @mouseleave=${this.handleMouseLeave}>
           ${this.renderDropIndicators()}
           <div class="columns-grid" style=${gridStyleValue}>
-            <div class="column col-1" style="display:flex; flex-direction: ${this.col1Direction}; align-items: ${this.col1Align}; justify-content: ${this.col1Justify}; gap: ${this.col1Gap}; flex: ${this.col1Flex};">
+            <div class="column col-1" style="display:flex; flex-direction: ${this.col1Direction}; align-items: ${this.col1Align}; justify-content: ${this.col1Justify}; padding: ${this.col1Padding}; gap: ${this.col1Gap}; flex: ${this.col1Flex}; width: 100%; height: 100%; box-sizing: border-box;">
               <slot name="col1"></slot>
             </div>
-            <div class="column col-2" style="display:flex; flex-direction: ${this.col2Direction}; align-items: ${this.col2Align}; justify-content: ${this.col2Justify}; gap: ${this.col2Gap}; flex: ${this.col2Flex};">
+            <div class="column col-2" style="display:flex; flex-direction: ${this.col2Direction}; align-items: ${this.col2Align}; justify-content: ${this.col2Justify}; padding: ${this.col2Padding}; gap: ${this.col2Gap}; flex: ${this.col2Flex}; width: 100%; height: 100%; box-sizing: border-box;">
               <slot name="col2"></slot>
             </div>
-            <div class="column col-3" style="display:flex; flex-direction: ${this.col3Direction}; align-items: ${this.col3Align}; justify-content: ${this.col3Justify}; gap: ${this.col3Gap}; flex: ${this.col3Flex};">
+            <div class="column col-3" style="display:flex; flex-direction: ${this.col3Direction}; align-items: ${this.col3Align}; justify-content: ${this.col3Justify}; padding: ${this.col3Padding}; gap: ${this.col3Gap}; flex: ${this.col3Flex}; width: 100%; height: 100%; box-sizing: border-box;">
               <slot name="col3"></slot>
             </div>
           </div>
@@ -1144,24 +1261,28 @@ export class ZeroSection4Col extends ZeroLayoutBase {
     const col1Dir = escapeStudio(config?.props?.col1Direction || "column");
     const col1Al = escapeStudio(config?.props?.col1Align || "stretch");
     const col1Just = escapeStudio(config?.props?.col1Justify || "flex-start");
+    const col1Pad = escapeStudio(config?.props?.col1Padding || "16px");
     const col1G = escapeStudio(config?.props?.col1Gap || "16px");
     const col1F = escapeStudio(config?.props?.col1Flex || "1");
 
     const col2Dir = escapeStudio(config?.props?.col2Direction || "column");
     const col2Al = escapeStudio(config?.props?.col2Align || "stretch");
     const col2Just = escapeStudio(config?.props?.col2Justify || "flex-start");
+    const col2Pad = escapeStudio(config?.props?.col2Padding || "16px");
     const col2G = escapeStudio(config?.props?.col2Gap || "16px");
     const col2F = escapeStudio(config?.props?.col2Flex || "1");
 
     const col3Dir = escapeStudio(config?.props?.col3Direction || "column");
     const col3Al = escapeStudio(config?.props?.col3Align || "stretch");
     const col3Just = escapeStudio(config?.props?.col3Justify || "flex-start");
+    const col3Pad = escapeStudio(config?.props?.col3Padding || "16px");
     const col3G = escapeStudio(config?.props?.col3Gap || "16px");
     const col3F = escapeStudio(config?.props?.col3Flex || "1");
 
     const col4Dir = escapeStudio(config?.props?.col4Direction || "column");
     const col4Al = escapeStudio(config?.props?.col4Align || "stretch");
     const col4Just = escapeStudio(config?.props?.col4Justify || "flex-start");
+    const col4Pad = escapeStudio(config?.props?.col4Padding || "16px");
     const col4G = escapeStudio(config?.props?.col4Gap || "16px");
     const col4F = escapeStudio(config?.props?.col4Flex || "1");
 
@@ -1176,48 +1297,48 @@ export class ZeroSection4Col extends ZeroLayoutBase {
       ],
       templateHtml: `
         <style>
-          .studio-section-outer-\${config?.nodeId || 'default'} {
-            width: \${width};
-            height: \${height};
-            margin: \${margin};
+          .studio-section-outer-${config?.nodeId || 'default'} {
+            width: ${width};
+            height: ${height};
+            margin: ${margin};
             display: block;
             box-sizing: border-box;
           }
-          .studio-internal-container-\${config?.nodeId || 'default'} {
+          .studio-internal-container-${config?.nodeId || 'default'} {
             width: 100%;
             height: 100%;
-            padding: \${padding};
-            background: \${backgroundColor};
-            border-radius: \${borderRadius};
-            box-shadow: \${elevation};
+            padding: ${padding};
+            background: ${backgroundColor};
+            border-radius: ${borderRadius};
+            box-shadow: ${elevation};
             box-sizing: border-box;
           }
-          .studio-cols-grid-\${config?.nodeId || 'default'} {
+          .studio-cols-grid-${config?.nodeId || 'default'} {
             display: grid;
-            gap: \${gap};
+            gap: ${gap};
             width: 100%;
             height: 100%;
             box-sizing: border-box;
-            grid-template-columns: repeat(\${colsDesktop}, minmax(0, 1fr));
+            grid-template-columns: repeat(${colsDesktop}, minmax(0, 1fr));
           }
           @media (max-width: 1023px) {
-            .studio-cols-grid-\${config?.nodeId || 'default'} {
-              grid-template-columns: repeat(\${colsTablet}, minmax(0, 1fr));
+            .studio-cols-grid-${config?.nodeId || 'default'} {
+              grid-template-columns: repeat(${colsTablet}, minmax(0, 1fr));
             }
           }
           @media (max-width: 767px) {
-            .studio-cols-grid-\${config?.nodeId || 'default'} {
-              grid-template-columns: repeat(\${colsMobile}, minmax(0, 1fr));
+            .studio-cols-grid-${config?.nodeId || 'default'} {
+              grid-template-columns: repeat(${colsMobile}, minmax(0, 1fr));
             }
           }
         </style>
-        <div class="studio-section-outer-\${config?.nodeId || 'default'}">
-          <div class="studio-internal-container-\${config?.nodeId || 'default'}">
-            <div class="studio-cols-grid-\${config?.nodeId || 'default'}">
-              <div style="display:flex; flex-direction: \${col1Dir}; align-items: \${col1Al}; justify-content: \${col1Just}; gap: \${col1G}; flex: \${col1F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
-              <div style="display:flex; flex-direction: \${col2Dir}; align-items: \${col2Al}; justify-content: \${col2Just}; gap: \${col2G}; flex: \${col2F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col2"></zero-studio-slot></div>
-              <div style="display:flex; flex-direction: \${col3Dir}; align-items: \${col3Al}; justify-content: \${col3Just}; gap: \${col3G}; flex: \${col3F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col3"></zero-studio-slot></div>
-              <div style="display:flex; flex-direction: \${col4Dir}; align-items: \${col4Al}; justify-content: \${col4Just}; gap: \${col4G}; flex: \${col4F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col4"></zero-studio-slot></div>
+        <div class="studio-section-outer-${config?.nodeId || 'default'}">
+          <div class="studio-internal-container-${config?.nodeId || 'default'}">
+            <div class="studio-cols-grid-${config?.nodeId || 'default'}">
+              <div style="display:flex; flex-direction: ${col1Dir}; align-items: ${col1Al}; justify-content: ${col1Just}; padding: ${col1Pad}; gap: ${col1G}; flex: ${col1F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${col2Dir}; align-items: ${col2Al}; justify-content: ${col2Just}; padding: ${col2Pad}; gap: ${col2G}; flex: ${col2F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col2"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${col3Dir}; align-items: ${col3Al}; justify-content: ${col3Just}; padding: ${col3Pad}; gap: ${col3G}; flex: ${col3F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col3"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${col4Dir}; align-items: ${col4Al}; justify-content: ${col4Just}; padding: ${col4Pad}; gap: ${col4G}; flex: ${col4F}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col4"></zero-studio-slot></div>
             </div>
           </div>
         </div>
@@ -1231,6 +1352,23 @@ export class ZeroSection4Col extends ZeroLayoutBase {
     { id: "col3", label: "Column 3", dropzone: true, anchor: "columns", accepts: [] },
     { id: "col4", label: "Column 4", dropzone: true, anchor: "columns", accepts: [] },
   ];
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.DROPDOWN,
+    displayLabel: "Configure Target",
+    fieldMappings: "activeColIndex",
+    categoryLabel: "Layout Settings",
+    optionItems: [
+      { label: "Section Container", value: "section" },
+      { label: "Column 1", value: "col1" },
+      { label: "Column 2", value: "col2" },
+      { label: "Column 3", value: "col3" },
+      { label: "Column 4", value: "col4" }
+    ]
+  })
+  activeColIndex = "section";
 
   // Column 1
   @property({ type: String })
@@ -1265,6 +1403,16 @@ export class ZeroSection4Col extends ZeroLayoutBase {
     optionItems: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }, { label: "Space Around", value: "space-around" }]
   })
   col1Justify = "flex-start";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 1 Padding",
+    fieldMappings: "col1Padding",
+    categoryLabel: "Column 1 Layout"
+  })
+  col1Padding = "16px";
 
   @property({ type: String })
   @RendererAttribute({
@@ -1324,6 +1472,16 @@ export class ZeroSection4Col extends ZeroLayoutBase {
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
     uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 2 Padding",
+    fieldMappings: "col2Padding",
+    categoryLabel: "Column 2 Layout"
+  })
+  col2Padding = "16px";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
     displayLabel: "Col 2 Gap",
     fieldMappings: "col2Gap",
     categoryLabel: "Column 2 Layout"
@@ -1378,6 +1536,16 @@ export class ZeroSection4Col extends ZeroLayoutBase {
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
     uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 3 Padding",
+    fieldMappings: "col3Padding",
+    categoryLabel: "Column 3 Layout"
+  })
+  col3Padding = "16px";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
     displayLabel: "Col 3 Gap",
     fieldMappings: "col3Gap",
     categoryLabel: "Column 3 Layout"
@@ -1427,6 +1595,16 @@ export class ZeroSection4Col extends ZeroLayoutBase {
     optionItems: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }, { label: "Space Around", value: "space-around" }]
   })
   col4Justify = "flex-start";
+
+  @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Col 4 Padding",
+    fieldMappings: "col4Padding",
+    categoryLabel: "Column 4 Layout"
+  })
+  col4Padding = "16px";
 
   @property({ type: String })
   @RendererAttribute({
@@ -1514,16 +1692,16 @@ export class ZeroSection4Col extends ZeroLayoutBase {
              @mouseleave=${this.handleMouseLeave}>
           ${this.renderDropIndicators()}
           <div class="columns-grid" style=${gridStyleValue}>
-            <div class="column col-1" style="display:flex; flex-direction: ${this.col1Direction}; align-items: ${this.col1Align}; justify-content: ${this.col1Justify}; gap: ${this.col1Gap}; flex: ${this.col1Flex};">
+            <div class="column col-1" style="display:flex; flex-direction: ${this.col1Direction}; align-items: ${this.col1Align}; justify-content: ${this.col1Justify}; padding: ${this.col1Padding}; gap: ${this.col1Gap}; flex: ${this.col1Flex}; width: 100%; height: 100%; box-sizing: border-box;">
               <slot name="col1"></slot>
             </div>
-            <div class="column col-2" style="display:flex; flex-direction: ${this.col2Direction}; align-items: ${this.col2Align}; justify-content: ${this.col2Justify}; gap: ${this.col2Gap}; flex: ${this.col2Flex};">
+            <div class="column col-2" style="display:flex; flex-direction: ${this.col2Direction}; align-items: ${this.col2Align}; justify-content: ${this.col2Justify}; padding: ${this.col2Padding}; gap: ${this.col2Gap}; flex: ${this.col2Flex}; width: 100%; height: 100%; box-sizing: border-box;">
               <slot name="col2"></slot>
             </div>
-            <div class="column col-3" style="display:flex; flex-direction: ${this.col3Direction}; align-items: ${this.col3Align}; justify-content: ${this.col3Justify}; gap: ${this.col3Gap}; flex: ${this.col3Flex};">
+            <div class="column col-3" style="display:flex; flex-direction: ${this.col3Direction}; align-items: ${this.col3Align}; justify-content: ${this.col3Justify}; padding: ${this.col3Padding}; gap: ${this.col3Gap}; flex: ${this.col3Flex}; width: 100%; height: 100%; box-sizing: border-box;">
               <slot name="col3"></slot>
             </div>
-            <div class="column col-4" style="display:flex; flex-direction: ${this.col4Direction}; align-items: ${this.col4Align}; justify-content: ${this.col4Justify}; gap: ${this.col4Gap}; flex: ${this.col4Flex};">
+            <div class="column col-4" style="display:flex; flex-direction: ${this.col4Direction}; align-items: ${this.col4Align}; justify-content: ${this.col4Justify}; padding: ${this.col4Padding}; gap: ${this.col4Gap}; flex: ${this.col4Flex}; width: 100%; height: 100%; box-sizing: border-box;">
               <slot name="col4"></slot>
             </div>
           </div>

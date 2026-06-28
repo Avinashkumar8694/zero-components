@@ -21,6 +21,7 @@ export * from './packages/zero-number-input/zero-number-input';
 export * from './packages/zero-range-slider/zero-range-slider';
 export * from './packages/zero-password-input/zero-password-input';
 export * from './packages/zero-section/zero-section';
+export * from './packages/zero-column/zero-column';
 export * from './packages/zero-stack/zero-stack';
 export * from './packages/zero-text/zero-text';
 export * from './packages/zero-input-widgets/zero-input-widgets';
@@ -64,3 +65,5 @@ export * from './packages/zero-uiv-expansion-modern/zero-uiv-expansion-modern';
 export * from './packages/zero-uiv-expansion-frosted/zero-uiv-expansion-frosted';
 export * from './packages/zero-uiv-expansion-blocky/zero-uiv-expansion-blocky';
 export * from './packages/zero-uiv-themes/src/index';
+export * from './packages/zero-product-card/zero-product-card';
+

@@ -9,6 +9,7 @@ import {
 } from "zero-annotation";
 import { LitElement, css, html } from "lit";
 import { property, customElement } from "lit/decorators.js";
+import "./zero-panel-suite";
 
 export const studioTemplate: ZeroStudioTemplate = {
   kind: "panel",
@@ -305,12 +306,13 @@ export class ZeroPanelLayout extends LitElement {
     uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
     displayLabel: "Direction",
     fieldMappings: "direction",
+    initialValue: "column",
     optionItems: [
       { label: "Row", value: "row" },
       { label: "Column", value: "column" },
     ],
   })
-  direction = "row";
+  direction = "column";
 
   @property({ type: String, reflect: true })
   @RendererAttribute({

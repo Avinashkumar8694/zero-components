@@ -1,0 +1,10 @@
+{
+  "name": "zero-page-ref",
+  "version": "1.0.0",
+  "description": "Nesting / Page Reference Layout",
+  "main": "zero-page-ref.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "page-reference", "layout"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

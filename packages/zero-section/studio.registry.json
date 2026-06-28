@@ -1,0 +1,212 @@
+[
+  {
+    "componentName": "zero-section-1col",
+    "title": "1 Column",
+    "version": "1.0.0",
+    "elementSelector": "zero-section-1col-1.0.0",
+    "jsEntry": "zero-section.ts",
+    "tags": ["layout", "section", "container", "1column"],
+    "category": "layout",
+    "group": "Content Block",
+    "properties": [
+      { "name": "col1Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col1Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col1Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col1Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col1Flex", "type": "string", "defaultValue": "1" },
+      { "name": "label", "type": "string", "defaultValue": "", "label": "Studio Label" }
+    ],
+    "studioTemplate": {
+      "kind": "section",
+      "templateHtml": "<div style='display:flex;width:100%;padding:12px;border-radius:16px;background:rgba(255,255,255,0.9);'><div style='flex:1;'><slot name='col1'></slot></div></div>",
+      "labelProp": "label",
+      "titleProp": "label",
+      "emptyText": "Drag and Drop Elements here",
+      "badges": [],
+      "slots": [
+        { "id": "col1", "label": "Column 1", "dropzone": true, "anchor": "columns", "accepts": [] }
+      ]
+    },
+    "events": [],
+    "slots": ["col1"],
+    "lifecycleHooks": ["onInit", "onDestroy", "onChanges", "afterRender"],
+    "publishableAsNode": true,
+    "allowBoxModel": true,
+    "allowCustomClass": true,
+    "allowCustomStyle": true,
+    "transformOnDrop": {
+      "componentName": "zero-section",
+      "children": [
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" }
+      ]
+    }
+  },
+  {
+    "componentName": "zero-section-2col",
+    "title": "2 Column",
+    "version": "1.0.0",
+    "elementSelector": "zero-section-2col-1.0.0",
+    "jsEntry": "zero-section.ts",
+    "tags": ["layout", "section", "container", "2columns"],
+    "category": "layout",
+    "group": "Content Block",
+    "properties": [
+      { "name": "col1Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col1Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col1Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col1Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col1Flex", "type": "string", "defaultValue": "1" },
+      { "name": "col2Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col2Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col2Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col2Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col2Flex", "type": "string", "defaultValue": "1" },
+      { "name": "label", "type": "string", "defaultValue": "", "label": "Studio Label" }
+    ],
+    "studioTemplate": {
+      "kind": "section",
+      "templateHtml": "<div style='display:flex;width:100%;padding:12px;border-radius:16px;background:rgba(255,255,255,0.9);gap:16px;'><div style='flex:1;'><slot name='col1'></slot></div><div style='flex:1;'><slot name='col2'></slot></div></div>",
+      "labelProp": "label",
+      "titleProp": "label",
+      "emptyText": "Drag and Drop Elements here",
+      "badges": [],
+      "slots": [
+        { "id": "col1", "label": "Column 1", "dropzone": true, "anchor": "columns", "accepts": [] },
+        { "id": "col2", "label": "Column 2", "dropzone": true, "anchor": "columns", "accepts": [] }
+      ]
+    },
+    "events": [],
+    "slots": ["col1", "col2"],
+    "lifecycleHooks": ["onInit", "onDestroy", "onChanges", "afterRender"],
+    "publishableAsNode": true,
+    "allowBoxModel": true,
+    "allowCustomClass": true,
+    "allowCustomStyle": true,
+    "transformOnDrop": {
+      "componentName": "zero-section",
+      "children": [
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" },
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" }
+      ]
+    }
+  },
+  {
+    "componentName": "zero-section-3col",
+    "title": "3 Column",
+    "version": "1.0.0",
+    "elementSelector": "zero-section-3col-1.0.0",
+    "jsEntry": "zero-section.ts",
+    "tags": ["layout", "section", "container", "3columns"],
+    "category": "layout",
+    "group": "Content Block",
+    "properties": [
+      { "name": "col1Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col1Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col1Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col1Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col1Flex", "type": "string", "defaultValue": "1" },
+      { "name": "col2Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col2Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col2Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col2Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col2Flex", "type": "string", "defaultValue": "1" },
+      { "name": "col3Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col3Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col3Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col3Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col3Flex", "type": "string", "defaultValue": "1" },
+      { "name": "label", "type": "string", "defaultValue": "", "label": "Studio Label" }
+    ],
+    "studioTemplate": {
+      "kind": "section",
+      "templateHtml": "<div style='display:flex;width:100%;padding:12px;border-radius:16px;background:rgba(255,255,255,0.9);gap:16px;'><div style='flex:1;'><slot name='col1'></slot></div><div style='flex:1;'><slot name='col2'></slot></div><div style='flex:1;'><slot name='col3'></slot></div></div>",
+      "labelProp": "label",
+      "titleProp": "label",
+      "emptyText": "Drag and Drop Elements here",
+      "badges": [],
+      "slots": [
+        { "id": "col1", "label": "Column 1", "dropzone": true, "anchor": "columns", "accepts": [] },
+        { "id": "col2", "label": "Column 2", "dropzone": true, "anchor": "columns", "accepts": [] },
+        { "id": "col3", "label": "Column 3", "dropzone": true, "anchor": "columns", "accepts": [] }
+      ]
+    },
+    "events": [],
+    "slots": ["col1", "col2", "col3"],
+    "lifecycleHooks": ["onInit", "onDestroy", "onChanges", "afterRender"],
+    "publishableAsNode": true,
+    "allowBoxModel": true,
+    "allowCustomClass": true,
+    "allowCustomStyle": true,
+    "transformOnDrop": {
+      "componentName": "zero-section",
+      "children": [
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" },
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" },
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" }
+      ]
+    }
+  },
+  {
+    "componentName": "zero-section-4col",
+    "title": "4 Column",
+    "version": "1.0.0",
+    "elementSelector": "zero-section-4col-1.0.0",
+    "jsEntry": "zero-section.ts",
+    "tags": ["layout", "section", "container", "4columns"],
+    "category": "layout",
+    "group": "Content Block",
+    "properties": [
+      { "name": "col1Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col1Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col1Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col1Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col1Flex", "type": "string", "defaultValue": "1" },
+      { "name": "col2Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col2Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col2Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col2Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col2Flex", "type": "string", "defaultValue": "1" },
+      { "name": "col3Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col3Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col3Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col3Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col3Flex", "type": "string", "defaultValue": "1" },
+      { "name": "col4Direction", "type": "string", "uiType": "select", "options": [{ "label": "Column", "value": "column" }, { "label": "Row", "value": "row" }], "defaultValue": "column" },
+      { "name": "col4Align", "type": "string", "uiType": "select", "options": [{ "label": "Stretch", "value": "stretch" }, { "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }], "defaultValue": "stretch" },
+      { "name": "col4Justify", "type": "string", "uiType": "select", "options": [{ "label": "Start", "value": "flex-start" }, { "label": "Center", "value": "center" }, { "label": "End", "value": "flex-end" }, { "label": "Space Between", "value": "space-between" }], "defaultValue": "flex-start" },
+      { "name": "col4Gap", "type": "string", "defaultValue": "16px" },
+      { "name": "col4Flex", "type": "string", "defaultValue": "1" },
+      { "name": "label", "type": "string", "defaultValue": "", "label": "Studio Label" }
+    ],
+    "studioTemplate": {
+      "kind": "section",
+      "templateHtml": "<div style='display:flex;width:100%;padding:12px;border-radius:16px;background:rgba(255,255,255,0.9);gap:16px;'><div style='flex:1;'><slot name='col1'></slot></div><div style='flex:1;'><slot name='col2'></slot></div><div style='flex:1;'><slot name='col3'></slot></div><div style='flex:1;'><slot name='col4'></slot></div></div>",
+      "labelProp": "label",
+      "titleProp": "label",
+      "emptyText": "Drag and Drop Elements here",
+      "badges": [],
+      "slots": [
+        { "id": "col1", "label": "Column 1", "dropzone": true, "anchor": "columns", "accepts": [] },
+        { "id": "col2", "label": "Column 2", "dropzone": true, "anchor": "columns", "accepts": [] },
+        { "id": "col3", "label": "Column 3", "dropzone": true, "anchor": "columns", "accepts": [] },
+        { "id": "col4", "label": "Column 4", "dropzone": true, "anchor": "columns", "accepts": [] }
+      ]
+    },
+    "events": [],
+    "slots": ["col1", "col2", "col3", "col4"],
+    "lifecycleHooks": ["onInit", "onDestroy", "onChanges", "afterRender"],
+    "publishableAsNode": true,
+    "allowBoxModel": true,
+    "allowCustomClass": true,
+    "allowCustomStyle": true,
+    "transformOnDrop": {
+      "componentName": "zero-section",
+      "children": [
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" },
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" },
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" },
+        { "componentName": "zero-column", "props": { "flex": "1" }, "slot": "default" }
+      ]
+    }
+  }
+]

@@ -48,6 +48,7 @@ export class ZeroColumn extends ZeroLayoutBase {
         /* Align using flex properties inherited from flex parent */
         flex: var(--zero-column-flex-override, var(--zero-column-flex, 1 1 0%));
         min-width: 0;
+        width: var(--zero-width, auto);
       }
       
       .column-inner {
@@ -117,6 +118,16 @@ export class ZeroColumn extends ZeroLayoutBase {
     categoryLabel: "Layout"
   })
   flex = "1";
+
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Width",
+    fieldMappings: "width",
+    categoryLabel: "Layout"
+  })
+  width = "auto";
 
   // Override default properties from ZeroLayoutBase with specific defaults/metadata
   @property({ type: String, reflect: true })

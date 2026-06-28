@@ -3,18 +3,18 @@
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const pt = globalThis, xt = pt.ShadowRoot && (pt.ShadyCSS === void 0 || pt.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Tt = Symbol(), ft = /* @__PURE__ */ new WeakMap();
+const pt = globalThis, xt = pt.ShadowRoot && (pt.ShadyCSS === void 0 || pt.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, ft = Symbol(), $t = /* @__PURE__ */ new WeakMap();
 let kt = class {
-  constructor(t, r, o) {
-    if (this._$cssResult$ = !0, o !== Tt) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
-    this.cssText = t, this.t = r;
+  constructor(t, o, l) {
+    if (this._$cssResult$ = !0, l !== ft) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+    this.cssText = t, this.t = o;
   }
   get styleSheet() {
     let t = this.o;
-    const r = this.t;
+    const o = this.t;
     if (xt && t === void 0) {
-      const o = r !== void 0 && r.length === 1;
-      o && (t = ft.get(r)), t === void 0 && ((this.o = t = new CSSStyleSheet()).replaceSync(this.cssText), o && ft.set(r, t));
+      const l = o !== void 0 && o.length === 1;
+      l && (t = $t.get(o)), t === void 0 && ((this.o = t = new CSSStyleSheet()).replaceSync(this.cssText), l && $t.set(o, t));
     }
     return t;
   }
@@ -22,33 +22,33 @@ let kt = class {
     return this.cssText;
   }
 };
-const Ht = (e) => new kt(typeof e == "string" ? e : e + "", void 0, Tt), Ut = (e, ...t) => {
-  const r = e.length === 1 ? e[0] : t.reduce((o, a, c) => o + ((d) => {
-    if (d._$cssResult$ === !0) return d.cssText;
-    if (typeof d == "number") return d;
-    throw Error("Value passed to 'css' function must be a 'css' function result: " + d + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-  })(a) + e[c + 1], e[0]);
-  return new kt(r, e, Tt);
+const Wt = (e) => new kt(typeof e == "string" ? e : e + "", void 0, ft), Ut = (e, ...t) => {
+  const o = e.length === 1 ? e[0] : t.reduce((l, r, c) => l + ((u) => {
+    if (u._$cssResult$ === !0) return u.cssText;
+    if (typeof u == "number") return u;
+    throw Error("Value passed to 'css' function must be a 'css' function result: " + u + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
+  })(r) + e[c + 1], e[0]);
+  return new kt(o, e, ft);
 }, Bt = (e, t) => {
-  if (xt) e.adoptedStyleSheets = t.map((r) => r instanceof CSSStyleSheet ? r : r.styleSheet);
-  else for (const r of t) {
-    const o = document.createElement("style"), a = pt.litNonce;
-    a !== void 0 && o.setAttribute("nonce", a), o.textContent = r.cssText, e.appendChild(o);
+  if (xt) e.adoptedStyleSheets = t.map((o) => o instanceof CSSStyleSheet ? o : o.styleSheet);
+  else for (const o of t) {
+    const l = document.createElement("style"), r = pt.litNonce;
+    r !== void 0 && l.setAttribute("nonce", r), l.textContent = o.cssText, e.appendChild(l);
   }
-}, Ct = xt ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((t) => {
-  let r = "";
-  for (const o of t.cssRules) r += o.cssText;
-  return Ht(r);
+}, Pt = xt ? (e) => e : (e) => e instanceof CSSStyleSheet ? ((t) => {
+  let o = "";
+  for (const l of t.cssRules) o += l.cssText;
+  return Wt(o);
 })(e) : e;
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Vt, defineProperty: Xt, getOwnPropertyDescriptor: qt, getOwnPropertyNames: Zt, getOwnPropertySymbols: Qt, getPrototypeOf: Kt } = Object, Ie = globalThis, wt = Ie.trustedTypes, er = wt ? wt.emptyScript : "", yt = Ie.reactiveElementPolyfillSupport, Ve = (e, t) => e, dt = { toAttribute(e, t) {
+const { is: Ht, defineProperty: Xt, getOwnPropertyDescriptor: qt, getOwnPropertyNames: Zt, getOwnPropertySymbols: Qt, getPrototypeOf: Kt } = Object, Ie = globalThis, wt = Ie.trustedTypes, eo = wt ? wt.emptyScript : "", ht = Ie.reactiveElementPolyfillSupport, He = (e, t) => e, ut = { toAttribute(e, t) {
   switch (t) {
     case Boolean:
-      e = e ? er : null;
+      e = e ? eo : null;
       break;
     case Object:
     case Array:
@@ -56,105 +56,105 @@ const { is: Vt, defineProperty: Xt, getOwnPropertyDescriptor: qt, getOwnProperty
   }
   return e;
 }, fromAttribute(e, t) {
-  let r = e;
+  let o = e;
   switch (t) {
     case Boolean:
-      r = e !== null;
+      o = e !== null;
       break;
     case Number:
-      r = e === null ? null : Number(e);
+      o = e === null ? null : Number(e);
       break;
     case Object:
     case Array:
       try {
-        r = JSON.parse(e);
+        o = JSON.parse(e);
       } catch {
-        r = null;
+        o = null;
       }
   }
-  return r;
-} }, $t = (e, t) => !Vt(e, t), Rt = { attribute: !0, type: String, converter: dt, reflect: !1, useDefault: !1, hasChanged: $t };
+  return o;
+} }, gt = (e, t) => !Ht(e, t), Rt = { attribute: !0, type: String, converter: ut, reflect: !1, useDefault: !1, hasChanged: gt };
 Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), Ie.litPropertyMetadata ?? (Ie.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
-let We = class extends HTMLElement {
+let Fe = class extends HTMLElement {
   static addInitializer(t) {
     this._$Ei(), (this.l ?? (this.l = [])).push(t);
   }
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(t, r = Rt) {
-    if (r.state && (r.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(t) && ((r = Object.create(r)).wrapped = !0), this.elementProperties.set(t, r), !r.noAccessor) {
-      const o = Symbol(), a = this.getPropertyDescriptor(t, o, r);
-      a !== void 0 && Xt(this.prototype, t, a);
+  static createProperty(t, o = Rt) {
+    if (o.state && (o.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(t) && ((o = Object.create(o)).wrapped = !0), this.elementProperties.set(t, o), !o.noAccessor) {
+      const l = Symbol(), r = this.getPropertyDescriptor(t, l, o);
+      r !== void 0 && Xt(this.prototype, t, r);
     }
   }
-  static getPropertyDescriptor(t, r, o) {
-    const { get: a, set: c } = qt(this.prototype, t) ?? { get() {
-      return this[r];
-    }, set(d) {
-      this[r] = d;
+  static getPropertyDescriptor(t, o, l) {
+    const { get: r, set: c } = qt(this.prototype, t) ?? { get() {
+      return this[o];
+    }, set(u) {
+      this[o] = u;
     } };
-    return { get: a, set(d) {
-      const P = a == null ? void 0 : a.call(this);
-      c == null || c.call(this, d), this.requestUpdate(t, P, o);
+    return { get: r, set(u) {
+      const C = r == null ? void 0 : r.call(this);
+      c == null || c.call(this, u), this.requestUpdate(t, C, l);
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(t) {
     return this.elementProperties.get(t) ?? Rt;
   }
   static _$Ei() {
-    if (this.hasOwnProperty(Ve("elementProperties"))) return;
+    if (this.hasOwnProperty(He("elementProperties"))) return;
     const t = Kt(this);
     t.finalize(), t.l !== void 0 && (this.l = [...t.l]), this.elementProperties = new Map(t.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty(Ve("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(Ve("properties"))) {
-      const r = this.properties, o = [...Zt(r), ...Qt(r)];
-      for (const a of o) this.createProperty(a, r[a]);
+    if (this.hasOwnProperty(He("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(He("properties"))) {
+      const o = this.properties, l = [...Zt(o), ...Qt(o)];
+      for (const r of l) this.createProperty(r, o[r]);
     }
     const t = this[Symbol.metadata];
     if (t !== null) {
-      const r = litPropertyMetadata.get(t);
-      if (r !== void 0) for (const [o, a] of r) this.elementProperties.set(o, a);
+      const o = litPropertyMetadata.get(t);
+      if (o !== void 0) for (const [l, r] of o) this.elementProperties.set(l, r);
     }
     this._$Eh = /* @__PURE__ */ new Map();
-    for (const [r, o] of this.elementProperties) {
-      const a = this._$Eu(r, o);
-      a !== void 0 && this._$Eh.set(a, r);
+    for (const [o, l] of this.elementProperties) {
+      const r = this._$Eu(o, l);
+      r !== void 0 && this._$Eh.set(r, o);
     }
     this.elementStyles = this.finalizeStyles(this.styles);
   }
   static finalizeStyles(t) {
-    const r = [];
+    const o = [];
     if (Array.isArray(t)) {
-      const o = new Set(t.flat(1 / 0).reverse());
-      for (const a of o) r.unshift(Ct(a));
-    } else t !== void 0 && r.push(Ct(t));
-    return r;
+      const l = new Set(t.flat(1 / 0).reverse());
+      for (const r of l) o.unshift(Pt(r));
+    } else t !== void 0 && o.push(Pt(t));
+    return o;
   }
-  static _$Eu(t, r) {
-    const o = r.attribute;
-    return o === !1 ? void 0 : typeof o == "string" ? o : typeof t == "string" ? t.toLowerCase() : void 0;
+  static _$Eu(t, o) {
+    const l = o.attribute;
+    return l === !1 ? void 0 : typeof l == "string" ? l : typeof t == "string" ? t.toLowerCase() : void 0;
   }
   constructor() {
     super(), this._$Ep = void 0, this.isUpdatePending = !1, this.hasUpdated = !1, this._$Em = null, this._$Ev();
   }
   _$Ev() {
     var t;
-    this._$ES = new Promise((r) => this.enableUpdating = r), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), (t = this.constructor.l) == null || t.forEach((r) => r(this));
+    this._$ES = new Promise((o) => this.enableUpdating = o), this._$AL = /* @__PURE__ */ new Map(), this._$E_(), this.requestUpdate(), (t = this.constructor.l) == null || t.forEach((o) => o(this));
   }
   addController(t) {
-    var r;
-    (this._$EO ?? (this._$EO = /* @__PURE__ */ new Set())).add(t), this.renderRoot !== void 0 && this.isConnected && ((r = t.hostConnected) == null || r.call(t));
+    var o;
+    (this._$EO ?? (this._$EO = /* @__PURE__ */ new Set())).add(t), this.renderRoot !== void 0 && this.isConnected && ((o = t.hostConnected) == null || o.call(t));
   }
   removeController(t) {
-    var r;
-    (r = this._$EO) == null || r.delete(t);
+    var o;
+    (o = this._$EO) == null || o.delete(t);
   }
   _$E_() {
-    const t = /* @__PURE__ */ new Map(), r = this.constructor.elementProperties;
-    for (const o of r.keys()) this.hasOwnProperty(o) && (t.set(o, this[o]), delete this[o]);
+    const t = /* @__PURE__ */ new Map(), o = this.constructor.elementProperties;
+    for (const l of o.keys()) this.hasOwnProperty(l) && (t.set(l, this[l]), delete this[l]);
     t.size > 0 && (this._$Ep = t);
   }
   createRenderRoot() {
@@ -163,59 +163,59 @@ let We = class extends HTMLElement {
   }
   connectedCallback() {
     var t;
-    this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this.enableUpdating(!0), (t = this._$EO) == null || t.forEach((r) => {
-      var o;
-      return (o = r.hostConnected) == null ? void 0 : o.call(r);
+    this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this.enableUpdating(!0), (t = this._$EO) == null || t.forEach((o) => {
+      var l;
+      return (l = o.hostConnected) == null ? void 0 : l.call(o);
     });
   }
   enableUpdating(t) {
   }
   disconnectedCallback() {
     var t;
-    (t = this._$EO) == null || t.forEach((r) => {
-      var o;
-      return (o = r.hostDisconnected) == null ? void 0 : o.call(r);
+    (t = this._$EO) == null || t.forEach((o) => {
+      var l;
+      return (l = o.hostDisconnected) == null ? void 0 : l.call(o);
     });
   }
-  attributeChangedCallback(t, r, o) {
-    this._$AK(t, o);
+  attributeChangedCallback(t, o, l) {
+    this._$AK(t, l);
   }
-  _$ET(t, r) {
+  _$ET(t, o) {
     var c;
-    const o = this.constructor.elementProperties.get(t), a = this.constructor._$Eu(t, o);
-    if (a !== void 0 && o.reflect === !0) {
-      const d = (((c = o.converter) == null ? void 0 : c.toAttribute) !== void 0 ? o.converter : dt).toAttribute(r, o.type);
-      this._$Em = t, d == null ? this.removeAttribute(a) : this.setAttribute(a, d), this._$Em = null;
+    const l = this.constructor.elementProperties.get(t), r = this.constructor._$Eu(t, l);
+    if (r !== void 0 && l.reflect === !0) {
+      const u = (((c = l.converter) == null ? void 0 : c.toAttribute) !== void 0 ? l.converter : ut).toAttribute(o, l.type);
+      this._$Em = t, u == null ? this.removeAttribute(r) : this.setAttribute(r, u), this._$Em = null;
     }
   }
-  _$AK(t, r) {
-    var c, d;
-    const o = this.constructor, a = o._$Eh.get(t);
-    if (a !== void 0 && this._$Em !== a) {
-      const P = o.getPropertyOptions(a), x = typeof P.converter == "function" ? { fromAttribute: P.converter } : ((c = P.converter) == null ? void 0 : c.fromAttribute) !== void 0 ? P.converter : dt;
-      this._$Em = a;
-      const R = x.fromAttribute(r, P.type);
-      this[a] = R ?? ((d = this._$Ej) == null ? void 0 : d.get(a)) ?? R, this._$Em = null;
+  _$AK(t, o) {
+    var c, u;
+    const l = this.constructor, r = l._$Eh.get(t);
+    if (r !== void 0 && this._$Em !== r) {
+      const C = l.getPropertyOptions(r), x = typeof C.converter == "function" ? { fromAttribute: C.converter } : ((c = C.converter) == null ? void 0 : c.fromAttribute) !== void 0 ? C.converter : ut;
+      this._$Em = r;
+      const R = x.fromAttribute(o, C.type);
+      this[r] = R ?? ((u = this._$Ej) == null ? void 0 : u.get(r)) ?? R, this._$Em = null;
     }
   }
-  requestUpdate(t, r, o, a = !1, c) {
-    var d;
+  requestUpdate(t, o, l, r = !1, c) {
+    var u;
     if (t !== void 0) {
-      const P = this.constructor;
-      if (a === !1 && (c = this[t]), o ?? (o = P.getPropertyOptions(t)), !((o.hasChanged ?? $t)(c, r) || o.useDefault && o.reflect && c === ((d = this._$Ej) == null ? void 0 : d.get(t)) && !this.hasAttribute(P._$Eu(t, o)))) return;
-      this.C(t, r, o);
+      const C = this.constructor;
+      if (r === !1 && (c = this[t]), l ?? (l = C.getPropertyOptions(t)), !((l.hasChanged ?? gt)(c, o) || l.useDefault && l.reflect && c === ((u = this._$Ej) == null ? void 0 : u.get(t)) && !this.hasAttribute(C._$Eu(t, l)))) return;
+      this.C(t, o, l);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
   }
-  C(t, r, { useDefault: o, reflect: a, wrapped: c }, d) {
-    o && !(this._$Ej ?? (this._$Ej = /* @__PURE__ */ new Map())).has(t) && (this._$Ej.set(t, d ?? r ?? this[t]), c !== !0 || d !== void 0) || (this._$AL.has(t) || (this.hasUpdated || o || (r = void 0), this._$AL.set(t, r)), a === !0 && this._$Em !== t && (this._$Eq ?? (this._$Eq = /* @__PURE__ */ new Set())).add(t));
+  C(t, o, { useDefault: l, reflect: r, wrapped: c }, u) {
+    l && !(this._$Ej ?? (this._$Ej = /* @__PURE__ */ new Map())).has(t) && (this._$Ej.set(t, u ?? o ?? this[t]), c !== !0 || u !== void 0) || (this._$AL.has(t) || (this.hasUpdated || l || (o = void 0), this._$AL.set(t, o)), r === !0 && this._$Em !== t && (this._$Eq ?? (this._$Eq = /* @__PURE__ */ new Set())).add(t));
   }
   async _$EP() {
     this.isUpdatePending = !0;
     try {
       await this._$ES;
-    } catch (r) {
-      Promise.reject(r);
+    } catch (o) {
+      Promise.reject(o);
     }
     const t = this.scheduleUpdate();
     return t != null && await t, !this.isUpdatePending;
@@ -224,38 +224,38 @@ let We = class extends HTMLElement {
     return this.performUpdate();
   }
   performUpdate() {
-    var o;
+    var l;
     if (!this.isUpdatePending) return;
     if (!this.hasUpdated) {
       if (this.renderRoot ?? (this.renderRoot = this.createRenderRoot()), this._$Ep) {
-        for (const [c, d] of this._$Ep) this[c] = d;
+        for (const [c, u] of this._$Ep) this[c] = u;
         this._$Ep = void 0;
       }
-      const a = this.constructor.elementProperties;
-      if (a.size > 0) for (const [c, d] of a) {
-        const { wrapped: P } = d, x = this[c];
-        P !== !0 || this._$AL.has(c) || x === void 0 || this.C(c, void 0, d, x);
+      const r = this.constructor.elementProperties;
+      if (r.size > 0) for (const [c, u] of r) {
+        const { wrapped: C } = u, x = this[c];
+        C !== !0 || this._$AL.has(c) || x === void 0 || this.C(c, void 0, u, x);
       }
     }
     let t = !1;
-    const r = this._$AL;
+    const o = this._$AL;
     try {
-      t = this.shouldUpdate(r), t ? (this.willUpdate(r), (o = this._$EO) == null || o.forEach((a) => {
+      t = this.shouldUpdate(o), t ? (this.willUpdate(o), (l = this._$EO) == null || l.forEach((r) => {
         var c;
-        return (c = a.hostUpdate) == null ? void 0 : c.call(a);
-      }), this.update(r)) : this._$EM();
-    } catch (a) {
-      throw t = !1, this._$EM(), a;
+        return (c = r.hostUpdate) == null ? void 0 : c.call(r);
+      }), this.update(o)) : this._$EM();
+    } catch (r) {
+      throw t = !1, this._$EM(), r;
     }
-    t && this._$AE(r);
+    t && this._$AE(o);
   }
   willUpdate(t) {
   }
   _$AE(t) {
-    var r;
-    (r = this._$EO) == null || r.forEach((o) => {
-      var a;
-      return (a = o.hostUpdated) == null ? void 0 : a.call(o);
+    var o;
+    (o = this._$EO) == null || o.forEach((l) => {
+      var r;
+      return (r = l.hostUpdated) == null ? void 0 : r.call(l);
     }), this.hasUpdated || (this.hasUpdated = !0, this.firstUpdated(t)), this.updated(t);
   }
   _$EM() {
@@ -271,85 +271,85 @@ let We = class extends HTMLElement {
     return !0;
   }
   update(t) {
-    this._$Eq && (this._$Eq = this._$Eq.forEach((r) => this._$ET(r, this[r]))), this._$EM();
+    this._$Eq && (this._$Eq = this._$Eq.forEach((o) => this._$ET(o, this[o]))), this._$EM();
   }
   updated(t) {
   }
   firstUpdated(t) {
   }
 };
-We.elementStyles = [], We.shadowRootOptions = { mode: "open" }, We[Ve("elementProperties")] = /* @__PURE__ */ new Map(), We[Ve("finalized")] = /* @__PURE__ */ new Map(), yt == null || yt({ ReactiveElement: We }), (Ie.reactiveElementVersions ?? (Ie.reactiveElementVersions = [])).push("2.1.2");
+Fe.elementStyles = [], Fe.shadowRootOptions = { mode: "open" }, Fe[He("elementProperties")] = /* @__PURE__ */ new Map(), Fe[He("finalized")] = /* @__PURE__ */ new Map(), ht == null || ht({ ReactiveElement: Fe }), (Ie.reactiveElementVersions ?? (Ie.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Xe = globalThis, Et = (e) => e, ut = Xe.trustedTypes, _t = ut ? ut.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, jt = "$lit$", De = `lit$${Math.random().toFixed(9).slice(2)}$`, Yt = "?" + De, tr = `<${Yt}>`, Ge = document, Ze = () => Ge.createComment(""), Qe = (e) => e === null || typeof e != "object" && typeof e != "function", gt = Array.isArray, rr = (e) => gt(e) || typeof (e == null ? void 0 : e[Symbol.iterator]) == "function", bt = `[ 	
-\f\r]`, Be = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, St = /-->/g, Ot = />/g, Ue = RegExp(`>|${bt}(?:([^\\s"'>=/]+)(${bt}*=${bt}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Lt = /'/g, Mt = /"/g, Gt = /^(?:script|style|textarea|title)$/i, or = (e) => (t, ...r) => ({ _$litType$: e, strings: t, values: r }), re = or(1), Je = Symbol.for("lit-noChange"), J = Symbol.for("lit-nothing"), zt = /* @__PURE__ */ new WeakMap(), je = Ge.createTreeWalker(Ge, 129);
-function Ft(e, t) {
-  if (!gt(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return _t !== void 0 ? _t.createHTML(t) : t;
+const Xe = globalThis, Et = (e) => e, dt = Xe.trustedTypes, St = dt ? dt.createPolicy("lit-html", { createHTML: (e) => e }) : void 0, jt = "$lit$", De = `lit$${Math.random().toFixed(9).slice(2)}$`, Vt = "?" + De, to = `<${Vt}>`, Ge = document, Ze = () => Ge.createComment(""), Qe = (e) => e === null || typeof e != "object" && typeof e != "function", Tt = Array.isArray, oo = (e) => Tt(e) || typeof (e == null ? void 0 : e[Symbol.iterator]) == "function", bt = `[ 	
+\f\r]`, Be = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, _t = /-->/g, Ot = />/g, Ue = RegExp(`>|${bt}(?:([^\\s"'>=/]+)(${bt}*=${bt}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Lt = /'/g, zt = /"/g, Gt = /^(?:script|style|textarea|title)$/i, lo = (e) => (t, ...o) => ({ _$litType$: e, strings: t, values: o }), oe = lo(1), Je = Symbol.for("lit-noChange"), J = Symbol.for("lit-nothing"), Mt = /* @__PURE__ */ new WeakMap(), je = Ge.createTreeWalker(Ge, 129);
+function Yt(e, t) {
+  if (!Tt(e) || !e.hasOwnProperty("raw")) throw Error("invalid template strings array");
+  return St !== void 0 ? St.createHTML(t) : t;
 }
-const ar = (e, t) => {
-  const r = e.length - 1, o = [];
-  let a, c = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", d = Be;
-  for (let P = 0; P < r; P++) {
-    const x = e[P];
-    let R, E, w = -1, z = 0;
-    for (; z < x.length && (d.lastIndex = z, E = d.exec(x), E !== null); ) z = d.lastIndex, d === Be ? E[1] === "!--" ? d = St : E[1] !== void 0 ? d = Ot : E[2] !== void 0 ? (Gt.test(E[2]) && (a = RegExp("</" + E[2], "g")), d = Ue) : E[3] !== void 0 && (d = Ue) : d === Ue ? E[0] === ">" ? (d = a ?? Be, w = -1) : E[1] === void 0 ? w = -2 : (w = d.lastIndex - E[2].length, R = E[1], d = E[3] === void 0 ? Ue : E[3] === '"' ? Mt : Lt) : d === Mt || d === Lt ? d = Ue : d === St || d === Ot ? d = Be : (d = Ue, a = void 0);
-    const I = d === Ue && e[P + 1].startsWith("/>") ? " " : "";
-    c += d === Be ? x + tr : w >= 0 ? (o.push(R), x.slice(0, w) + jt + x.slice(w) + De + I) : x + De + (w === -2 ? P : I);
+const ro = (e, t) => {
+  const o = e.length - 1, l = [];
+  let r, c = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", u = Be;
+  for (let C = 0; C < o; C++) {
+    const x = e[C];
+    let R, E, w = -1, M = 0;
+    for (; M < x.length && (u.lastIndex = M, E = u.exec(x), E !== null); ) M = u.lastIndex, u === Be ? E[1] === "!--" ? u = _t : E[1] !== void 0 ? u = Ot : E[2] !== void 0 ? (Gt.test(E[2]) && (r = RegExp("</" + E[2], "g")), u = Ue) : E[3] !== void 0 && (u = Ue) : u === Ue ? E[0] === ">" ? (u = r ?? Be, w = -1) : E[1] === void 0 ? w = -2 : (w = u.lastIndex - E[2].length, R = E[1], u = E[3] === void 0 ? Ue : E[3] === '"' ? zt : Lt) : u === zt || u === Lt ? u = Ue : u === _t || u === Ot ? u = Be : (u = Ue, r = void 0);
+    const I = u === Ue && e[C + 1].startsWith("/>") ? " " : "";
+    c += u === Be ? x + to : w >= 0 ? (l.push(R), x.slice(0, w) + jt + x.slice(w) + De + I) : x + De + (w === -2 ? C : I);
   }
-  return [Ft(e, c + (e[r] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), o];
+  return [Yt(e, c + (e[o] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), l];
 };
 class Ke {
-  constructor({ strings: t, _$litType$: r }, o) {
-    let a;
+  constructor({ strings: t, _$litType$: o }, l) {
+    let r;
     this.parts = [];
-    let c = 0, d = 0;
-    const P = t.length - 1, x = this.parts, [R, E] = ar(t, r);
-    if (this.el = Ke.createElement(R, o), je.currentNode = this.el.content, r === 2 || r === 3) {
+    let c = 0, u = 0;
+    const C = t.length - 1, x = this.parts, [R, E] = ro(t, o);
+    if (this.el = Ke.createElement(R, l), je.currentNode = this.el.content, o === 2 || o === 3) {
       const w = this.el.content.firstChild;
       w.replaceWith(...w.childNodes);
     }
-    for (; (a = je.nextNode()) !== null && x.length < P; ) {
-      if (a.nodeType === 1) {
-        if (a.hasAttributes()) for (const w of a.getAttributeNames()) if (w.endsWith(jt)) {
-          const z = E[d++], I = a.getAttribute(w).split(De), U = /([.?@])?(.*)/.exec(z);
-          x.push({ type: 1, index: c, name: U[2], strings: I, ctor: U[1] === "." ? lr : U[1] === "?" ? sr : U[1] === "@" ? nr : ht }), a.removeAttribute(w);
-        } else w.startsWith(De) && (x.push({ type: 6, index: c }), a.removeAttribute(w));
-        if (Gt.test(a.tagName)) {
-          const w = a.textContent.split(De), z = w.length - 1;
-          if (z > 0) {
-            a.textContent = ut ? ut.emptyScript : "";
-            for (let I = 0; I < z; I++) a.append(w[I], Ze()), je.nextNode(), x.push({ type: 2, index: ++c });
-            a.append(w[z], Ze());
+    for (; (r = je.nextNode()) !== null && x.length < C; ) {
+      if (r.nodeType === 1) {
+        if (r.hasAttributes()) for (const w of r.getAttributeNames()) if (w.endsWith(jt)) {
+          const M = E[u++], I = r.getAttribute(w).split(De), U = /([.?@])?(.*)/.exec(M);
+          x.push({ type: 1, index: c, name: U[2], strings: I, ctor: U[1] === "." ? io : U[1] === "?" ? so : U[1] === "@" ? no : yt }), r.removeAttribute(w);
+        } else w.startsWith(De) && (x.push({ type: 6, index: c }), r.removeAttribute(w));
+        if (Gt.test(r.tagName)) {
+          const w = r.textContent.split(De), M = w.length - 1;
+          if (M > 0) {
+            r.textContent = dt ? dt.emptyScript : "";
+            for (let I = 0; I < M; I++) r.append(w[I], Ze()), je.nextNode(), x.push({ type: 2, index: ++c });
+            r.append(w[M], Ze());
           }
         }
-      } else if (a.nodeType === 8) if (a.data === Yt) x.push({ type: 2, index: c });
+      } else if (r.nodeType === 8) if (r.data === Vt) x.push({ type: 2, index: c });
       else {
         let w = -1;
-        for (; (w = a.data.indexOf(De, w + 1)) !== -1; ) x.push({ type: 7, index: c }), w += De.length - 1;
+        for (; (w = r.data.indexOf(De, w + 1)) !== -1; ) x.push({ type: 7, index: c }), w += De.length - 1;
       }
       c++;
     }
   }
-  static createElement(t, r) {
-    const o = Ge.createElement("template");
-    return o.innerHTML = t, o;
+  static createElement(t, o) {
+    const l = Ge.createElement("template");
+    return l.innerHTML = t, l;
   }
 }
-function He(e, t, r = e, o) {
-  var d, P;
+function We(e, t, o = e, l) {
+  var u, C;
   if (t === Je) return t;
-  let a = o !== void 0 ? (d = r._$Co) == null ? void 0 : d[o] : r._$Cl;
+  let r = l !== void 0 ? (u = o._$Co) == null ? void 0 : u[l] : o._$Cl;
   const c = Qe(t) ? void 0 : t._$litDirective$;
-  return (a == null ? void 0 : a.constructor) !== c && ((P = a == null ? void 0 : a._$AO) == null || P.call(a, !1), c === void 0 ? a = void 0 : (a = new c(e), a._$AT(e, r, o)), o !== void 0 ? (r._$Co ?? (r._$Co = []))[o] = a : r._$Cl = a), a !== void 0 && (t = He(e, a._$AS(e, t.values), a, o)), t;
+  return (r == null ? void 0 : r.constructor) !== c && ((C = r == null ? void 0 : r._$AO) == null || C.call(r, !1), c === void 0 ? r = void 0 : (r = new c(e), r._$AT(e, o, l)), l !== void 0 ? (o._$Co ?? (o._$Co = []))[l] = r : o._$Cl = r), r !== void 0 && (t = We(e, r._$AS(e, t.values), r, l)), t;
 }
-class ir {
-  constructor(t, r) {
-    this._$AV = [], this._$AN = void 0, this._$AD = t, this._$AM = r;
+class ao {
+  constructor(t, o) {
+    this._$AV = [], this._$AN = void 0, this._$AD = t, this._$AM = o;
   }
   get parentNode() {
     return this._$AM.parentNode;
@@ -358,21 +358,21 @@ class ir {
     return this._$AM._$AU;
   }
   u(t) {
-    const { el: { content: r }, parts: o } = this._$AD, a = ((t == null ? void 0 : t.creationScope) ?? Ge).importNode(r, !0);
-    je.currentNode = a;
-    let c = je.nextNode(), d = 0, P = 0, x = o[0];
+    const { el: { content: o }, parts: l } = this._$AD, r = ((t == null ? void 0 : t.creationScope) ?? Ge).importNode(o, !0);
+    je.currentNode = r;
+    let c = je.nextNode(), u = 0, C = 0, x = l[0];
     for (; x !== void 0; ) {
-      if (d === x.index) {
+      if (u === x.index) {
         let R;
-        x.type === 2 ? R = new et(c, c.nextSibling, this, t) : x.type === 1 ? R = new x.ctor(c, x.name, x.strings, this, t) : x.type === 6 && (R = new pr(c, this, t)), this._$AV.push(R), x = o[++P];
+        x.type === 2 ? R = new et(c, c.nextSibling, this, t) : x.type === 1 ? R = new x.ctor(c, x.name, x.strings, this, t) : x.type === 6 && (R = new po(c, this, t)), this._$AV.push(R), x = l[++C];
       }
-      d !== (x == null ? void 0 : x.index) && (c = je.nextNode(), d++);
+      u !== (x == null ? void 0 : x.index) && (c = je.nextNode(), u++);
     }
-    return je.currentNode = Ge, a;
+    return je.currentNode = Ge, r;
   }
   p(t) {
-    let r = 0;
-    for (const o of this._$AV) o !== void 0 && (o.strings !== void 0 ? (o._$AI(t, o, r), r += o.strings.length - 2) : o._$AI(t[r])), r++;
+    let o = 0;
+    for (const l of this._$AV) l !== void 0 && (l.strings !== void 0 ? (l._$AI(t, l, o), o += l.strings.length - 2) : l._$AI(t[o])), o++;
   }
 }
 class et {
@@ -380,13 +380,13 @@ class et {
     var t;
     return ((t = this._$AM) == null ? void 0 : t._$AU) ?? this._$Cv;
   }
-  constructor(t, r, o, a) {
-    this.type = 2, this._$AH = J, this._$AN = void 0, this._$AA = t, this._$AB = r, this._$AM = o, this.options = a, this._$Cv = (a == null ? void 0 : a.isConnected) ?? !0;
+  constructor(t, o, l, r) {
+    this.type = 2, this._$AH = J, this._$AN = void 0, this._$AA = t, this._$AB = o, this._$AM = l, this.options = r, this._$Cv = (r == null ? void 0 : r.isConnected) ?? !0;
   }
   get parentNode() {
     let t = this._$AA.parentNode;
-    const r = this._$AM;
-    return r !== void 0 && (t == null ? void 0 : t.nodeType) === 11 && (t = r.parentNode), t;
+    const o = this._$AM;
+    return o !== void 0 && (t == null ? void 0 : t.nodeType) === 11 && (t = o.parentNode), t;
   }
   get startNode() {
     return this._$AA;
@@ -394,8 +394,8 @@ class et {
   get endNode() {
     return this._$AB;
   }
-  _$AI(t, r = this) {
-    t = He(this, t, r), Qe(t) ? t === J || t == null || t === "" ? (this._$AH !== J && this._$AR(), this._$AH = J) : t !== this._$AH && t !== Je && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : rr(t) ? this.k(t) : this._(t);
+  _$AI(t, o = this) {
+    t = We(this, t, o), Qe(t) ? t === J || t == null || t === "" ? (this._$AH !== J && this._$AR(), this._$AH = J) : t !== this._$AH && t !== Je && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : oo(t) ? this.k(t) : this._(t);
   }
   O(t) {
     return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -408,62 +408,62 @@ class et {
   }
   $(t) {
     var c;
-    const { values: r, _$litType$: o } = t, a = typeof o == "number" ? this._$AC(t) : (o.el === void 0 && (o.el = Ke.createElement(Ft(o.h, o.h[0]), this.options)), o);
-    if (((c = this._$AH) == null ? void 0 : c._$AD) === a) this._$AH.p(r);
+    const { values: o, _$litType$: l } = t, r = typeof l == "number" ? this._$AC(t) : (l.el === void 0 && (l.el = Ke.createElement(Yt(l.h, l.h[0]), this.options)), l);
+    if (((c = this._$AH) == null ? void 0 : c._$AD) === r) this._$AH.p(o);
     else {
-      const d = new ir(a, this), P = d.u(this.options);
-      d.p(r), this.T(P), this._$AH = d;
+      const u = new ao(r, this), C = u.u(this.options);
+      u.p(o), this.T(C), this._$AH = u;
     }
   }
   _$AC(t) {
-    let r = zt.get(t.strings);
-    return r === void 0 && zt.set(t.strings, r = new Ke(t)), r;
+    let o = Mt.get(t.strings);
+    return o === void 0 && Mt.set(t.strings, o = new Ke(t)), o;
   }
   k(t) {
-    gt(this._$AH) || (this._$AH = [], this._$AR());
-    const r = this._$AH;
-    let o, a = 0;
-    for (const c of t) a === r.length ? r.push(o = new et(this.O(Ze()), this.O(Ze()), this, this.options)) : o = r[a], o._$AI(c), a++;
-    a < r.length && (this._$AR(o && o._$AB.nextSibling, a), r.length = a);
+    Tt(this._$AH) || (this._$AH = [], this._$AR());
+    const o = this._$AH;
+    let l, r = 0;
+    for (const c of t) r === o.length ? o.push(l = new et(this.O(Ze()), this.O(Ze()), this, this.options)) : l = o[r], l._$AI(c), r++;
+    r < o.length && (this._$AR(l && l._$AB.nextSibling, r), o.length = r);
   }
-  _$AR(t = this._$AA.nextSibling, r) {
-    var o;
-    for ((o = this._$AP) == null ? void 0 : o.call(this, !1, !0, r); t !== this._$AB; ) {
-      const a = Et(t).nextSibling;
-      Et(t).remove(), t = a;
+  _$AR(t = this._$AA.nextSibling, o) {
+    var l;
+    for ((l = this._$AP) == null ? void 0 : l.call(this, !1, !0, o); t !== this._$AB; ) {
+      const r = Et(t).nextSibling;
+      Et(t).remove(), t = r;
     }
   }
   setConnected(t) {
-    var r;
-    this._$AM === void 0 && (this._$Cv = t, (r = this._$AP) == null || r.call(this, t));
+    var o;
+    this._$AM === void 0 && (this._$Cv = t, (o = this._$AP) == null || o.call(this, t));
   }
 }
-class ht {
+class yt {
   get tagName() {
     return this.element.tagName;
   }
   get _$AU() {
     return this._$AM._$AU;
   }
-  constructor(t, r, o, a, c) {
-    this.type = 1, this._$AH = J, this._$AN = void 0, this.element = t, this.name = r, this._$AM = a, this.options = c, o.length > 2 || o[0] !== "" || o[1] !== "" ? (this._$AH = Array(o.length - 1).fill(new String()), this.strings = o) : this._$AH = J;
+  constructor(t, o, l, r, c) {
+    this.type = 1, this._$AH = J, this._$AN = void 0, this.element = t, this.name = o, this._$AM = r, this.options = c, l.length > 2 || l[0] !== "" || l[1] !== "" ? (this._$AH = Array(l.length - 1).fill(new String()), this.strings = l) : this._$AH = J;
   }
-  _$AI(t, r = this, o, a) {
+  _$AI(t, o = this, l, r) {
     const c = this.strings;
-    let d = !1;
-    if (c === void 0) t = He(this, t, r, 0), d = !Qe(t) || t !== this._$AH && t !== Je, d && (this._$AH = t);
+    let u = !1;
+    if (c === void 0) t = We(this, t, o, 0), u = !Qe(t) || t !== this._$AH && t !== Je, u && (this._$AH = t);
     else {
-      const P = t;
+      const C = t;
       let x, R;
-      for (t = c[0], x = 0; x < c.length - 1; x++) R = He(this, P[o + x], r, x), R === Je && (R = this._$AH[x]), d || (d = !Qe(R) || R !== this._$AH[x]), R === J ? t = J : t !== J && (t += (R ?? "") + c[x + 1]), this._$AH[x] = R;
+      for (t = c[0], x = 0; x < c.length - 1; x++) R = We(this, C[l + x], o, x), R === Je && (R = this._$AH[x]), u || (u = !Qe(R) || R !== this._$AH[x]), R === J ? t = J : t !== J && (t += (R ?? "") + c[x + 1]), this._$AH[x] = R;
     }
-    d && !a && this.j(t);
+    u && !r && this.j(t);
   }
   j(t) {
     t === J ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t ?? "");
   }
 }
-class lr extends ht {
+class io extends yt {
   constructor() {
     super(...arguments), this.type = 3;
   }
@@ -471,7 +471,7 @@ class lr extends ht {
     this.element[this.name] = t === J ? void 0 : t;
   }
 }
-class sr extends ht {
+class so extends yt {
   constructor() {
     super(...arguments), this.type = 4;
   }
@@ -479,60 +479,60 @@ class sr extends ht {
     this.element.toggleAttribute(this.name, !!t && t !== J);
   }
 }
-class nr extends ht {
-  constructor(t, r, o, a, c) {
-    super(t, r, o, a, c), this.type = 5;
+class no extends yt {
+  constructor(t, o, l, r, c) {
+    super(t, o, l, r, c), this.type = 5;
   }
-  _$AI(t, r = this) {
-    if ((t = He(this, t, r, 0) ?? J) === Je) return;
-    const o = this._$AH, a = t === J && o !== J || t.capture !== o.capture || t.once !== o.once || t.passive !== o.passive, c = t !== J && (o === J || a);
-    a && this.element.removeEventListener(this.name, this, o), c && this.element.addEventListener(this.name, this, t), this._$AH = t;
+  _$AI(t, o = this) {
+    if ((t = We(this, t, o, 0) ?? J) === Je) return;
+    const l = this._$AH, r = t === J && l !== J || t.capture !== l.capture || t.once !== l.once || t.passive !== l.passive, c = t !== J && (l === J || r);
+    r && this.element.removeEventListener(this.name, this, l), c && this.element.addEventListener(this.name, this, t), this._$AH = t;
   }
   handleEvent(t) {
-    var r;
-    typeof this._$AH == "function" ? this._$AH.call(((r = this.options) == null ? void 0 : r.host) ?? this.element, t) : this._$AH.handleEvent(t);
+    var o;
+    typeof this._$AH == "function" ? this._$AH.call(((o = this.options) == null ? void 0 : o.host) ?? this.element, t) : this._$AH.handleEvent(t);
   }
 }
-class pr {
-  constructor(t, r, o) {
-    this.element = t, this.type = 6, this._$AN = void 0, this._$AM = r, this.options = o;
+class po {
+  constructor(t, o, l) {
+    this.element = t, this.type = 6, this._$AN = void 0, this._$AM = o, this.options = l;
   }
   get _$AU() {
     return this._$AM._$AU;
   }
   _$AI(t) {
-    He(this, t);
+    We(this, t);
   }
 }
 const mt = Xe.litHtmlPolyfillSupport;
 mt == null || mt(Ke, et), (Xe.litHtmlVersions ?? (Xe.litHtmlVersions = [])).push("3.3.3");
-const dr = (e, t, r) => {
-  const o = (r == null ? void 0 : r.renderBefore) ?? t;
-  let a = o._$litPart$;
-  if (a === void 0) {
-    const c = (r == null ? void 0 : r.renderBefore) ?? null;
-    o._$litPart$ = a = new et(t.insertBefore(Ze(), c), c, void 0, r ?? {});
+const uo = (e, t, o) => {
+  const l = (o == null ? void 0 : o.renderBefore) ?? t;
+  let r = l._$litPart$;
+  if (r === void 0) {
+    const c = (o == null ? void 0 : o.renderBefore) ?? null;
+    l._$litPart$ = r = new et(t.insertBefore(Ze(), c), c, void 0, o ?? {});
   }
-  return a._$AI(e), a;
+  return r._$AI(e), r;
 };
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const Ye = globalThis;
-class qe extends We {
+const Ve = globalThis;
+class qe extends Fe {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
   createRenderRoot() {
-    var r;
+    var o;
     const t = super.createRenderRoot();
-    return (r = this.renderOptions).renderBefore ?? (r.renderBefore = t.firstChild), t;
+    return (o = this.renderOptions).renderBefore ?? (o.renderBefore = t.firstChild), t;
   }
   update(t) {
-    const r = this.render();
-    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t), this._$Do = dr(r, this.renderRoot, this.renderOptions);
+    const o = this.render();
+    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(t), this._$Do = uo(o, this.renderRoot, this.renderOptions);
   }
   connectedCallback() {
     var t;
@@ -547,17 +547,17 @@ class qe extends We {
   }
 }
 var Nt;
-qe._$litElement$ = !0, qe.finalized = !0, (Nt = Ye.litElementHydrateSupport) == null || Nt.call(Ye, { LitElement: qe });
-const vt = Ye.litElementPolyfillSupport;
+qe._$litElement$ = !0, qe.finalized = !0, (Nt = Ve.litElementHydrateSupport) == null || Nt.call(Ve, { LitElement: qe });
+const vt = Ve.litElementPolyfillSupport;
 vt == null || vt({ LitElement: qe });
-(Ye.litElementVersions ?? (Ye.litElementVersions = [])).push("4.2.2");
+(Ve.litElementVersions ?? (Ve.litElementVersions = [])).push("4.2.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const tt = (e) => (t, r) => {
-  r !== void 0 ? r.addInitializer(() => {
+const tt = (e) => (t, o) => {
+  o !== void 0 ? o.addInitializer(() => {
     customElements.define(e, t);
   }) : customElements.define(e, t);
 };
@@ -566,32 +566,32 @@ const tt = (e) => (t, r) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ur = { attribute: !0, type: String, converter: dt, reflect: !1, hasChanged: $t }, cr = (e = ur, t, r) => {
-  const { kind: o, metadata: a } = r;
-  let c = globalThis.litPropertyMetadata.get(a);
-  if (c === void 0 && globalThis.litPropertyMetadata.set(a, c = /* @__PURE__ */ new Map()), o === "setter" && ((e = Object.create(e)).wrapped = !0), c.set(r.name, e), o === "accessor") {
-    const { name: d } = r;
-    return { set(P) {
+const co = { attribute: !0, type: String, converter: ut, reflect: !1, hasChanged: gt }, yo = (e = co, t, o) => {
+  const { kind: l, metadata: r } = o;
+  let c = globalThis.litPropertyMetadata.get(r);
+  if (c === void 0 && globalThis.litPropertyMetadata.set(r, c = /* @__PURE__ */ new Map()), l === "setter" && ((e = Object.create(e)).wrapped = !0), c.set(o.name, e), l === "accessor") {
+    const { name: u } = o;
+    return { set(C) {
       const x = t.get.call(this);
-      t.set.call(this, P), this.requestUpdate(d, x, e, !0, P);
-    }, init(P) {
-      return P !== void 0 && this.C(d, void 0, e, P), P;
+      t.set.call(this, C), this.requestUpdate(u, x, e, !0, C);
+    }, init(C) {
+      return C !== void 0 && this.C(u, void 0, e, C), C;
     } };
   }
-  if (o === "setter") {
-    const { name: d } = r;
-    return function(P) {
-      const x = this[d];
-      t.call(this, P), this.requestUpdate(d, x, e, !0, P);
+  if (l === "setter") {
+    const { name: u } = o;
+    return function(C) {
+      const x = this[u];
+      t.call(this, C), this.requestUpdate(u, x, e, !0, C);
     };
   }
-  throw Error("Unsupported decorator location: " + o);
+  throw Error("Unsupported decorator location: " + l);
 };
 function p(e) {
-  return (t, r) => typeof r == "object" ? cr(e, t, r) : ((o, a, c) => {
-    const d = a.hasOwnProperty(c);
-    return a.constructor.createProperty(c, o), d ? Object.getOwnPropertyDescriptor(a, c) : void 0;
-  })(e, t, r);
+  return (t, o) => typeof o == "object" ? yo(e, t, o) : ((l, r, c) => {
+    const u = r.hasOwnProperty(c);
+    return r.constructor.createProperty(c, l), u ? Object.getOwnPropertyDescriptor(r, c) : void 0;
+  })(e, t, o);
 }
 var At = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
 /*! *****************************************************************************
@@ -611,9 +611,9 @@ and limitations under the License.
 var Dt;
 (function(e) {
   (function(t) {
-    var r = typeof globalThis == "object" ? globalThis : typeof At == "object" ? At : typeof self == "object" ? self : typeof this == "object" ? this : P(), o = a(e);
-    typeof r.Reflect < "u" && (o = a(r.Reflect, o)), t(o, r), typeof r.Reflect > "u" && (r.Reflect = e);
-    function a(x, R) {
+    var o = typeof globalThis == "object" ? globalThis : typeof At == "object" ? At : typeof self == "object" ? self : typeof this == "object" ? this : C(), l = r(e);
+    typeof o.Reflect < "u" && (l = r(o.Reflect, l)), t(l, o), typeof o.Reflect > "u" && (o.Reflect = e);
+    function r(x, R) {
       return function(E, w) {
         Object.defineProperty(x, E, { configurable: !0, writable: !0, value: w }), R && R(E, w);
       };
@@ -624,219 +624,219 @@ var Dt;
       } catch {
       }
     }
-    function d() {
+    function u() {
       try {
         return (0, eval)("(function() { return this; })()");
       } catch {
       }
     }
-    function P() {
-      return c() || d();
+    function C() {
+      return c() || u();
     }
-  })(function(t, r) {
-    var o = Object.prototype.hasOwnProperty, a = typeof Symbol == "function", c = a && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", d = a && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", P = typeof Object.create == "function", x = { __proto__: [] } instanceof Array, R = !P && !x, E = {
+  })(function(t, o) {
+    var l = Object.prototype.hasOwnProperty, r = typeof Symbol == "function", c = r && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", u = r && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", C = typeof Object.create == "function", x = { __proto__: [] } instanceof Array, R = !C && !x, E = {
       // create an object in dictionary mode (a.k.a. "slow" mode in v8)
-      create: P ? function() {
-        return Fe(/* @__PURE__ */ Object.create(null));
+      create: C ? function() {
+        return Ye(/* @__PURE__ */ Object.create(null));
       } : x ? function() {
-        return Fe({ __proto__: null });
+        return Ye({ __proto__: null });
       } : function() {
-        return Fe({});
+        return Ye({});
       },
-      has: R ? function(i, l) {
-        return o.call(i, l);
-      } : function(i, l) {
-        return l in i;
+      has: R ? function(a, i) {
+        return l.call(a, i);
+      } : function(a, i) {
+        return i in a;
       },
-      get: R ? function(i, l) {
-        return o.call(i, l) ? i[l] : void 0;
-      } : function(i, l) {
-        return i[l];
+      get: R ? function(a, i) {
+        return l.call(a, i) ? a[i] : void 0;
+      } : function(a, i) {
+        return a[i];
       }
-    }, w = Object.getPrototypeOf(Function), z = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : lt(), I = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : st(), U = typeof WeakMap == "function" ? WeakMap : nt(), F = a ? Symbol.for("@reflect-metadata:registry") : void 0, H = ot(), Z = at(H);
-    function Q(i, l, s, m) {
-      if (f(s)) {
-        if (!Ee(i))
+    }, w = Object.getPrototypeOf(Function), M = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : it(), I = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : st(), U = typeof WeakMap == "function" ? WeakMap : nt(), Y = r ? Symbol.for("@reflect-metadata:registry") : void 0, W = lt(), Z = rt(W);
+    function Q(a, i, s, m) {
+      if ($(s)) {
+        if (!Ee(a))
           throw new TypeError();
-        if (!_e(l))
+        if (!Se(i))
           throw new TypeError();
-        return we(i, l);
+        return we(a, i);
       } else {
-        if (!Ee(i))
+        if (!Ee(a))
           throw new TypeError();
-        if (!M(l))
+        if (!z(i))
           throw new TypeError();
-        if (!M(m) && !f(m) && !V(m))
+        if (!z(m) && !$(m) && !H(m))
           throw new TypeError();
-        return V(m) && (m = void 0), s = j(s), Re(i, l, s, m);
+        return H(m) && (m = void 0), s = j(s), Re(a, i, s, m);
       }
     }
     t("decorate", Q);
-    function B(i, l) {
-      function s(m, C) {
-        if (!M(m))
+    function B(a, i) {
+      function s(m, P) {
+        if (!z(m))
           throw new TypeError();
-        if (!f(C) && !Ne(C))
+        if (!$(P) && !Ne(P))
           throw new TypeError();
-        me(i, l, m, C);
+        me(a, i, m, P);
       }
       return s;
     }
     t("metadata", B);
-    function K(i, l, s, m) {
-      if (!M(s))
+    function K(a, i, s, m) {
+      if (!z(s))
         throw new TypeError();
-      return f(m) || (m = j(m)), me(i, l, s, m);
+      return $(m) || (m = j(m)), me(a, i, s, m);
     }
     t("defineMetadata", K);
-    function X(i, l, s) {
-      if (!M(l))
+    function X(a, i, s) {
+      if (!z(i))
         throw new TypeError();
-      return f(s) || (s = j(s)), he(i, l, s);
+      return $(s) || (s = j(s)), ye(a, i, s);
     }
     t("hasMetadata", X);
-    function q(i, l, s) {
-      if (!M(l))
+    function q(a, i, s) {
+      if (!z(i))
         throw new TypeError();
-      return f(s) || (s = j(s)), se(i, l, s);
+      return $(s) || (s = j(s)), se(a, i, s);
     }
     t("hasOwnMetadata", q);
-    function ce(i, l, s) {
-      if (!M(l))
+    function ce(a, i, s) {
+      if (!z(i))
         throw new TypeError();
-      return f(s) || (s = j(s)), ye(i, l, s);
+      return $(s) || (s = j(s)), he(a, i, s);
     }
     t("getMetadata", ce);
-    function oe(i, l, s) {
-      if (!M(l))
+    function le(a, i, s) {
+      if (!z(i))
         throw new TypeError();
-      return f(s) || (s = j(s)), be(i, l, s);
+      return $(s) || (s = j(s)), be(a, i, s);
     }
-    t("getOwnMetadata", oe);
-    function ae(i, l) {
-      if (!M(i))
+    t("getOwnMetadata", le);
+    function re(a, i) {
+      if (!z(a))
         throw new TypeError();
-      return f(l) || (l = j(l)), ve(i, l);
+      return $(i) || (i = j(i)), ve(a, i);
     }
-    t("getMetadataKeys", ae);
-    function ie(i, l) {
-      if (!M(i))
+    t("getMetadataKeys", re);
+    function ae(a, i) {
+      if (!z(a))
         throw new TypeError();
-      return f(l) || (l = j(l)), ne(i, l);
+      return $(i) || (i = j(i)), ne(a, i);
     }
-    t("getOwnMetadataKeys", ie);
-    function le(i, l, s) {
-      if (!M(l))
+    t("getOwnMetadataKeys", ae);
+    function ie(a, i, s) {
+      if (!z(i))
         throw new TypeError();
-      if (f(s) || (s = j(s)), !M(l))
+      if ($(s) || (s = j(s)), !z(i))
         throw new TypeError();
-      f(s) || (s = j(s));
+      $(s) || (s = j(s));
       var m = Ae(
-        l,
+        i,
         s,
         /*Create*/
         !1
       );
-      return f(m) ? !1 : m.OrdinaryDeleteMetadata(i, l, s);
+      return $(m) ? !1 : m.OrdinaryDeleteMetadata(a, i, s);
     }
-    t("deleteMetadata", le);
-    function we(i, l) {
-      for (var s = i.length - 1; s >= 0; --s) {
-        var m = i[s], C = m(l);
-        if (!f(C) && !V(C)) {
-          if (!_e(C))
+    t("deleteMetadata", ie);
+    function we(a, i) {
+      for (var s = a.length - 1; s >= 0; --s) {
+        var m = a[s], P = m(i);
+        if (!$(P) && !H(P)) {
+          if (!Se(P))
             throw new TypeError();
-          l = C;
+          i = P;
         }
       }
-      return l;
+      return i;
     }
-    function Re(i, l, s, m) {
-      for (var C = i.length - 1; C >= 0; --C) {
-        var W = i[C], Y = W(l, s, m);
-        if (!f(Y) && !V(Y)) {
-          if (!M(Y))
+    function Re(a, i, s, m) {
+      for (var P = a.length - 1; P >= 0; --P) {
+        var F = a[P], V = F(i, s, m);
+        if (!$(V) && !H(V)) {
+          if (!z(V))
             throw new TypeError();
-          m = Y;
+          m = V;
         }
       }
       return m;
     }
-    function he(i, l, s) {
-      var m = se(i, l, s);
+    function ye(a, i, s) {
+      var m = se(a, i, s);
       if (m)
         return !0;
-      var C = Ce(l);
-      return V(C) ? !1 : he(i, C, s);
+      var P = Pe(i);
+      return H(P) ? !1 : ye(a, P, s);
     }
-    function se(i, l, s) {
+    function se(a, i, s) {
       var m = Ae(
-        l,
+        i,
         s,
         /*Create*/
         !1
       );
-      return f(m) ? !1 : de(m.OrdinaryHasOwnMetadata(i, l, s));
+      return $(m) ? !1 : ue(m.OrdinaryHasOwnMetadata(a, i, s));
     }
-    function ye(i, l, s) {
-      var m = se(i, l, s);
+    function he(a, i, s) {
+      var m = se(a, i, s);
       if (m)
-        return be(i, l, s);
-      var C = Ce(l);
-      if (!V(C))
-        return ye(i, C, s);
+        return be(a, i, s);
+      var P = Pe(i);
+      if (!H(P))
+        return he(a, P, s);
     }
-    function be(i, l, s) {
+    function be(a, i, s) {
       var m = Ae(
-        l,
+        i,
         s,
         /*Create*/
         !1
       );
-      if (!f(m))
-        return m.OrdinaryGetOwnMetadata(i, l, s);
+      if (!$(m))
+        return m.OrdinaryGetOwnMetadata(a, i, s);
     }
-    function me(i, l, s, m) {
-      var C = Ae(
+    function me(a, i, s, m) {
+      var P = Ae(
         s,
         m,
         /*Create*/
         !0
       );
-      C.OrdinaryDefineOwnMetadata(i, l, s, m);
+      P.OrdinaryDefineOwnMetadata(a, i, s, m);
     }
-    function ve(i, l) {
-      var s = ne(i, l), m = Ce(i);
+    function ve(a, i) {
+      var s = ne(a, i), m = Pe(a);
       if (m === null)
         return s;
-      var C = ve(m, l);
-      if (C.length <= 0)
+      var P = ve(m, i);
+      if (P.length <= 0)
         return s;
       if (s.length <= 0)
-        return C;
-      for (var W = new I(), Y = [], _ = 0, v = s; _ < v.length; _++) {
-        var T = v[_], $ = W.has(T);
-        $ || (W.add(T), Y.push(T));
+        return P;
+      for (var F = new I(), V = [], S = 0, v = s; S < v.length; S++) {
+        var f = v[S], g = F.has(f);
+        g || (F.add(f), V.push(f));
       }
-      for (var g = 0, S = C; g < S.length; g++) {
-        var T = S[g], $ = W.has(T);
-        $ || (W.add(T), Y.push(T));
+      for (var T = 0, _ = P; T < _.length; T++) {
+        var f = _[T], g = F.has(f);
+        g || (F.add(f), V.push(f));
       }
-      return Y;
+      return V;
     }
-    function ne(i, l) {
+    function ne(a, i) {
       var s = Ae(
+        a,
         i,
-        l,
         /*create*/
         !1
       );
-      return s ? s.OrdinaryOwnMetadataKeys(i, l) : [];
+      return s ? s.OrdinaryOwnMetadataKeys(a, i) : [];
     }
-    function pe(i) {
-      if (i === null)
+    function pe(a) {
+      if (a === null)
         return 1;
-      switch (typeof i) {
+      switch (typeof a) {
         case "undefined":
           return 0;
         case "boolean":
@@ -848,86 +848,86 @@ var Dt;
         case "number":
           return 5;
         case "object":
-          return i === null ? 1 : 6;
+          return a === null ? 1 : 6;
         default:
           return 6;
       }
     }
-    function f(i) {
-      return i === void 0;
+    function $(a) {
+      return a === void 0;
     }
-    function V(i) {
-      return i === null;
+    function H(a) {
+      return a === null;
     }
-    function xe(i) {
-      return typeof i == "symbol";
+    function xe(a) {
+      return typeof a == "symbol";
     }
-    function M(i) {
-      return typeof i == "object" ? i !== null : typeof i == "function";
+    function z(a) {
+      return typeof a == "object" ? a !== null : typeof a == "function";
     }
-    function Te(i, l) {
-      switch (pe(i)) {
+    function fe(a, i) {
+      switch (pe(a)) {
         case 0:
-          return i;
+          return a;
         case 1:
-          return i;
+          return a;
         case 2:
-          return i;
+          return a;
         case 3:
-          return i;
+          return a;
         case 4:
-          return i;
+          return a;
         case 5:
-          return i;
+          return a;
       }
-      var s = "string", m = Se(i, c);
+      var s = "string", m = _e(a, c);
       if (m !== void 0) {
-        var C = m.call(i, s);
-        if (M(C))
+        var P = m.call(a, s);
+        if (z(P))
           throw new TypeError();
-        return C;
+        return P;
       }
-      return $e(i);
+      return ge(a);
     }
-    function $e(i, l) {
+    function ge(a, i) {
       var s, m;
       {
-        var C = i.toString;
-        if (Pe(C)) {
-          var m = C.call(i);
-          if (!M(m))
+        var P = a.toString;
+        if (Ce(P)) {
+          var m = P.call(a);
+          if (!z(m))
             return m;
         }
-        var s = i.valueOf;
-        if (Pe(s)) {
-          var m = s.call(i);
-          if (!M(m))
+        var s = a.valueOf;
+        if (Ce(s)) {
+          var m = s.call(a);
+          if (!z(m))
             return m;
         }
       }
       throw new TypeError();
     }
-    function de(i) {
-      return !!i;
+    function ue(a) {
+      return !!a;
     }
-    function ge(i) {
-      return "" + i;
+    function Te(a) {
+      return "" + a;
     }
-    function j(i) {
-      var l = Te(i);
-      return xe(l) ? l : ge(l);
+    function j(a) {
+      var i = fe(a);
+      return xe(i) ? i : Te(i);
     }
-    function Ee(i) {
-      return Array.isArray ? Array.isArray(i) : i instanceof Object ? i instanceof Array : Object.prototype.toString.call(i) === "[object Array]";
+    function Ee(a) {
+      return Array.isArray ? Array.isArray(a) : a instanceof Object ? a instanceof Array : Object.prototype.toString.call(a) === "[object Array]";
     }
-    function Pe(i) {
-      return typeof i == "function";
+    function Ce(a) {
+      return typeof a == "function";
     }
-    function _e(i) {
-      return typeof i == "function";
+    function Se(a) {
+      return typeof a == "function";
     }
-    function Ne(i) {
-      switch (pe(i)) {
+    function Ne(a) {
+      switch (pe(a)) {
         case 3:
           return !0;
         case 4:
@@ -936,428 +936,428 @@ var Dt;
           return !1;
       }
     }
-    function fe(i, l) {
-      return i === l || i !== i && l !== l;
+    function $e(a, i) {
+      return a === i || a !== a && i !== i;
     }
-    function Se(i, l) {
-      var s = i[l];
+    function _e(a, i) {
+      var s = a[i];
       if (s != null) {
-        if (!Pe(s))
+        if (!Ce(s))
           throw new TypeError();
         return s;
       }
     }
-    function Oe(i) {
-      var l = Se(i, d);
-      if (!Pe(l))
+    function Oe(a) {
+      var i = _e(a, u);
+      if (!Ce(i))
         throw new TypeError();
-      var s = l.call(i);
-      if (!M(s))
+      var s = i.call(a);
+      if (!z(s))
         throw new TypeError();
       return s;
     }
-    function Le(i) {
-      return i.value;
+    function Le(a) {
+      return a.value;
     }
-    function Me(i) {
-      var l = i.next();
-      return l.done ? !1 : l;
+    function ze(a) {
+      var i = a.next();
+      return i.done ? !1 : i;
     }
-    function ze(i) {
-      var l = i.return;
-      l && l.call(i);
+    function Me(a) {
+      var i = a.return;
+      i && i.call(a);
     }
-    function Ce(i) {
-      var l = Object.getPrototypeOf(i);
-      if (typeof i != "function" || i === w || l !== w)
-        return l;
-      var s = i.prototype, m = s && Object.getPrototypeOf(s);
+    function Pe(a) {
+      var i = Object.getPrototypeOf(a);
+      if (typeof a != "function" || a === w || i !== w)
+        return i;
+      var s = a.prototype, m = s && Object.getPrototypeOf(s);
       if (m == null || m === Object.prototype)
-        return l;
-      var C = m.constructor;
-      return typeof C != "function" || C === i ? l : C;
+        return i;
+      var P = m.constructor;
+      return typeof P != "function" || P === a ? i : P;
     }
     function ke() {
-      var i;
-      !f(F) && typeof r.Reflect < "u" && !(F in r.Reflect) && typeof r.Reflect.defineMetadata == "function" && (i = it(r.Reflect));
-      var l, s, m, C = new U(), W = {
-        registerProvider: Y,
+      var a;
+      !$(Y) && typeof o.Reflect < "u" && !(Y in o.Reflect) && typeof o.Reflect.defineMetadata == "function" && (a = at(o.Reflect));
+      var i, s, m, P = new U(), F = {
+        registerProvider: V,
         getProvider: v,
-        setProvider: $
+        setProvider: g
       };
-      return W;
-      function Y(g) {
-        if (!Object.isExtensible(W))
+      return F;
+      function V(T) {
+        if (!Object.isExtensible(F))
           throw new Error("Cannot add provider to a frozen registry.");
         switch (!0) {
-          case i === g:
+          case a === T:
             break;
-          case f(l):
-            l = g;
+          case $(i):
+            i = T;
             break;
-          case l === g:
+          case i === T:
             break;
-          case f(s):
-            s = g;
+          case $(s):
+            s = T;
             break;
-          case s === g:
+          case s === T:
             break;
           default:
-            m === void 0 && (m = new I()), m.add(g);
+            m === void 0 && (m = new I()), m.add(T);
             break;
         }
       }
-      function _(g, S) {
-        if (!f(l)) {
-          if (l.isProviderFor(g, S))
-            return l;
-          if (!f(s)) {
-            if (s.isProviderFor(g, S))
-              return l;
-            if (!f(m))
+      function S(T, _) {
+        if (!$(i)) {
+          if (i.isProviderFor(T, _))
+            return i;
+          if (!$(s)) {
+            if (s.isProviderFor(T, _))
+              return i;
+            if (!$(m))
               for (var A = Oe(m); ; ) {
-                var N = Me(A);
+                var N = ze(A);
                 if (!N)
                   return;
-                var ue = Le(N);
-                if (ue.isProviderFor(g, S))
-                  return ze(A), ue;
+                var de = Le(N);
+                if (de.isProviderFor(T, _))
+                  return Me(A), de;
               }
           }
         }
-        if (!f(i) && i.isProviderFor(g, S))
-          return i;
+        if (!$(a) && a.isProviderFor(T, _))
+          return a;
       }
-      function v(g, S) {
-        var A = C.get(g), N;
-        return f(A) || (N = A.get(S)), f(N) && (N = _(g, S), f(N) || (f(A) && (A = new z(), C.set(g, A)), A.set(S, N))), N;
+      function v(T, _) {
+        var A = P.get(T), N;
+        return $(A) || (N = A.get(_)), $(N) && (N = S(T, _), $(N) || ($(A) && (A = new M(), P.set(T, A)), A.set(_, N))), N;
       }
-      function T(g) {
-        if (f(g))
+      function f(T) {
+        if ($(T))
           throw new TypeError();
-        return l === g || s === g || !f(m) && m.has(g);
+        return i === T || s === T || !$(m) && m.has(T);
       }
-      function $(g, S, A) {
-        if (!T(A))
+      function g(T, _, A) {
+        if (!f(A))
           throw new Error("Metadata provider not registered.");
-        var N = v(g, S);
+        var N = v(T, _);
         if (N !== A) {
-          if (!f(N))
+          if (!$(N))
             return !1;
-          var ue = C.get(g);
-          f(ue) && (ue = new z(), C.set(g, ue)), ue.set(S, A);
+          var de = P.get(T);
+          $(de) && (de = new M(), P.set(T, de)), de.set(_, A);
         }
         return !0;
       }
     }
-    function ot() {
-      var i;
-      return !f(F) && M(r.Reflect) && Object.isExtensible(r.Reflect) && (i = r.Reflect[F]), f(i) && (i = ke()), !f(F) && M(r.Reflect) && Object.isExtensible(r.Reflect) && Object.defineProperty(r.Reflect, F, {
+    function lt() {
+      var a;
+      return !$(Y) && z(o.Reflect) && Object.isExtensible(o.Reflect) && (a = o.Reflect[Y]), $(a) && (a = ke()), !$(Y) && z(o.Reflect) && Object.isExtensible(o.Reflect) && Object.defineProperty(o.Reflect, Y, {
         enumerable: !1,
         configurable: !1,
         writable: !1,
-        value: i
-      }), i;
+        value: a
+      }), a;
     }
-    function at(i) {
-      var l = new U(), s = {
-        isProviderFor: function(T, $) {
-          var g = l.get(T);
-          return f(g) ? !1 : g.has($);
+    function rt(a) {
+      var i = new U(), s = {
+        isProviderFor: function(f, g) {
+          var T = i.get(f);
+          return $(T) ? !1 : T.has(g);
         },
-        OrdinaryDefineOwnMetadata: Y,
-        OrdinaryHasOwnMetadata: C,
-        OrdinaryGetOwnMetadata: W,
-        OrdinaryOwnMetadataKeys: _,
+        OrdinaryDefineOwnMetadata: V,
+        OrdinaryHasOwnMetadata: P,
+        OrdinaryGetOwnMetadata: F,
+        OrdinaryOwnMetadataKeys: S,
         OrdinaryDeleteMetadata: v
       };
-      return H.registerProvider(s), s;
-      function m(T, $, g) {
-        var S = l.get(T), A = !1;
-        if (f(S)) {
-          if (!g)
+      return W.registerProvider(s), s;
+      function m(f, g, T) {
+        var _ = i.get(f), A = !1;
+        if ($(_)) {
+          if (!T)
             return;
-          S = new z(), l.set(T, S), A = !0;
+          _ = new M(), i.set(f, _), A = !0;
         }
-        var N = S.get($);
-        if (f(N)) {
-          if (!g)
+        var N = _.get(g);
+        if ($(N)) {
+          if (!T)
             return;
-          if (N = new z(), S.set($, N), !i.setProvider(T, $, s))
-            throw S.delete($), A && l.delete(T), new Error("Wrong provider for target.");
+          if (N = new M(), _.set(g, N), !a.setProvider(f, g, s))
+            throw _.delete(g), A && i.delete(f), new Error("Wrong provider for target.");
         }
         return N;
       }
-      function C(T, $, g) {
-        var S = m(
-          $,
+      function P(f, g, T) {
+        var _ = m(
           g,
+          T,
           /*Create*/
           !1
         );
-        return f(S) ? !1 : de(S.has(T));
+        return $(_) ? !1 : ue(_.has(f));
       }
-      function W(T, $, g) {
-        var S = m(
-          $,
+      function F(f, g, T) {
+        var _ = m(
           g,
+          T,
           /*Create*/
           !1
         );
-        if (!f(S))
-          return S.get(T);
+        if (!$(_))
+          return _.get(f);
       }
-      function Y(T, $, g, S) {
+      function V(f, g, T, _) {
         var A = m(
-          g,
-          S,
+          T,
+          _,
           /*Create*/
           !0
         );
-        A.set(T, $);
+        A.set(f, g);
       }
-      function _(T, $) {
-        var g = [], S = m(
-          T,
-          $,
+      function S(f, g) {
+        var T = [], _ = m(
+          f,
+          g,
           /*Create*/
           !1
         );
-        if (f(S))
-          return g;
-        for (var A = S.keys(), N = Oe(A), ue = 0; ; ) {
-          var Pt = Me(N);
-          if (!Pt)
-            return g.length = ue, g;
-          var Wt = Le(Pt);
+        if ($(_))
+          return T;
+        for (var A = _.keys(), N = Oe(A), de = 0; ; ) {
+          var Ct = ze(N);
+          if (!Ct)
+            return T.length = de, T;
+          var Ft = Le(Ct);
           try {
-            g[ue] = Wt;
+            T[de] = Ft;
           } catch (Jt) {
             try {
-              ze(N);
+              Me(N);
             } finally {
               throw Jt;
             }
           }
-          ue++;
+          de++;
         }
       }
-      function v(T, $, g) {
-        var S = m(
-          $,
+      function v(f, g, T) {
+        var _ = m(
           g,
+          T,
           /*Create*/
           !1
         );
-        if (f(S) || !S.delete(T))
+        if ($(_) || !_.delete(f))
           return !1;
-        if (S.size === 0) {
-          var A = l.get($);
-          f(A) || (A.delete(g), A.size === 0 && l.delete(A));
+        if (_.size === 0) {
+          var A = i.get(g);
+          $(A) || (A.delete(T), A.size === 0 && i.delete(A));
         }
         return !0;
       }
     }
-    function it(i) {
-      var l = i.defineMetadata, s = i.hasOwnMetadata, m = i.getOwnMetadata, C = i.getOwnMetadataKeys, W = i.deleteMetadata, Y = new U(), _ = {
-        isProviderFor: function(v, T) {
-          var $ = Y.get(v);
-          return !f($) && $.has(T) ? !0 : C(v, T).length ? (f($) && ($ = new I(), Y.set(v, $)), $.add(T), !0) : !1;
+    function at(a) {
+      var i = a.defineMetadata, s = a.hasOwnMetadata, m = a.getOwnMetadata, P = a.getOwnMetadataKeys, F = a.deleteMetadata, V = new U(), S = {
+        isProviderFor: function(v, f) {
+          var g = V.get(v);
+          return !$(g) && g.has(f) ? !0 : P(v, f).length ? ($(g) && (g = new I(), V.set(v, g)), g.add(f), !0) : !1;
         },
-        OrdinaryDefineOwnMetadata: l,
+        OrdinaryDefineOwnMetadata: i,
         OrdinaryHasOwnMetadata: s,
         OrdinaryGetOwnMetadata: m,
-        OrdinaryOwnMetadataKeys: C,
-        OrdinaryDeleteMetadata: W
+        OrdinaryOwnMetadataKeys: P,
+        OrdinaryDeleteMetadata: F
       };
-      return _;
+      return S;
     }
-    function Ae(i, l, s) {
-      var m = H.getProvider(i, l);
-      if (!f(m))
+    function Ae(a, i, s) {
+      var m = W.getProvider(a, i);
+      if (!$(m))
         return m;
       if (s) {
-        if (H.setProvider(i, l, Z))
+        if (W.setProvider(a, i, Z))
           return Z;
         throw new Error("Illegal state.");
       }
     }
-    function lt() {
-      var i = {}, l = [], s = (
+    function it() {
+      var a = {}, i = [], s = (
         /** @class */
         function() {
-          function _(v, T, $) {
-            this._index = 0, this._keys = v, this._values = T, this._selector = $;
+          function S(v, f, g) {
+            this._index = 0, this._keys = v, this._values = f, this._selector = g;
           }
-          return _.prototype["@@iterator"] = function() {
+          return S.prototype["@@iterator"] = function() {
             return this;
-          }, _.prototype[d] = function() {
+          }, S.prototype[u] = function() {
             return this;
-          }, _.prototype.next = function() {
+          }, S.prototype.next = function() {
             var v = this._index;
             if (v >= 0 && v < this._keys.length) {
-              var T = this._selector(this._keys[v], this._values[v]);
-              return v + 1 >= this._keys.length ? (this._index = -1, this._keys = l, this._values = l) : this._index++, { value: T, done: !1 };
+              var f = this._selector(this._keys[v], this._values[v]);
+              return v + 1 >= this._keys.length ? (this._index = -1, this._keys = i, this._values = i) : this._index++, { value: f, done: !1 };
             }
             return { value: void 0, done: !0 };
-          }, _.prototype.throw = function(v) {
-            throw this._index >= 0 && (this._index = -1, this._keys = l, this._values = l), v;
-          }, _.prototype.return = function(v) {
-            return this._index >= 0 && (this._index = -1, this._keys = l, this._values = l), { value: v, done: !0 };
-          }, _;
+          }, S.prototype.throw = function(v) {
+            throw this._index >= 0 && (this._index = -1, this._keys = i, this._values = i), v;
+          }, S.prototype.return = function(v) {
+            return this._index >= 0 && (this._index = -1, this._keys = i, this._values = i), { value: v, done: !0 };
+          }, S;
         }()
       ), m = (
         /** @class */
         function() {
-          function _() {
-            this._keys = [], this._values = [], this._cacheKey = i, this._cacheIndex = -2;
+          function S() {
+            this._keys = [], this._values = [], this._cacheKey = a, this._cacheIndex = -2;
           }
-          return Object.defineProperty(_.prototype, "size", {
+          return Object.defineProperty(S.prototype, "size", {
             get: function() {
               return this._keys.length;
             },
             enumerable: !0,
             configurable: !0
-          }), _.prototype.has = function(v) {
+          }), S.prototype.has = function(v) {
             return this._find(
               v,
               /*insert*/
               !1
             ) >= 0;
-          }, _.prototype.get = function(v) {
-            var T = this._find(
+          }, S.prototype.get = function(v) {
+            var f = this._find(
               v,
               /*insert*/
               !1
             );
-            return T >= 0 ? this._values[T] : void 0;
-          }, _.prototype.set = function(v, T) {
-            var $ = this._find(
+            return f >= 0 ? this._values[f] : void 0;
+          }, S.prototype.set = function(v, f) {
+            var g = this._find(
               v,
               /*insert*/
               !0
             );
-            return this._values[$] = T, this;
-          }, _.prototype.delete = function(v) {
-            var T = this._find(
+            return this._values[g] = f, this;
+          }, S.prototype.delete = function(v) {
+            var f = this._find(
               v,
               /*insert*/
               !1
             );
-            if (T >= 0) {
-              for (var $ = this._keys.length, g = T + 1; g < $; g++)
-                this._keys[g - 1] = this._keys[g], this._values[g - 1] = this._values[g];
-              return this._keys.length--, this._values.length--, fe(v, this._cacheKey) && (this._cacheKey = i, this._cacheIndex = -2), !0;
+            if (f >= 0) {
+              for (var g = this._keys.length, T = f + 1; T < g; T++)
+                this._keys[T - 1] = this._keys[T], this._values[T - 1] = this._values[T];
+              return this._keys.length--, this._values.length--, $e(v, this._cacheKey) && (this._cacheKey = a, this._cacheIndex = -2), !0;
             }
             return !1;
-          }, _.prototype.clear = function() {
-            this._keys.length = 0, this._values.length = 0, this._cacheKey = i, this._cacheIndex = -2;
-          }, _.prototype.keys = function() {
-            return new s(this._keys, this._values, C);
-          }, _.prototype.values = function() {
-            return new s(this._keys, this._values, W);
-          }, _.prototype.entries = function() {
-            return new s(this._keys, this._values, Y);
-          }, _.prototype["@@iterator"] = function() {
+          }, S.prototype.clear = function() {
+            this._keys.length = 0, this._values.length = 0, this._cacheKey = a, this._cacheIndex = -2;
+          }, S.prototype.keys = function() {
+            return new s(this._keys, this._values, P);
+          }, S.prototype.values = function() {
+            return new s(this._keys, this._values, F);
+          }, S.prototype.entries = function() {
+            return new s(this._keys, this._values, V);
+          }, S.prototype["@@iterator"] = function() {
             return this.entries();
-          }, _.prototype[d] = function() {
+          }, S.prototype[u] = function() {
             return this.entries();
-          }, _.prototype._find = function(v, T) {
-            if (!fe(this._cacheKey, v)) {
+          }, S.prototype._find = function(v, f) {
+            if (!$e(this._cacheKey, v)) {
               this._cacheIndex = -1;
-              for (var $ = 0; $ < this._keys.length; $++)
-                if (fe(this._keys[$], v)) {
-                  this._cacheIndex = $;
+              for (var g = 0; g < this._keys.length; g++)
+                if ($e(this._keys[g], v)) {
+                  this._cacheIndex = g;
                   break;
                 }
             }
-            return this._cacheIndex < 0 && T && (this._cacheIndex = this._keys.length, this._keys.push(v), this._values.push(void 0)), this._cacheIndex;
-          }, _;
+            return this._cacheIndex < 0 && f && (this._cacheIndex = this._keys.length, this._keys.push(v), this._values.push(void 0)), this._cacheIndex;
+          }, S;
         }()
       );
       return m;
-      function C(_, v) {
-        return _;
+      function P(S, v) {
+        return S;
       }
-      function W(_, v) {
+      function F(S, v) {
         return v;
       }
-      function Y(_, v) {
-        return [_, v];
+      function V(S, v) {
+        return [S, v];
       }
     }
     function st() {
-      var i = (
+      var a = (
         /** @class */
         function() {
-          function l() {
-            this._map = new z();
+          function i() {
+            this._map = new M();
           }
-          return Object.defineProperty(l.prototype, "size", {
+          return Object.defineProperty(i.prototype, "size", {
             get: function() {
               return this._map.size;
             },
             enumerable: !0,
             configurable: !0
-          }), l.prototype.has = function(s) {
+          }), i.prototype.has = function(s) {
             return this._map.has(s);
-          }, l.prototype.add = function(s) {
+          }, i.prototype.add = function(s) {
             return this._map.set(s, s), this;
-          }, l.prototype.delete = function(s) {
+          }, i.prototype.delete = function(s) {
             return this._map.delete(s);
-          }, l.prototype.clear = function() {
+          }, i.prototype.clear = function() {
             this._map.clear();
-          }, l.prototype.keys = function() {
+          }, i.prototype.keys = function() {
             return this._map.keys();
-          }, l.prototype.values = function() {
+          }, i.prototype.values = function() {
             return this._map.keys();
-          }, l.prototype.entries = function() {
+          }, i.prototype.entries = function() {
             return this._map.entries();
-          }, l.prototype["@@iterator"] = function() {
+          }, i.prototype["@@iterator"] = function() {
             return this.keys();
-          }, l.prototype[d] = function() {
+          }, i.prototype[u] = function() {
             return this.keys();
-          }, l;
+          }, i;
         }()
       );
-      return i;
+      return a;
     }
     function nt() {
-      var i = 16, l = E.create(), s = m();
+      var a = 16, i = E.create(), s = m();
       return (
         /** @class */
         function() {
           function v() {
             this._key = m();
           }
-          return v.prototype.has = function(T) {
-            var $ = C(
-              T,
+          return v.prototype.has = function(f) {
+            var g = P(
+              f,
               /*create*/
               !1
             );
-            return $ !== void 0 ? E.has($, this._key) : !1;
-          }, v.prototype.get = function(T) {
-            var $ = C(
-              T,
+            return g !== void 0 ? E.has(g, this._key) : !1;
+          }, v.prototype.get = function(f) {
+            var g = P(
+              f,
               /*create*/
               !1
             );
-            return $ !== void 0 ? E.get($, this._key) : void 0;
-          }, v.prototype.set = function(T, $) {
-            var g = C(
-              T,
+            return g !== void 0 ? E.get(g, this._key) : void 0;
+          }, v.prototype.set = function(f, g) {
+            var T = P(
+              f,
               /*create*/
               !0
             );
-            return g[this._key] = $, this;
-          }, v.prototype.delete = function(T) {
-            var $ = C(
-              T,
+            return T[this._key] = g, this;
+          }, v.prototype.delete = function(f) {
+            var g = P(
+              f,
               /*create*/
               !1
             );
-            return $ !== void 0 ? delete $[this._key] : !1;
+            return g !== void 0 ? delete g[this._key] : !1;
           }, v.prototype.clear = function() {
             this._key = m();
           }, v;
@@ -1366,52 +1366,52 @@ var Dt;
       function m() {
         var v;
         do
-          v = "@@WeakMap@@" + _();
-        while (E.has(l, v));
-        return l[v] = !0, v;
+          v = "@@WeakMap@@" + S();
+        while (E.has(i, v));
+        return i[v] = !0, v;
       }
-      function C(v, T) {
-        if (!o.call(v, s)) {
-          if (!T)
+      function P(v, f) {
+        if (!l.call(v, s)) {
+          if (!f)
             return;
           Object.defineProperty(v, s, { value: E.create() });
         }
         return v[s];
       }
-      function W(v, T) {
-        for (var $ = 0; $ < T; ++$)
-          v[$] = Math.random() * 255 | 0;
+      function F(v, f) {
+        for (var g = 0; g < f; ++g)
+          v[g] = Math.random() * 255 | 0;
         return v;
       }
-      function Y(v) {
+      function V(v) {
         if (typeof Uint8Array == "function") {
-          var T = new Uint8Array(v);
-          return typeof crypto < "u" ? crypto.getRandomValues(T) : typeof msCrypto < "u" ? msCrypto.getRandomValues(T) : W(T, v), T;
+          var f = new Uint8Array(v);
+          return typeof crypto < "u" ? crypto.getRandomValues(f) : typeof msCrypto < "u" ? msCrypto.getRandomValues(f) : F(f, v), f;
         }
-        return W(new Array(v), v);
+        return F(new Array(v), v);
       }
-      function _() {
-        var v = Y(i);
+      function S() {
+        var v = V(a);
         v[6] = v[6] & 79 | 64, v[8] = v[8] & 191 | 128;
-        for (var T = "", $ = 0; $ < i; ++$) {
-          var g = v[$];
-          ($ === 4 || $ === 6 || $ === 8) && (T += "-"), g < 16 && (T += "0"), T += g.toString(16).toLowerCase();
+        for (var f = "", g = 0; g < a; ++g) {
+          var T = v[g];
+          (g === 4 || g === 6 || g === 8) && (f += "-"), T < 16 && (f += "0"), f += T.toString(16).toLowerCase();
         }
-        return T;
+        return f;
       }
     }
-    function Fe(i) {
-      return i.__ = void 0, delete i.__, i;
+    function Ye(a) {
+      return a.__ = void 0, delete a.__, a;
     }
   });
 })(Dt || (Dt = {}));
-function hr(e) {
+function ho(e) {
   return typeof e.name == "string" && typeof e.version == "string" && typeof e.title == "string" && typeof e.elementSelector == "string" && typeof e.group == "string" && typeof e.iconName == "string";
 }
-function yr(e) {
+function bo(e) {
   return function(t) {
-    if (hr(e)) {
-      const r = {
+    if (ho(e)) {
+      const o = {
         version: e.version,
         name: e.name,
         title: e.title,
@@ -1419,74 +1419,74 @@ function yr(e) {
         category: e.group,
         icon: e.iconName
       };
-      if (Reflect.defineMetadata("ZeroComponent", r, t.prototype), globalThis.customElements) {
-        const o = `${e.elementSelector}-${e.version}`;
-        if (!customElements.get(o))
+      if (Reflect.defineMetadata("ZeroComponent", o, t.prototype), globalThis.customElements) {
+        const l = `${e.elementSelector}-${e.version}`;
+        if (!customElements.get(l))
           try {
-            customElements.define(o, t);
+            customElements.define(l, t);
           } catch {
             try {
-              customElements.define(o, class extends t {
+              customElements.define(l, class extends t {
               });
             } catch (c) {
-              console.error(`[ZeroAnnotations] Failed to define custom element ${o}:`, c);
+              console.error(`[ZeroAnnotations] Failed to define custom element ${l}:`, c);
             }
           }
       } else
         console.warn("The customElements API is not supported in this environment. Custom element registration skipped.");
       window.dispatchEvent(new CustomEvent("zero-element:component-load", {
         detail: {
-          element: r
+          element: o
         }
       }));
     } else
       throw new Error("Invalid configuration provided to RendererComponent decorator");
   };
 }
-function rt(e) {
-  return yr(e);
+function ot(e) {
+  return bo(e);
 }
-function br(e) {
-  var r;
-  if (((r = e == null ? void 0 : e.categoryLabel) == null ? void 0 : r.trim()) === "")
+function mo(e) {
+  var o;
+  if (((o = e == null ? void 0 : e.categoryLabel) == null ? void 0 : o.trim()) === "")
     throw new Error("Invalid category for RendererAttributeConfiguration. It cannot be an empty string.");
   return !0;
 }
-function mr(e) {
-  return function(t, r) {
+function vo(e) {
+  return function(t, o) {
     try {
-      br(e);
-      const o = [...Reflect.getMetadata("ZeroAttribute", t) || []];
-      let a = !0;
-      if (typeof r == "string") {
+      mo(e);
+      const l = [...Reflect.getMetadata("ZeroAttribute", t) || []];
+      let r = !0;
+      if (typeof o == "string") {
         try {
-          a = typeof t[r] != "function";
+          r = typeof t[o] != "function";
         } catch {
-          a = !0;
+          r = !0;
         }
-        a && (e.fieldMappings = e.fieldMappings ?? r);
+        r && (e.fieldMappings = e.fieldMappings ?? o);
       }
-      o.push(e), Reflect.defineMetadata("ZeroAttribute", o, t);
-    } catch (o) {
-      console.log(o);
+      l.push(e), Reflect.defineMetadata("ZeroAttribute", l, t);
+    } catch (l) {
+      console.log(l);
     }
   };
 }
-function h(e) {
-  return mr(e);
+function y(e) {
+  return vo(e);
 }
-var y;
+var h;
 (function(e) {
   e.TEXT_INPUT = "text-input", e.PASSWORD_INPUT = "password-input", e.DROPDOWN = "dropdown", e.CHECKBOX = "checkbox", e.RADIO_BUTTON = "radio-button", e.RANGE_SLIDER = "range-slider", e.FILE_INPUT = "file-input", e.DATE_PICKER = "date-picker", e.COLOR_PICKER = "color-picker", e.NUMBER_INPUT = "number-input", e.TEXTAREA = "textarea", e.MULTI_SELECT = "multi-select", e.POPUP_DROPDOWN = "popup-dropdown", e.LAYOUT_PICKER = "layout-picker", e.RESPONSIVE_OVERRIDE = "responsive-override", e.IMAGE_PICKER = "image-picker", e.CHIPS = "chips";
-})(y || (y = {}));
-var u;
+})(h || (h = {}));
+var d;
 (function(e) {
   e.PROPERTY = "property", e.EVENT = "event", e.ACTION = "action";
-})(u || (u = {}));
-var vr = Object.defineProperty, xr = Object.getOwnPropertyDescriptor, k = (e, t, r, o) => {
-  for (var a = o > 1 ? void 0 : o ? xr(t, r) : t, c = e.length - 1, d; c >= 0; c--)
-    (d = e[c]) && (a = (o ? d(t, r, a) : d(a)) || a);
-  return o && a && vr(t, r, a), a;
+})(d || (d = {}));
+var xo = Object.defineProperty, fo = Object.getOwnPropertyDescriptor, k = (e, t, o, l) => {
+  for (var r = l > 1 ? void 0 : l ? fo(t, o) : t, c = e.length - 1, u; c >= 0; c--)
+    (u = e[c]) && (r = (l ? u(t, o, r) : u(r)) || r);
+  return l && r && xo(t, o, r), r;
 };
 const ct = class ct extends qe {
   constructor() {
@@ -1507,12 +1507,12 @@ const ct = class ct extends qe {
    * Ensures parity between Studio and Renderer for mobile/tablet/desktop overrides.
    */
   renderResponsiveStyles() {
-    if (!this.responsiveProps || Object.keys(this.responsiveProps).length === 0) return re``;
-    const t = this.overridePrefix, r = {
+    if (!this.responsiveProps || Object.keys(this.responsiveProps).length === 0) return oe``;
+    const t = this.overridePrefix, o = {
       mobile: "@media screen and (max-width: 767px)",
       tablet: "@media screen and (min-width: 768px) and (max-width: 1024px)",
       desktop: "@media screen and (min-width: 1025px)"
-    }, o = {
+    }, l = {
       width: "width",
       height: "height",
       margin: "margin",
@@ -1532,21 +1532,21 @@ const ct = class ct extends qe {
       elevation: "elevation",
       wrap: "wrap"
     };
-    let a = "";
-    return Object.entries(r).forEach(([c, d]) => {
-      const P = this.responsiveProps[c];
-      if (!P) return;
+    let r = "";
+    return Object.entries(o).forEach(([c, u]) => {
+      const C = this.responsiveProps[c];
+      if (!C) return;
       let x = "";
-      Object.entries(P).forEach(([R, E]) => {
-        const w = o[R];
+      Object.entries(C).forEach(([R, E]) => {
+        const w = l[R];
         w && (x += `--${t}-${w}-override: ${E};
 `);
-      }), x && (a += `${d} {
+      }), x && (r += `${u} {
   :host {
     ${x}  }
 }
 `);
-    }), a ? re`<style>${a}</style>` : re``;
+    }), r ? oe`<style>${r}</style>` : oe``;
   }
   // --- Visual Logic ---
   get overridePrefix() {
@@ -1578,8 +1578,8 @@ const ct = class ct extends qe {
     ].join(";");
   }
   computeColumnBasis() {
-    const t = this.overridePrefix, r = `var(--${t}-gap-override, ${this.gap || "0px"})`, o = `var(--${t}-items-per-row-override, ${Math.max(1, Number(this.itemsPerRow) || 1)})`;
-    return `calc((100% / ${o}) - ((${r} * (${o} - 1)) / ${o}))`;
+    const t = this.overridePrefix, o = `var(--${t}-gap-override, ${this.gap || "0px"})`, l = `var(--${t}-items-per-row-override, ${Math.max(1, Number(this.itemsPerRow) || 1)})`;
+    return `calc((100% / ${l}) - ((${o} * (${l} - 1)) / ${l}))`;
   }
   get isStudio() {
     if (typeof window > "u") return !1;
@@ -1596,22 +1596,22 @@ const ct = class ct extends qe {
   // --- Interaction (Studio) ---
   handleMouseMove(t) {
     if (!this.isStudio) return;
-    const r = t.currentTarget.getBoundingClientRect(), o = (t.clientX - r.left) / r.width, a = (t.clientY - r.top) / r.height;
-    this.direction === "row" ? o < 0.3 ? this.activeEdge = "left" : o > 0.7 ? this.activeEdge = "right" : this.activeEdge = "none" : a < 0.3 ? this.activeEdge = "top" : a > 0.7 ? this.activeEdge = "bottom" : this.activeEdge = "none";
+    const o = t.currentTarget.getBoundingClientRect(), l = (t.clientX - o.left) / o.width, r = (t.clientY - o.top) / o.height;
+    this.direction === "row" ? l < 0.3 ? this.activeEdge = "left" : l > 0.7 ? this.activeEdge = "right" : this.activeEdge = "none" : r < 0.3 ? this.activeEdge = "top" : r > 0.7 ? this.activeEdge = "bottom" : this.activeEdge = "none";
   }
   handleMouseLeave() {
     this.isStudio && (this.activeEdge = "none");
   }
   renderDropIndicators() {
-    return this.isStudio ? re`
+    return this.isStudio ? oe`
       <div class="drop-indicator left ${this.activeEdge === "left" ? "active" : ""}"></div>
       <div class="drop-indicator right ${this.activeEdge === "right" ? "active" : ""}"></div>
       <div class="drop-indicator top ${this.activeEdge === "top" ? "active" : ""}"></div>
       <div class="drop-indicator bottom ${this.activeEdge === "bottom" ? "active" : ""}"></div>
-    ` : re``;
+    ` : oe``;
   }
   renderHeader() {
-    return re``;
+    return oe``;
   }
 };
 ct.slots = [], ct.styles = Ut`
@@ -1721,9 +1721,9 @@ k([
 ], L.prototype, "activeEdge", 2);
 k([
   p({ type: Boolean, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.CHECKBOX,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.CHECKBOX,
     displayLabel: "Visible",
     fieldMappings: "visible",
     categoryLabel: "Logic"
@@ -1731,9 +1731,9 @@ k([
 ], L.prototype, "visible", 2);
 k([
   p({ type: Number, reflect: !0, attribute: "z-index" }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Z-Index",
     fieldMappings: "zIndex",
     categoryLabel: "Advanced"
@@ -1741,9 +1741,9 @@ k([
 ], L.prototype, "zIndex", 2);
 k([
   p({ type: Number, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.RANGE_SLIDER,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.RANGE_SLIDER,
     displayLabel: "Opacity",
     fieldMappings: "opacity",
     categoryLabel: "Advanced"
@@ -1751,9 +1751,9 @@ k([
 ], L.prototype, "opacity", 2);
 k([
   p({ type: String, attribute: "custom-class" }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Custom CSS Class",
     fieldMappings: "customClass",
     categoryLabel: "Advanced"
@@ -1761,9 +1761,9 @@ k([
 ], L.prototype, "customClass", 2);
 k([
   p({ type: String, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.RESPONSIVE_OVERRIDE,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.RESPONSIVE_OVERRIDE,
     displayLabel: "Width",
     fieldMappings: "width",
     categoryLabel: "Dimensions"
@@ -1771,9 +1771,9 @@ k([
 ], L.prototype, "width", 2);
 k([
   p({ type: String, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.RESPONSIVE_OVERRIDE,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.RESPONSIVE_OVERRIDE,
     displayLabel: "Height",
     fieldMappings: "height",
     categoryLabel: "Dimensions"
@@ -1781,9 +1781,9 @@ k([
 ], L.prototype, "height", 2);
 k([
   p({ type: String, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.RESPONSIVE_OVERRIDE,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.RESPONSIVE_OVERRIDE,
     displayLabel: "Margin",
     fieldMappings: "margin",
     categoryLabel: "Spacing"
@@ -1791,17 +1791,17 @@ k([
 ], L.prototype, "margin", 2);
 k([
   p({ type: String, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.RESPONSIVE_OVERRIDE,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.RESPONSIVE_OVERRIDE,
     displayLabel: "Padding",
     fieldMappings: "padding",
     categoryLabel: "Spacing"
   })
 ], L.prototype, "padding", 2);
 k([
-  h({
-    attributeType: u.EVENT,
+  y({
+    attributeType: d.EVENT,
     displayLabel: "On Click",
     eventTrigger: "click",
     categoryLabel: "Triggers"
@@ -1824,9 +1824,9 @@ k([
 ], L.prototype, "itemsPerRow", 2);
 k([
   p({ type: String, attribute: "background-color", reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.COLOR_PICKER,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.COLOR_PICKER,
     displayLabel: "Background Color",
     fieldMappings: "backgroundColor",
     categoryLabel: "Appearance"
@@ -1834,9 +1834,9 @@ k([
 ], L.prototype, "backgroundColor", 2);
 k([
   p({ type: String, attribute: "border-radius", reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Corner Radius",
     fieldMappings: "borderRadius",
     categoryLabel: "Appearance"
@@ -1844,9 +1844,9 @@ k([
 ], L.prototype, "borderRadius", 2);
 k([
   p({ type: String, reflect: !0, attribute: "elevation" }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Elevation (Shadow)",
     fieldMappings: "elevation",
     categoryLabel: "Appearance",
@@ -1859,23 +1859,23 @@ k([
   })
 ], L.prototype, "elevation", 2);
 k([
-  h({
-    attributeType: u.ACTION,
+  y({
+    attributeType: d.ACTION,
     displayLabel: "Show Component",
     categoryLabel: "Actions"
   })
 ], L.prototype, "show", 1);
 k([
-  h({
-    attributeType: u.ACTION,
+  y({
+    attributeType: d.ACTION,
     displayLabel: "Hide Component",
     categoryLabel: "Actions"
   })
 ], L.prototype, "hide", 1);
-var Tr = Object.defineProperty, $r = Object.getOwnPropertyDescriptor, b = (e, t, r, o) => {
-  for (var a = o > 1 ? void 0 : o ? $r(t, r) : t, c = e.length - 1, d; c >= 0; c--)
-    (d = e[c]) && (a = (o ? d(t, r, a) : d(a)) || a);
-  return o && a && Tr(t, r, a), a;
+var go = Object.defineProperty, To = Object.getOwnPropertyDescriptor, b = (e, t, o, l) => {
+  for (var r = l > 1 ? void 0 : l ? To(t, o) : t, c = e.length - 1, u; c >= 0; c--)
+    (u = e[c]) && (r = (l ? u(t, o, r) : u(r)) || r);
+  return l && r && go(t, o, r), r;
 };
 const It = {
   kind: "section",
@@ -1900,12 +1900,226 @@ let ee = class extends L {
   get overridePrefix() {
     return "zero-section";
   }
+  static getStudioPresets() {
+    return [
+      {
+        componentName: "zero-section-1col",
+        title: "1 Column",
+        version: "1.0.0",
+        elementSelector: "zero-section-1col-1.0.0",
+        jsEntry: "zero-section.ts",
+        tags: ["layout", "section", "container", "1column"],
+        category: "layout",
+        group: "Content Block",
+        properties: [
+          { name: "col1Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col1Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col1Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col1Gap", type: "string", defaultValue: "16px" },
+          { name: "col1Flex", type: "string", defaultValue: "1" },
+          { name: "label", type: "string", defaultValue: "", label: "Studio Label" }
+        ],
+        studioTemplate: {
+          kind: "section",
+          templateHtml: "<div style='display:flex;width:100%;padding:12px;border-radius:16px;background:rgba(255,255,255,0.9);'><div style='flex:1;'><slot name='col1'></slot></div></div>",
+          labelProp: "label",
+          titleProp: "label",
+          emptyText: "Drag and Drop Elements here",
+          badges: [],
+          slots: [
+            { id: "col1", label: "Column 1", dropzone: !0, anchor: "columns", accepts: [] }
+          ]
+        },
+        events: [],
+        slots: ["col1"],
+        lifecycleHooks: ["onInit", "onDestroy", "onChanges", "afterRender"],
+        publishableAsNode: !0,
+        allowBoxModel: !0,
+        allowCustomClass: !0,
+        allowCustomStyle: !0,
+        transformOnDrop: {
+          componentName: "zero-section",
+          children: [
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" }
+          ]
+        }
+      },
+      {
+        componentName: "zero-section-2col",
+        title: "2 Column",
+        version: "1.0.0",
+        elementSelector: "zero-section-2col-1.0.0",
+        jsEntry: "zero-section.ts",
+        tags: ["layout", "section", "container", "2columns"],
+        category: "layout",
+        group: "Content Block",
+        properties: [
+          { name: "col1Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col1Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col1Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col1Gap", type: "string", defaultValue: "16px" },
+          { name: "col1Flex", type: "string", defaultValue: "1" },
+          { name: "col2Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col2Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col2Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col2Gap", type: "string", defaultValue: "16px" },
+          { name: "col2Flex", type: "string", defaultValue: "1" },
+          { name: "label", type: "string", defaultValue: "", label: "Studio Label" }
+        ],
+        studioTemplate: {
+          kind: "section",
+          templateHtml: "<div style='display:flex;width:100%;padding:12px;border-radius:16px;background:rgba(255,255,255,0.9);gap:16px;'><div style='flex:1;'><slot name='col1'></slot></div><div style='flex:1;'><slot name='col2'></slot></div></div>",
+          labelProp: "label",
+          titleProp: "label",
+          emptyText: "Drag and Drop Elements here",
+          badges: [],
+          slots: [
+            { id: "col1", label: "Column 1", dropzone: !0, anchor: "columns", accepts: [] },
+            { id: "col2", label: "Column 2", dropzone: !0, anchor: "columns", accepts: [] }
+          ]
+        },
+        events: [],
+        slots: ["col1", "col2"],
+        lifecycleHooks: ["onInit", "onDestroy", "onChanges", "afterRender"],
+        publishableAsNode: !0,
+        allowBoxModel: !0,
+        allowCustomClass: !0,
+        allowCustomStyle: !0,
+        transformOnDrop: {
+          componentName: "zero-section",
+          children: [
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" }
+          ]
+        }
+      },
+      {
+        componentName: "zero-section-3col",
+        title: "3 Column",
+        version: "1.0.0",
+        elementSelector: "zero-section-3col-1.0.0",
+        jsEntry: "zero-section.ts",
+        tags: ["layout", "section", "container", "3columns"],
+        category: "layout",
+        group: "Content Block",
+        properties: [
+          { name: "col1Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col1Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col1Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col1Gap", type: "string", defaultValue: "16px" },
+          { name: "col1Flex", type: "string", defaultValue: "1" },
+          { name: "col2Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col2Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col2Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col2Gap", type: "string", defaultValue: "16px" },
+          { name: "col2Flex", type: "string", defaultValue: "1" },
+          { name: "col3Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col3Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col3Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col3Gap", type: "string", defaultValue: "16px" },
+          { name: "col3Flex", type: "string", defaultValue: "1" },
+          { name: "label", type: "string", defaultValue: "", label: "Studio Label" }
+        ],
+        studioTemplate: {
+          kind: "section",
+          templateHtml: "<div style='display:flex;width:100%;padding:12px;border-radius:16px;background:rgba(255,255,255,0.9);gap:16px;'><div style='flex:1;'><slot name='col1'></slot></div><div style='flex:1;'><slot name='col2'></slot></div><div style='flex:1;'><slot name='col3'></slot></div></div>",
+          labelProp: "label",
+          titleProp: "label",
+          emptyText: "Drag and Drop Elements here",
+          badges: [],
+          slots: [
+            { id: "col1", label: "Column 1", dropzone: !0, anchor: "columns", accepts: [] },
+            { id: "col2", label: "Column 2", dropzone: !0, anchor: "columns", accepts: [] },
+            { id: "col3", label: "Column 3", dropzone: !0, anchor: "columns", accepts: [] }
+          ]
+        },
+        events: [],
+        slots: ["col1", "col2", "col3"],
+        lifecycleHooks: ["onInit", "onDestroy", "onChanges", "afterRender"],
+        publishableAsNode: !0,
+        allowBoxModel: !0,
+        allowCustomClass: !0,
+        allowCustomStyle: !0,
+        transformOnDrop: {
+          componentName: "zero-section",
+          children: [
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" }
+          ]
+        }
+      },
+      {
+        componentName: "zero-section-4col",
+        title: "4 Column",
+        version: "1.0.0",
+        elementSelector: "zero-section-4col-1.0.0",
+        jsEntry: "zero-section.ts",
+        tags: ["layout", "section", "container", "4columns"],
+        category: "layout",
+        group: "Content Block",
+        properties: [
+          { name: "col1Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col1Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col1Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col1Gap", type: "string", defaultValue: "16px" },
+          { name: "col1Flex", type: "string", defaultValue: "1" },
+          { name: "col2Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col2Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col2Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col2Gap", type: "string", defaultValue: "16px" },
+          { name: "col2Flex", type: "string", defaultValue: "1" },
+          { name: "col3Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col3Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col3Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col3Gap", type: "string", defaultValue: "16px" },
+          { name: "col3Flex", type: "string", defaultValue: "1" },
+          { name: "col4Direction", type: "string", uiType: "select", options: [{ label: "Column", value: "column" }, { label: "Row", value: "row" }], defaultValue: "column" },
+          { name: "col4Align", type: "string", uiType: "select", options: [{ label: "Stretch", value: "stretch" }, { label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }], defaultValue: "stretch" },
+          { name: "col4Justify", type: "string", uiType: "select", options: [{ label: "Start", value: "flex-start" }, { label: "Center", value: "center" }, { label: "End", value: "flex-end" }, { label: "Space Between", value: "space-between" }], defaultValue: "flex-start" },
+          { name: "col4Gap", type: "string", defaultValue: "16px" },
+          { name: "col4Flex", type: "string", defaultValue: "1" },
+          { name: "label", type: "string", defaultValue: "", label: "Studio Label" }
+        ],
+        studioTemplate: {
+          kind: "section",
+          templateHtml: "<div style='display:flex;width:100%;padding:12px;border-radius:16px;background:rgba(255,255,255,0.9);gap:16px;'><div style='flex:1;'><slot name='col1'></slot></div><div style='flex:1;'><slot name='col2'></slot></div><div style='flex:1;'><slot name='col3'></slot></div><div style='flex:1;'><slot name='col4'></slot></div></div>",
+          labelProp: "label",
+          titleProp: "label",
+          emptyText: "Drag and Drop Elements here",
+          badges: [],
+          slots: [
+            { id: "col1", label: "Column 1", dropzone: !0, anchor: "columns", accepts: [] },
+            { id: "col2", label: "Column-2", dropzone: !0, anchor: "columns", accepts: [] },
+            { id: "col3", label: "Column 3", dropzone: !0, anchor: "columns", accepts: [] },
+            { id: "col4", label: "Column 4", dropzone: !0, anchor: "columns", accepts: [] }
+          ]
+        },
+        events: [],
+        slots: ["col1", "col2", "col3", "col4"],
+        lifecycleHooks: ["onInit", "onDestroy", "onChanges", "afterRender"],
+        publishableAsNode: !0,
+        allowBoxModel: !0,
+        allowCustomClass: !0,
+        allowCustomStyle: !0,
+        transformOnDrop: {
+          componentName: "zero-section",
+          children: [
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+            { componentName: "zero-column", props: { flex: "1" }, slot: "default" }
+          ]
+        }
+      }
+    ];
+  }
   static getStudioTemplate(e) {
-    var F;
+    var Y;
     if (!e) return It;
     n(e.studio.display.label || "Section Block");
-    const t = n(e.props.justify || "flex-start"), r = n(e.props.align || "stretch"), o = n(e.props.direction || "row"), a = n(e.props.gap || "16px"), c = n(e.props.padding || "0px"), d = n(e.props.backgroundColor || "transparent"), P = n(e.props.borderColor || "transparent"), x = n(e.props.borderWidth || "0px"), R = n(e.props.borderRadius || "0px"), E = n(e.props.backgroundImage ? `url(${e.props.backgroundImage})` : "none"), w = e.props.responsiveProps || ((F = e.studio.props) == null ? void 0 : F.responsiveProps) || {};
-    let z = "";
+    const t = n(e.props.justify || "flex-start"), o = n(e.props.align || "stretch"), l = n(e.props.direction || "row"), r = n(e.props.gap || "16px"), c = n(e.props.padding || "0px"), u = n(e.props.backgroundColor || "transparent"), C = n(e.props.borderColor || "transparent"), x = n(e.props.borderWidth || "0px"), R = n(e.props.borderRadius || "0px"), E = n(e.props.backgroundImage ? `url(${e.props.backgroundImage})` : "none"), w = e.props.responsiveProps || ((Y = e.studio.props) == null ? void 0 : Y.responsiveProps) || {};
+    let M = "";
     const I = {
       mobile: "@media screen and (max-width: 767px)",
       tablet: "@media screen and (min-width: 768px) and (max-width: 1024px)",
@@ -1920,8 +2134,8 @@ let ee = class extends L {
       borderColor: "border-color",
       backgroundImage: "background-image"
     };
-    return Object.entries(I).forEach(([H, Z]) => {
-      const Q = w[H];
+    return Object.entries(I).forEach(([W, Z]) => {
+      const Q = w[W];
       if (!Q) return;
       let B = "";
       Object.entries(Q).forEach(([K, X]) => {
@@ -1929,22 +2143,22 @@ let ee = class extends L {
         q && (K === "backgroundImage" && X ? B += `--zero-section-${q}-override: url(${X});
 ` : B += `--zero-section-${q}-override: ${X};
 `);
-      }), B && (z += `${Z} { .studio-section-container { ${B} } }
+      }), B && (M += `${Z} { .studio-section-container { ${B} } }
 `);
     }), {
       ...It,
       templateHtml: [
         `<div class="studio-section-container" style="
           --zero-p-justify: var(--zero-section-justify-override, ${t});
-          --zero-p-align: var(--zero-section-align-override, ${r});
-          --zero-p-gap: var(--zero-section-gap-override, ${a});
+          --zero-p-align: var(--zero-section-align-override, ${o});
+          --zero-p-gap: var(--zero-section-gap-override, ${r});
           --zero-p-padding: var(--zero-section-padding-override, ${c});
-          --zero-p-bg: ${d};
-          --zero-section-border-c: var(--zero-section-border-color-override, ${P});
+          --zero-p-bg: ${u};
+          --zero-section-border-c: var(--zero-section-border-color-override, ${C});
           --zero-section-border-w: var(--zero-section-border-width-override, ${x});
           --zero-section-bg-url: var(--zero-section-background-image-override, ${E});
           --zero-p-border-radius: ${R};
-          --zero-p-direction: var(--zero-section-direction-override, ${o});
+          --zero-p-direction: var(--zero-section-direction-override, ${l});
 
           display: flex;
           flex-direction: var(--zero-p-direction);
@@ -1965,7 +2179,7 @@ let ee = class extends L {
         ">`,
         `<style>
           .studio-section-container zero-studio-slot[name='default'] { width: 100%; display: flex; flex-direction: var(--zero-p-direction); gap: var(--zero-p-gap); }
-          ${z}
+          ${M}
         </style>`,
         "<zero-studio-slot name='default'></zero-studio-slot>",
         "</div>"
@@ -1975,13 +2189,13 @@ let ee = class extends L {
   computeInternalStyles() {
     const e = this.overridePrefix;
     let t = super.computeInternalStyles();
-    const r = `var(--${e}-background-image-override, ${this.backgroundImage ? `url(${this.backgroundImage})` : "none"})`;
-    t += `; --zero-section-bg-url: ${r}`;
-    const o = `var(--${e}-border-width-override, ${this.borderWidth})`, a = `var(--${e}-border-color-override, ${this.borderColor})`;
-    return t += `; --zero-section-border-w: ${o}; --zero-section-border-c: ${a}`, t;
+    const o = `var(--${e}-background-image-override, ${this.backgroundImage ? `url(${this.backgroundImage})` : "none"})`;
+    t += `; --zero-section-bg-url: ${o}`;
+    const l = `var(--${e}-border-width-override, ${this.borderWidth})`, r = `var(--${e}-border-color-override, ${this.borderColor})`;
+    return t += `; --zero-section-border-w: ${l}; --zero-section-border-c: ${r}`, t;
   }
   render() {
-    return re`
+    return oe`
       ${this.renderResponsiveStyles()}
       <div style=${this.computeBaseStyles()}>
         <div class="zero-internal-container" 
@@ -1990,7 +2204,7 @@ let ee = class extends L {
              @mouseleave=${this.handleMouseLeave}>
           ${this.renderDropIndicators()}
           <div class="section-inner">
-            ${this.backgroundVideo ? re`
+            ${this.backgroundVideo ? oe`
               <video class="background-video" autoplay muted loop playsinline>
                 <source src=${this.backgroundVideo} type="video/mp4">
               </video>
@@ -2051,9 +2265,9 @@ ee.styles = [
 ];
 b([
   p({ type: String, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Layout Direction",
     fieldMappings: "direction",
     categoryLabel: "Layout Settings",
@@ -2066,9 +2280,9 @@ b([
 ], ee.prototype, "direction", 2);
 b([
   p({ type: String, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Align Items",
     fieldMappings: "align",
     categoryLabel: "Layout Settings",
@@ -2083,9 +2297,9 @@ b([
 ], ee.prototype, "align", 2);
 b([
   p({ type: String, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Justify Content",
     fieldMappings: "justify",
     categoryLabel: "Layout Settings",
@@ -2101,9 +2315,9 @@ b([
 ], ee.prototype, "justify", 2);
 b([
   p({ type: String, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Gap",
     fieldMappings: "gap",
     categoryLabel: "Layout Settings",
@@ -2112,9 +2326,9 @@ b([
 ], ee.prototype, "gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.RESPONSIVE_OVERRIDE,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.RESPONSIVE_OVERRIDE,
     displayLabel: "Background Image",
     fieldMappings: "backgroundImage",
     categoryLabel: "Appearance"
@@ -2122,9 +2336,9 @@ b([
 ], ee.prototype, "backgroundImage", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Background Video (URL)",
     fieldMappings: "backgroundVideo",
     categoryLabel: "Appearance"
@@ -2132,9 +2346,9 @@ b([
 ], ee.prototype, "backgroundVideo", 2);
 b([
   p({ type: Boolean, reflect: !0 }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.CHECKBOX,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.CHECKBOX,
     displayLabel: "Enable Parallax",
     fieldMappings: "parallax",
     categoryLabel: "Appearance"
@@ -2142,9 +2356,9 @@ b([
 ], ee.prototype, "parallax", 2);
 b([
   p({ type: String, attribute: "border-width" }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.RESPONSIVE_OVERRIDE,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.RESPONSIVE_OVERRIDE,
     displayLabel: "Border Width",
     fieldMappings: "borderWidth",
     categoryLabel: "Appearance"
@@ -2152,16 +2366,16 @@ b([
 ], ee.prototype, "borderWidth", 2);
 b([
   p({ type: String, attribute: "border-color" }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.RESPONSIVE_OVERRIDE,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.RESPONSIVE_OVERRIDE,
     displayLabel: "Border Color",
     fieldMappings: "borderColor",
     categoryLabel: "Appearance"
   })
 ], ee.prototype, "borderColor", 2);
 ee = b([
-  rt({
+  ot({
     name: "zero-section",
     version: "1.0.0",
     title: "Section Block",
@@ -2178,11 +2392,19 @@ let te = class extends L {
   get overridePrefix() {
     return "zero-section-1col";
   }
+  static getTransformOnDrop() {
+    return {
+      componentName: "zero-section",
+      children: [
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" }
+      ]
+    };
+  }
   static getStudioTemplate(e) {
-    var U, F, H, Z, Q, B, K, X, q, ce, oe, ae, ie, le;
-    const t = n(((U = e == null ? void 0 : e.props) == null ? void 0 : U.width) || "100%"), r = n(((F = e == null ? void 0 : e.props) == null ? void 0 : F.height) || "auto"), o = n(((H = e == null ? void 0 : e.props) == null ? void 0 : H.margin) || "0px"), a = n(((Z = e == null ? void 0 : e.props) == null ? void 0 : Z.padding) || "0px"), c = n(((Q = e == null ? void 0 : e.props) == null ? void 0 : Q.backgroundColor) || "transparent"), d = n(((B = e == null ? void 0 : e.props) == null ? void 0 : B.borderRadius) || "0px"), P = n(((K = e == null ? void 0 : e.props) == null ? void 0 : K.elevation) || "none");
+    var U, Y, W, Z, Q, B, K, X, q, ce, le, re, ae, ie;
+    const t = n(((U = e == null ? void 0 : e.props) == null ? void 0 : U.width) || "100%"), o = n(((Y = e == null ? void 0 : e.props) == null ? void 0 : Y.height) || "auto"), l = n(((W = e == null ? void 0 : e.props) == null ? void 0 : W.margin) || "0px"), r = n(((Z = e == null ? void 0 : e.props) == null ? void 0 : Z.padding) || "0px"), c = n(((Q = e == null ? void 0 : e.props) == null ? void 0 : Q.backgroundColor) || "transparent"), u = n(((B = e == null ? void 0 : e.props) == null ? void 0 : B.borderRadius) || "0px"), C = n(((K = e == null ? void 0 : e.props) == null ? void 0 : K.elevation) || "none");
     n(((X = e == null ? void 0 : e.props) == null ? void 0 : X.gap) || "16px");
-    const x = n(((q = e == null ? void 0 : e.props) == null ? void 0 : q.col1Direction) || "column"), R = n(((ce = e == null ? void 0 : e.props) == null ? void 0 : ce.col1Align) || "stretch"), E = n(((oe = e == null ? void 0 : e.props) == null ? void 0 : oe.col1Justify) || "flex-start"), w = n(((ae = e == null ? void 0 : e.props) == null ? void 0 : ae.col1Padding) || "16px"), z = n(((ie = e == null ? void 0 : e.props) == null ? void 0 : ie.col1Gap) || "16px"), I = n(((le = e == null ? void 0 : e.props) == null ? void 0 : le.col1Flex) || "1");
+    const x = n(((q = e == null ? void 0 : e.props) == null ? void 0 : q.col1Direction) || "column"), R = n(((ce = e == null ? void 0 : e.props) == null ? void 0 : ce.col1Align) || "stretch"), E = n(((le = e == null ? void 0 : e.props) == null ? void 0 : le.col1Justify) || "flex-start"), w = n(((re = e == null ? void 0 : e.props) == null ? void 0 : re.col1Padding) || "16px"), M = n(((ae = e == null ? void 0 : e.props) == null ? void 0 : ae.col1Gap) || "16px"), I = n(((ie = e == null ? void 0 : e.props) == null ? void 0 : ie.col1Flex) || "1");
     return {
       kind: "section",
       emptyText: "Drag and Drop Elements here",
@@ -2193,24 +2415,24 @@ let te = class extends L {
         <style>
           .studio-section-outer-${(e == null ? void 0 : e.nodeId) || "default"} {
             width: ${t};
-            height: ${r};
-            margin: ${o};
+            height: ${o};
+            margin: ${l};
             display: block;
             box-sizing: border-box;
           }
           .studio-internal-container-${(e == null ? void 0 : e.nodeId) || "default"} {
             width: 100%;
             height: 100%;
-            padding: ${a};
+            padding: ${r};
             background: ${c};
-            border-radius: ${d};
-            box-shadow: ${P};
+            border-radius: ${u};
+            box-shadow: ${C};
             box-sizing: border-box;
           }
         </style>
         <div class="studio-section-outer-${(e == null ? void 0 : e.nodeId) || "default"}">
           <div class="studio-internal-container-${(e == null ? void 0 : e.nodeId) || "default"}">
-            <div style="display:flex; flex-direction: ${x}; align-items: ${R}; justify-content: ${E}; padding: ${w}; gap: ${z}; flex: ${I}; width: 100%; height: 100%; box-sizing: border-box;">
+            <div style="display:flex; flex-direction: ${x}; align-items: ${R}; justify-content: ${E}; padding: ${w}; gap: ${M}; flex: ${I}; width: 100%; height: 100%; box-sizing: border-box;">
               <zero-studio-slot name="col1"></zero-studio-slot>
             </div>
           </div>
@@ -2219,7 +2441,7 @@ let te = class extends L {
     };
   }
   render() {
-    return re`
+    return oe`
       ${this.renderResponsiveStyles()}
       <div style=${this.computeBaseStyles()}>
         <div class="zero-internal-container" 
@@ -2240,9 +2462,9 @@ te.slots = [
 ];
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Configure Target",
     fieldMappings: "activeColIndex",
     categoryLabel: "Layout Settings",
@@ -2254,9 +2476,9 @@ b([
 ], te.prototype, "activeColIndex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Direction",
     fieldMappings: "col1Direction",
     categoryLabel: "Column 1 Layout",
@@ -2268,9 +2490,9 @@ b([
 ], te.prototype, "col1Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Align",
     fieldMappings: "col1Align",
     categoryLabel: "Column 1 Layout",
@@ -2284,9 +2506,9 @@ b([
 ], te.prototype, "col1Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Justify",
     fieldMappings: "col1Justify",
     categoryLabel: "Column 1 Layout",
@@ -2301,9 +2523,9 @@ b([
 ], te.prototype, "col1Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Padding",
     fieldMappings: "col1Padding",
     categoryLabel: "Column 1 Layout"
@@ -2311,9 +2533,9 @@ b([
 ], te.prototype, "col1Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Gap",
     fieldMappings: "col1Gap",
     categoryLabel: "Column 1 Layout"
@@ -2321,9 +2543,9 @@ b([
 ], te.prototype, "col1Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Flex Weight",
     fieldMappings: "col1Flex",
     categoryLabel: "Column 1 Layout"
@@ -2331,9 +2553,9 @@ b([
 ], te.prototype, "col1Flex", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Desktop)",
     fieldMappings: "colsDesktop",
     categoryLabel: "Responsive Layout"
@@ -2341,9 +2563,9 @@ b([
 ], te.prototype, "colsDesktop", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Tablet)",
     fieldMappings: "colsTablet",
     categoryLabel: "Responsive Layout"
@@ -2351,16 +2573,16 @@ b([
 ], te.prototype, "colsTablet", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Mobile)",
     fieldMappings: "colsMobile",
     categoryLabel: "Responsive Layout"
   })
 ], te.prototype, "colsMobile", 2);
 te = b([
-  rt({
+  ot({
     name: "zero-section-1col",
     version: "1.0.0",
     title: "1 Column Section",
@@ -2377,9 +2599,18 @@ let G = class extends L {
   get overridePrefix() {
     return "zero-section-2col";
   }
+  static getTransformOnDrop() {
+    return {
+      componentName: "zero-section",
+      children: [
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" }
+      ]
+    };
+  }
   static getStudioTemplate(e) {
-    var oe, ae, ie, le, we, Re, he, se, ye, be, me, ve, ne, pe, f, V, xe, M, Te, $e, de, ge, j;
-    const t = n(((oe = e == null ? void 0 : e.props) == null ? void 0 : oe.width) || "100%"), r = n(((ae = e == null ? void 0 : e.props) == null ? void 0 : ae.height) || "auto"), o = n(((ie = e == null ? void 0 : e.props) == null ? void 0 : ie.margin) || "0px"), a = n(((le = e == null ? void 0 : e.props) == null ? void 0 : le.padding) || "0px"), c = n(((we = e == null ? void 0 : e.props) == null ? void 0 : we.backgroundColor) || "transparent"), d = n(((Re = e == null ? void 0 : e.props) == null ? void 0 : Re.borderRadius) || "0px"), P = n(((he = e == null ? void 0 : e.props) == null ? void 0 : he.elevation) || "none"), x = n(((se = e == null ? void 0 : e.props) == null ? void 0 : se.gap) || "16px"), R = ((ye = e == null ? void 0 : e.props) == null ? void 0 : ye.colsDesktop) ?? 2, E = ((be = e == null ? void 0 : e.props) == null ? void 0 : be.colsTablet) ?? 2, w = ((me = e == null ? void 0 : e.props) == null ? void 0 : me.colsMobile) ?? 1, z = n(((ve = e == null ? void 0 : e.props) == null ? void 0 : ve.col1Direction) || "column"), I = n(((ne = e == null ? void 0 : e.props) == null ? void 0 : ne.col1Align) || "stretch"), U = n(((pe = e == null ? void 0 : e.props) == null ? void 0 : pe.col1Justify) || "flex-start"), F = n(((f = e == null ? void 0 : e.props) == null ? void 0 : f.col1Padding) || "16px"), H = n(((V = e == null ? void 0 : e.props) == null ? void 0 : V.col1Gap) || "16px"), Z = n(((xe = e == null ? void 0 : e.props) == null ? void 0 : xe.col1Flex) || "1"), Q = n(((M = e == null ? void 0 : e.props) == null ? void 0 : M.col2Direction) || "column"), B = n(((Te = e == null ? void 0 : e.props) == null ? void 0 : Te.col2Align) || "stretch"), K = n((($e = e == null ? void 0 : e.props) == null ? void 0 : $e.col2Justify) || "flex-start"), X = n(((de = e == null ? void 0 : e.props) == null ? void 0 : de.col2Padding) || "16px"), q = n(((ge = e == null ? void 0 : e.props) == null ? void 0 : ge.col2Gap) || "16px"), ce = n(((j = e == null ? void 0 : e.props) == null ? void 0 : j.col2Flex) || "1");
+    var le, re, ae, ie, we, Re, ye, se, he, be, me, ve, ne, pe, $, H, xe, z, fe, ge, ue, Te, j;
+    const t = n(((le = e == null ? void 0 : e.props) == null ? void 0 : le.width) || "100%"), o = n(((re = e == null ? void 0 : e.props) == null ? void 0 : re.height) || "auto"), l = n(((ae = e == null ? void 0 : e.props) == null ? void 0 : ae.margin) || "0px"), r = n(((ie = e == null ? void 0 : e.props) == null ? void 0 : ie.padding) || "0px"), c = n(((we = e == null ? void 0 : e.props) == null ? void 0 : we.backgroundColor) || "transparent"), u = n(((Re = e == null ? void 0 : e.props) == null ? void 0 : Re.borderRadius) || "0px"), C = n(((ye = e == null ? void 0 : e.props) == null ? void 0 : ye.elevation) || "none"), x = n(((se = e == null ? void 0 : e.props) == null ? void 0 : se.gap) || "16px"), R = ((he = e == null ? void 0 : e.props) == null ? void 0 : he.colsDesktop) ?? 2, E = ((be = e == null ? void 0 : e.props) == null ? void 0 : be.colsTablet) ?? 2, w = ((me = e == null ? void 0 : e.props) == null ? void 0 : me.colsMobile) ?? 1, M = n(((ve = e == null ? void 0 : e.props) == null ? void 0 : ve.col1Direction) || "column"), I = n(((ne = e == null ? void 0 : e.props) == null ? void 0 : ne.col1Align) || "stretch"), U = n(((pe = e == null ? void 0 : e.props) == null ? void 0 : pe.col1Justify) || "flex-start"), Y = n((($ = e == null ? void 0 : e.props) == null ? void 0 : $.col1Padding) || "16px"), W = n(((H = e == null ? void 0 : e.props) == null ? void 0 : H.col1Gap) || "16px"), Z = n(((xe = e == null ? void 0 : e.props) == null ? void 0 : xe.col1Flex) || "1"), Q = n(((z = e == null ? void 0 : e.props) == null ? void 0 : z.col2Direction) || "column"), B = n(((fe = e == null ? void 0 : e.props) == null ? void 0 : fe.col2Align) || "stretch"), K = n(((ge = e == null ? void 0 : e.props) == null ? void 0 : ge.col2Justify) || "flex-start"), X = n(((ue = e == null ? void 0 : e.props) == null ? void 0 : ue.col2Padding) || "16px"), q = n(((Te = e == null ? void 0 : e.props) == null ? void 0 : Te.col2Gap) || "16px"), ce = n(((j = e == null ? void 0 : e.props) == null ? void 0 : j.col2Flex) || "1");
     return {
       kind: "section",
       emptyText: "Drag and Drop Elements here",
@@ -2391,18 +2622,18 @@ let G = class extends L {
         <style>
           .studio-section-outer-${(e == null ? void 0 : e.nodeId) || "default"} {
             width: ${t};
-            height: ${r};
-            margin: ${o};
+            height: ${o};
+            margin: ${l};
             display: block;
             box-sizing: border-box;
           }
           .studio-internal-container-${(e == null ? void 0 : e.nodeId) || "default"} {
             width: 100%;
             height: 100%;
-            padding: ${a};
+            padding: ${r};
             background: ${c};
-            border-radius: ${d};
-            box-shadow: ${P};
+            border-radius: ${u};
+            box-shadow: ${C};
             box-sizing: border-box;
           }
           .studio-cols-grid-${(e == null ? void 0 : e.nodeId) || "default"} {
@@ -2427,7 +2658,7 @@ let G = class extends L {
         <div class="studio-section-outer-${(e == null ? void 0 : e.nodeId) || "default"}">
           <div class="studio-internal-container-${(e == null ? void 0 : e.nodeId) || "default"}">
             <div class="studio-cols-grid-${(e == null ? void 0 : e.nodeId) || "default"}">
-              <div style="display:flex; flex-direction: ${z}; align-items: ${I}; justify-content: ${U}; padding: ${F}; gap: ${H}; flex: ${Z}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${M}; align-items: ${I}; justify-content: ${U}; padding: ${Y}; gap: ${W}; flex: ${Z}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
               <div style="display:flex; flex-direction: ${Q}; align-items: ${B}; justify-content: ${K}; padding: ${X}; gap: ${q}; flex: ${ce}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col2"></zero-studio-slot></div>
             </div>
           </div>
@@ -2441,7 +2672,7 @@ let G = class extends L {
       `--zero-section-cols-tablet: ${this.colsTablet || 2}`,
       `--zero-section-cols-mobile: ${this.colsMobile || 1}`
     ].join(";");
-    return re`
+    return oe`
       ${this.renderResponsiveStyles()}
       <style>
         .columns-grid {
@@ -2488,9 +2719,9 @@ G.slots = [
 ];
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Configure Target",
     fieldMappings: "activeColIndex",
     categoryLabel: "Layout Settings",
@@ -2503,9 +2734,9 @@ b([
 ], G.prototype, "activeColIndex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Direction",
     fieldMappings: "col1Direction",
     categoryLabel: "Column 1 Layout",
@@ -2517,9 +2748,9 @@ b([
 ], G.prototype, "col1Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Align",
     fieldMappings: "col1Align",
     categoryLabel: "Column 1 Layout",
@@ -2533,9 +2764,9 @@ b([
 ], G.prototype, "col1Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Justify",
     fieldMappings: "col1Justify",
     categoryLabel: "Column 1 Layout",
@@ -2550,9 +2781,9 @@ b([
 ], G.prototype, "col1Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Padding",
     fieldMappings: "col1Padding",
     categoryLabel: "Column 1 Layout"
@@ -2560,9 +2791,9 @@ b([
 ], G.prototype, "col1Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Gap",
     fieldMappings: "col1Gap",
     categoryLabel: "Column 1 Layout"
@@ -2570,9 +2801,9 @@ b([
 ], G.prototype, "col1Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Flex Weight",
     fieldMappings: "col1Flex",
     categoryLabel: "Column 1 Layout"
@@ -2580,9 +2811,9 @@ b([
 ], G.prototype, "col1Flex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 2 Direction",
     fieldMappings: "col2Direction",
     categoryLabel: "Column 2 Layout",
@@ -2594,9 +2825,9 @@ b([
 ], G.prototype, "col2Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 2 Align",
     fieldMappings: "col2Align",
     categoryLabel: "Column 2 Layout",
@@ -2610,9 +2841,9 @@ b([
 ], G.prototype, "col2Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 2 Justify",
     fieldMappings: "col2Justify",
     categoryLabel: "Column 2 Layout",
@@ -2627,9 +2858,9 @@ b([
 ], G.prototype, "col2Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 2 Padding",
     fieldMappings: "col2Padding",
     categoryLabel: "Column 2 Layout"
@@ -2637,9 +2868,9 @@ b([
 ], G.prototype, "col2Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 2 Gap",
     fieldMappings: "col2Gap",
     categoryLabel: "Column 2 Layout"
@@ -2647,9 +2878,9 @@ b([
 ], G.prototype, "col2Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 2 Flex Weight",
     fieldMappings: "col2Flex",
     categoryLabel: "Column 2 Layout"
@@ -2657,9 +2888,9 @@ b([
 ], G.prototype, "col2Flex", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Desktop)",
     fieldMappings: "colsDesktop",
     categoryLabel: "Responsive Layout"
@@ -2667,9 +2898,9 @@ b([
 ], G.prototype, "colsDesktop", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Tablet)",
     fieldMappings: "colsTablet",
     categoryLabel: "Responsive Layout"
@@ -2677,16 +2908,16 @@ b([
 ], G.prototype, "colsTablet", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Mobile)",
     fieldMappings: "colsMobile",
     categoryLabel: "Responsive Layout"
   })
 ], G.prototype, "colsMobile", 2);
 G = b([
-  rt({
+  ot({
     name: "zero-section-2col",
     version: "1.0.0",
     title: "2 Column Section",
@@ -2703,9 +2934,19 @@ let D = class extends L {
   get overridePrefix() {
     return "zero-section-3col";
   }
+  static getTransformOnDrop() {
+    return {
+      componentName: "zero-section",
+      children: [
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" }
+      ]
+    };
+  }
   static getStudioTemplate(e) {
-    var he, se, ye, be, me, ve, ne, pe, f, V, xe, M, Te, $e, de, ge, j, Ee, Pe, _e, Ne, fe, Se, Oe, Le, Me, ze, Ce, ke;
-    const t = n(((he = e == null ? void 0 : e.props) == null ? void 0 : he.width) || "100%"), r = n(((se = e == null ? void 0 : e.props) == null ? void 0 : se.height) || "auto"), o = n(((ye = e == null ? void 0 : e.props) == null ? void 0 : ye.margin) || "0px"), a = n(((be = e == null ? void 0 : e.props) == null ? void 0 : be.padding) || "0px"), c = n(((me = e == null ? void 0 : e.props) == null ? void 0 : me.backgroundColor) || "transparent"), d = n(((ve = e == null ? void 0 : e.props) == null ? void 0 : ve.borderRadius) || "0px"), P = n(((ne = e == null ? void 0 : e.props) == null ? void 0 : ne.elevation) || "none"), x = n(((pe = e == null ? void 0 : e.props) == null ? void 0 : pe.gap) || "16px"), R = ((f = e == null ? void 0 : e.props) == null ? void 0 : f.colsDesktop) ?? 3, E = ((V = e == null ? void 0 : e.props) == null ? void 0 : V.colsTablet) ?? 2, w = ((xe = e == null ? void 0 : e.props) == null ? void 0 : xe.colsMobile) ?? 1, z = n(((M = e == null ? void 0 : e.props) == null ? void 0 : M.col1Direction) || "column"), I = n(((Te = e == null ? void 0 : e.props) == null ? void 0 : Te.col1Align) || "stretch"), U = n((($e = e == null ? void 0 : e.props) == null ? void 0 : $e.col1Justify) || "flex-start"), F = n(((de = e == null ? void 0 : e.props) == null ? void 0 : de.col1Padding) || "16px"), H = n(((ge = e == null ? void 0 : e.props) == null ? void 0 : ge.col1Gap) || "16px"), Z = n(((j = e == null ? void 0 : e.props) == null ? void 0 : j.col1Flex) || "1"), Q = n(((Ee = e == null ? void 0 : e.props) == null ? void 0 : Ee.col2Direction) || "column"), B = n(((Pe = e == null ? void 0 : e.props) == null ? void 0 : Pe.col2Align) || "stretch"), K = n(((_e = e == null ? void 0 : e.props) == null ? void 0 : _e.col2Justify) || "flex-start"), X = n(((Ne = e == null ? void 0 : e.props) == null ? void 0 : Ne.col2Padding) || "16px"), q = n(((fe = e == null ? void 0 : e.props) == null ? void 0 : fe.col2Gap) || "16px"), ce = n(((Se = e == null ? void 0 : e.props) == null ? void 0 : Se.col2Flex) || "1"), oe = n(((Oe = e == null ? void 0 : e.props) == null ? void 0 : Oe.col3Direction) || "column"), ae = n(((Le = e == null ? void 0 : e.props) == null ? void 0 : Le.col3Align) || "stretch"), ie = n(((Me = e == null ? void 0 : e.props) == null ? void 0 : Me.col3Justify) || "flex-start"), le = n(((ze = e == null ? void 0 : e.props) == null ? void 0 : ze.col3Padding) || "16px"), we = n(((Ce = e == null ? void 0 : e.props) == null ? void 0 : Ce.col3Gap) || "16px"), Re = n(((ke = e == null ? void 0 : e.props) == null ? void 0 : ke.col3Flex) || "1");
+    var ye, se, he, be, me, ve, ne, pe, $, H, xe, z, fe, ge, ue, Te, j, Ee, Ce, Se, Ne, $e, _e, Oe, Le, ze, Me, Pe, ke;
+    const t = n(((ye = e == null ? void 0 : e.props) == null ? void 0 : ye.width) || "100%"), o = n(((se = e == null ? void 0 : e.props) == null ? void 0 : se.height) || "auto"), l = n(((he = e == null ? void 0 : e.props) == null ? void 0 : he.margin) || "0px"), r = n(((be = e == null ? void 0 : e.props) == null ? void 0 : be.padding) || "0px"), c = n(((me = e == null ? void 0 : e.props) == null ? void 0 : me.backgroundColor) || "transparent"), u = n(((ve = e == null ? void 0 : e.props) == null ? void 0 : ve.borderRadius) || "0px"), C = n(((ne = e == null ? void 0 : e.props) == null ? void 0 : ne.elevation) || "none"), x = n(((pe = e == null ? void 0 : e.props) == null ? void 0 : pe.gap) || "16px"), R = (($ = e == null ? void 0 : e.props) == null ? void 0 : $.colsDesktop) ?? 3, E = ((H = e == null ? void 0 : e.props) == null ? void 0 : H.colsTablet) ?? 2, w = ((xe = e == null ? void 0 : e.props) == null ? void 0 : xe.colsMobile) ?? 1, M = n(((z = e == null ? void 0 : e.props) == null ? void 0 : z.col1Direction) || "column"), I = n(((fe = e == null ? void 0 : e.props) == null ? void 0 : fe.col1Align) || "stretch"), U = n(((ge = e == null ? void 0 : e.props) == null ? void 0 : ge.col1Justify) || "flex-start"), Y = n(((ue = e == null ? void 0 : e.props) == null ? void 0 : ue.col1Padding) || "16px"), W = n(((Te = e == null ? void 0 : e.props) == null ? void 0 : Te.col1Gap) || "16px"), Z = n(((j = e == null ? void 0 : e.props) == null ? void 0 : j.col1Flex) || "1"), Q = n(((Ee = e == null ? void 0 : e.props) == null ? void 0 : Ee.col2Direction) || "column"), B = n(((Ce = e == null ? void 0 : e.props) == null ? void 0 : Ce.col2Align) || "stretch"), K = n(((Se = e == null ? void 0 : e.props) == null ? void 0 : Se.col2Justify) || "flex-start"), X = n(((Ne = e == null ? void 0 : e.props) == null ? void 0 : Ne.col2Padding) || "16px"), q = n((($e = e == null ? void 0 : e.props) == null ? void 0 : $e.col2Gap) || "16px"), ce = n(((_e = e == null ? void 0 : e.props) == null ? void 0 : _e.col2Flex) || "1"), le = n(((Oe = e == null ? void 0 : e.props) == null ? void 0 : Oe.col3Direction) || "column"), re = n(((Le = e == null ? void 0 : e.props) == null ? void 0 : Le.col3Align) || "stretch"), ae = n(((ze = e == null ? void 0 : e.props) == null ? void 0 : ze.col3Justify) || "flex-start"), ie = n(((Me = e == null ? void 0 : e.props) == null ? void 0 : Me.col3Padding) || "16px"), we = n(((Pe = e == null ? void 0 : e.props) == null ? void 0 : Pe.col3Gap) || "16px"), Re = n(((ke = e == null ? void 0 : e.props) == null ? void 0 : ke.col3Flex) || "1");
     return {
       kind: "section",
       emptyText: "Drag and Drop Elements here",
@@ -2718,18 +2959,18 @@ let D = class extends L {
         <style>
           .studio-section-outer-${(e == null ? void 0 : e.nodeId) || "default"} {
             width: ${t};
-            height: ${r};
-            margin: ${o};
+            height: ${o};
+            margin: ${l};
             display: block;
             box-sizing: border-box;
           }
           .studio-internal-container-${(e == null ? void 0 : e.nodeId) || "default"} {
             width: 100%;
             height: 100%;
-            padding: ${a};
+            padding: ${r};
             background: ${c};
-            border-radius: ${d};
-            box-shadow: ${P};
+            border-radius: ${u};
+            box-shadow: ${C};
             box-sizing: border-box;
           }
           .studio-cols-grid-${(e == null ? void 0 : e.nodeId) || "default"} {
@@ -2754,9 +2995,9 @@ let D = class extends L {
         <div class="studio-section-outer-${(e == null ? void 0 : e.nodeId) || "default"}">
           <div class="studio-internal-container-${(e == null ? void 0 : e.nodeId) || "default"}">
             <div class="studio-cols-grid-${(e == null ? void 0 : e.nodeId) || "default"}">
-              <div style="display:flex; flex-direction: ${z}; align-items: ${I}; justify-content: ${U}; padding: ${F}; gap: ${H}; flex: ${Z}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${M}; align-items: ${I}; justify-content: ${U}; padding: ${Y}; gap: ${W}; flex: ${Z}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
               <div style="display:flex; flex-direction: ${Q}; align-items: ${B}; justify-content: ${K}; padding: ${X}; gap: ${q}; flex: ${ce}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col2"></zero-studio-slot></div>
-              <div style="display:flex; flex-direction: ${oe}; align-items: ${ae}; justify-content: ${ie}; padding: ${le}; gap: ${we}; flex: ${Re}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col3"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${le}; align-items: ${re}; justify-content: ${ae}; padding: ${ie}; gap: ${we}; flex: ${Re}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col3"></zero-studio-slot></div>
             </div>
           </div>
         </div>
@@ -2769,7 +3010,7 @@ let D = class extends L {
       `--zero-section-cols-tablet: ${this.colsTablet || 2}`,
       `--zero-section-cols-mobile: ${this.colsMobile || 1}`
     ].join(";");
-    return re`
+    return oe`
       ${this.renderResponsiveStyles()}
       <style>
         .columns-grid {
@@ -2820,9 +3061,9 @@ D.slots = [
 ];
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Configure Target",
     fieldMappings: "activeColIndex",
     categoryLabel: "Layout Settings",
@@ -2836,9 +3077,9 @@ b([
 ], D.prototype, "activeColIndex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Direction",
     fieldMappings: "col1Direction",
     categoryLabel: "Column 1 Layout",
@@ -2847,9 +3088,9 @@ b([
 ], D.prototype, "col1Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Align",
     fieldMappings: "col1Align",
     categoryLabel: "Column 1 Layout",
@@ -2858,9 +3099,9 @@ b([
 ], D.prototype, "col1Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Justify",
     fieldMappings: "col1Justify",
     categoryLabel: "Column 1 Layout",
@@ -2869,9 +3110,9 @@ b([
 ], D.prototype, "col1Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Padding",
     fieldMappings: "col1Padding",
     categoryLabel: "Column 1 Layout"
@@ -2879,9 +3120,9 @@ b([
 ], D.prototype, "col1Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Gap",
     fieldMappings: "col1Gap",
     categoryLabel: "Column 1 Layout"
@@ -2889,9 +3130,9 @@ b([
 ], D.prototype, "col1Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Flex Weight",
     fieldMappings: "col1Flex",
     categoryLabel: "Column 1 Layout"
@@ -2899,9 +3140,9 @@ b([
 ], D.prototype, "col1Flex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 2 Direction",
     fieldMappings: "col2Direction",
     categoryLabel: "Column 2 Layout",
@@ -2910,9 +3151,9 @@ b([
 ], D.prototype, "col2Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 2 Align",
     fieldMappings: "col2Align",
     categoryLabel: "Column 2 Layout",
@@ -2921,9 +3162,9 @@ b([
 ], D.prototype, "col2Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 2 Justify",
     fieldMappings: "col2Justify",
     categoryLabel: "Column 2 Layout",
@@ -2932,9 +3173,9 @@ b([
 ], D.prototype, "col2Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 2 Padding",
     fieldMappings: "col2Padding",
     categoryLabel: "Column 2 Layout"
@@ -2942,9 +3183,9 @@ b([
 ], D.prototype, "col2Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 2 Gap",
     fieldMappings: "col2Gap",
     categoryLabel: "Column 2 Layout"
@@ -2952,9 +3193,9 @@ b([
 ], D.prototype, "col2Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 2 Flex Weight",
     fieldMappings: "col2Flex",
     categoryLabel: "Column 2 Layout"
@@ -2962,9 +3203,9 @@ b([
 ], D.prototype, "col2Flex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 3 Direction",
     fieldMappings: "col3Direction",
     categoryLabel: "Column 3 Layout",
@@ -2973,9 +3214,9 @@ b([
 ], D.prototype, "col3Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 3 Align",
     fieldMappings: "col3Align",
     categoryLabel: "Column 3 Layout",
@@ -2984,9 +3225,9 @@ b([
 ], D.prototype, "col3Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 3 Justify",
     fieldMappings: "col3Justify",
     categoryLabel: "Column 3 Layout",
@@ -2995,9 +3236,9 @@ b([
 ], D.prototype, "col3Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 3 Padding",
     fieldMappings: "col3Padding",
     categoryLabel: "Column 3 Layout"
@@ -3005,9 +3246,9 @@ b([
 ], D.prototype, "col3Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 3 Gap",
     fieldMappings: "col3Gap",
     categoryLabel: "Column 3 Layout"
@@ -3015,9 +3256,9 @@ b([
 ], D.prototype, "col3Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 3 Flex Weight",
     fieldMappings: "col3Flex",
     categoryLabel: "Column 3 Layout"
@@ -3025,9 +3266,9 @@ b([
 ], D.prototype, "col3Flex", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Desktop)",
     fieldMappings: "colsDesktop",
     categoryLabel: "Responsive Layout"
@@ -3035,9 +3276,9 @@ b([
 ], D.prototype, "colsDesktop", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Tablet)",
     fieldMappings: "colsTablet",
     categoryLabel: "Responsive Layout"
@@ -3045,16 +3286,16 @@ b([
 ], D.prototype, "colsTablet", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Mobile)",
     fieldMappings: "colsMobile",
     categoryLabel: "Responsive Layout"
   })
 ], D.prototype, "colsMobile", 2);
 D = b([
-  rt({
+  ot({
     name: "zero-section-3col",
     version: "1.0.0",
     title: "3 Column Section",
@@ -3071,9 +3312,20 @@ let O = class extends L {
   get overridePrefix() {
     return "zero-section-4col";
   }
+  static getTransformOnDrop() {
+    return {
+      componentName: "zero-section",
+      children: [
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" },
+        { componentName: "zero-column", props: { flex: "1" }, slot: "default" }
+      ]
+    };
+  }
   static getStudioTemplate(e) {
-    var ne, pe, f, V, xe, M, Te, $e, de, ge, j, Ee, Pe, _e, Ne, fe, Se, Oe, Le, Me, ze, Ce, ke, ot, at, it, Ae, lt, st, nt, Fe, i, l, s, m;
-    const t = n(((ne = e == null ? void 0 : e.props) == null ? void 0 : ne.width) || "100%"), r = n(((pe = e == null ? void 0 : e.props) == null ? void 0 : pe.height) || "auto"), o = n(((f = e == null ? void 0 : e.props) == null ? void 0 : f.margin) || "0px"), a = n(((V = e == null ? void 0 : e.props) == null ? void 0 : V.padding) || "0px"), c = n(((xe = e == null ? void 0 : e.props) == null ? void 0 : xe.backgroundColor) || "transparent"), d = n(((M = e == null ? void 0 : e.props) == null ? void 0 : M.borderRadius) || "0px"), P = n(((Te = e == null ? void 0 : e.props) == null ? void 0 : Te.elevation) || "none"), x = n((($e = e == null ? void 0 : e.props) == null ? void 0 : $e.gap) || "16px"), R = ((de = e == null ? void 0 : e.props) == null ? void 0 : de.colsDesktop) ?? 4, E = ((ge = e == null ? void 0 : e.props) == null ? void 0 : ge.colsTablet) ?? 2, w = ((j = e == null ? void 0 : e.props) == null ? void 0 : j.colsMobile) ?? 1, z = n(((Ee = e == null ? void 0 : e.props) == null ? void 0 : Ee.col1Direction) || "column"), I = n(((Pe = e == null ? void 0 : e.props) == null ? void 0 : Pe.col1Align) || "stretch"), U = n(((_e = e == null ? void 0 : e.props) == null ? void 0 : _e.col1Justify) || "flex-start"), F = n(((Ne = e == null ? void 0 : e.props) == null ? void 0 : Ne.col1Padding) || "16px"), H = n(((fe = e == null ? void 0 : e.props) == null ? void 0 : fe.col1Gap) || "16px"), Z = n(((Se = e == null ? void 0 : e.props) == null ? void 0 : Se.col1Flex) || "1"), Q = n(((Oe = e == null ? void 0 : e.props) == null ? void 0 : Oe.col2Direction) || "column"), B = n(((Le = e == null ? void 0 : e.props) == null ? void 0 : Le.col2Align) || "stretch"), K = n(((Me = e == null ? void 0 : e.props) == null ? void 0 : Me.col2Justify) || "flex-start"), X = n(((ze = e == null ? void 0 : e.props) == null ? void 0 : ze.col2Padding) || "16px"), q = n(((Ce = e == null ? void 0 : e.props) == null ? void 0 : Ce.col2Gap) || "16px"), ce = n(((ke = e == null ? void 0 : e.props) == null ? void 0 : ke.col2Flex) || "1"), oe = n(((ot = e == null ? void 0 : e.props) == null ? void 0 : ot.col3Direction) || "column"), ae = n(((at = e == null ? void 0 : e.props) == null ? void 0 : at.col3Align) || "stretch"), ie = n(((it = e == null ? void 0 : e.props) == null ? void 0 : it.col3Justify) || "flex-start"), le = n(((Ae = e == null ? void 0 : e.props) == null ? void 0 : Ae.col3Padding) || "16px"), we = n(((lt = e == null ? void 0 : e.props) == null ? void 0 : lt.col3Gap) || "16px"), Re = n(((st = e == null ? void 0 : e.props) == null ? void 0 : st.col3Flex) || "1"), he = n(((nt = e == null ? void 0 : e.props) == null ? void 0 : nt.col4Direction) || "column"), se = n(((Fe = e == null ? void 0 : e.props) == null ? void 0 : Fe.col4Align) || "stretch"), ye = n(((i = e == null ? void 0 : e.props) == null ? void 0 : i.col4Justify) || "flex-start"), be = n(((l = e == null ? void 0 : e.props) == null ? void 0 : l.col4Padding) || "16px"), me = n(((s = e == null ? void 0 : e.props) == null ? void 0 : s.col4Gap) || "16px"), ve = n(((m = e == null ? void 0 : e.props) == null ? void 0 : m.col4Flex) || "1");
+    var ne, pe, $, H, xe, z, fe, ge, ue, Te, j, Ee, Ce, Se, Ne, $e, _e, Oe, Le, ze, Me, Pe, ke, lt, rt, at, Ae, it, st, nt, Ye, a, i, s, m;
+    const t = n(((ne = e == null ? void 0 : e.props) == null ? void 0 : ne.width) || "100%"), o = n(((pe = e == null ? void 0 : e.props) == null ? void 0 : pe.height) || "auto"), l = n((($ = e == null ? void 0 : e.props) == null ? void 0 : $.margin) || "0px"), r = n(((H = e == null ? void 0 : e.props) == null ? void 0 : H.padding) || "0px"), c = n(((xe = e == null ? void 0 : e.props) == null ? void 0 : xe.backgroundColor) || "transparent"), u = n(((z = e == null ? void 0 : e.props) == null ? void 0 : z.borderRadius) || "0px"), C = n(((fe = e == null ? void 0 : e.props) == null ? void 0 : fe.elevation) || "none"), x = n(((ge = e == null ? void 0 : e.props) == null ? void 0 : ge.gap) || "16px"), R = ((ue = e == null ? void 0 : e.props) == null ? void 0 : ue.colsDesktop) ?? 4, E = ((Te = e == null ? void 0 : e.props) == null ? void 0 : Te.colsTablet) ?? 2, w = ((j = e == null ? void 0 : e.props) == null ? void 0 : j.colsMobile) ?? 1, M = n(((Ee = e == null ? void 0 : e.props) == null ? void 0 : Ee.col1Direction) || "column"), I = n(((Ce = e == null ? void 0 : e.props) == null ? void 0 : Ce.col1Align) || "stretch"), U = n(((Se = e == null ? void 0 : e.props) == null ? void 0 : Se.col1Justify) || "flex-start"), Y = n(((Ne = e == null ? void 0 : e.props) == null ? void 0 : Ne.col1Padding) || "16px"), W = n((($e = e == null ? void 0 : e.props) == null ? void 0 : $e.col1Gap) || "16px"), Z = n(((_e = e == null ? void 0 : e.props) == null ? void 0 : _e.col1Flex) || "1"), Q = n(((Oe = e == null ? void 0 : e.props) == null ? void 0 : Oe.col2Direction) || "column"), B = n(((Le = e == null ? void 0 : e.props) == null ? void 0 : Le.col2Align) || "stretch"), K = n(((ze = e == null ? void 0 : e.props) == null ? void 0 : ze.col2Justify) || "flex-start"), X = n(((Me = e == null ? void 0 : e.props) == null ? void 0 : Me.col2Padding) || "16px"), q = n(((Pe = e == null ? void 0 : e.props) == null ? void 0 : Pe.col2Gap) || "16px"), ce = n(((ke = e == null ? void 0 : e.props) == null ? void 0 : ke.col2Flex) || "1"), le = n(((lt = e == null ? void 0 : e.props) == null ? void 0 : lt.col3Direction) || "column"), re = n(((rt = e == null ? void 0 : e.props) == null ? void 0 : rt.col3Align) || "stretch"), ae = n(((at = e == null ? void 0 : e.props) == null ? void 0 : at.col3Justify) || "flex-start"), ie = n(((Ae = e == null ? void 0 : e.props) == null ? void 0 : Ae.col3Padding) || "16px"), we = n(((it = e == null ? void 0 : e.props) == null ? void 0 : it.col3Gap) || "16px"), Re = n(((st = e == null ? void 0 : e.props) == null ? void 0 : st.col3Flex) || "1"), ye = n(((nt = e == null ? void 0 : e.props) == null ? void 0 : nt.col4Direction) || "column"), se = n(((Ye = e == null ? void 0 : e.props) == null ? void 0 : Ye.col4Align) || "stretch"), he = n(((a = e == null ? void 0 : e.props) == null ? void 0 : a.col4Justify) || "flex-start"), be = n(((i = e == null ? void 0 : e.props) == null ? void 0 : i.col4Padding) || "16px"), me = n(((s = e == null ? void 0 : e.props) == null ? void 0 : s.col4Gap) || "16px"), ve = n(((m = e == null ? void 0 : e.props) == null ? void 0 : m.col4Flex) || "1");
     return {
       kind: "section",
       emptyText: "Drag and Drop Elements here",
@@ -3087,18 +3339,18 @@ let O = class extends L {
         <style>
           .studio-section-outer-${(e == null ? void 0 : e.nodeId) || "default"} {
             width: ${t};
-            height: ${r};
-            margin: ${o};
+            height: ${o};
+            margin: ${l};
             display: block;
             box-sizing: border-box;
           }
           .studio-internal-container-${(e == null ? void 0 : e.nodeId) || "default"} {
             width: 100%;
             height: 100%;
-            padding: ${a};
+            padding: ${r};
             background: ${c};
-            border-radius: ${d};
-            box-shadow: ${P};
+            border-radius: ${u};
+            box-shadow: ${C};
             box-sizing: border-box;
           }
           .studio-cols-grid-${(e == null ? void 0 : e.nodeId) || "default"} {
@@ -3123,10 +3375,10 @@ let O = class extends L {
         <div class="studio-section-outer-${(e == null ? void 0 : e.nodeId) || "default"}">
           <div class="studio-internal-container-${(e == null ? void 0 : e.nodeId) || "default"}">
             <div class="studio-cols-grid-${(e == null ? void 0 : e.nodeId) || "default"}">
-              <div style="display:flex; flex-direction: ${z}; align-items: ${I}; justify-content: ${U}; padding: ${F}; gap: ${H}; flex: ${Z}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${M}; align-items: ${I}; justify-content: ${U}; padding: ${Y}; gap: ${W}; flex: ${Z}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col1"></zero-studio-slot></div>
               <div style="display:flex; flex-direction: ${Q}; align-items: ${B}; justify-content: ${K}; padding: ${X}; gap: ${q}; flex: ${ce}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col2"></zero-studio-slot></div>
-              <div style="display:flex; flex-direction: ${oe}; align-items: ${ae}; justify-content: ${ie}; padding: ${le}; gap: ${we}; flex: ${Re}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col3"></zero-studio-slot></div>
-              <div style="display:flex; flex-direction: ${he}; align-items: ${se}; justify-content: ${ye}; padding: ${be}; gap: ${me}; flex: ${ve}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col4"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${le}; align-items: ${re}; justify-content: ${ae}; padding: ${ie}; gap: ${we}; flex: ${Re}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col3"></zero-studio-slot></div>
+              <div style="display:flex; flex-direction: ${ye}; align-items: ${se}; justify-content: ${he}; padding: ${be}; gap: ${me}; flex: ${ve}; width: 100%; height: 100%; box-sizing: border-box;"><zero-studio-slot name="col4"></zero-studio-slot></div>
             </div>
           </div>
         </div>
@@ -3139,7 +3391,7 @@ let O = class extends L {
       `--zero-section-cols-tablet: ${this.colsTablet || 2}`,
       `--zero-section-cols-mobile: ${this.colsMobile || 1}`
     ].join(";");
-    return re`
+    return oe`
       ${this.renderResponsiveStyles()}
       <style>
         .columns-grid {
@@ -3194,9 +3446,9 @@ O.slots = [
 ];
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Configure Target",
     fieldMappings: "activeColIndex",
     categoryLabel: "Layout Settings",
@@ -3211,9 +3463,9 @@ b([
 ], O.prototype, "activeColIndex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Direction",
     fieldMappings: "col1Direction",
     categoryLabel: "Column 1 Layout",
@@ -3222,9 +3474,9 @@ b([
 ], O.prototype, "col1Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Align",
     fieldMappings: "col1Align",
     categoryLabel: "Column 1 Layout",
@@ -3233,9 +3485,9 @@ b([
 ], O.prototype, "col1Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 1 Justify",
     fieldMappings: "col1Justify",
     categoryLabel: "Column 1 Layout",
@@ -3244,9 +3496,9 @@ b([
 ], O.prototype, "col1Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Padding",
     fieldMappings: "col1Padding",
     categoryLabel: "Column 1 Layout"
@@ -3254,9 +3506,9 @@ b([
 ], O.prototype, "col1Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Gap",
     fieldMappings: "col1Gap",
     categoryLabel: "Column 1 Layout"
@@ -3264,9 +3516,9 @@ b([
 ], O.prototype, "col1Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 1 Flex Weight",
     fieldMappings: "col1Flex",
     categoryLabel: "Column 1 Layout"
@@ -3274,9 +3526,9 @@ b([
 ], O.prototype, "col1Flex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 2 Direction",
     fieldMappings: "col2Direction",
     categoryLabel: "Column 2 Layout",
@@ -3285,9 +3537,9 @@ b([
 ], O.prototype, "col2Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 2 Align",
     fieldMappings: "col2Align",
     categoryLabel: "Column 2 Layout",
@@ -3296,9 +3548,9 @@ b([
 ], O.prototype, "col2Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 2 Justify",
     fieldMappings: "col2Justify",
     categoryLabel: "Column 2 Layout",
@@ -3307,9 +3559,9 @@ b([
 ], O.prototype, "col2Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 2 Padding",
     fieldMappings: "col2Padding",
     categoryLabel: "Column 2 Layout"
@@ -3317,9 +3569,9 @@ b([
 ], O.prototype, "col2Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 2 Gap",
     fieldMappings: "col2Gap",
     categoryLabel: "Column 2 Layout"
@@ -3327,9 +3579,9 @@ b([
 ], O.prototype, "col2Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 2 Flex Weight",
     fieldMappings: "col2Flex",
     categoryLabel: "Column 2 Layout"
@@ -3337,9 +3589,9 @@ b([
 ], O.prototype, "col2Flex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 3 Direction",
     fieldMappings: "col3Direction",
     categoryLabel: "Column 3 Layout",
@@ -3348,9 +3600,9 @@ b([
 ], O.prototype, "col3Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 3 Align",
     fieldMappings: "col3Align",
     categoryLabel: "Column 3 Layout",
@@ -3359,9 +3611,9 @@ b([
 ], O.prototype, "col3Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 3 Justify",
     fieldMappings: "col3Justify",
     categoryLabel: "Column 3 Layout",
@@ -3370,9 +3622,9 @@ b([
 ], O.prototype, "col3Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 3 Padding",
     fieldMappings: "col3Padding",
     categoryLabel: "Column 3 Layout"
@@ -3380,9 +3632,9 @@ b([
 ], O.prototype, "col3Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 3 Gap",
     fieldMappings: "col3Gap",
     categoryLabel: "Column 3 Layout"
@@ -3390,9 +3642,9 @@ b([
 ], O.prototype, "col3Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 3 Flex Weight",
     fieldMappings: "col3Flex",
     categoryLabel: "Column 3 Layout"
@@ -3400,9 +3652,9 @@ b([
 ], O.prototype, "col3Flex", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 4 Direction",
     fieldMappings: "col4Direction",
     categoryLabel: "Column 4 Layout",
@@ -3411,9 +3663,9 @@ b([
 ], O.prototype, "col4Direction", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 4 Align",
     fieldMappings: "col4Align",
     categoryLabel: "Column 4 Layout",
@@ -3422,9 +3674,9 @@ b([
 ], O.prototype, "col4Align", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.DROPDOWN,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.DROPDOWN,
     displayLabel: "Col 4 Justify",
     fieldMappings: "col4Justify",
     categoryLabel: "Column 4 Layout",
@@ -3433,9 +3685,9 @@ b([
 ], O.prototype, "col4Justify", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 4 Padding",
     fieldMappings: "col4Padding",
     categoryLabel: "Column 4 Layout"
@@ -3443,9 +3695,9 @@ b([
 ], O.prototype, "col4Padding", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 4 Gap",
     fieldMappings: "col4Gap",
     categoryLabel: "Column 4 Layout"
@@ -3453,9 +3705,9 @@ b([
 ], O.prototype, "col4Gap", 2);
 b([
   p({ type: String }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.TEXT_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.TEXT_INPUT,
     displayLabel: "Col 4 Flex Weight",
     fieldMappings: "col4Flex",
     categoryLabel: "Column 4 Layout"
@@ -3463,9 +3715,9 @@ b([
 ], O.prototype, "col4Flex", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Desktop)",
     fieldMappings: "colsDesktop",
     categoryLabel: "Responsive Layout"
@@ -3473,9 +3725,9 @@ b([
 ], O.prototype, "colsDesktop", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Tablet)",
     fieldMappings: "colsTablet",
     categoryLabel: "Responsive Layout"
@@ -3483,16 +3735,16 @@ b([
 ], O.prototype, "colsTablet", 2);
 b([
   p({ type: Number }),
-  h({
-    attributeType: u.PROPERTY,
-    uiComponentType: y.NUMBER_INPUT,
+  y({
+    attributeType: d.PROPERTY,
+    uiComponentType: h.NUMBER_INPUT,
     displayLabel: "Columns (Mobile)",
     fieldMappings: "colsMobile",
     categoryLabel: "Responsive Layout"
   })
 ], O.prototype, "colsMobile", 2);
 O = b([
-  rt({
+  ot({
     name: "zero-section-4col",
     version: "1.0.0",
     title: "4 Column Section",

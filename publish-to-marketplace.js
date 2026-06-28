@@ -22,25 +22,6 @@ function prettifyName(name) {
 }
 
 function scanPackageMetadata(pkgName, packageRoot, defaultTags, description, version) {
-    // If studio.registry.json exists in package root, load it directly
-    const registryJsonPath = path.join(packageRoot, 'studio.registry.json');
-    if (fs.existsSync(registryJsonPath)) {
-        try {
-            console.log(`ℹ️  Reading metadata from studio.registry.json for ${pkgName}`);
-            const data = JSON.parse(fs.readFileSync(registryJsonPath, 'utf8'));
-            if (Array.isArray(data)) {
-                return data.map(comp => ({
-                    ...comp,
-                    source: "marketplace",
-                    publishableAsNode: comp.publishableAsNode !== undefined ? comp.publishableAsNode : true,
-                    lifecycleHooks: comp.lifecycleHooks || ["onInit", "onDestroy", "onChanges", "afterRender"]
-                }));
-            }
-        } catch (e) {
-            console.warn(`⚠️  Failed to read studio.registry.json:`, e.message);
-        }
-    }
-
     // Default metadata for single-component packages (detailed properties are loaded dynamically from the Lit class in browser)
     return [
         {
@@ -128,7 +109,7 @@ function publishPackage(pkgName) {
         license: srcPkgJson.license || "MIT",
         zero: {
             ...srcPkgJson.zero,
-            components: scannedMetadata
+            components: (srcPkgJson.zero && srcPkgJson.zero.components) ? srcPkgJson.zero.components : scannedMetadata
         }
     };
     

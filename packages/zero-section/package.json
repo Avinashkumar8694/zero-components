@@ -6,5 +6,36 @@
   "type": "module",
   "keywords": ["lit", "web-component", "section", "container", "layout"],
   "author": "Zero Components",
-  "license": "MIT"
+  "license": "MIT",
+  "zero": {
+    "component": true,
+    "category": "Layout",
+    "components": [
+      {
+        "tag": "zero-section",
+        "title": "Section Container",
+        "category": "Layout"
+      },
+      {
+        "tag": "zero-section-1col",
+        "title": "1 Column Section",
+        "category": "Layout"
+      },
+      {
+        "tag": "zero-section-2col",
+        "title": "2 Column Section",
+        "category": "Layout"
+      },
+      {
+        "tag": "zero-section-3col",
+        "title": "3 Column Section",
+        "category": "Layout"
+      },
+      {
+        "tag": "zero-section-4col",
+        "title": "4 Column Section",
+        "category": "Layout"
+      }
+    ]
+  }
 }

@@ -43,6 +43,8 @@ function scanPackageMetadata(pkgName, packageRoot, defaultTags, description, ver
     ];
 }
 
+
+
 function getPackageVersion(pkgName) {
     const pkgJsonPath = path.join(packagesDir, pkgName, 'package.json');
     if (fs.existsSync(pkgJsonPath)) {
@@ -97,6 +99,10 @@ function publishPackage(pkgName) {
         version
     );
 
+    const componentsList = (srcPkgJson.zero?.module || srcPkgJson.zero?.hidden)
+        ? []
+        : ((srcPkgJson.zero && srcPkgJson.zero.components) ? srcPkgJson.zero.components : scannedMetadata);
+
     // Prepare published package.json (merging source metadata)
     const packageJson = {
         ...srcPkgJson,
@@ -109,7 +115,7 @@ function publishPackage(pkgName) {
         license: srcPkgJson.license || "MIT",
         zero: {
             ...srcPkgJson.zero,
-            components: (srcPkgJson.zero && srcPkgJson.zero.components) ? srcPkgJson.zero.components : scannedMetadata
+            components: componentsList
         }
     };
     

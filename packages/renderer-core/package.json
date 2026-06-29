@@ -13,5 +13,8 @@
     "@zero/schema": "file:../../../studio-platform/packages/schema",
     "@zero/auth-config": "file:../../../studio-platform/packages/auth-config",
     "zero-annotation": "^1.0.10"
+  },
+  "zero": {
+    "hidden": true
   }
 }

@@ -12,5 +12,8 @@
     "type": "theme",
     "name": "Zero UIV Themes",
     "description": "Premium Uiverse-inspired theme provider"
+  },
+  "zero": {
+    "hidden": true
   }
 }

@@ -1,425 +1,370 @@
 // @environment page
-import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotation';
-import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
-import { LitElement, html, css } from 'lit';
-import { property } from 'lit/decorators.js';
+import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotation";
+import { RendererAttribute, RendererComponent, applyGlobalStyles, AttributeType, UserInterfaceType } from "zero-annotation";
+import { LitElement, css, html } from "lit";
+import { property, state } from "lit/decorators.js";
 
-const getThemeManager = () => (window as any).zeroThemeManager;
-
-/**
- * A configurable checkbox component with custom styling.
- * 
- * @export
- * @class ZeroCheckbox
- * @extends {LitElement}
- */
 export const studioTemplate: ZeroStudioTemplate = {
-    kind: 'generic',
-    templateHtml: [
-        "<div style='display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;border:1px solid rgba(148,163,184,0.15);background:rgba(255,255,255,0.95);'>",
-        "<div style='width:18px;height:18px;border-radius:4px;border:2px solid var(--uiv-primary-color,#6c63ff);'></div>",
-        "<span style='font-size:0.8rem;color:var(--uiv-text-color,#1e293b);'>{{display:label}}</span>",
-        "</div>"
-    ].join(""),
-    labelProp: 'label',
-    badges: ['Form', 'Checkbox'],
+  kind: "generic",
+  templateHtml: [
+    "<div style='display:flex;align-items:center;gap:10px;padding:8px 12px;'>",
+    "<div style='width:18px;height:18px;border-radius:4px;border:2px solid var(--uiv-primary-color,#6366f1);'></div>",
+    "<span style='font-size:14px;color:var(--uiv-text-color,#1e293b);'>{{display:label}}</span>",
+    "</div>"
+  ].join(""),
+  labelProp: "label",
+  badges: ["Form", "Checkbox"],
 };
 
 function escapeStudio(value: string): string {
-    return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 @RendererComponent({
-    name: 'zero-checkbox',
-    version: '1.0.0',
-    title: 'Checkbox',
-    elementSelector: 'zero-checkbox',
-    group: 'Form Controls',
-    iconName: 'checkbox-icon.png',
+  name: "zero-checkbox",
+  version: "1.0.0",
+  title: "Checkbox",
+  elementSelector: "zero-checkbox",
+  group: "Form Controls",
+  iconName: "checkbox-icon.png",
 })
 @applyGlobalStyles()
 export class ZeroCheckbox extends LitElement {
-    static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
-        if (!config) return studioTemplate;
-        const labelDisplay = escapeStudio(config.studio.display.label || 'Checkbox');
-        return {
-            ...studioTemplate,
-            templateHtml: [
-                "<div style='display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:8px;border:1px solid rgba(148,163,184,0.15);background:rgba(255,255,255,0.95);'>",
-                "<div style='width:18px;height:18px;border-radius:4px;border:2px solid var(--uiv-primary-color,#6c63ff);'></div>",
-                `<span style='font-size:0.8rem;color:var(--uiv-text-color,#1e293b);'>${labelDisplay}</span>`,
-                "</div>"
-            ].join(""),
-        };
+  static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
+    if (!config) return studioTemplate;
+    const labelDisplay = escapeStudio(config.studio.display.label || "Checkbox");
+    return {
+      ...studioTemplate,
+      templateHtml: [
+        "<div style='display:flex;align-items:center;gap:10px;padding:6px 0px;'>",
+        "<div style='width:18px;height:18px;border-radius:4px;border:2px solid var(--uiv-primary-color,#6366f1);display:flex;align-items:center;justify-content:center;color:#6366f1;font-size:12px;font-weight:bold;'>✓</div>",
+        `<span style='font-size:14px;color:var(--uiv-text-color,#1f2937);font-family:inherit;'>${labelDisplay}</span>`,
+        "</div>"
+      ].join(""),
+    };
+  }
+
+  static styles = css`
+    :host {
+      display: block;
+      margin-bottom: 12px;
+      --cb-p: var(--uiv-primary-color, #6366f1);
+      --cb-text: var(--uiv-text-color, #1f2937);
+      --cb-bg: var(--uiv-surface-color, #ffffff);
+      --cb-border: var(--uiv-border-color, #d1d5db);
     }
 
-    static styles = css`
-        :host {
-            display: block;
-            width: 100%;
-            --uiv-primary: var(--uiv-primary-color, #6c63ff);
-            --uiv-bg: var(--uiv-surface-color, #fff);
-            --uiv-text: var(--uiv-text-color, #333);
-            --uiv-border: var(--uiv-border-color, #ddd);
-        }
+    .checkbox-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      position: relative;
+      transition: all 0.2s ease;
+      padding: 4px 0;
+    }
 
-        .form-field {
-            margin-bottom: 20px;
-        }
+    .checkbox-wrapper.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
 
-        .form-field label.main-label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: var(--uiv-text);
-            font-weight: 500;
-        }
+    /* Base checkbox box */
+    .checkbox-box {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--cb-border);
+      border-radius: 4px;
+      background: var(--cb-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-sizing: border-box;
+    }
 
-        .checkbox-field {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+    .checkbox-box::after {
+      content: "";
+      width: 5px;
+      height: 10px;
+      border: solid #ffffff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg) scale(0);
+      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: absolute;
+      top: 1px;
+    }
 
-        .checkbox-field:hover:not(.disabled) {
-            background-color: rgba(var(--uiv-primary-rgb, 108, 99, 255), 0.05);
-            transform: translateX(2px);
-        }
+    /* Indeterminate line */
+    .checkbox-box.indeterminate::after {
+      content: "";
+      width: 10px;
+      height: 2px;
+      background: #ffffff;
+      border: none;
+      transform: scale(0);
+      top: 7px;
+      left: 3px;
+    }
 
-        .checkbox-field.disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
+    .checked .checkbox-box.indeterminate::after,
+    .indeterminate-active .checkbox-box::after {
+      transform: scale(1) !important;
+      border: none !important;
+      width: 10px;
+      height: 2px;
+      background: #ffffff;
+      top: 7px;
+      left: 3px;
+    }
 
-        .checkbox-container {
-            position: relative;
-            display: inline-block;
-        }
+    /* State mappings */
+    .checked .checkbox-box,
+    .indeterminate-active .checkbox-box {
+      background: var(--cb-p);
+      border-color: var(--cb-p);
+    }
 
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            margin: 0;
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
-            border: 2px solid var(--uiv-border);
-            border-radius: 6px;
-            background-color: var(--uiv-bg);
-            transition: all 0.2s;
-            position: relative;
-            box-shadow: var(--uiv-shadow-depth, none);
-        }
+    .checked .checkbox-box::after {
+      transform: rotate(45deg) scale(1);
+    }
 
-        input[type="checkbox"]:hover:not(:disabled) {
-            border-color: var(--uiv-primary);
-            box-shadow: var(--uiv-border-glow);
-        }
+    .checkbox-label {
+      font-size: 0.93rem;
+      color: var(--cb-text);
+      font-weight: 500;
+    }
 
-        input[type="checkbox"]:checked {
-            background-color: var(--uiv-primary);
-            border-color: var(--uiv-primary);
-            box-shadow: var(--uiv-border-glow);
-        }
+    /* ─── VARIANTS ─── */
 
-        input[type="checkbox"]:checked::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #fff;
-            font-size: 14px;
-            font-weight: bold;
-        }
+    /* Glow Variant */
+    .variant-glow .checkbox-box {
+      border-radius: 6px;
+    }
+    .checked.variant-glow .checkbox-box,
+    .indeterminate-active.variant-glow .checkbox-box {
+      box-shadow: 0 0 12px var(--cb-p);
+    }
 
-        input[type="checkbox"]:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px rgba(var(--uiv-primary-rgb, 108, 99, 255), 0.2), var(--uiv-border-glow);
-        }
+    /* Heart Variant */
+    .variant-heart .checkbox-box {
+      border: none;
+      background: transparent;
+      width: 22px;
+      height: 22px;
+    }
+    .variant-heart .checkbox-box::after {
+      display: none;
+    }
+    .variant-heart .heart-icon {
+      fill: none;
+      stroke: var(--cb-border);
+      stroke-width: 2.5;
+      width: 100%;
+      height: 100%;
+      transition: all 0.25s ease;
+    }
+    .checked.variant-heart .heart-icon {
+      fill: #ef4444;
+      stroke: #ef4444;
+      transform: scale(1.15);
+      filter: drop-shadow(0 2px 6px rgba(239, 68, 68, 0.4));
+    }
 
-        input[type="checkbox"]:disabled {
-            background-color: #f5f5f5;
-            border-color: #ccc;
-            cursor: not-allowed;
-        }
+    /* Tick / Round Variant */
+    .variant-tick .checkbox-box {
+      border-radius: 50%;
+    }
+    .checked.variant-tick .checkbox-box {
+      background: #10b981;
+      border-color: #10b981;
+    }
 
-        .checkbox-label {
-            font-size: var(--font-size-base, 14px);
-            color: var(--text-primary, #333);
-            cursor: pointer;
-            user-select: none;
-            line-height: 1.4;
-        }
+    /* Label description */
+    .description {
+      font-size: 0.78rem;
+      color: var(--uiv-text-color-secondary, #6b7280);
+      margin-left: 30px;
+      margin-top: -2px;
+    }
 
-        .checkbox-field.disabled .checkbox-label {
-            color: var(--text-disabled, #999);
-            cursor: not-allowed;
-        }
+    .has-error .checkbox-box {
+      border-color: #ef4444 !important;
+    }
+    .error-text {
+      color: #ef4444;
+      font-size: 0.78rem;
+      margin-left: 30px;
+      margin-top: 4px;
+      font-weight: 500;
+    }
+  `;
 
-        .description {
-            font-size: var(--font-size-sm, 12px);
-            color: var(--text-secondary, #666);
-            margin-top: var(--spacing-xs, 4px);
-            margin-left: 26px; /* Align with checkbox label */
-        }
+  @property({ type: Boolean }) checked = false;
+  @property({ type: String }) label = "Checkbox Label";
+  @property({ type: String }) description = "";
+  @property({ type: String }) variant = "standard";
+  @property({ type: Boolean }) disabled = false;
+  @property({ type: Boolean }) required = false;
+  @property({ type: Boolean }) indeterminate = false;
+  @property({ type: String }) value = "";
+  @property({ type: String, attribute: "error-message" }) errorMessage = "";
+  @property({ type: Boolean, attribute: "show-error" }) showError = false;
 
-        .error-message {
-            color: var(--error-color, #f44336);
-            font-size: var(--font-size-sm, 12px);
-            margin-top: var(--spacing-xs, 4px);
-            display: none;
-        }
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Checked",
+    fieldMappings: "checked"
+  })
+  get checkedConfig() { return this.checked; }
+  set checkedConfig(val: boolean) { this.checked = Boolean(val); }
 
-        .error-message.show {
-            display: block;
-        }
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Label",
+    fieldMappings: "label"
+  })
+  get labelConfig() { return this.label; }
+  set labelConfig(val: string) { this.label = val; }
 
-        input[type="checkbox"].error {
-            border-color: var(--error-color, #f44336);
-        }
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Description",
+    fieldMappings: "description"
+  })
+  get descriptionConfig() { return this.description; }
+  set descriptionConfig(val: string) { this.description = val; }
 
-        input[type="checkbox"].error:focus {
-            box-shadow: 0 0 0 2px var(--error-light, rgba(244, 67, 54, 0.2));
-        }
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.DROPDOWN,
+    displayLabel: "Checkbox Variant Style",
+    fieldMappings: "variant",
+    optionItems: [
+      { label: "Standard Box", value: "standard" },
+      { label: "Glowing Box", value: "glow" },
+      { label: "Heart Icon", value: "heart" },
+      { label: "Round Tick", value: "tick" }
+    ]
+  })
+  get variantConfig() { return this.variant; }
+  set variantConfig(val: string) { this.variant = val || "standard"; }
 
-        /* Custom checkbox styles */
-        .checkbox-field.custom-style input[type="checkbox"] {
-            border-radius: 50%;
-        }
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Disabled",
+    fieldMappings: "disabled"
+  })
+  get disabledConfig() { return this.disabled; }
+  set disabledConfig(val: boolean) { this.disabled = Boolean(val); }
 
-        .checkbox-field.switch-style {
-            gap: var(--spacing-md, 12px);
-        }        .checkbox-field.switch-style input[type="checkbox"] {
-            width: var(--icon-size-xl, 36px);
-            height: var(--icon-size-md, 20px);
-            border-radius: var(--border-radius-xl, 10px);
-            background-color: var(--background-secondary, #f5f5f5);
-            border: 1px solid var(--border-color, #ddd);
-            position: relative;
-            transition: all 0.3s;
-        }
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Required Field",
+    fieldMappings: "required"
+  })
+  get requiredConfig() { return this.required; }
+  set requiredConfig(val: boolean) { this.required = Boolean(val); }
 
-        .checkbox-field.switch-style input[type="checkbox"]::after {
-            content: '';
-            position: absolute;
-            top: 1px;
-            left: 1px;            width: var(--icon-size-sm, 16px);
-            height: var(--icon-size-sm, 16px);
-            background-color: white;
-            border-radius: 50%;
-            transition: all 0.3s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Indeterminate State",
+    fieldMappings: "indeterminate"
+  })
+  get indeterminateConfig() { return this.indeterminate; }
+  set indeterminateConfig(val: boolean) { this.indeterminate = Boolean(val); }
 
-        .checkbox-field.switch-style input[type="checkbox"]:checked::after {
-            left: 17px;
-        }
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Value Key",
+    fieldMappings: "value"
+  })
+  get valueConfig() { return this.value; }
+  set valueConfig(val: string) { this.value = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Error Message",
+    fieldMappings: "errorMessage"
+  })
+  get errorMessageConfig() { return this.errorMessage; }
+  set errorMessageConfig(val: string) { this.errorMessage = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Show Error",
+    fieldMappings: "showError"
+  })
+  get showErrorConfig() { return this.showError; }
+  set showErrorConfig(val: boolean) { this.showError = Boolean(val); }
+
+  private handleToggle() {
+    if (this.disabled) return;
+    
+    if (this.indeterminate) {
+      this.indeterminate = false;
+      this.checked = true;
+    } else {
+      this.checked = !this.checked;
+    }
+
+    this.dispatchEvent(
+      new CustomEvent("change", {
+        detail: {
+          checked: this.checked,
+          value: this.value,
+          indeterminate: this.indeterminate
+        },
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+
+  render() {
+    const wrapClass = [
+      this.checked ? "checked" : "",
+      this.indeterminate ? "indeterminate-active" : "",
+      this.disabled ? "disabled" : "",
+      this.showError ? "has-error" : "",
+      `variant-${this.variant}`
+    ].join(" ");
+
+    return html`
+      <div class="checkbox-wrapper ${wrapClass}" @click=${this.handleToggle}>
+        <div class="checkbox-box ${this.indeterminate ? "indeterminate" : ""}">
+          ${this.variant === "heart"
+            ? html`
+                <svg class="heart-icon" viewBox="0 0 24 24">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              `
+            : ""}
+        </div>
+        <span class="checkbox-label">${this.label}</span>
+      </div>
+      ${this.description
+        ? html`<div class="description">${this.description}</div>`
+        : ""}
+      ${this.showError && this.errorMessage
+        ? html`<div class="error-text">${this.errorMessage}</div>`
+        : ""}
     `;
-
-    @property({ type: Boolean })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.CHECKBOX,
-        displayLabel: 'Checked',
-        fieldMappings: 'checked',
-    })
-    checked = false;
-
-    @property({ type: String })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.TEXT_INPUT,
-        displayLabel: 'Label',
-        placeholderText: 'Enter checkbox label',
-        fieldMappings: 'label',
-    })
-    label = 'Checkbox Label';
-
-    @property({ type: String })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.TEXT_INPUT,
-        displayLabel: 'Description',
-        placeholderText: 'Enter description text',
-        fieldMappings: 'description',
-    })
-    description = '';
-
-    @property({ type: Boolean })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.CHECKBOX,
-        displayLabel: 'Required',
-        fieldMappings: 'required',
-    })
-    required = false;
-
-    @property({ type: Boolean })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.CHECKBOX,
-        displayLabel: 'Disabled',
-        fieldMappings: 'disabled',
-    })
-    disabled = false;
-
-    @property({ type: Boolean })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.CHECKBOX,
-        displayLabel: 'Indeterminate',
-        fieldMappings: 'indeterminate',
-    })
-    indeterminate = false;
-
-    @property({ type: String })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.DROPDOWN,
-        displayLabel: 'Style',
-        optionItems: [
-            { value: 'default', label: 'Default' },
-            { value: 'custom', label: 'Rounded' },
-            { value: 'switch', label: 'Switch' }
-        ],
-        fieldMappings: 'checkboxStyle',
-    })
-    checkboxStyle = 'default';
-
-    @property({ type: String })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.TEXT_INPUT,
-        displayLabel: 'Value',
-        placeholderText: 'Enter checkbox value',
-        fieldMappings: 'value',
-    })
-    value = '';
-
-    @property({ type: String })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.TEXT_INPUT,
-        displayLabel: 'Error Message',
-        placeholderText: 'Enter error message',
-        fieldMappings: 'errorMessage',
-    })
-    errorMessage = '';
-
-    @property({ type: Boolean })
-    @RendererAttribute({
-        attributeType: AttributeType.PROPERTY,
-        uiComponentType: UserInterfaceType.CHECKBOX,
-        displayLabel: 'Show Error',
-        fieldMappings: 'showError',
-    })
-    showError = false;
-
-    private getCheckboxClass(): string {
-        let classes = 'checkbox-field';
-        
-        if (this.disabled) classes += ' disabled';
-        if (this.checkboxStyle === 'custom') classes += ' custom-style';
-        if (this.checkboxStyle === 'switch') classes += ' switch-style';
-        
-        return classes;
-    }
-
-    private handleCheckboxClick() {
-        if (this.disabled) return;
-        
-        if (this.indeterminate) {
-            this.indeterminate = false;
-            this.checked = true;
-        } else {
-            this.checked = !this.checked;
-        }
-        
-        this.dispatchChangeEvent();
-    }
-
-    private dispatchChangeEvent() {
-        this.dispatchEvent(new CustomEvent('change', {
-            detail: { 
-                checked: this.checked,
-                value: this.value,
-                indeterminate: this.indeterminate
-            },
-            bubbles: true,
-            composed: true,
-        }));
-    }
-
-    @RendererAttribute({
-        attributeType: AttributeType.EVENT,
-        displayLabel: 'On Change',
-        eventTrigger: 'change',
-    })
-    handleChange(event: Event) {
-        const target = event.target as HTMLInputElement;
-        this.checked = target.checked;
-        this.indeterminate = false;
-        this.dispatchChangeEvent();
-    }
-
-    updated(changedProperties: Map<string, any>) {
-        super.updated(changedProperties);
-        
-        if (changedProperties.has('indeterminate')) {
-            const checkbox = this.shadowRoot?.querySelector('input[type="checkbox"]') as HTMLInputElement;
-            if (checkbox) {
-                checkbox.indeterminate = this.indeterminate;
-            }
-        }
-    }
-
-    connectedCallback() {
-        super.connectedCallback();
-        getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
-    }
-
-    render() {
-        const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
-        return html`
-            <style>
-                ${themeModule ? themeModule.getGlobalStyles() : ''}
-                ${themeModule ? themeModule.getComponentStyles('checkbox') : ''}
-            </style>
-            <div class="form-field uiv-${themeModule?.id}-theme">
-                ${this.label ? html`
-                    <label class="main-label uiv-${themeModule?.id}-text">Choose Option</label>
-                ` : ''}
-                
-                <div class="${this.getCheckboxClass()} uiv-${themeModule?.id}-card" @click="${this.handleCheckboxClick}">
-                    <div class="checkbox-container">
-                        <input 
-                            type="checkbox"
-                            .checked="${this.checked}"
-                            .indeterminate="${this.indeterminate}"
-                            ?required="${this.required}"
-                            ?disabled="${this.disabled}"
-                            value="${this.value}"
-                            class="${this.showError ? 'error' : ''}"
-                            @change="${this.handleChange}"
-                            @click="${(e: Event) => e.stopPropagation()}"
-                        />
-                    </div>
-                    <span class="checkbox-label uiv-${themeModule?.id}-text">${this.label}</span>
-                </div>
-                
-                ${this.description ? html`
-                    <div class="description uiv-${themeModule?.id}-text-secondary">${this.description}</div>
-                ` : ''}
-                
-                <div class="error-message uiv-${themeModule?.id}-text ${this.showError ? 'show' : ''}" style="color: var(--uiv-error-color, #f44336)">
-                    ${this.errorMessage}
-                </div>
-            </div>
-        `;
-    }
+  }
 }

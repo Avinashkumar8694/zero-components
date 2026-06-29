@@ -1,4 +1,4 @@
-// @environment page
+// @environment server
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { html, css } from 'lit';
 import { property, customElement } from 'lit/decorators.js';

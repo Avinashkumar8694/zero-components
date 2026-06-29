@@ -1,0 +1,10 @@
+{
+  "name": "zero-tooltip",
+  "version": "1.0.0",
+  "description": "Professional customizable tooltip component",
+  "main": "zero-tooltip.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "tooltip"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

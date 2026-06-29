@@ -1,3 +1,4 @@
+// @environment server
 import { Directive, directive, PartType } from 'lit/directive.js';
 
 class OpenPopupDirective extends Directive {

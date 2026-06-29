@@ -1,0 +1,13 @@
+{
+  "name": "zero-radio",
+  "version": "1.0.0",
+  "description": "Professional customizable radio button component",
+  "main": "zero-radio.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "radio"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true
+  }
+}

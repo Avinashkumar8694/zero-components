@@ -12,5 +12,8 @@
     "type": "theme",
     "name": "Zero Standard Themes",
     "description": "Collection of standard themes (Cyber, Glass, Modern, etc.)"
+  },
+  "zero": {
+    "hidden": true
   }
 }

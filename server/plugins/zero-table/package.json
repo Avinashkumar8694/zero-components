@@ -1,0 +1,10 @@
+{
+  "name": "zero-table",
+  "version": "1.0.0",
+  "description": "Professional customizable data table component",
+  "main": "zero-table.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "table", "data-table"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

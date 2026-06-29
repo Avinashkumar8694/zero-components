@@ -1,0 +1,10 @@
+{
+  "name": "zero-switch",
+  "version": "1.0.0",
+  "description": "Professional customizable switch and toggle component",
+  "main": "zero-switch.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "switch", "toggle"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

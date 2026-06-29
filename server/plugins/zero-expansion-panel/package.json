@@ -1,0 +1,10 @@
+{
+  "name": "zero-expansion-panel",
+  "version": "1.0.0",
+  "description": "Professional customizable accordion expansion panel container",
+  "main": "zero-expansion-panel.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "expansion-panel", "accordion"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

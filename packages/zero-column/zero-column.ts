@@ -164,6 +164,39 @@ export class ZeroColumn extends ZeroLayoutBase {
   })
   gap = "16px";
 
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Align Items",
+    fieldMappings: "align",
+    categoryLabel: "Layout",
+    optionItems: [
+      { label: "Stretch", value: "stretch" },
+      { label: "Start", value: "flex-start" },
+      { label: "Center", value: "center" },
+      { label: "End", value: "flex-end" }
+    ]
+  })
+  align = "stretch";
+
+  @property({ type: String, reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.RESPONSIVE_OVERRIDE,
+    displayLabel: "Justify Content",
+    fieldMappings: "justify",
+    categoryLabel: "Layout",
+    optionItems: [
+      { label: "Start", value: "flex-start" },
+      { label: "Center", value: "center" },
+      { label: "End", value: "flex-end" },
+      { label: "Space Between", value: "space-between" },
+      { label: "Space Around", value: "space-around" }
+    ]
+  })
+  justify = "flex-start";
+
   protected computeBaseStyles(): string {
     let base = super.computeBaseStyles();
     const flexVal = `var(--zero-column-flex-override, ${this.flex})`;

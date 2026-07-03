@@ -5,7 +5,8 @@
     "zero-uiv-themes",
     "popup-dropdown",
     "popup-dropdown-directive",
-    "zero-column"
+    "zero-column",
+    "zero-sidenav-layout"
   ],
   "activeProvider": "",
   "activeTheme": ""

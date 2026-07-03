@@ -1,0 +1,12 @@
+{
+  "name": "zero-block-feature",
+  "version": "1.0.0",
+  "description": "Feature Block component for landing pages",
+  "main": "zero-block-feature.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

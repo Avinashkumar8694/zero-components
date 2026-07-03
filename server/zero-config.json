@@ -2,7 +2,8 @@
   "installedPlugins": [
     "code-editor",
     "zero-standard-themes",
-    "zero-column"
+    "zero-column",
+    "zero-sidenav-layout"
   ],
   "activeProvider": "",
   "activeTheme": ""

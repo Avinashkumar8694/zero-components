@@ -1,0 +1,12 @@
+{
+  "name": "zero-block-footer",
+  "version": "1.0.0",
+  "description": "Footer Block component for landing pages",
+  "main": "zero-block-footer.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

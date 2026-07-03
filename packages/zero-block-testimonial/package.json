@@ -1,0 +1,12 @@
+{
+  "name": "zero-block-testimonial",
+  "version": "1.0.0",
+  "description": "Testimonial Block component for landing pages",
+  "main": "zero-block-testimonial.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

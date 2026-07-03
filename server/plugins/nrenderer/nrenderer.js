@@ -423,13 +423,13 @@ var Xe;
             if (s.isProviderFor(y, $))
               return a;
             if (!m(u))
-              for (var S = Ve(u); ; ) {
-                var O = We(S);
-                if (!O)
+              for (var A = Ve(u); ; ) {
+                var P = We(A);
+                if (!P)
                   return;
-                var L = Be(O);
+                var L = Be(P);
                 if (L.isProviderFor(y, $))
-                  return Ge(S), L;
+                  return Ge(A), L;
               }
           }
         }
@@ -437,23 +437,23 @@ var Xe;
           return o;
       }
       function c(y, $) {
-        var S = g.get(y), O;
-        return m(S) || (O = S.get($)), m(O) && (O = w(y, $), m(O) || (m(S) && (S = new I(), g.set(y, S)), S.set($, O))), O;
+        var A = g.get(y), P;
+        return m(A) || (P = A.get($)), m(P) && (P = w(y, $), m(P) || (m(A) && (A = new I(), g.set(y, A)), A.set($, P))), P;
       }
       function p(y) {
         if (m(y))
           throw new TypeError();
         return a === y || s === y || !m(u) && u.has(y);
       }
-      function f(y, $, S) {
-        if (!p(S))
+      function f(y, $, A) {
+        if (!p(A))
           throw new Error("Metadata provider not registered.");
-        var O = c(y, $);
-        if (O !== S) {
-          if (!m(O))
+        var P = c(y, $);
+        if (P !== A) {
+          if (!m(P))
             return !1;
           var L = g.get(y);
-          m(L) && (L = new I(), g.set(y, L)), L.set($, S);
+          m(L) && (L = new I(), g.set(y, L)), L.set($, A);
         }
         return !0;
       }
@@ -481,20 +481,20 @@ var Xe;
       };
       return ce.registerProvider(s), s;
       function u(p, f, y) {
-        var $ = a.get(p), S = !1;
+        var $ = a.get(p), A = !1;
         if (m($)) {
           if (!y)
             return;
-          $ = new I(), a.set(p, $), S = !0;
+          $ = new I(), a.set(p, $), A = !0;
         }
-        var O = $.get(f);
-        if (m(O)) {
+        var P = $.get(f);
+        if (m(P)) {
           if (!y)
             return;
-          if (O = new I(), $.set(f, O), !o.setProvider(p, f, s))
-            throw $.delete(f), S && a.delete(p), new Error("Wrong provider for target.");
+          if (P = new I(), $.set(f, P), !o.setProvider(p, f, s))
+            throw $.delete(f), A && a.delete(p), new Error("Wrong provider for target.");
         }
-        return O;
+        return P;
       }
       function g(p, f, y) {
         var $ = u(
@@ -516,13 +516,13 @@ var Xe;
           return $.get(p);
       }
       function C(p, f, y, $) {
-        var S = u(
+        var A = u(
           y,
           $,
           /*Create*/
           !0
         );
-        S.set(p, f);
+        A.set(p, f);
       }
       function w(p, f) {
         var y = [], $ = u(
@@ -533,8 +533,8 @@ var Xe;
         );
         if (m($))
           return y;
-        for (var S = $.keys(), O = Ve(S), L = 0; ; ) {
-          var Ye = We(O);
+        for (var A = $.keys(), P = Ve(A), L = 0; ; ) {
+          var Ye = We(P);
           if (!Ye)
             return y.length = L, y;
           var Dt = Be(Ye);
@@ -542,7 +542,7 @@ var Xe;
             y[L] = Dt;
           } catch (Ht) {
             try {
-              Ge(O);
+              Ge(P);
             } finally {
               throw Ht;
             }
@@ -560,8 +560,8 @@ var Xe;
         if (m($) || !$.delete(p))
           return !1;
         if ($.size === 0) {
-          var S = a.get(f);
-          m(S) || (S.delete(y), S.size === 0 && a.delete(S));
+          var A = a.get(f);
+          m(A) || (A.delete(y), A.size === 0 && a.delete(A));
         }
         return !0;
       }
@@ -1527,14 +1527,14 @@ function x(i) {
     return n.constructor.createProperty(l, r), d ? Object.getOwnPropertyDescriptor(n, l) : void 0;
   })(i, e, t);
 }
-var gr = Object.defineProperty, mr = Object.getOwnPropertyDescriptor, P = (i, e, t, r) => {
+var gr = Object.defineProperty, mr = Object.getOwnPropertyDescriptor, O = (i, e, t, r) => {
   for (var n = r > 1 ? void 0 : r ? mr(e, t) : e, l = i.length - 1, d; l >= 0; l--)
     (d = i[l]) && (n = (r ? d(e, t, n) : d(n)) || n);
   return r && n && gr(e, t, n), n;
 };
 const ve = class ve extends oe {
   constructor() {
-    super(...arguments), this.responsiveProps = {}, this.activeEdge = "none", this.visible = !0, this.zIndex = 1, this.opacity = 1, this.customClass = "", this.width = "100%", this.height = "auto", this.margin = "0px", this.padding = "0px", this.direction = "row", this.justify = "flex-start", this.align = "stretch", this.gap = "16px", this.itemsPerRow = 1, this.backgroundColor = "transparent", this.borderRadius = "0px", this.elevation = "none";
+    super(...arguments), this.responsiveProps = {}, this.activeEdge = "none", this.visible = !0, this.zIndex = 1, this.opacity = 1, this.customClass = "", this.width = "100%", this.height = "auto", this.margin = "0px", this.padding = "0px", this.direction = "row", this.justify = "flex-start", this.align = "stretch", this.gap = "16px", this.itemsPerRow = 1, this.wrap = "wrap", this.backgroundColor = "transparent", this.borderRadius = "0px", this.elevation = "none";
   }
   get onClick() {
     return "click";
@@ -1618,7 +1618,8 @@ const ve = class ve extends oe {
       `--zero-p-align: var(--${e}-align-override, ${this.align})`,
       `--zero-p-border-radius: var(--${e}-border-radius-override, ${this.borderRadius})`,
       `--zero-p-shadow: var(--${e}-elevation-override, ${this.elevation})`,
-      `--zero-p-direction: var(--${e}-direction-override, ${this.direction})`
+      `--zero-p-direction: var(--${e}-direction-override, ${this.direction})`,
+      `--zero-p-wrap: var(--${e}-wrap-override, ${this.wrap || "wrap"})`
     ].join(";");
   }
   computeColumnBasis() {
@@ -1671,10 +1672,14 @@ ve.slots = [], ve.styles = ut`
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
+    slot {
+      display: contents;
+    }
+
     .zero-internal-container {
       position: relative;
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: var(--zero-p-wrap, wrap);
       box-sizing: border-box;
       width: 100%;
       height: 100%;
@@ -1729,7 +1734,7 @@ ve.slots = [], ve.styles = ut`
       min-height: 0;
       display: flex;
       flex-direction: var(--zero-p-direction, row);
-      flex-wrap: wrap;
+      flex-wrap: var(--zero-p-wrap, wrap);
       gap: var(--zero-p-gap, 0px);
       row-gap: var(--zero-p-row-gap, var(--zero-p-gap, 0px));
       justify-content: var(--zero-p-justify, flex-start);
@@ -1756,14 +1761,14 @@ ve.slots = [], ve.styles = ut`
     .drop-indicator.top { top: 0; left: 0; width: 100%; height: 30%; border-bottom: 3px solid var(--zs-primary); }
     .drop-indicator.bottom { bottom: 0; left: 0; width: 100%; height: 30%; border-top: 3px solid var(--zs-primary); }
   `;
-let A = ve;
-P([
+let S = ve;
+O([
   x({ type: Object, attribute: "responsive-props" })
-], A.prototype, "responsiveProps", 2);
-P([
+], S.prototype, "responsiveProps", 2);
+O([
   x({ type: String })
-], A.prototype, "activeEdge", 2);
-P([
+], S.prototype, "activeEdge", 2);
+O([
   x({ type: Boolean, reflect: !0 }),
   k({
     attributeType: R.PROPERTY,
@@ -1772,8 +1777,8 @@ P([
     fieldMappings: "visible",
     categoryLabel: "Logic"
   })
-], A.prototype, "visible", 2);
-P([
+], S.prototype, "visible", 2);
+O([
   x({ type: Number, reflect: !0, attribute: "z-index" }),
   k({
     attributeType: R.PROPERTY,
@@ -1782,8 +1787,8 @@ P([
     fieldMappings: "zIndex",
     categoryLabel: "Advanced"
   })
-], A.prototype, "zIndex", 2);
-P([
+], S.prototype, "zIndex", 2);
+O([
   x({ type: Number, reflect: !0 }),
   k({
     attributeType: R.PROPERTY,
@@ -1792,8 +1797,8 @@ P([
     fieldMappings: "opacity",
     categoryLabel: "Advanced"
   })
-], A.prototype, "opacity", 2);
-P([
+], S.prototype, "opacity", 2);
+O([
   x({ type: String, attribute: "custom-class" }),
   k({
     attributeType: R.PROPERTY,
@@ -1802,8 +1807,8 @@ P([
     fieldMappings: "customClass",
     categoryLabel: "Advanced"
   })
-], A.prototype, "customClass", 2);
-P([
+], S.prototype, "customClass", 2);
+O([
   x({ type: String, reflect: !0 }),
   k({
     attributeType: R.PROPERTY,
@@ -1812,8 +1817,8 @@ P([
     fieldMappings: "width",
     categoryLabel: "Dimensions"
   })
-], A.prototype, "width", 2);
-P([
+], S.prototype, "width", 2);
+O([
   x({ type: String, reflect: !0 }),
   k({
     attributeType: R.PROPERTY,
@@ -1822,8 +1827,8 @@ P([
     fieldMappings: "height",
     categoryLabel: "Dimensions"
   })
-], A.prototype, "height", 2);
-P([
+], S.prototype, "height", 2);
+O([
   x({ type: String, reflect: !0 }),
   k({
     attributeType: R.PROPERTY,
@@ -1832,8 +1837,8 @@ P([
     fieldMappings: "margin",
     categoryLabel: "Spacing"
   })
-], A.prototype, "margin", 2);
-P([
+], S.prototype, "margin", 2);
+O([
   x({ type: String, reflect: !0 }),
   k({
     attributeType: R.PROPERTY,
@@ -1842,31 +1847,34 @@ P([
     fieldMappings: "padding",
     categoryLabel: "Spacing"
   })
-], A.prototype, "padding", 2);
-P([
+], S.prototype, "padding", 2);
+O([
   k({
     attributeType: R.EVENT,
     displayLabel: "On Click",
     eventTrigger: "click",
     categoryLabel: "Triggers"
   })
-], A.prototype, "onClick", 1);
-P([
+], S.prototype, "onClick", 1);
+O([
   x({ type: String, reflect: !0 })
-], A.prototype, "direction", 2);
-P([
+], S.prototype, "direction", 2);
+O([
   x({ type: String, reflect: !0 })
-], A.prototype, "justify", 2);
-P([
+], S.prototype, "justify", 2);
+O([
   x({ type: String, reflect: !0 })
-], A.prototype, "align", 2);
-P([
+], S.prototype, "align", 2);
+O([
   x({ type: String, reflect: !0 })
-], A.prototype, "gap", 2);
-P([
+], S.prototype, "gap", 2);
+O([
   x({ type: Number, reflect: !0, attribute: "items-per-row" })
-], A.prototype, "itemsPerRow", 2);
-P([
+], S.prototype, "itemsPerRow", 2);
+O([
+  x({ type: String, reflect: !0 })
+], S.prototype, "wrap", 2);
+O([
   x({ type: String, attribute: "background-color", reflect: !0 }),
   k({
     attributeType: R.PROPERTY,
@@ -1875,8 +1883,8 @@ P([
     fieldMappings: "backgroundColor",
     categoryLabel: "Appearance"
   })
-], A.prototype, "backgroundColor", 2);
-P([
+], S.prototype, "backgroundColor", 2);
+O([
   x({ type: String, attribute: "border-radius", reflect: !0 }),
   k({
     attributeType: R.PROPERTY,
@@ -1885,8 +1893,8 @@ P([
     fieldMappings: "borderRadius",
     categoryLabel: "Appearance"
   })
-], A.prototype, "borderRadius", 2);
-P([
+], S.prototype, "borderRadius", 2);
+O([
   x({ type: String, reflect: !0, attribute: "elevation" }),
   k({
     attributeType: R.PROPERTY,
@@ -1901,21 +1909,21 @@ P([
       { label: "High", value: "0 12px 24px rgba(0,0,0,0.16)" }
     ]
   })
-], A.prototype, "elevation", 2);
-P([
+], S.prototype, "elevation", 2);
+O([
   k({
     attributeType: R.ACTION,
     displayLabel: "Show Component",
     categoryLabel: "Actions"
   })
-], A.prototype, "show", 1);
-P([
+], S.prototype, "show", 1);
+O([
   k({
     attributeType: R.ACTION,
     displayLabel: "Hide Component",
     categoryLabel: "Actions"
   })
-], A.prototype, "hide", 1);
+], S.prototype, "hide", 1);
 var br = Object.defineProperty, _r = Object.getOwnPropertyDescriptor, ue = (i, e, t, r) => {
   for (var n = r > 1 ? void 0 : r ? _r(e, t) : e, l = i.length - 1, d; l >= 0; l--)
     (d = i[l]) && (n = (r ? d(e, t, n) : d(n)) || n);
@@ -1935,7 +1943,7 @@ const st = {
   badges: ["Renderer", "Layout"],
   emptyText: "Drop components here to render"
 };
-let X = class extends A {
+let X = class extends S {
   constructor() {
     super(...arguments), this.direction = "column", this.justify = "flex-start", this.align = "stretch", this.gap = "16px";
   }
@@ -2002,7 +2010,7 @@ let X = class extends A {
   }
 };
 X.styles = [
-  A.styles,
+  S.styles,
   ut`
       .nrenderer-content {
         width: 100%;

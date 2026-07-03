@@ -1,0 +1,12 @@
+{
+  "name": "zero-metadata-card",
+  "version": "1.0.0",
+  "description": "Metadata Grid Card component for dashboards",
+  "main": "zero-metadata-card.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

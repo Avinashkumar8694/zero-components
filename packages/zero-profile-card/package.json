@@ -1,0 +1,12 @@
+{
+  "name": "zero-profile-card",
+  "version": "1.0.0",
+  "description": "Profile Card component for dashboards",
+  "main": "zero-profile-card.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

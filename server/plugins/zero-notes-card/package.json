@@ -1,0 +1,12 @@
+{
+  "name": "zero-notes-card",
+  "version": "1.0.0",
+  "description": "Notes Card component for dashboards",
+  "main": "zero-notes-card.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

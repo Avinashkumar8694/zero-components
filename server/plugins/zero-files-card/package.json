@@ -1,0 +1,12 @@
+{
+  "name": "zero-files-card",
+  "version": "1.0.0",
+  "description": "Files List Card component for dashboards",
+  "main": "zero-files-card.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

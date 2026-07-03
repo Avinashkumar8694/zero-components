@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "zero": {
-    "component": true
+    "component": true,
+    "hidden": true
   }
 }

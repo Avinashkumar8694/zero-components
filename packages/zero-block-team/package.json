@@ -1,0 +1,12 @@
+{
+  "name": "zero-block-team",
+  "version": "1.0.0",
+  "description": "Team Block component for landing pages",
+  "main": "zero-block-team.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "zero-sidenav-layout",
+  "version": "1.0.0",
+  "description": "Sidenav Layout Template component for visual builder pages",
+  "main": "zero-sidenav-layout.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

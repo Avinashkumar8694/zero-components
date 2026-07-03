@@ -37,3 +37,15 @@ export * from './packages/zero-radio/zero-radio';
 // Other standard plugins
 export * from './packages/zero-uiv-loader-orbit/zero-uiv-loader-orbit';
 export * from './packages/zero-uiv-themes/src/index';
+
+// Design Blocks
+export * from './packages/zero-block-header/zero-block-header';
+export * from './packages/zero-block-hero/zero-block-hero';
+export * from './packages/zero-block-feature/zero-block-feature';
+export * from './packages/zero-block-content/zero-block-content';
+export * from './packages/zero-block-cta/zero-block-cta';
+export * from './packages/zero-block-pricing/zero-block-pricing';
+export * from './packages/zero-block-team/zero-block-team';
+export * from './packages/zero-block-testimonial/zero-block-testimonial';
+export * from './packages/zero-block-contact/zero-block-contact';
+export * from './packages/zero-block-footer/zero-block-footer';

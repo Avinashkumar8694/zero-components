@@ -1,0 +1,12 @@
+{
+  "name": "zero-block-cta",
+  "version": "1.0.0",
+  "description": "CTA Block component for landing pages",
+  "main": "zero-block-cta.ts",
+  "type": "module",
+  "keywords": [
+    "lit",
+    "web-component"
+  ],
+  "license": "MIT"
+}

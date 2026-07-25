@@ -45,16 +45,41 @@ export class ZeroColumn extends ZeroLayoutBase {
     ZeroLayoutBase.styles,
     css`
       :host {
-        /* Align using flex properties inherited from flex parent */
+        /* When width is explicitly set, respect it with flex-basis */
         flex: var(--zero-column-flex-override, var(--zero-column-flex, 1 1 0%));
         min-width: 0;
         width: var(--zero-width, auto);
+        /* If a fixed width is set, prevent flex from stretching/shrinking */
+        flex-shrink: var(--zero-column-shrink, 1);
+        flex-grow: var(--zero-column-grow, 1);
+        box-sizing: border-box;
+        align-self: stretch;
+      }
+      
+      :host([width]) {
+        /* When a width attribute is present, lock to that width */
+        flex: 0 0 var(--zero-width, auto);
+        width: var(--zero-width, auto);
+        max-width: var(--zero-width, none);
+      }
+      
+      @media (max-width: 768px) {
+        :host {
+          --zero-column-flex: 1 1 100%;
+          --zero-width: 100%;
+        }
+        :host([width]) {
+          flex: var(--zero-column-flex-override, 1 1 100%);
+          width: var(--zero-column-width-override, 100%);
+          max-width: var(--zero-column-width-override, 100%);
+        }
       }
       
       .column-inner {
         position: relative;
         width: 100%;
-        height: 100%;
+        flex: 1;
+        min-height: 0;
         display: flex;
         flex-direction: column;
       }
@@ -268,7 +293,7 @@ export class ZeroColumn extends ZeroLayoutBase {
   render() {
     return html`
       ${this.renderResponsiveStyles()}
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="zero-internal-container" 
              style=${this.computeInternalStyles()}
              @mousemove=${this.handleMouseMove}

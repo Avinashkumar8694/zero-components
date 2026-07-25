@@ -139,7 +139,7 @@ var Ve;
       if (b(s) || (s = D(s)), !S(a))
         throw new TypeError();
       b(s) || (s = D(s));
-      var h = Q(
+      var h = K(
         a,
         s,
         /*Create*/
@@ -178,7 +178,7 @@ var Ve;
       return Y(v) ? !1 : Me(i, v, s);
     }
     function pe(i, a, s) {
-      var h = Q(
+      var h = K(
         a,
         s,
         /*Create*/
@@ -195,7 +195,7 @@ var Ve;
         return Se(i, v, s);
     }
     function Oe(i, a, s) {
-      var h = Q(
+      var h = K(
         a,
         s,
         /*Create*/
@@ -205,7 +205,7 @@ var Ve;
         return h.OrdinaryGetOwnMetadata(i, a, s);
     }
     function Te(i, a, s, h) {
-      var v = Q(
+      var v = K(
         s,
         h,
         /*Create*/
@@ -233,7 +233,7 @@ var Ve;
       return O;
     }
     function Re(i, a) {
-      var s = Q(
+      var s = K(
         i,
         a,
         /*create*/
@@ -580,7 +580,7 @@ var Ve;
       };
       return m;
     }
-    function Q(i, a, s) {
+    function K(i, a, s) {
       var h = le.getProvider(i, a);
       if (!b(h))
         return h;
@@ -825,7 +825,9 @@ function jt(r) {
         title: r.title,
         selector: r.elementSelector,
         category: r.group,
-        icon: r.iconName
+        icon: r.iconName,
+        layoutKind: r.layoutKind,
+        environment: r.environment
       };
       if (Reflect.defineMetadata("ZeroComponent", t, e.prototype), globalThis.customElements) {
         const n = `${r.elementSelector}-${r.version}`;
@@ -979,7 +981,7 @@ const Vt = (r) => new at(typeof r == "string" ? r : r + "", void 0, Ce), Gt = (r
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Yt, defineProperty: Xt, getOwnPropertyDescriptor: Zt, getOwnPropertyNames: Jt, getOwnPropertySymbols: Qt, getPrototypeOf: Kt } = Object, B = globalThis, Ye = B.trustedTypes, er = Ye ? Ye.emptyScript : "", be = B.reactiveElementPolyfillSupport, te = (r, e) => r, de = { toAttribute(r, e) {
+const { is: Yt, defineProperty: Xt, getOwnPropertyDescriptor: Zt, getOwnPropertyNames: Jt, getOwnPropertySymbols: Kt, getPrototypeOf: Qt } = Object, B = globalThis, Ye = B.trustedTypes, er = Ye ? Ye.emptyScript : "", be = B.reactiveElementPolyfillSupport, te = (r, e) => r, de = { toAttribute(r, e) {
   switch (e) {
     case Boolean:
       r = r ? er : null;
@@ -1038,13 +1040,13 @@ let X = class extends HTMLElement {
   }
   static _$Ei() {
     if (this.hasOwnProperty(te("elementProperties"))) return;
-    const e = Kt(this);
+    const e = Qt(this);
     e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
     if (this.hasOwnProperty(te("finalized"))) return;
     if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(te("properties"))) {
-      const t = this.properties, n = [...Jt(t), ...Qt(t)];
+      const t = this.properties, n = [...Jt(t), ...Kt(t)];
       for (const o of n) this.createProperty(o, t[o]);
     }
     const e = this[Symbol.metadata];
@@ -1219,7 +1221,7 @@ X.elementStyles = [], X.shadowRootOptions = { mode: "open" }, X[te("elementPrope
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const re = globalThis, Ze = (r) => r, ce = re.trustedTypes, Je = ce ? ce.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, st = "$lit$", z = `lit$${Math.random().toFixed(9).slice(2)}$`, lt = "?" + z, tr = `<${lt}>`, G = document, ie = () => G.createComment(""), oe = (r) => r === null || typeof r != "object" && typeof r != "function", xe = Array.isArray, rr = (r) => xe(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", me = `[ 	
-\f\r]`, K = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Qe = /-->/g, Ke = />/g, W = RegExp(`>|${me}(?:([^\\s"'>=/]+)(${me}*=${me}*(?:[^ 	
+\f\r]`, Q = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ke = /-->/g, Qe = />/g, W = RegExp(`>|${me}(?:([^\\s"'>=/]+)(${me}*=${me}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), et = /'/g, tt = /"/g, ut = /^(?:script|style|textarea|title)$/i, nr = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), ee = nr(1), Z = Symbol.for("lit-noChange"), P = Symbol.for("lit-nothing"), rt = /* @__PURE__ */ new WeakMap(), q = G.createTreeWalker(G, 129);
 function ht(r, e) {
   if (!xe(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
@@ -1227,13 +1229,13 @@ function ht(r, e) {
 }
 const ir = (r, e) => {
   const t = r.length - 1, n = [];
-  let o, l = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", u = K;
+  let o, l = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", u = Q;
   for (let g = 0; g < t; g++) {
     const y = r[g];
     let E, $, w = -1, R = 0;
-    for (; R < y.length && (u.lastIndex = R, $ = u.exec(y), $ !== null); ) R = u.lastIndex, u === K ? $[1] === "!--" ? u = Qe : $[1] !== void 0 ? u = Ke : $[2] !== void 0 ? (ut.test($[2]) && (o = RegExp("</" + $[2], "g")), u = W) : $[3] !== void 0 && (u = W) : u === W ? $[0] === ">" ? (u = o ?? K, w = -1) : $[1] === void 0 ? w = -2 : (w = u.lastIndex - $[2].length, E = $[1], u = $[3] === void 0 ? W : $[3] === '"' ? tt : et) : u === tt || u === et ? u = W : u === Qe || u === Ke ? u = K : (u = W, o = void 0);
+    for (; R < y.length && (u.lastIndex = R, $ = u.exec(y), $ !== null); ) R = u.lastIndex, u === Q ? $[1] === "!--" ? u = Ke : $[1] !== void 0 ? u = Qe : $[2] !== void 0 ? (ut.test($[2]) && (o = RegExp("</" + $[2], "g")), u = W) : $[3] !== void 0 && (u = W) : u === W ? $[0] === ">" ? (u = o ?? Q, w = -1) : $[1] === void 0 ? w = -2 : (w = u.lastIndex - $[2].length, E = $[1], u = $[3] === void 0 ? W : $[3] === '"' ? tt : et) : u === tt || u === et ? u = W : u === Ke || u === Qe ? u = Q : (u = W, o = void 0);
     const H = u === W && r[g + 1].startsWith("/>") ? " " : "";
-    l += u === K ? y + tr : w >= 0 ? (n.push(E), y.slice(0, w) + st + y.slice(w) + z + H) : y + z + (w === -2 ? g : H);
+    l += u === Q ? y + tr : w >= 0 ? (n.push(E), y.slice(0, w) + st + y.slice(w) + z + H) : y + z + (w === -2 ? g : H);
   }
   return [ht(r, l + (r[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), n];
 };

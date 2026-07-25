@@ -1,5 +1,5 @@
 import { html } from "lit";
-import { property, customElement } from "lit/decorators.js";
+import { property } from "lit/decorators.js";
 import { RendererComponent, RendererAttribute, AttributeType, UserInterfaceType } from "zero-annotation";
 import { ZeroLayoutBase } from "./zero-layout-base";
 import type { ZeroSlotDefinition } from "./zero-layout-base";
@@ -15,7 +15,6 @@ import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotat
   group: "Layout",
   iconName: "expansion-panel-icon.png",
 })
-@customElement("zero-expansion-panel")
 export class ZeroExpansionPanel extends ZeroLayoutBase {
   protected get overridePrefix() { return "zero-expansion-panel"; }
 
@@ -206,7 +205,7 @@ export class ZeroExpansionPanel extends ZeroLayoutBase {
   render() {
     return html`
       ${this.renderResponsiveStyles()}
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div
           class="zero-internal-container"
           style="
@@ -261,7 +260,6 @@ export class ZeroExpansionPanel extends ZeroLayoutBase {
   group: "Layout",
   iconName: "tab-panel-icon.png",
 })
-@customElement("zero-tab-panel")
 export class ZeroTabPanel extends ZeroLayoutBase {
   protected get overridePrefix() { return "zero-tab-panel"; }
 
@@ -407,7 +405,7 @@ export class ZeroTabPanel extends ZeroLayoutBase {
     const tabList = this.getTabList();
     return html`
       ${this.renderResponsiveStyles()}
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="zero-internal-container" style="border: 1px solid rgba(0,0,0,0.08); overflow: hidden; ${this.computeInternalStyles()}">
           <div class="tabs-header-bar" style="background: ${this.headerBg}; display: flex; border-bottom: 1px solid ${this.borderColor || 'rgba(0,0,0,0.08)'}; width: 100%; box-sizing: border-box; overflow-x: auto;">
             ${tabList.map((tab, index) => {
@@ -449,7 +447,6 @@ export class ZeroTabPanel extends ZeroLayoutBase {
   group: "Layout",
   iconName: "stepper-panel-icon.png",
 })
-@customElement("zero-stepper-panel")
 export class ZeroStepperPanel extends ZeroLayoutBase {
   protected get overridePrefix() { return "zero-stepper-panel"; }
 
@@ -648,7 +645,7 @@ export class ZeroStepperPanel extends ZeroLayoutBase {
     const stepList = this.getStepList();
     return html`
       ${this.renderResponsiveStyles()}
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="zero-internal-container" style="border: 1px solid rgba(0,0,0,0.08); overflow: hidden; ${this.computeInternalStyles()}">
           <div class="stepper-header-bar" style="background: ${this.headerBg}; display: flex; align-items: center; justify-content: center; padding: 16px; border-bottom: 1px solid ${this.borderColor || 'rgba(0,0,0,0.08)'}; width: 100%; box-sizing: border-box; overflow-x: auto; gap: 16px;">
             ${stepList.map((step, index) => {

@@ -139,7 +139,7 @@ var Ge;
       if (m(o) || (o = j(o)), !A(s))
         throw new TypeError();
       m(o) || (o = j(o));
-      var c = Q(
+      var c = K(
         s,
         o,
         /*Create*/
@@ -178,7 +178,7 @@ var Ge;
       return F(y) ? !1 : Oe(a, y, o);
     }
     function fe(a, s, o) {
-      var c = Q(
+      var c = K(
         s,
         o,
         /*Create*/
@@ -195,7 +195,7 @@ var Ge;
         return Me(a, y, o);
     }
     function Te(a, s, o) {
-      var c = Q(
+      var c = K(
         s,
         o,
         /*Create*/
@@ -205,7 +205,7 @@ var Ge;
         return c.OrdinaryGetOwnMetadata(a, s, o);
     }
     function ke(a, s, o, c) {
-      var y = Q(
+      var y = K(
         o,
         c,
         /*Create*/
@@ -233,7 +233,7 @@ var Ge;
       return C;
     }
     function Re(a, s) {
-      var o = Q(
+      var o = K(
         a,
         s,
         /*create*/
@@ -580,7 +580,7 @@ var Ge;
       };
       return _;
     }
-    function Q(a, s, o) {
+    function K(a, s, o) {
       var c = oe.getProvider(a, s);
       if (!m(c))
         return c;
@@ -825,7 +825,9 @@ function It(r) {
         title: r.title,
         selector: r.elementSelector,
         category: r.group,
-        icon: r.iconName
+        icon: r.iconName,
+        layoutKind: r.layoutKind,
+        environment: r.environment
       };
       if (Reflect.defineMetadata("ZeroComponent", t, e.prototype), globalThis.customElements) {
         const n = `${r.elementSelector}-${r.version}`;
@@ -979,7 +981,7 @@ const Gt = (r) => new ot(typeof r == "string" ? r : r + "", void 0, Se), Jt = (r
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Zt, defineProperty: Yt, getOwnPropertyDescriptor: Xt, getOwnPropertyNames: Qt, getOwnPropertySymbols: Kt, getPrototypeOf: er } = Object, I = globalThis, Ze = I.trustedTypes, tr = Ze ? Ze.emptyScript : "", me = I.reactiveElementPolyfillSupport, ee = (r, e) => r, de = { toAttribute(r, e) {
+const { is: Zt, defineProperty: Yt, getOwnPropertyDescriptor: Xt, getOwnPropertyNames: Kt, getOwnPropertySymbols: Qt, getPrototypeOf: er } = Object, I = globalThis, Ze = I.trustedTypes, tr = Ze ? Ze.emptyScript : "", me = I.reactiveElementPolyfillSupport, ee = (r, e) => r, de = { toAttribute(r, e) {
   switch (e) {
     case Boolean:
       r = r ? tr : null;
@@ -1044,7 +1046,7 @@ let Z = class extends HTMLElement {
   static finalize() {
     if (this.hasOwnProperty(ee("finalized"))) return;
     if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(ee("properties"))) {
-      const t = this.properties, n = [...Qt(t), ...Kt(t)];
+      const t = this.properties, n = [...Kt(t), ...Qt(t)];
       for (const i of n) this.createProperty(i, t[i]);
     }
     const e = this[Symbol.metadata];
@@ -1218,22 +1220,22 @@ Z.elementStyles = [], Z.shadowRootOptions = { mode: "open" }, Z[ee("elementPrope
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const te = globalThis, Xe = (r) => r, he = te.trustedTypes, Qe = he ? he.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, lt = "$lit$", U = `lit$${Math.random().toFixed(9).slice(2)}$`, ut = "?" + U, rr = `<${ut}>`, G = document, ne = () => G.createComment(""), ie = (r) => r === null || typeof r != "object" && typeof r != "function", Ae = Array.isArray, nr = (r) => Ae(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", be = `[ 	
-\f\r]`, K = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ke = /-->/g, et = />/g, B = RegExp(`>|${be}(?:([^\\s"'>=/]+)(${be}*=${be}*(?:[^ 	
+const te = globalThis, Xe = (r) => r, he = te.trustedTypes, Ke = he ? he.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, lt = "$lit$", U = `lit$${Math.random().toFixed(9).slice(2)}$`, ut = "?" + U, rr = `<${ut}>`, G = document, ne = () => G.createComment(""), ie = (r) => r === null || typeof r != "object" && typeof r != "function", Ae = Array.isArray, nr = (r) => Ae(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", be = `[ 	
+\f\r]`, Q = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Qe = /-->/g, et = />/g, B = RegExp(`>|${be}(?:([^\\s"'>=/]+)(${be}*=${be}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), tt = /'/g, rt = /"/g, ct = /^(?:script|style|textarea|title)$/i, ir = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), ue = ir(1), Y = Symbol.for("lit-noChange"), M = Symbol.for("lit-nothing"), nt = /* @__PURE__ */ new WeakMap(), V = G.createTreeWalker(G, 129);
 function dt(r, e) {
   if (!Ae(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return Qe !== void 0 ? Qe.createHTML(e) : e;
+  return Ke !== void 0 ? Ke.createHTML(e) : e;
 }
 const ar = (r, e) => {
   const t = r.length - 1, n = [];
-  let i, l = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", u = K;
+  let i, l = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", u = Q;
   for (let v = 0; v < t; v++) {
     const p = r[v];
     let x, b, $ = -1, T = 0;
-    for (; T < p.length && (u.lastIndex = T, b = u.exec(p), b !== null); ) T = u.lastIndex, u === K ? b[1] === "!--" ? u = Ke : b[1] !== void 0 ? u = et : b[2] !== void 0 ? (ct.test(b[2]) && (i = RegExp("</" + b[2], "g")), u = B) : b[3] !== void 0 && (u = B) : u === B ? b[0] === ">" ? (u = i ?? K, $ = -1) : b[1] === void 0 ? $ = -2 : ($ = u.lastIndex - b[2].length, x = b[1], u = b[3] === void 0 ? B : b[3] === '"' ? rt : tt) : u === rt || u === tt ? u = B : u === Ke || u === et ? u = K : (u = B, i = void 0);
+    for (; T < p.length && (u.lastIndex = T, b = u.exec(p), b !== null); ) T = u.lastIndex, u === Q ? b[1] === "!--" ? u = Qe : b[1] !== void 0 ? u = et : b[2] !== void 0 ? (ct.test(b[2]) && (i = RegExp("</" + b[2], "g")), u = B) : b[3] !== void 0 && (u = B) : u === B ? b[0] === ">" ? (u = i ?? Q, $ = -1) : b[1] === void 0 ? $ = -2 : ($ = u.lastIndex - b[2].length, x = b[1], u = b[3] === void 0 ? B : b[3] === '"' ? rt : tt) : u === rt || u === tt ? u = B : u === Qe || u === et ? u = Q : (u = B, i = void 0);
     const R = u === B && r[v + 1].startsWith("/>") ? " " : "";
-    l += u === K ? p + rr : $ >= 0 ? (n.push(x), p.slice(0, $) + lt + p.slice($) + U + R) : p + U + ($ === -2 ? v : R);
+    l += u === Q ? p + rr : $ >= 0 ? (n.push(x), p.slice(0, $) + lt + p.slice($) + U + R) : p + U + ($ === -2 ? v : R);
   }
   return [dt(r, l + (r[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), n];
 };

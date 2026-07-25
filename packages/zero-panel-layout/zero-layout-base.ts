@@ -51,13 +51,22 @@ export class ZeroLayoutBase extends LitElement {
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
+    :host > div {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+    }
+
     .zero-internal-container {
       position: relative;
       display: flex;
       flex-wrap: wrap;
       box-sizing: border-box;
       width: 100%;
-      height: 100%;
+      flex: 1;
+      min-height: 0;
       gap: var(--zero-p-gap, 0px);
       row-gap: var(--zero-p-row-gap, var(--zero-p-gap, 0px));
       padding: var(--zero-p-padding, 0px);
@@ -463,5 +472,27 @@ export class ZeroLayoutBase extends LitElement {
 
   renderHeader() {
     return html``;
+  }
+
+  willUpdate(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
+    super.willUpdate(changedProperties);
+    this.updateHostStyles();
+  }
+
+  protected updateHostStyles() {
+    const stylesStr = this.computeBaseStyles();
+    const declarations = stylesStr.split(";").map(s => s.trim()).filter(Boolean);
+    for (const decl of declarations) {
+      const colonIndex = decl.indexOf(":");
+      if (colonIndex === -1) continue;
+      const key = decl.slice(0, colonIndex).trim();
+      const val = decl.slice(colonIndex + 1).trim();
+      
+      if (key.startsWith("--")) {
+        this.style.setProperty(key, val);
+      } else {
+        (this.style as any)[key] = val;
+      }
+    }
   }
 }

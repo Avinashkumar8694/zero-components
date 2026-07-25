@@ -139,7 +139,7 @@ var qe;
       if (b(a) || (a = U(a)), !k(s))
         throw new TypeError();
       b(a) || (a = U(a));
-      var u = Q(
+      var u = K(
         s,
         a,
         /*Create*/
@@ -178,7 +178,7 @@ var qe;
       return X(v) ? !1 : Me(i, v, a);
     }
     function pe(i, s, a) {
-      var u = Q(
+      var u = K(
         s,
         a,
         /*Create*/
@@ -195,7 +195,7 @@ var qe;
         return ke(i, v, a);
     }
     function Se(i, s, a) {
-      var u = Q(
+      var u = K(
         s,
         a,
         /*Create*/
@@ -205,7 +205,7 @@ var qe;
         return u.OrdinaryGetOwnMetadata(i, s, a);
     }
     function Oe(i, s, a, u) {
-      var v = Q(
+      var v = K(
         a,
         u,
         /*Create*/
@@ -233,7 +233,7 @@ var qe;
       return S;
     }
     function Te(i, s) {
-      var a = Q(
+      var a = K(
         i,
         s,
         /*create*/
@@ -580,7 +580,7 @@ var qe;
       };
       return m;
     }
-    function Q(i, s, a) {
+    function K(i, s, a) {
       var u = ae.getProvider(i, s);
       if (!b(u))
         return u;
@@ -825,7 +825,9 @@ function Dt(r) {
         title: r.title,
         selector: r.elementSelector,
         category: r.group,
-        icon: r.iconName
+        icon: r.iconName,
+        layoutKind: r.layoutKind,
+        environment: r.environment
       };
       if (Reflect.defineMetadata("ZeroComponent", t, e.prototype), globalThis.customElements) {
         const n = `${r.elementSelector}-${r.version}`;
@@ -979,10 +981,10 @@ const Gt = (r) => new ot(typeof r == "string" ? r : r + "", void 0, Ee), qt = (r
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Ft, defineProperty: Xt, getOwnPropertyDescriptor: Yt, getOwnPropertyNames: Zt, getOwnPropertySymbols: Jt, getPrototypeOf: Qt } = Object, z = globalThis, Xe = z.trustedTypes, Kt = Xe ? Xe.emptyScript : "", be = z.reactiveElementPolyfillSupport, ee = (r, e) => r, de = { toAttribute(r, e) {
+const { is: Ft, defineProperty: Xt, getOwnPropertyDescriptor: Yt, getOwnPropertyNames: Zt, getOwnPropertySymbols: Jt, getPrototypeOf: Kt } = Object, z = globalThis, Xe = z.trustedTypes, Qt = Xe ? Xe.emptyScript : "", be = z.reactiveElementPolyfillSupport, ee = (r, e) => r, de = { toAttribute(r, e) {
   switch (e) {
     case Boolean:
-      r = r ? Kt : null;
+      r = r ? Qt : null;
       break;
     case Object:
     case Array:
@@ -1038,7 +1040,7 @@ let Y = class extends HTMLElement {
   }
   static _$Ei() {
     if (this.hasOwnProperty(ee("elementProperties"))) return;
-    const e = Qt(this);
+    const e = Kt(this);
     e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
@@ -1219,7 +1221,7 @@ Y.elementStyles = [], Y.shadowRootOptions = { mode: "open" }, Y[ee("elementPrope
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const te = globalThis, Ze = (r) => r, he = te.trustedTypes, Je = he ? he.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, st = "$lit$", B = `lit$${Math.random().toFixed(9).slice(2)}$`, at = "?" + B, er = `<${at}>`, W = document, ne = () => W.createComment(""), ie = (r) => r === null || typeof r != "object" && typeof r != "function", Ae = Array.isArray, tr = (r) => Ae(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", me = `[ 	
-\f\r]`, K = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Qe = /-->/g, Ke = />/g, V = RegExp(`>|${me}(?:([^\\s"'>=/]+)(${me}*=${me}*(?:[^ 	
+\f\r]`, Q = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ke = /-->/g, Qe = />/g, V = RegExp(`>|${me}(?:([^\\s"'>=/]+)(${me}*=${me}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), et = /'/g, tt = /"/g, lt = /^(?:script|style|textarea|title)$/i, rr = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), ce = rr(1), Z = Symbol.for("lit-noChange"), P = Symbol.for("lit-nothing"), rt = /* @__PURE__ */ new WeakMap(), G = W.createTreeWalker(W, 129);
 function ct(r, e) {
   if (!Ae(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
@@ -1227,13 +1229,13 @@ function ct(r, e) {
 }
 const nr = (r, e) => {
   const t = r.length - 1, n = [];
-  let o, l = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", c = K;
+  let o, l = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", c = Q;
   for (let g = 0; g < t; g++) {
     const y = r[g];
     let E, $, w = -1, T = 0;
-    for (; T < y.length && (c.lastIndex = T, $ = c.exec(y), $ !== null); ) T = c.lastIndex, c === K ? $[1] === "!--" ? c = Qe : $[1] !== void 0 ? c = Ke : $[2] !== void 0 ? (lt.test($[2]) && (o = RegExp("</" + $[2], "g")), c = V) : $[3] !== void 0 && (c = V) : c === V ? $[0] === ">" ? (c = o ?? K, w = -1) : $[1] === void 0 ? w = -2 : (w = c.lastIndex - $[2].length, E = $[1], c = $[3] === void 0 ? V : $[3] === '"' ? tt : et) : c === tt || c === et ? c = V : c === Qe || c === Ke ? c = K : (c = V, o = void 0);
+    for (; T < y.length && (c.lastIndex = T, $ = c.exec(y), $ !== null); ) T = c.lastIndex, c === Q ? $[1] === "!--" ? c = Ke : $[1] !== void 0 ? c = Qe : $[2] !== void 0 ? (lt.test($[2]) && (o = RegExp("</" + $[2], "g")), c = V) : $[3] !== void 0 && (c = V) : c === V ? $[0] === ">" ? (c = o ?? Q, w = -1) : $[1] === void 0 ? w = -2 : (w = c.lastIndex - $[2].length, E = $[1], c = $[3] === void 0 ? V : $[3] === '"' ? tt : et) : c === tt || c === et ? c = V : c === Ke || c === Qe ? c = Q : (c = V, o = void 0);
     const R = c === V && r[g + 1].startsWith("/>") ? " " : "";
-    l += c === K ? y + er : w >= 0 ? (n.push(E), y.slice(0, w) + st + y.slice(w) + B + R) : y + B + (w === -2 ? g : R);
+    l += c === Q ? y + er : w >= 0 ? (n.push(E), y.slice(0, w) + st + y.slice(w) + B + R) : y + B + (w === -2 ? g : R);
   }
   return [ct(r, l + (r[t] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), n];
 };

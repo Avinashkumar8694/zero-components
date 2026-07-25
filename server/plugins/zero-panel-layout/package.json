@@ -14,7 +14,6 @@
   "author": "Zero Components",
   "license": "MIT",
   "zero": {
-    "hidden": true,
     "component": true,
     "category": "Layout",
     "components": [

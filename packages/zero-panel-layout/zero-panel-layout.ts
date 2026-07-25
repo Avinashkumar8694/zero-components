@@ -58,7 +58,6 @@ export const studioTemplate: ZeroStudioTemplate = {
   iconName: "panel-layout-icon.png",
 })
 @applyGlobalStyles()
-@customElement("zero-panel-layout")
 export class ZeroPanelLayout extends LitElement {
   static getStudioTemplate(config?: ZeroStudioTemplateContext): ZeroStudioTemplate {
     if (!config) {

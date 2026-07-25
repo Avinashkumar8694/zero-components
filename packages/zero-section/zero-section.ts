@@ -265,7 +265,8 @@ export class ZeroSection extends ZeroLayoutBase {
       .section-inner {
         position: relative;
         width: 100%;
-        height: 100%;
+        flex: 1;
+        min-height: 0;
         display: flex;
         flex-direction: column;
         background-size: cover;
@@ -286,13 +287,21 @@ export class ZeroSection extends ZeroLayoutBase {
         position: relative;
         z-index: 1;
         width: 100%;
-        height: 100%;
+        flex: 1;
+        min-height: 0;
         display: flex;
         flex-wrap: wrap;
         flex-direction: var(--zero-p-direction, row);
         justify-content: var(--zero-p-justify, flex-start);
         align-items: var(--zero-p-align, stretch);
         gap: var(--zero-p-gap, 16px);
+      }
+
+      @media (max-width: 768px) {
+        .content-layer {
+          --zero-p-direction: var(--zero-section-direction-override, column);
+          --zero-p-gap: var(--zero-section-gap-override, 16px);
+        }
       }
 
       :host([parallax]) .section-inner {
@@ -524,7 +533,7 @@ export class ZeroSection extends ZeroLayoutBase {
   render() {
     return html`
       ${this.renderResponsiveStyles()}
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="zero-internal-container" 
              style=${this.computeInternalStyles()}
              @mousemove=${this.handleMouseMove}
@@ -750,7 +759,7 @@ export class ZeroSection1Col extends ZeroLayoutBase {
   render() {
     return html`
       ${this.renderResponsiveStyles()}
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="zero-internal-container" 
              style=${this.computeInternalStyles()}
              @mousemove=${this.handleMouseMove}
@@ -1107,7 +1116,7 @@ export class ZeroSection2Col extends ZeroLayoutBase {
           }
         }
       </style>
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="zero-internal-container" 
              style=${this.computeInternalStyles()}
              @mousemove=${this.handleMouseMove}
@@ -1517,7 +1526,7 @@ export class ZeroSection3Col extends ZeroLayoutBase {
           }
         }
       </style>
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="zero-internal-container" 
              style=${this.computeInternalStyles()}
              @mousemove=${this.handleMouseMove}
@@ -2006,7 +2015,7 @@ export class ZeroSection4Col extends ZeroLayoutBase {
           }
         }
       </style>
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="zero-internal-container" 
              style=${this.computeInternalStyles()}
              @mousemove=${this.handleMouseMove}

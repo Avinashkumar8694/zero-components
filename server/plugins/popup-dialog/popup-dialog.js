@@ -825,7 +825,9 @@ function Ie(n) {
         title: n.title,
         selector: n.elementSelector,
         category: n.group,
-        icon: n.iconName
+        icon: n.iconName,
+        layoutKind: n.layoutKind,
+        environment: n.environment
       };
       if (Reflect.defineMetadata("ZeroComponent", e, t.prototype), globalThis.customElements) {
         const r = `${n.elementSelector}-${n.version}`;

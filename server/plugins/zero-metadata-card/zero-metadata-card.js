@@ -63,7 +63,7 @@ var dt;
       }
     }, b = Object.getPrototypeOf(Function), P = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : qe(), V = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Ze(), H = typeof WeakMap == "function" ? WeakMap : Rt(), j = s ? Symbol.for("@reflect-metadata:registry") : void 0, J = Be(), re = Fe(J);
     function Oe(i, a, o, h) {
-      if (v(o)) {
+      if (y(o)) {
         if (!de(i))
           throw new TypeError();
         if (!pe(a))
@@ -74,19 +74,19 @@ var dt;
           throw new TypeError();
         if (!M(a))
           throw new TypeError();
-        if (!M(h) && !v(h) && !U(h))
+        if (!M(h) && !y(h) && !U(h))
           throw new TypeError();
         return U(h) && (h = void 0), o = N(o), De(i, a, o, h);
       }
     }
     e("decorate", Oe);
     function Pe(i, a) {
-      function o(h, y) {
+      function o(h, v) {
         if (!M(h))
           throw new TypeError();
-        if (!v(y) && !ze(y))
+        if (!y(v) && !ze(v))
           throw new TypeError();
-        ae(i, a, h, y);
+        ae(i, a, h, v);
       }
       return o;
     }
@@ -94,75 +94,75 @@ var dt;
     function Ce(i, a, o, h) {
       if (!M(o))
         throw new TypeError();
-      return v(h) || (h = N(h)), ae(i, a, o, h);
+      return y(h) || (h = N(h)), ae(i, a, o, h);
     }
     e("defineMetadata", Ce);
-    function ke(i, a, o) {
-      if (!M(a))
-        throw new TypeError();
-      return v(o) || (o = N(o)), ie(i, a, o);
-    }
-    e("hasMetadata", ke);
     function xe(i, a, o) {
       if (!M(a))
         throw new TypeError();
-      return v(o) || (o = N(o)), X(i, a, o);
+      return y(o) || (o = N(o)), ie(i, a, o);
     }
-    e("hasOwnMetadata", xe);
+    e("hasMetadata", xe);
     function ge(i, a, o) {
       if (!M(a))
         throw new TypeError();
-      return v(o) || (o = N(o)), ne(i, a, o);
+      return y(o) || (o = N(o)), X(i, a, o);
     }
-    e("getMetadata", ge);
+    e("hasOwnMetadata", ge);
+    function ke(i, a, o) {
+      if (!M(a))
+        throw new TypeError();
+      return y(o) || (o = N(o)), ne(i, a, o);
+    }
+    e("getMetadata", ke);
     function Re(i, a, o) {
       if (!M(a))
         throw new TypeError();
-      return v(o) || (o = N(o)), se(i, a, o);
+      return y(o) || (o = N(o)), se(i, a, o);
     }
     e("getOwnMetadata", Re);
     function Te(i, a) {
       if (!M(i))
         throw new TypeError();
-      return v(a) || (a = N(a)), oe(i, a);
+      return y(a) || (a = N(a)), oe(i, a);
     }
     e("getMetadataKeys", Te);
     function Le(i, a) {
       if (!M(i))
         throw new TypeError();
-      return v(a) || (a = N(a)), le(i, a);
+      return y(a) || (a = N(a)), le(i, a);
     }
     e("getOwnMetadataKeys", Le);
     function Ve(i, a, o) {
       if (!M(a))
         throw new TypeError();
-      if (v(o) || (o = N(o)), !M(a))
+      if (y(o) || (o = N(o)), !M(a))
         throw new TypeError();
-      v(o) || (o = N(o));
+      y(o) || (o = N(o));
       var h = I(
         a,
         o,
         /*Create*/
         !1
       );
-      return v(h) ? !1 : h.OrdinaryDeleteMetadata(i, a, o);
+      return y(h) ? !1 : h.OrdinaryDeleteMetadata(i, a, o);
     }
     e("deleteMetadata", Ve);
     function Ne(i, a) {
       for (var o = i.length - 1; o >= 0; --o) {
-        var h = i[o], y = h(a);
-        if (!v(y) && !U(y)) {
-          if (!pe(y))
+        var h = i[o], v = h(a);
+        if (!y(v) && !U(v)) {
+          if (!pe(v))
             throw new TypeError();
-          a = y;
+          a = v;
         }
       }
       return a;
     }
     function De(i, a, o, h) {
-      for (var y = i.length - 1; y >= 0; --y) {
-        var x = i[y], C = x(a, o, h);
-        if (!v(C) && !U(C)) {
+      for (var v = i.length - 1; v >= 0; --v) {
+        var g = i[v], C = g(a, o, h);
+        if (!y(C) && !U(C)) {
           if (!M(C))
             throw new TypeError();
           h = C;
@@ -174,8 +174,8 @@ var dt;
       var h = X(i, a, o);
       if (h)
         return !0;
-      var y = Q(a);
-      return U(y) ? !1 : ie(i, y, o);
+      var v = Q(a);
+      return U(v) ? !1 : ie(i, v, o);
     }
     function X(i, a, o) {
       var h = I(
@@ -184,15 +184,15 @@ var dt;
         /*Create*/
         !1
       );
-      return v(h) ? !1 : he(h.OrdinaryHasOwnMetadata(i, a, o));
+      return y(h) ? !1 : he(h.OrdinaryHasOwnMetadata(i, a, o));
     }
     function ne(i, a, o) {
       var h = X(i, a, o);
       if (h)
         return se(i, a, o);
-      var y = Q(a);
-      if (!U(y))
-        return ne(i, y, o);
+      var v = Q(a);
+      if (!U(v))
+        return ne(i, v, o);
     }
     function se(i, a, o) {
       var h = I(
@@ -201,34 +201,34 @@ var dt;
         /*Create*/
         !1
       );
-      if (!v(h))
+      if (!y(h))
         return h.OrdinaryGetOwnMetadata(i, a, o);
     }
     function ae(i, a, o, h) {
-      var y = I(
+      var v = I(
         o,
         h,
         /*Create*/
         !0
       );
-      y.OrdinaryDefineOwnMetadata(i, a, o, h);
+      v.OrdinaryDefineOwnMetadata(i, a, o, h);
     }
     function oe(i, a) {
       var o = le(i, a), h = Q(i);
       if (h === null)
         return o;
-      var y = oe(h, a);
-      if (y.length <= 0)
+      var v = oe(h, a);
+      if (v.length <= 0)
         return o;
       if (o.length <= 0)
-        return y;
-      for (var x = new V(), C = [], $ = 0, d = o; $ < d.length; $++) {
-        var p = d[$], c = x.has(p);
-        c || (x.add(p), C.push(p));
+        return v;
+      for (var g = new V(), C = [], $ = 0, d = o; $ < d.length; $++) {
+        var p = d[$], c = g.has(p);
+        c || (g.add(p), C.push(p));
       }
-      for (var m = 0, w = y; m < w.length; m++) {
-        var p = w[m], c = x.has(p);
-        c || (x.add(p), C.push(p));
+      for (var m = 0, w = v; m < w.length; m++) {
+        var p = w[m], c = g.has(p);
+        c || (g.add(p), C.push(p));
       }
       return C;
     }
@@ -261,7 +261,7 @@ var dt;
           return 6;
       }
     }
-    function v(i) {
+    function y(i) {
       return i === void 0;
     }
     function U(i) {
@@ -290,19 +290,19 @@ var dt;
       }
       var o = "string", h = ce(i, l);
       if (h !== void 0) {
-        var y = h.call(i, o);
-        if (M(y))
+        var v = h.call(i, o);
+        if (M(v))
           throw new TypeError();
-        return y;
+        return v;
       }
       return je(i);
     }
     function je(i, a) {
       var o, h;
       {
-        var y = i.toString;
-        if (B(y)) {
-          var h = y.call(i);
+        var v = i.toString;
+        if (B(v)) {
+          var h = v.call(i);
           if (!M(h))
             return h;
         }
@@ -367,11 +367,11 @@ var dt;
     function me(i) {
       return i.value;
     }
-    function ye(i) {
+    function ve(i) {
       var a = i.next();
       return a.done ? !1 : a;
     }
-    function ve(i) {
+    function ye(i) {
       var a = i.return;
       a && a.call(i);
     }
@@ -382,30 +382,30 @@ var dt;
       var o = i.prototype, h = o && Object.getPrototypeOf(o);
       if (h == null || h === Object.prototype)
         return a;
-      var y = h.constructor;
-      return typeof y != "function" || y === i ? a : y;
+      var v = h.constructor;
+      return typeof v != "function" || v === i ? a : v;
     }
     function Ge() {
       var i;
-      !v(j) && typeof r.Reflect < "u" && !(j in r.Reflect) && typeof r.Reflect.defineMetadata == "function" && (i = We(r.Reflect));
-      var a, o, h, y = new H(), x = {
+      !y(j) && typeof r.Reflect < "u" && !(j in r.Reflect) && typeof r.Reflect.defineMetadata == "function" && (i = We(r.Reflect));
+      var a, o, h, v = new H(), g = {
         registerProvider: C,
         getProvider: d,
         setProvider: c
       };
-      return x;
+      return g;
       function C(m) {
-        if (!Object.isExtensible(x))
+        if (!Object.isExtensible(g))
           throw new Error("Cannot add provider to a frozen registry.");
         switch (!0) {
           case i === m:
             break;
-          case v(a):
+          case y(a):
             a = m;
             break;
           case a === m:
             break;
-          case v(o):
+          case y(o):
             o = m;
             break;
           case o === m:
@@ -416,51 +416,51 @@ var dt;
         }
       }
       function $(m, w) {
-        if (!v(a)) {
+        if (!y(a)) {
           if (a.isProviderFor(m, w))
             return a;
-          if (!v(o)) {
+          if (!y(o)) {
             if (o.isProviderFor(m, w))
               return a;
-            if (!v(h))
+            if (!y(h))
               for (var S = fe(h); ; ) {
-                var O = ye(S);
+                var O = ve(S);
                 if (!O)
                   return;
                 var D = me(O);
                 if (D.isProviderFor(m, w))
-                  return ve(S), D;
+                  return ye(S), D;
               }
           }
         }
-        if (!v(i) && i.isProviderFor(m, w))
+        if (!y(i) && i.isProviderFor(m, w))
           return i;
       }
       function d(m, w) {
-        var S = y.get(m), O;
-        return v(S) || (O = S.get(w)), v(O) && (O = $(m, w), v(O) || (v(S) && (S = new P(), y.set(m, S)), S.set(w, O))), O;
+        var S = v.get(m), O;
+        return y(S) || (O = S.get(w)), y(O) && (O = $(m, w), y(O) || (y(S) && (S = new P(), v.set(m, S)), S.set(w, O))), O;
       }
       function p(m) {
-        if (v(m))
+        if (y(m))
           throw new TypeError();
-        return a === m || o === m || !v(h) && h.has(m);
+        return a === m || o === m || !y(h) && h.has(m);
       }
       function c(m, w, S) {
         if (!p(S))
           throw new Error("Metadata provider not registered.");
         var O = d(m, w);
         if (O !== S) {
-          if (!v(O))
+          if (!y(O))
             return !1;
-          var D = y.get(m);
-          v(D) && (D = new P(), y.set(m, D)), D.set(w, S);
+          var D = v.get(m);
+          y(D) && (D = new P(), v.set(m, D)), D.set(w, S);
         }
         return !0;
       }
     }
     function Be() {
       var i;
-      return !v(j) && M(r.Reflect) && Object.isExtensible(r.Reflect) && (i = r.Reflect[j]), v(i) && (i = Ge()), !v(j) && M(r.Reflect) && Object.isExtensible(r.Reflect) && Object.defineProperty(r.Reflect, j, {
+      return !y(j) && M(r.Reflect) && Object.isExtensible(r.Reflect) && (i = r.Reflect[j]), y(i) && (i = Ge()), !y(j) && M(r.Reflect) && Object.isExtensible(r.Reflect) && Object.defineProperty(r.Reflect, j, {
         enumerable: !1,
         configurable: !1,
         writable: !1,
@@ -471,24 +471,24 @@ var dt;
       var a = new H(), o = {
         isProviderFor: function(p, c) {
           var m = a.get(p);
-          return v(m) ? !1 : m.has(c);
+          return y(m) ? !1 : m.has(c);
         },
         OrdinaryDefineOwnMetadata: C,
-        OrdinaryHasOwnMetadata: y,
-        OrdinaryGetOwnMetadata: x,
+        OrdinaryHasOwnMetadata: v,
+        OrdinaryGetOwnMetadata: g,
         OrdinaryOwnMetadataKeys: $,
         OrdinaryDeleteMetadata: d
       };
       return J.registerProvider(o), o;
       function h(p, c, m) {
         var w = a.get(p), S = !1;
-        if (v(w)) {
+        if (y(w)) {
           if (!m)
             return;
           w = new P(), a.set(p, w), S = !0;
         }
         var O = w.get(c);
-        if (v(O)) {
+        if (y(O)) {
           if (!m)
             return;
           if (O = new P(), w.set(c, O), !i.setProvider(p, c, o))
@@ -496,23 +496,23 @@ var dt;
         }
         return O;
       }
-      function y(p, c, m) {
+      function v(p, c, m) {
         var w = h(
           c,
           m,
           /*Create*/
           !1
         );
-        return v(w) ? !1 : he(w.has(p));
+        return y(w) ? !1 : he(w.has(p));
       }
-      function x(p, c, m) {
+      function g(p, c, m) {
         var w = h(
           c,
           m,
           /*Create*/
           !1
         );
-        if (!v(w))
+        if (!y(w))
           return w.get(p);
       }
       function C(p, c, m, w) {
@@ -531,10 +531,10 @@ var dt;
           /*Create*/
           !1
         );
-        if (v(w))
+        if (y(w))
           return m;
         for (var S = w.keys(), O = fe(S), D = 0; ; ) {
-          var lt = ye(O);
+          var lt = ve(O);
           if (!lt)
             return m.length = D, m;
           var Tt = me(lt);
@@ -542,7 +542,7 @@ var dt;
             m[D] = Tt;
           } catch (Lt) {
             try {
-              ve(O);
+              ye(O);
             } finally {
               throw Lt;
             }
@@ -557,32 +557,32 @@ var dt;
           /*Create*/
           !1
         );
-        if (v(w) || !w.delete(p))
+        if (y(w) || !w.delete(p))
           return !1;
         if (w.size === 0) {
           var S = a.get(c);
-          v(S) || (S.delete(m), S.size === 0 && a.delete(S));
+          y(S) || (S.delete(m), S.size === 0 && a.delete(S));
         }
         return !0;
       }
     }
     function We(i) {
-      var a = i.defineMetadata, o = i.hasOwnMetadata, h = i.getOwnMetadata, y = i.getOwnMetadataKeys, x = i.deleteMetadata, C = new H(), $ = {
+      var a = i.defineMetadata, o = i.hasOwnMetadata, h = i.getOwnMetadata, v = i.getOwnMetadataKeys, g = i.deleteMetadata, C = new H(), $ = {
         isProviderFor: function(d, p) {
           var c = C.get(d);
-          return !v(c) && c.has(p) ? !0 : y(d, p).length ? (v(c) && (c = new V(), C.set(d, c)), c.add(p), !0) : !1;
+          return !y(c) && c.has(p) ? !0 : v(d, p).length ? (y(c) && (c = new V(), C.set(d, c)), c.add(p), !0) : !1;
         },
         OrdinaryDefineOwnMetadata: a,
         OrdinaryHasOwnMetadata: o,
         OrdinaryGetOwnMetadata: h,
-        OrdinaryOwnMetadataKeys: y,
-        OrdinaryDeleteMetadata: x
+        OrdinaryOwnMetadataKeys: v,
+        OrdinaryDeleteMetadata: g
       };
       return $;
     }
     function I(i, a, o) {
       var h = J.getProvider(i, a);
-      if (!v(h))
+      if (!y(h))
         return h;
       if (o) {
         if (J.setProvider(i, a, re))
@@ -661,9 +661,9 @@ var dt;
           }, $.prototype.clear = function() {
             this._keys.length = 0, this._values.length = 0, this._cacheKey = i, this._cacheIndex = -2;
           }, $.prototype.keys = function() {
-            return new o(this._keys, this._values, y);
+            return new o(this._keys, this._values, v);
           }, $.prototype.values = function() {
-            return new o(this._keys, this._values, x);
+            return new o(this._keys, this._values, g);
           }, $.prototype.entries = function() {
             return new o(this._keys, this._values, C);
           }, $.prototype["@@iterator"] = function() {
@@ -684,10 +684,10 @@ var dt;
         }()
       );
       return h;
-      function y($, d) {
+      function v($, d) {
         return $;
       }
-      function x($, d) {
+      function g($, d) {
         return d;
       }
       function C($, d) {
@@ -739,28 +739,28 @@ var dt;
             this._key = h();
           }
           return d.prototype.has = function(p) {
-            var c = y(
+            var c = v(
               p,
               /*create*/
               !1
             );
             return c !== void 0 ? A.has(c, this._key) : !1;
           }, d.prototype.get = function(p) {
-            var c = y(
+            var c = v(
               p,
               /*create*/
               !1
             );
             return c !== void 0 ? A.get(c, this._key) : void 0;
           }, d.prototype.set = function(p, c) {
-            var m = y(
+            var m = v(
               p,
               /*create*/
               !0
             );
             return m[this._key] = c, this;
           }, d.prototype.delete = function(p) {
-            var c = y(
+            var c = v(
               p,
               /*create*/
               !1
@@ -778,7 +778,7 @@ var dt;
         while (A.has(a, d));
         return a[d] = !0, d;
       }
-      function y(d, p) {
+      function v(d, p) {
         if (!n.call(d, o)) {
           if (!p)
             return;
@@ -786,7 +786,7 @@ var dt;
         }
         return d[o];
       }
-      function x(d, p) {
+      function g(d, p) {
         for (var c = 0; c < p; ++c)
           d[c] = Math.random() * 255 | 0;
         return d;
@@ -794,9 +794,9 @@ var dt;
       function C(d) {
         if (typeof Uint8Array == "function") {
           var p = new Uint8Array(d);
-          return typeof crypto < "u" ? crypto.getRandomValues(p) : typeof msCrypto < "u" ? msCrypto.getRandomValues(p) : x(p, d), p;
+          return typeof crypto < "u" ? crypto.getRandomValues(p) : typeof msCrypto < "u" ? msCrypto.getRandomValues(p) : g(p, d), p;
         }
-        return x(new Array(d), d);
+        return g(new Array(d), d);
       }
       function $() {
         var d = C(i);
@@ -952,7 +952,7 @@ const It = (t) => new Pt(typeof t == "string" ? t : t + "", void 0, st), zt = (t
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Bt, defineProperty: Ft, getOwnPropertyDescriptor: Wt, getOwnPropertyNames: qt, getOwnPropertySymbols: Zt, getPrototypeOf: Jt } = Object, G = globalThis, yt = G.trustedTypes, Xt = yt ? yt.emptyScript : "", et = G.reactiveElementPolyfillSupport, be = (t, e) => t, Xe = { toAttribute(t, e) {
+const { is: Bt, defineProperty: Ft, getOwnPropertyDescriptor: Wt, getOwnPropertyNames: qt, getOwnPropertySymbols: Zt, getPrototypeOf: Jt } = Object, G = globalThis, vt = G.trustedTypes, Xt = vt ? vt.emptyScript : "", et = G.reactiveElementPolyfillSupport, be = (t, e) => t, Xe = { toAttribute(t, e) {
   switch (e) {
     case Boolean:
       t = t ? Xt : null;
@@ -980,7 +980,7 @@ const { is: Bt, defineProperty: Ft, getOwnPropertyDescriptor: Wt, getOwnProperty
       }
   }
   return r;
-} }, at = (t, e) => !Bt(t, e), vt = { attribute: !0, type: String, converter: Xe, reflect: !1, useDefault: !1, hasChanged: at };
+} }, at = (t, e) => !Bt(t, e), yt = { attribute: !0, type: String, converter: Xe, reflect: !1, useDefault: !1, hasChanged: at };
 Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), G.litPropertyMetadata ?? (G.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
 let K = class extends HTMLElement {
   static addInitializer(e) {
@@ -989,7 +989,7 @@ let K = class extends HTMLElement {
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(e, r = vt) {
+  static createProperty(e, r = yt) {
     if (r.state && (r.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(e) && ((r = Object.create(r)).wrapped = !0), this.elementProperties.set(e, r), !r.noAccessor) {
       const n = Symbol(), s = this.getPropertyDescriptor(e, n, r);
       s !== void 0 && Ft(this.prototype, e, s);
@@ -1007,7 +1007,7 @@ let K = class extends HTMLElement {
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(e) {
-    return this.elementProperties.get(e) ?? vt;
+    return this.elementProperties.get(e) ?? yt;
   }
   static _$Ei() {
     if (this.hasOwnProperty(be("elementProperties"))) return;
@@ -1191,10 +1191,10 @@ K.elementStyles = [], K.shadowRootOptions = { mode: "open" }, K[be("elementPrope
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const $e = globalThis, _t = (t) => t, Ye = $e.trustedTypes, bt = Ye ? Ye.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, Ct = "$lit$", z = `lit$${Math.random().toFixed(9).slice(2)}$`, kt = "?" + z, Yt = `<${kt}>`, Z = document, Ae = () => Z.createComment(""), Ee = (t) => t === null || typeof t != "object" && typeof t != "function", ot = Array.isArray, Qt = (t) => ot(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", tt = `[ 	
+const $e = globalThis, _t = (t) => t, Ye = $e.trustedTypes, bt = Ye ? Ye.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, Ct = "$lit$", z = `lit$${Math.random().toFixed(9).slice(2)}$`, xt = "?" + z, Yt = `<${xt}>`, Z = document, Ae = () => Z.createComment(""), Ee = (t) => t === null || typeof t != "object" && typeof t != "function", ot = Array.isArray, Qt = (t) => ot(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", tt = `[ 	
 \f\r]`, _e = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, $t = /-->/g, wt = />/g, F = RegExp(`>|${tt}(?:([^\\s"'>=/]+)(${tt}*=${tt}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), At = /'/g, Et = /"/g, xt = /^(?:script|style|textarea|title)$/i, Kt = (t) => (e, ...r) => ({ _$litType$: t, strings: e, values: r }), St = Kt(1), ee = Symbol.for("lit-noChange"), g = Symbol.for("lit-nothing"), Mt = /* @__PURE__ */ new WeakMap(), W = Z.createTreeWalker(Z, 129);
-function gt(t, e) {
+\f\r"'\`<>=]|("|')|))|$)`, "g"), At = /'/g, Et = /"/g, gt = /^(?:script|style|textarea|title)$/i, Kt = (t) => (e, ...r) => ({ _$litType$: t, strings: e, values: r }), St = Kt(1), ee = Symbol.for("lit-noChange"), k = Symbol.for("lit-nothing"), Mt = /* @__PURE__ */ new WeakMap(), W = Z.createTreeWalker(Z, 129);
+function kt(t, e) {
   if (!ot(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return bt !== void 0 ? bt.createHTML(e) : e;
 }
@@ -1204,11 +1204,11 @@ const er = (t, e) => {
   for (let _ = 0; _ < r; _++) {
     const f = t[_];
     let E, A, b = -1, P = 0;
-    for (; P < f.length && (u.lastIndex = P, A = u.exec(f), A !== null); ) P = u.lastIndex, u === _e ? A[1] === "!--" ? u = $t : A[1] !== void 0 ? u = wt : A[2] !== void 0 ? (xt.test(A[2]) && (s = RegExp("</" + A[2], "g")), u = F) : A[3] !== void 0 && (u = F) : u === F ? A[0] === ">" ? (u = s ?? _e, b = -1) : A[1] === void 0 ? b = -2 : (b = u.lastIndex - A[2].length, E = A[1], u = A[3] === void 0 ? F : A[3] === '"' ? Et : At) : u === Et || u === At ? u = F : u === $t || u === wt ? u = _e : (u = F, s = void 0);
+    for (; P < f.length && (u.lastIndex = P, A = u.exec(f), A !== null); ) P = u.lastIndex, u === _e ? A[1] === "!--" ? u = $t : A[1] !== void 0 ? u = wt : A[2] !== void 0 ? (gt.test(A[2]) && (s = RegExp("</" + A[2], "g")), u = F) : A[3] !== void 0 && (u = F) : u === F ? A[0] === ">" ? (u = s ?? _e, b = -1) : A[1] === void 0 ? b = -2 : (b = u.lastIndex - A[2].length, E = A[1], u = A[3] === void 0 ? F : A[3] === '"' ? Et : At) : u === Et || u === At ? u = F : u === $t || u === wt ? u = _e : (u = F, s = void 0);
     const V = u === F && t[_ + 1].startsWith("/>") ? " " : "";
     l += u === _e ? f + Yt : b >= 0 ? (n.push(E), f.slice(0, b) + Ct + f.slice(b) + z + V) : f + z + (b === -2 ? _ : V);
   }
-  return [gt(t, l + (t[r] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), n];
+  return [kt(t, l + (t[r] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), n];
 };
 class Se {
   constructor({ strings: e, _$litType$: r }, n) {
@@ -1226,7 +1226,7 @@ class Se {
           const P = A[u++], V = s.getAttribute(b).split(z), H = /([.?@])?(.*)/.exec(P);
           f.push({ type: 1, index: l, name: H[2], strings: V, ctor: H[1] === "." ? rr : H[1] === "?" ? ir : H[1] === "@" ? nr : Qe }), s.removeAttribute(b);
         } else b.startsWith(z) && (f.push({ type: 6, index: l }), s.removeAttribute(b));
-        if (xt.test(s.tagName)) {
+        if (gt.test(s.tagName)) {
           const b = s.textContent.split(z), P = b.length - 1;
           if (P > 0) {
             s.textContent = Ye ? Ye.emptyScript : "";
@@ -1234,7 +1234,7 @@ class Se {
             s.append(b[P], Ae());
           }
         }
-      } else if (s.nodeType === 8) if (s.data === kt) f.push({ type: 2, index: l });
+      } else if (s.nodeType === 8) if (s.data === xt) f.push({ type: 2, index: l });
       else {
         let b = -1;
         for (; (b = s.data.indexOf(z, b + 1)) !== -1; ) f.push({ type: 7, index: l }), b += z.length - 1;
@@ -1288,7 +1288,7 @@ class Me {
     return ((e = this._$AM) == null ? void 0 : e._$AU) ?? this._$Cv;
   }
   constructor(e, r, n, s) {
-    this.type = 2, this._$AH = g, this._$AN = void 0, this._$AA = e, this._$AB = r, this._$AM = n, this.options = s, this._$Cv = (s == null ? void 0 : s.isConnected) ?? !0;
+    this.type = 2, this._$AH = k, this._$AN = void 0, this._$AA = e, this._$AB = r, this._$AM = n, this.options = s, this._$Cv = (s == null ? void 0 : s.isConnected) ?? !0;
   }
   get parentNode() {
     let e = this._$AA.parentNode;
@@ -1302,7 +1302,7 @@ class Me {
     return this._$AB;
   }
   _$AI(e, r = this) {
-    e = te(this, e, r), Ee(e) ? e === g || e == null || e === "" ? (this._$AH !== g && this._$AR(), this._$AH = g) : e !== this._$AH && e !== ee && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Qt(e) ? this.k(e) : this._(e);
+    e = te(this, e, r), Ee(e) ? e === k || e == null || e === "" ? (this._$AH !== k && this._$AR(), this._$AH = k) : e !== this._$AH && e !== ee && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : Qt(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -1311,11 +1311,11 @@ class Me {
     this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
   }
   _(e) {
-    this._$AH !== g && Ee(this._$AH) ? this._$AA.nextSibling.data = e : this.T(Z.createTextNode(e)), this._$AH = e;
+    this._$AH !== k && Ee(this._$AH) ? this._$AA.nextSibling.data = e : this.T(Z.createTextNode(e)), this._$AH = e;
   }
   $(e) {
     var l;
-    const { values: r, _$litType$: n } = e, s = typeof n == "number" ? this._$AC(e) : (n.el === void 0 && (n.el = Se.createElement(gt(n.h, n.h[0]), this.options)), n);
+    const { values: r, _$litType$: n } = e, s = typeof n == "number" ? this._$AC(e) : (n.el === void 0 && (n.el = Se.createElement(kt(n.h, n.h[0]), this.options)), n);
     if (((l = this._$AH) == null ? void 0 : l._$AD) === s) this._$AH.p(r);
     else {
       const u = new tr(s, this), _ = u.u(this.options);
@@ -1353,7 +1353,7 @@ class Qe {
     return this._$AM._$AU;
   }
   constructor(e, r, n, s, l) {
-    this.type = 1, this._$AH = g, this._$AN = void 0, this.element = e, this.name = r, this._$AM = s, this.options = l, n.length > 2 || n[0] !== "" || n[1] !== "" ? (this._$AH = Array(n.length - 1).fill(new String()), this.strings = n) : this._$AH = g;
+    this.type = 1, this._$AH = k, this._$AN = void 0, this.element = e, this.name = r, this._$AM = s, this.options = l, n.length > 2 || n[0] !== "" || n[1] !== "" ? (this._$AH = Array(n.length - 1).fill(new String()), this.strings = n) : this._$AH = k;
   }
   _$AI(e, r = this, n, s) {
     const l = this.strings;
@@ -1362,12 +1362,12 @@ class Qe {
     else {
       const _ = e;
       let f, E;
-      for (e = l[0], f = 0; f < l.length - 1; f++) E = te(this, _[n + f], r, f), E === ee && (E = this._$AH[f]), u || (u = !Ee(E) || E !== this._$AH[f]), E === g ? e = g : e !== g && (e += (E ?? "") + l[f + 1]), this._$AH[f] = E;
+      for (e = l[0], f = 0; f < l.length - 1; f++) E = te(this, _[n + f], r, f), E === ee && (E = this._$AH[f]), u || (u = !Ee(E) || E !== this._$AH[f]), E === k ? e = k : e !== k && (e += (E ?? "") + l[f + 1]), this._$AH[f] = E;
     }
     u && !s && this.j(e);
   }
   j(e) {
-    e === g ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
+    e === k ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
   }
 }
 class rr extends Qe {
@@ -1375,7 +1375,7 @@ class rr extends Qe {
     super(...arguments), this.type = 3;
   }
   j(e) {
-    this.element[this.name] = e === g ? void 0 : e;
+    this.element[this.name] = e === k ? void 0 : e;
   }
 }
 class ir extends Qe {
@@ -1383,7 +1383,7 @@ class ir extends Qe {
     super(...arguments), this.type = 4;
   }
   j(e) {
-    this.element.toggleAttribute(this.name, !!e && e !== g);
+    this.element.toggleAttribute(this.name, !!e && e !== k);
   }
 }
 class nr extends Qe {
@@ -1391,8 +1391,8 @@ class nr extends Qe {
     super(e, r, n, s, l), this.type = 5;
   }
   _$AI(e, r = this) {
-    if ((e = te(this, e, r, 0) ?? g) === ee) return;
-    const n = this._$AH, s = e === g && n !== g || e.capture !== n.capture || e.once !== n.once || e.passive !== n.passive, l = e !== g && (n === g || s);
+    if ((e = te(this, e, r, 0) ?? k) === ee) return;
+    const n = this._$AH, s = e === k && n !== k || e.capture !== n.capture || e.once !== n.once || e.passive !== n.passive, l = e !== k && (n === k || s);
     s && this.element.removeEventListener(this.name, this, n), l && this.element.addEventListener(this.name, this, e), this._$AH = e;
   }
   handleEvent(e) {
@@ -1498,18 +1498,18 @@ var ur = Object.defineProperty, hr = Object.getOwnPropertyDescriptor, R = (t, e,
 function T(t) {
   return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
-let k = class extends we {
+let x = class extends we {
   constructor() {
-    super(...arguments), this.item1Label = "Gender", this.item1Value = "Female", this.item2Label = "Birthday", this.item2Value = "Feb 24th, 1997", this.item3Label = "Phone Number", this.item3Value = "(239) 555-0108", this.item4Label = "Registered Date", this.item4Value = "Feb 24th, 1997", this.item5Label = "Street Address", this.item5Value = "Jl. Diponegoro No. 21", this.item6Label = "City", this.item6Value = "Cilacap", this.item7Label = "ZIP Code", this.item7Value = "655849", this.item8Label = "Member Status", this.item8Value = "Active Member";
+    super(...arguments), this.item1Label = "Gender", this.item1Value = "Female", this.item2Label = "Birthday", this.item2Value = "Feb 24th, 1997", this.item3Label = "Phone Number", this.item3Value = "(239) 555-0108", this.item4Label = "Street Address", this.item4Value = "Jl. Diponegoro No. 21", this.item5Label = "City", this.item5Value = "Cilacap", this.item6Label = "ZIP Code", this.item6Value = "655849", this.item7Label = "Member Status", this.item7Value = "Active Member", this.item8Label = "Registered Date", this.item8Value = "Feb 24th, 1997";
   }
   static getStudioTemplate(t) {
-    var re, Oe, Pe, Ce, ke, xe, ge, Re, Te, Le, Ve, Ne, De, ie, X, ne, se, ae, oe, le, ue, v, U, He, M, Ue, je, he, Ie, N, de, B, pe, ze, Y, ce, fe, me, ye, ve, Q, Ge, Be, Fe, We, I, qe, Ze;
+    var re, Oe, Pe, Ce, xe, ge, ke, Re, Te, Le, Ve, Ne, De, ie, X, ne, se, ae, oe, le, ue, y, U, He, M, Ue, je, he, Ie, N, de, B, pe, ze, Y, ce, fe, me, ve, ye, Q, Ge, Be, Fe, We, I, qe, Ze;
     if (!t)
       return {
         kind: "generic",
         templateHtml: "<zero-metadata-card-1.0.0></zero-metadata-card-1.0.0>"
       };
-    const e = T(((re = t == null ? void 0 : t.props) == null ? void 0 : re.item1Label) ?? ((Pe = (Oe = t == null ? void 0 : t.studio) == null ? void 0 : Oe.props) == null ? void 0 : Pe.item1Label) ?? "Gender"), r = T(((Ce = t == null ? void 0 : t.props) == null ? void 0 : Ce.item1Value) ?? ((xe = (ke = t == null ? void 0 : t.studio) == null ? void 0 : ke.props) == null ? void 0 : xe.item1Value) ?? "Female"), n = T(((ge = t == null ? void 0 : t.props) == null ? void 0 : ge.item2Label) ?? ((Te = (Re = t == null ? void 0 : t.studio) == null ? void 0 : Re.props) == null ? void 0 : Te.item2Label) ?? "Birthday"), s = T(((Le = t == null ? void 0 : t.props) == null ? void 0 : Le.item2Value) ?? ((Ne = (Ve = t == null ? void 0 : t.studio) == null ? void 0 : Ve.props) == null ? void 0 : Ne.item2Value) ?? "Feb 24th, 1997"), l = T(((De = t == null ? void 0 : t.props) == null ? void 0 : De.item3Label) ?? ((X = (ie = t == null ? void 0 : t.studio) == null ? void 0 : ie.props) == null ? void 0 : X.item3Label) ?? "Phone Number"), u = T(((ne = t == null ? void 0 : t.props) == null ? void 0 : ne.item3Value) ?? ((ae = (se = t == null ? void 0 : t.studio) == null ? void 0 : se.props) == null ? void 0 : ae.item3Value) ?? "(239) 555-0108"), _ = T(((oe = t == null ? void 0 : t.props) == null ? void 0 : oe.item4Label) ?? ((ue = (le = t == null ? void 0 : t.studio) == null ? void 0 : le.props) == null ? void 0 : ue.item4Label) ?? "Registered Date"), f = T(((v = t == null ? void 0 : t.props) == null ? void 0 : v.item4Value) ?? ((He = (U = t == null ? void 0 : t.studio) == null ? void 0 : U.props) == null ? void 0 : He.item4Value) ?? "Feb 24th, 1997"), E = T(((M = t == null ? void 0 : t.props) == null ? void 0 : M.item5Label) ?? ((je = (Ue = t == null ? void 0 : t.studio) == null ? void 0 : Ue.props) == null ? void 0 : je.item5Label) ?? "Street Address"), A = T(((he = t == null ? void 0 : t.props) == null ? void 0 : he.item5Value) ?? ((N = (Ie = t == null ? void 0 : t.studio) == null ? void 0 : Ie.props) == null ? void 0 : N.item5Value) ?? "Jl. Diponegoro No. 21"), b = T(((de = t == null ? void 0 : t.props) == null ? void 0 : de.item6Label) ?? ((pe = (B = t == null ? void 0 : t.studio) == null ? void 0 : B.props) == null ? void 0 : pe.item6Label) ?? "City"), P = T(((ze = t == null ? void 0 : t.props) == null ? void 0 : ze.item6Value) ?? ((ce = (Y = t == null ? void 0 : t.studio) == null ? void 0 : Y.props) == null ? void 0 : ce.item6Value) ?? "Cilacap"), V = T(((fe = t == null ? void 0 : t.props) == null ? void 0 : fe.item7Label) ?? ((ye = (me = t == null ? void 0 : t.studio) == null ? void 0 : me.props) == null ? void 0 : ye.item7Label) ?? "ZIP Code"), H = T(((ve = t == null ? void 0 : t.props) == null ? void 0 : ve.item7Value) ?? ((Ge = (Q = t == null ? void 0 : t.studio) == null ? void 0 : Q.props) == null ? void 0 : Ge.item7Value) ?? "655849"), j = T(((Be = t == null ? void 0 : t.props) == null ? void 0 : Be.item8Label) ?? ((We = (Fe = t == null ? void 0 : t.studio) == null ? void 0 : Fe.props) == null ? void 0 : We.item8Label) ?? "Member Status"), J = T(((I = t == null ? void 0 : t.props) == null ? void 0 : I.item8Value) ?? ((Ze = (qe = t == null ? void 0 : t.studio) == null ? void 0 : qe.props) == null ? void 0 : Ze.item8Value) ?? "Active Member");
+    const e = T(((re = t == null ? void 0 : t.props) == null ? void 0 : re.item1Label) ?? ((Pe = (Oe = t == null ? void 0 : t.studio) == null ? void 0 : Oe.props) == null ? void 0 : Pe.item1Label) ?? "Gender"), r = T(((Ce = t == null ? void 0 : t.props) == null ? void 0 : Ce.item1Value) ?? ((ge = (xe = t == null ? void 0 : t.studio) == null ? void 0 : xe.props) == null ? void 0 : ge.item1Value) ?? "Female"), n = T(((ke = t == null ? void 0 : t.props) == null ? void 0 : ke.item2Label) ?? ((Te = (Re = t == null ? void 0 : t.studio) == null ? void 0 : Re.props) == null ? void 0 : Te.item2Label) ?? "Birthday"), s = T(((Le = t == null ? void 0 : t.props) == null ? void 0 : Le.item2Value) ?? ((Ne = (Ve = t == null ? void 0 : t.studio) == null ? void 0 : Ve.props) == null ? void 0 : Ne.item2Value) ?? "Feb 24th, 1997"), l = T(((De = t == null ? void 0 : t.props) == null ? void 0 : De.item3Label) ?? ((X = (ie = t == null ? void 0 : t.studio) == null ? void 0 : ie.props) == null ? void 0 : X.item3Label) ?? "Phone Number"), u = T(((ne = t == null ? void 0 : t.props) == null ? void 0 : ne.item3Value) ?? ((ae = (se = t == null ? void 0 : t.studio) == null ? void 0 : se.props) == null ? void 0 : ae.item3Value) ?? "(239) 555-0108"), _ = T(((oe = t == null ? void 0 : t.props) == null ? void 0 : oe.item4Label) ?? ((ue = (le = t == null ? void 0 : t.studio) == null ? void 0 : le.props) == null ? void 0 : ue.item4Label) ?? "Street Address"), f = T(((y = t == null ? void 0 : t.props) == null ? void 0 : y.item4Value) ?? ((He = (U = t == null ? void 0 : t.studio) == null ? void 0 : U.props) == null ? void 0 : He.item4Value) ?? "Jl. Diponegoro No. 21"), E = T(((M = t == null ? void 0 : t.props) == null ? void 0 : M.item5Label) ?? ((je = (Ue = t == null ? void 0 : t.studio) == null ? void 0 : Ue.props) == null ? void 0 : je.item5Label) ?? "City"), A = T(((he = t == null ? void 0 : t.props) == null ? void 0 : he.item5Value) ?? ((N = (Ie = t == null ? void 0 : t.studio) == null ? void 0 : Ie.props) == null ? void 0 : N.item5Value) ?? "Cilacap"), b = T(((de = t == null ? void 0 : t.props) == null ? void 0 : de.item6Label) ?? ((pe = (B = t == null ? void 0 : t.studio) == null ? void 0 : B.props) == null ? void 0 : pe.item6Label) ?? "ZIP Code"), P = T(((ze = t == null ? void 0 : t.props) == null ? void 0 : ze.item6Value) ?? ((ce = (Y = t == null ? void 0 : t.studio) == null ? void 0 : Y.props) == null ? void 0 : ce.item6Value) ?? "655849"), V = T(((fe = t == null ? void 0 : t.props) == null ? void 0 : fe.item7Label) ?? ((ve = (me = t == null ? void 0 : t.studio) == null ? void 0 : me.props) == null ? void 0 : ve.item7Label) ?? "Member Status"), H = T(((ye = t == null ? void 0 : t.props) == null ? void 0 : ye.item7Value) ?? ((Ge = (Q = t == null ? void 0 : t.studio) == null ? void 0 : Q.props) == null ? void 0 : Ge.item7Value) ?? "Active Member"), j = T(((Be = t == null ? void 0 : t.props) == null ? void 0 : Be.item8Label) ?? ((We = (Fe = t == null ? void 0 : t.studio) == null ? void 0 : Fe.props) == null ? void 0 : We.item8Label) ?? "Registered Date"), J = T(((I = t == null ? void 0 : t.props) == null ? void 0 : I.item8Value) ?? ((Ze = (qe = t == null ? void 0 : t.studio) == null ? void 0 : qe.props) == null ? void 0 : Ze.item8Value) ?? "Feb 24th, 1997");
     return {
       kind: "generic",
       templateHtml: `
@@ -1536,20 +1536,20 @@ let k = class extends we {
   }
   render() {
     const t = [
-      { label: this.item1Label, value: this.item1Value, top: !0 },
-      { label: this.item2Label, value: this.item2Value, top: !0 },
-      { label: this.item3Label, value: this.item3Value, top: !0 },
-      { label: this.item4Label, value: this.item4Value, top: !0 },
-      { label: this.item5Label, value: this.item5Value, top: !1 },
-      { label: this.item6Label, value: this.item6Value, top: !1 },
-      { label: this.item7Label, value: this.item7Value, top: !1 },
-      { label: this.item8Label, value: this.item8Value, top: !1 }
+      { label: this.item1Label, value: this.item1Value },
+      { label: this.item2Label, value: this.item2Value },
+      { label: this.item3Label, value: this.item3Value },
+      { label: this.item4Label, value: this.item4Value },
+      { label: this.item5Label, value: this.item5Value },
+      { label: this.item6Label, value: this.item6Value },
+      { label: this.item7Label, value: this.item7Value },
+      { label: this.item8Label, value: this.item8Value }
     ];
     return St`
       <div class="card">
         <div class="grid">
           ${t.map((e) => St`
-            <div class=${e.top ? "item" : "item-bottom"}>
+            <div class="item">
               <div class="label">${e.label}</div>
               <div class="val">${e.value}</div>
             </div>
@@ -1559,7 +1559,7 @@ let k = class extends we {
     `;
   }
 };
-k.styles = zt`
+x.styles = zt`
     :host {
       display: block;
       width: 100%;
@@ -1567,90 +1567,110 @@ k.styles = zt`
     .card {
       padding: 24px;
       border-radius: 16px;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+      background: var(--uiv-surface-color, #ffffff);
+      border: 1px solid var(--uiv-border-color, rgba(0, 0, 0, 0.05));
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
       font-family: inherit;
       box-sizing: border-box;
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px 20px;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .grid {
         grid-template-columns: repeat(2, 1fr);
       }
     }
-    .item {
-      border-bottom: 1px solid #f1f5f9;
-      padding-bottom: 12px;
+    @media (max-width: 400px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
-    .item-bottom {
-      padding-top: 4px;
+    .item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
     .label {
       font-size: 0.75rem;
-      color: #64748b;
+      color: var(--uiv-text-muted, #94a3b8);
+      font-weight: 500;
+      text-transform: capitalize;
     }
     .val {
       font-size: 0.875rem;
       font-weight: 600;
-      color: #0f172a;
-      margin-top: 4px;
-      word-break: break-all;
+      color: var(--uiv-text-color, #1e293b);
+      word-break: break-word;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 16px;
+      }
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px 12px;
+      }
+      .label {
+        font-size: 0.7rem;
+      }
+      .val {
+        font-size: 0.8rem;
+      }
     }
   `;
 R([
   L({ type: String, attribute: "item1-label" })
-], k.prototype, "item1Label", 2);
+], x.prototype, "item1Label", 2);
 R([
   L({ type: String, attribute: "item1-value" })
-], k.prototype, "item1Value", 2);
+], x.prototype, "item1Value", 2);
 R([
   L({ type: String, attribute: "item2-label" })
-], k.prototype, "item2Label", 2);
+], x.prototype, "item2Label", 2);
 R([
   L({ type: String, attribute: "item2-value" })
-], k.prototype, "item2Value", 2);
+], x.prototype, "item2Value", 2);
 R([
   L({ type: String, attribute: "item3-label" })
-], k.prototype, "item3Label", 2);
+], x.prototype, "item3Label", 2);
 R([
   L({ type: String, attribute: "item3-value" })
-], k.prototype, "item3Value", 2);
+], x.prototype, "item3Value", 2);
 R([
   L({ type: String, attribute: "item4-label" })
-], k.prototype, "item4Label", 2);
+], x.prototype, "item4Label", 2);
 R([
   L({ type: String, attribute: "item4-value" })
-], k.prototype, "item4Value", 2);
+], x.prototype, "item4Value", 2);
 R([
   L({ type: String, attribute: "item5-label" })
-], k.prototype, "item5Label", 2);
+], x.prototype, "item5Label", 2);
 R([
   L({ type: String, attribute: "item5-value" })
-], k.prototype, "item5Value", 2);
+], x.prototype, "item5Value", 2);
 R([
   L({ type: String, attribute: "item6-label" })
-], k.prototype, "item6Label", 2);
+], x.prototype, "item6Label", 2);
 R([
   L({ type: String, attribute: "item6-value" })
-], k.prototype, "item6Value", 2);
+], x.prototype, "item6Value", 2);
 R([
   L({ type: String, attribute: "item7-label" })
-], k.prototype, "item7Label", 2);
+], x.prototype, "item7Label", 2);
 R([
   L({ type: String, attribute: "item7-value" })
-], k.prototype, "item7Value", 2);
+], x.prototype, "item7Value", 2);
 R([
   L({ type: String, attribute: "item8-label" })
-], k.prototype, "item8Label", 2);
+], x.prototype, "item8Label", 2);
 R([
   L({ type: String, attribute: "item8-value" })
-], k.prototype, "item8Value", 2);
-k = R([
+], x.prototype, "item8Value", 2);
+x = R([
   Ut({
     name: "zero-metadata-card",
     version: "1.0.0",
@@ -1660,7 +1680,7 @@ k = R([
     iconName: "card-icon.png"
   }),
   jt()
-], k);
+], x);
 export {
-  k as ZeroMetadataCard
+  x as ZeroMetadataCard
 };

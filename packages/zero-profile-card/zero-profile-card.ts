@@ -65,9 +65,9 @@ export class ZeroProfileCard extends LitElement {
     .card {
       padding: 24px;
       border-radius: 16px;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+      background: var(--uiv-surface-color, #ffffff);
+      border: 1px solid var(--uiv-border-color, rgba(0, 0, 0, 0.05));
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -81,60 +81,94 @@ export class ZeroProfileCard extends LitElement {
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 16px;
-      border: 3px solid #f1f5f9;
+      border: 1px solid var(--uiv-border-color, #e2e8f0);
     }
     .name {
       margin: 0 0 4px 0;
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
-      color: #0f172a;
+      color: var(--uiv-text-color, #1e293b);
     }
     .subtitle {
       margin: 0 0 20px 0;
-      font-size: 0.85rem;
-      color: #64748b;
+      font-size: 0.8rem;
+      color: var(--uiv-text-muted, #64748b);
       word-break: break-all;
     }
     .stats {
       display: flex;
       gap: 24px;
       width: 100%;
-      border-top: 1px solid #f1f5f9;
-      border-bottom: 1px solid #f1f5f9;
+      border-top: 1px solid var(--uiv-border-color, #f1f5f9);
+      border-bottom: 1px solid var(--uiv-border-color, #f1f5f9);
       padding: 16px 0;
       margin-bottom: 20px;
       justify-content: center;
     }
     .stat-val {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 700;
-      color: #0f172a;
+      color: var(--uiv-text-color, #1e293b);
     }
     .stat-lbl {
       font-size: 0.75rem;
-      color: #64748b;
+      color: var(--uiv-text-muted, #94a3b8);
       margin-top: 2px;
     }
     .divider {
       width: 1px;
-      background: #e2e8f0;
+      background: var(--uiv-border-color, #e2e8f0);
       height: 32px;
     }
     .btn {
       width: 100%;
       padding: 10px;
       border-radius: 8px;
-      border: 1px solid #cbd5e1;
-      background: #ffffff;
-      color: #0f172a;
+      border: 1px solid var(--uiv-border-color, #cbd5e1);
+      background: var(--uiv-surface-color, #ffffff);
+      color: var(--uiv-text-color, #334155);
       font-weight: 600;
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       cursor: pointer;
       transition: all 0.2s;
     }
     .btn:hover {
-      background: #f8fafc;
-      border-color: #94a3b8;
+      background: var(--uiv-hover-bg, #f8fafc);
+      border-color: var(--uiv-primary-color, #94a3b8);
+      color: var(--uiv-text-color, #0f172a);
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 16px;
+      }
+      .avatar {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 12px;
+      }
+      .name {
+        font-size: 1.05rem;
+      }
+      .subtitle {
+        font-size: 0.75rem;
+        margin-bottom: 16px;
+      }
+      .stats {
+        padding: 12px 0;
+        margin-bottom: 16px;
+        gap: 16px;
+      }
+      .stat-val {
+        font-size: 1.05rem;
+      }
+      .stat-lbl {
+        font-size: 0.7rem;
+      }
+      .btn {
+        padding: 8px;
+        font-size: 0.8rem;
+      }
     }
   `;
 

@@ -49,6 +49,8 @@ export interface NavItem {
   icon?: string;
   /** If set, clicking navigates to this URL. */
   href?: string;
+  /** If set, SPA routes to this path. */
+  path?: string;
   /** Link target. Default: "_self". */
   target?: "_self" | "_blank";
   /** Short badge (e.g. "3", "New"). */
@@ -515,6 +517,8 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         appName: "Zendenta",
         appSubtitle: "Cabut gigi tanpa sakit",
         appLogo: "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 16H11V14H13V16ZM13 12H11V7H13V12Z' fill='#0EA5E9'/></svg>",
+        headerLogo: "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#0ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'></path><circle cx='12' cy='7' r='4'></circle></svg>",
+        headerTitle: "Diane Cooper",
         sidebarBg: "#ffffff",
         sidebarText: "#64748b",
         sidebarActiveBg: "#f1f5f9",
@@ -531,6 +535,14 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
           userRole: "Dentist",
           avatarUrl: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=120"
         }),
+        headerConfig: JSON.stringify({
+          showSearch: true,
+          searchPlaceholder: "Search",
+          showNotificationBell: true,
+          notificationCount: 4,
+          showUserAvatar: false,
+          showBreadcrumb: false
+        }),
         navItems: JSON.stringify([
           { label: "Overview", icon: "⏱️" },
           { label: "Calendar", icon: "📅" },
@@ -541,26 +553,42 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
           { label: "Help ?", icon: "❓", bottom: true }
         ]),
         activeItem: 2,
-        fixedHeader: true,
+        fixedHeader: false,
         fixedFooter: true
       },
       children: [
-        // 1. Breadcrumbs Header Section (1 Column)
+        // 1. Breadcrumbs Header Section (2 Columns for breadcrumbs and actions)
         {
           componentName: "zero-section",
           slot: "main",
           props: {
             gap: "16px",
-            padding: "0px 0px 16px 0px"
+            padding: "0px 0px 16px 0px",
+            justify: "space-between",
+            align: "center"
           },
           children: [
             {
               componentName: "zero-column",
-              props: { flex: "1" },
+              props: { width: "60%", padding: "0px", direction: "row", align: "center", gap: "8px" },
               children: [
                 {
-                  componentName: "zero-heading",
-                  props: { text: "Patient List / Diane Cooper", level: 3, align: "left" }
+                  componentName: "zero-text",
+                  props: { text: "Patient List  >  Diane Cooper", size: 14, weight: 600, color: "#64748b" }
+                }
+              ]
+            },
+            {
+              componentName: "zero-column",
+              props: { width: "40%", padding: "0px", direction: "row", justify: "flex-end", align: "center", gap: "10px" },
+              children: [
+                {
+                  componentName: "zero-button",
+                  props: { label: "🖨️", variant: "secondary", size: "small" }
+                },
+                {
+                  componentName: "zero-button",
+                  props: { label: "✏️ Edit Patient", variant: "secondary", size: "small" }
                 }
               ]
             }
@@ -577,7 +605,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
             // Column 1: Patient Profile Card (25%)
             {
               componentName: "zero-column",
-              props: { width: "25%" },
+              props: { width: "25%", padding: "0px" },
               children: [
                 {
                   componentName: "zero-profile-card",
@@ -597,7 +625,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
             // Column 2: Information & Timeline Cards (50%)
             {
               componentName: "zero-column",
-              props: { width: "50%", gap: "24px" },
+              props: { width: "50%", padding: "0px", gap: "24px" },
               children: [
                 {
                   componentName: "zero-metadata-card",
@@ -608,16 +636,16 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
                     item2Value: "Feb 24th, 1997",
                     item3Label: "Phone Number",
                     item3Value: "(239) 555-0108",
-                    item4Label: "Registered Date",
-                    item4Value: "Feb 24th, 1997",
-                    item5Label: "Street Address",
-                    item5Value: "Jl. Diponegoro No. 21",
-                    item6Label: "City",
-                    item6Value: "Cilacap",
-                    item7Label: "ZIP Code",
-                    item7Value: "655849",
-                    item8Label: "Member Status",
-                    item8Value: "Active Member"
+                    item4Label: "Street Address",
+                    item4Value: "Jl. Diponegoro No. 21",
+                    item5Label: "City",
+                    item5Value: "Cilacap",
+                    item6Label: "ZIP Code",
+                    item6Value: "655849",
+                    item7Label: "Member Status",
+                    item7Value: "Active Member",
+                    item8Label: "Registered Date",
+                    item8Value: "Feb 24th, 1997"
                   }
                 },
                 {
@@ -629,15 +657,26 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
             // Column 3: Notes & Files Cards (25%)
             {
               componentName: "zero-column",
-              props: { width: "25%", gap: "24px" },
+              props: { width: "25%", padding: "0px", gap: "24px" },
               children: [
                 {
                   componentName: "zero-notes-card",
                   props: {
                     title: "Notes",
-                    text: "This patient has history of penicillin allergy. Please verify medications. Prefers morning appointments.",
-                    author: "Drg. Adam H.",
-                    date: "26 Nov '19"
+                    notesJson: JSON.stringify([
+                      {
+                        text: "- This patient is lorem ipsum dolor sit amet\n- Lorem ipsum dolor sit amet\n- has allergic history with Cataflam",
+                        author: "Drg. Mega Nanade",
+                        date: "20 Nov '19",
+                        active: true
+                      },
+                      {
+                        text: "Lorem ipsum dolor sit amet",
+                        author: "Drg. Mega Nanade",
+                        date: "20 Nov '19",
+                        active: false
+                      }
+                    ])
                   }
                 },
                 {
@@ -761,11 +800,14 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         min-height: var(--zero-height, 100vh);
         --snl-accent: var(--uiv-primary-color, #6366f1);
         --snl-ease: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        font-family: var(--zero-theme-typography-fontFamily, var(--uiv-font-family, system-ui, -apple-system, sans-serif));
+        font-size: var(--zero-theme-typography-bodySize, var(--uiv-font-size-base, 14px));
       }
 
       :host > div {
         height: var(--zero-height, 100%);
         width: 100%;
+        display: block; /* override base class flex — snl-shell handles its own layout */
       }
 
       /* ── Shell ── */
@@ -1049,6 +1091,63 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       :host([sidenav-type="over"]:not([opened])) .snl-sidebar {
         transform: translateX(-100%);
         border-right: none !important;
+      }
+
+      .snl-header-toggle-mobile {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .snl-header-toggle-mobile {
+          display: flex !important;
+          align-items: center;
+          justify-content: center;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          font-size: 1.25rem;
+          padding: 8px;
+          color: inherit;
+        }
+
+        /* Force overlay mode on mobile */
+        .snl-sidebar {
+          position: absolute !important;
+          left: 0 !important;
+          top: 0 !important;
+          bottom: 0 !important;
+          z-index: 30 !important;
+          height: 100% !important;
+          box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15) !important;
+          transform: translateX(-100%) !important;
+          transition: transform var(--snl-ease) !important;
+          width: 260px !important;
+        }
+
+        :host([opened]) .snl-sidebar {
+          transform: translateX(0) !important;
+        }
+
+        /* Ensure main content is not indented/pushed on mobile */
+        .snl-main {
+          margin-left: 0 !important;
+        }
+
+        /* Make header components fit on narrow screen */
+        .snl-header-brand {
+          font-size: 0.85rem !important;
+          gap: 6px !important;
+        }
+        .snl-header-search {
+          max-width: 140px !important;
+          padding: 5px 8px !important;
+        }
+        .snl-header-user {
+          padding: 2px 4px !important;
+        }
+        .snl-user-info {
+          display: none !important;
+        }
       }
 
       .snl-backdrop {
@@ -1365,6 +1464,16 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
   })
   headerTitle = "";
 
+  @property({ type: String, attribute: "header-logo" })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Header Logo (overrides app logo in header bar)",
+    fieldMappings: "headerLogo",
+    categoryLabel: "Branding"
+  })
+  headerLogo = "";
+
   // ─── Layout ────────────────────────────────────────────────────────────────
 
   @property({ type: Boolean, reflect: true })
@@ -1598,7 +1707,11 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
   private handleNavClick(index: number, item: NavItem) {
     if (item.disabled || item.separator || item.section) return;
     this.navigateTo(index);
-    if (item.href) window.open(item.href, item.target ?? "_self");
+    if (item.path) {
+      this.dispatchEvent(new CustomEvent("route-change", { detail: { path: item.path }, bubbles: true, composed: true }));
+    } else if (item.href) {
+      window.open(item.href, item.target ?? "_self");
+    }
   }
 
   private _expandedItems = new Set<number>();
@@ -1722,6 +1835,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     const appSubtitle = config?.props?.appSubtitle || "";
     const appLogo     = config?.props?.appLogo     || "🚀";
     const headerTitle = config?.props?.headerTitle || "";
+    const headerLogo  = config?.props?.headerLogo  || "";
     const activeItem  = Number(config?.props?.activeItem ?? 0);
     const collapsed   = !!config?.props?.collapsed;
 
@@ -1806,7 +1920,13 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       ">
         ${headerLeftBtn}
         <div style="display:flex; align-items:center; gap:8px; font-weight:700; font-size:0.95rem; color:${headerText}; white-space:nowrap; flex-shrink:0;">
-          <span style="font-size:1.3rem;">${appLogo}</span>${brandLabel}
+          ${(() => {
+            const finalLogo = headerLogo || appLogo;
+            return finalLogo.startsWith('<') ? finalLogo : 
+              (finalLogo.startsWith('http') || finalLogo.startsWith('/') || finalLogo.includes('.')) ? `<img src="${finalLogo}" style="width: 24px; height: 24px; object-fit: contain;" />` :
+              `<span style="font-size:1.3rem;">${finalLogo}</span>`;
+          })()}
+          ${brandLabel}
         </div>
         ${headerMode === "config"
           ? studioHeaderExtras(headerCfg, accentColor, headerText)
@@ -1958,15 +2078,26 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     const headerEl = this.headerMode === "hidden" ? nothing : html`
       <header class="snl-header"
         style="
-          height:${this.headerHeight}; background:${this.headerBg};
-          color:${this.headerText};
-          border-bottom:1px solid ${this.headerBorder};
+          height:${this.headerHeight}; background:var(--uiv-surface-color, ${this.headerBg});
+          color:var(--uiv-text-color, ${this.headerText});
+          border-bottom:1px solid var(--uiv-border-color, ${this.headerBorder});
         ">
+
+        <button class="snl-header-toggle-mobile" @click=${(e: Event) => { e.stopPropagation(); this.toggle(); }} title="Toggle sidebar">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+          </svg>
+        </button>
 
         ${this.collapseBtnPosition === "header-left" && this.showCollapseBtn ? this.renderToggleButton("header-left") : nothing}
 
         <div class="snl-header-brand" style="color:${this.headerText};">
-          <span>${this.appLogo}</span>
+          ${(() => {
+            const finalLogo = this.headerLogo || this.appLogo;
+            return finalLogo && finalLogo.startsWith('<') ? html`${unsafeHTML(finalLogo)}` : 
+              finalLogo && (finalLogo.startsWith('http') || finalLogo.startsWith('/') || finalLogo.includes('.')) ? html`<img src="${finalLogo}" style="width: 24px; height: 24px; object-fit: contain;" />` :
+              html`<span class="snl-brand-logo">${finalLogo}</span>`;
+          })()}
           <span>${this.headerTitle || this.appName}</span>
         </div>
 
@@ -2039,7 +2170,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     // ─ Sidebar ─
     const sidebarEl = !sidebarVisible ? nothing : html`
       <aside class="snl-sidebar"
-        style="width:${this.sidebarWidth}; background:${this.sidebarBg};
+        style="width:${this.sidebarWidth}; background:var(--uiv-surface-color, ${this.sidebarBg});
           --snl-collapsed-w:${this.collapsedWidth};
           ${sidebarStyles}">
 
@@ -2183,27 +2314,27 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
 
     return html`
       ${this.renderResponsiveStyles()}
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="snl-shell" style="
-          --snl-accent: ${this.accentColor};
+          --snl-accent: var(--uiv-primary-color, ${this.accentColor});
           --snl-sidebar-width: ${this.sidebarWidth};
           --snl-collapsed-w: ${this.collapsedWidth};
-          --snl-brand-text-color: ${this.sidebarActiveText || 'currentColor'};
+          --snl-brand-text-color: var(--uiv-text-color, ${this.sidebarActiveText || 'currentColor'});
           --snl-separator-color: ${this.sidebarText ? `${this.sidebarText}15` : 'rgba(255,255,255,0.08)'};
-          --snl-footer-name-color: ${this.sidebarActiveText || 'currentColor'};
-          --snl-footer-role-color: ${this.sidebarText || '#94a3b8'};
-          --snl-footer-btn-color: ${this.sidebarText || '#94a3b8'};
-          --snl-hover-bg: ${this.sidebarText === '#94a3b8' ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.04)'};
+          --snl-footer-name-color: var(--uiv-text-color, ${this.sidebarActiveText || 'currentColor'});
+          --snl-footer-role-color: var(--uiv-text-muted, ${this.sidebarText || '#94a3b8'});
+          --snl-footer-btn-color: var(--uiv-text-muted, ${this.sidebarText || '#94a3b8'});
+          --snl-hover-bg: var(--uiv-hover-bg, ${this.sidebarText === '#94a3b8' ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.04)'});
           ${this.computeInternalStyles()}
         ">
           ${headerElAtShell}
           <div class="snl-body">
-            ${this.sidenavType === "over" && this.opened && this.hasBackdrop ? html`
+            ${this.opened && (this.sidenavType === "over" || (typeof window !== 'undefined' && window.innerWidth <= 768)) && this.hasBackdrop ? html`
               <div class="snl-backdrop" @click=${this.close}></div>
             ` : nothing}
             ${sidebarEl}
             ${this.collapseBtnPosition === "floating" && this.showCollapseBtn ? this.renderToggleButton("floating") : nothing}
-            <main class="snl-main" style="background:${this.mainBg}; ${mainOverflowStyle} ${mainPaddingStyle} display: flex; flex-direction: column;">
+            <main class="snl-main" style="background:var(--uiv-bg-color, ${this.mainBg}); ${mainOverflowStyle} ${mainPaddingStyle} display: flex; flex-direction: column;">
               ${headerElInMain}
               ${!this.fixedHeader ? html`
                 <div style="flex: 1; padding:${this.mainPadding}; box-sizing: border-box;">

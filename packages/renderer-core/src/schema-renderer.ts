@@ -1,4 +1,4 @@
-import { type TemplateResult } from "lit";
+import { type TemplateResult, nothing } from "lit";
 import { html, unsafeStatic } from "lit/static-html.js";
 import { ref } from "lit/directives/ref.js";
 import type { FlowFieldDefinition, StudioSchema, ThemeDefinition, UIComponentNode, VariableDefinition } from "@zero/schema";
@@ -20,6 +20,7 @@ export interface RuntimeContext {
 
 export class SchemaRenderer {
   private activeSchema?: StudioSchema;
+  private loadedPageIds = new Set<string>();
 
   constructor(private readonly context: RuntimeContext) { }
 
@@ -35,10 +36,19 @@ export class SchemaRenderer {
         ?.map(p => p.name) || []
     );
     
-    const localDeps = schema.dependencies.filter(dep => {
-      const [componentName] = dep.split("@");
-      return !marketplacePluginNames.has(componentName);
-    });
+    // schema.dependencies can be an object map {name: version} or an array ["name@version"]
+    const rawDeps = schema.dependencies ?? {};
+    let localDeps: string[];
+    if (Array.isArray(rawDeps)) {
+      localDeps = rawDeps.filter((dep: string) => {
+        const [componentName] = dep.split("@");
+        return !marketplacePluginNames.has(componentName);
+      });
+    } else {
+      localDeps = Object.entries(rawDeps as Record<string, string>)
+        .filter(([name]) => !marketplacePluginNames.has(name))
+        .map(([name, version]) => `${name}@${version}`);
+    }
 
     const loads = localDeps.map((dependency: string) => {
       const [componentName, version] = dependency.split("@");
@@ -53,9 +63,48 @@ export class SchemaRenderer {
     resolveOAuthConfig(schema.auth);
   }
 
+  private async lazyloadNodeDependencies(node: UIComponentNode): Promise<void> {
+    if (!this.activeSchema) return;
+    const componentNames = new Set<string>();
+    const scan = (curr: UIComponentNode) => {
+      if (curr.componentName && !curr.componentName.startsWith("page-")) {
+        componentNames.add(curr.componentName);
+      }
+      (curr.children || []).forEach(scan);
+    };
+    scan(node);
+
+    const unregistered = Array.from(componentNames).filter(name => {
+      const tag = name.replace(/^@[^/]+\//, "");
+      return !customElements.get(tag) && !customElements.get(`${tag}-1.0.0`);
+    });
+
+    if (unregistered.length === 0) return;
+
+    const registry = this.context.registry as any;
+    if (registry && typeof registry.ensureComponentLoaded === "function") {
+      const promises = unregistered.map(name => {
+        const tag = name.replace(/^@[^/]+\//, "");
+        console.log(`[Lazyload] On-demand loading component: ${tag} (1.0.0)`);
+        return registry.ensureComponentLoaded(tag, "1.0.0");
+      });
+      await Promise.all(promises);
+    }
+  }
+
   resolveRoute(schema: StudioSchema, pathName: string): UIComponentNode {
     this.activeSchema = schema;
-    const matchedRoute = schema.routes.find((route) => route.path === pathName) ?? schema.routes[0];
+    const routes = schema.routes ?? [];
+    let matchedRoute = routes.find((route) => route.path === pathName) ?? routes[0];
+    if (matchedRoute) {
+      let current = matchedRoute;
+      while (current.parentId) {
+        const parent = routes.find((r) => r.id === current.parentId);
+        if (!parent) break;
+        current = parent;
+      }
+      matchedRoute = current;
+    }
     return findNode(schema.root, matchedRoute?.pageNodeId ?? schema.root.id) ?? schema.root;
   }
 
@@ -65,15 +114,17 @@ export class SchemaRenderer {
     stateSnapshot?: { global: Record<string, unknown>; pages: Record<string, Record<string, unknown>>; components: Record<string, Record<string, unknown>> }
   ): Record<string, unknown> {
     this.activeSchema = schema;
-    const route = schema.routes.find((item) => item.path === pathName) ?? schema.routes[0];
+    const routes = schema.routes ?? [];
+    const route = routes.find((item) => item.path === pathName) ?? routes[0];
     const pageVariables = (schema.variables?.page ?? []).filter((variable) => variable.pageNodeId === route?.pageNodeId);
     const locale = schema.variables?.locales?.[0];
     const globalState = stateSnapshot?.global;
+    const flows = schema.flows ?? [];
 
     const baseScope = {
       page: {
         vars: resolveVariableBucket(pageVariables, {}, globalState),
-        flow: mapFlowContracts(schema.flows.find((flow) => flow.id === route?.pageFlowId)?.nodes),
+        flow: mapFlowContracts(flows.find((flow) => flow.id === route?.pageFlowId)?.nodes),
       },
       services: {
         shared: resolveVariableBucket(schema.variables?.service ?? [], {}, globalState),
@@ -143,8 +194,9 @@ export class SchemaRenderer {
   }
 
   createThemeStyle(theme: ThemeDefinition): string {
+    if (!theme || !theme.tokens) return '';
     const entries = Object.values(theme.tokens)
-      .flatMap((group) => Object.entries(group))
+      .flatMap((group) => group && typeof group === 'object' ? Object.entries(group) : [])
       .map(([key, value]) => {
         const kebabKey = toKebabCase(key);
         const prefix = kebabKey.startsWith("--") ? "" : "--";
@@ -188,7 +240,7 @@ export class SchemaRenderer {
       return html``;
     }
 
-    const children = resolvedNode.children.map((child: UIComponentNode) => this.renderNode(child, scope));
+    const children = (resolvedNode.children || []).map((child: UIComponentNode) => this.renderNode(child, scope));
     const inlineStyle = serializeStyles(resolvedNode.styles);
     const responsiveCss = serializeResponsiveCss(resolvedNode, renderId);
 
@@ -221,11 +273,44 @@ export class SchemaRenderer {
             props: pageRefProps,
             $props: pageRefProps,
           };
-          const matchedChildren = matchedPage.children.map((child: UIComponentNode) => this.renderNode(child, extendedScope));
+          const matchedChildren = (matchedPage.children || []).map((child: UIComponentNode) => this.renderNode(child, extendedScope));
           return html`${responsiveCss ? html`<style>${responsiveCss}</style>` : null}<div class="zero-page-ref-wrapper" data-node-id=${renderId} style=${inlineStyle}>${matchedChildren}</div>`;
         }
       }
       return html``;
+    }
+
+    if (resolvedNode.componentName === "zero-router-outlet") {
+      const activePath = (scope.system as any)?.route?.path ?? "/";
+      const matchedRoute = this.activeSchema?.routes.find((r) => r.path === activePath && r.parentId);
+      console.log("[RouterOutlet] activePath:", activePath, "matchedRoute:", matchedRoute ? matchedRoute.id : "NONE", "parentId:", matchedRoute?.parentId);
+      
+      const slotVal = resolvedNode.customAttributes?.slot || resolvedNode.props?.slot;
+      const slotAttr = slotVal ? String(slotVal) : "";
+
+      if (matchedRoute && matchedRoute.parentId && this.activeSchema) {
+        const matchedPage = findNode(this.activeSchema.root, matchedRoute.pageNodeId);
+        console.log("[RouterOutlet] matchedPage:", matchedPage ? matchedPage.id : "NONE");
+        if (matchedPage) {
+          const pageId = matchedPage.id;
+          if (!this.loadedPageIds.has(pageId)) {
+            this.lazyloadNodeDependencies(matchedPage).then(() => {
+              this.loadedPageIds.add(pageId);
+              this.context.navigate(activePath);
+            });
+            return html`${responsiveCss ? html`<style>${responsiveCss}</style>` : null}<div class="zero-router-outlet-loading" slot=${slotAttr || nothing} style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px; gap: 16px; color: var(--uiv-text-muted, #64748b);">
+              <div class="spinner" style="width: 28px; height: 28px; border: 3px solid var(--uiv-border-color, #e2e8f0); border-top-color: var(--uiv-primary-color, #0ea5e9); border-top-color: var(--uiv-primary-color, #0ea5e9); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+              <span style="font-size: 0.85rem; font-weight: 500;">Loading page components...</span>
+              <style>
+                @keyframes spin { to { transform: rotate(360deg); } }
+              </style>
+            </div>`;
+          }
+          const matchedChildren = (matchedPage.children || []).map((child: UIComponentNode) => this.renderNode(child, scope));
+          return html`${responsiveCss ? html`<style>${responsiveCss}</style>` : null}<div class="zero-router-outlet-wrapper" slot=${slotAttr || nothing} data-node-id=${renderId} style=${inlineStyle}>${matchedChildren}</div>`;
+        }
+      }
+      return html`<div class="zero-router-outlet-placeholder" slot=${slotAttr || nothing} style="padding: 24px; border: 2px dashed var(--uiv-border-color, #e2e8f0); border-radius: 12px; text-align: center; color: var(--uiv-text-muted, #94a3b8); font-size: 0.85rem; background: var(--uiv-bg-color, #f8fafc); font-weight: 500;">Router Outlet (Preserves Sidenav Layout. Select tabs to route sub-pages here)</div>`;
     }
 
     // Construct the versioned tag name to match @RendererComponent registration
@@ -379,7 +464,7 @@ export function findNode(root: UIComponentNode, nodeId: string): UIComponentNode
     return root;
   }
 
-  for (const child of root.children) {
+  for (const child of (root.children || [])) {
     const found = findNode(child, nodeId);
     if (found) {
       return found;
@@ -471,8 +556,8 @@ export function isExpression(value: unknown): boolean {
 }
 
 function applyBindings(node: UIComponentNode, scope: Record<string, unknown>): UIComponentNode {
-  const nextProps = { ...node.props };
-  const nextStyles = { ...node.styles };
+  const nextProps = { ...(node.props ?? {}) };
+  const nextStyles = { ...(node.styles ?? {}) };
   const bindings = node.bindings ?? {};
 
   // 1. Resolve values directly in Props (Universal Resolution)

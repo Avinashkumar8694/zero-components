@@ -825,7 +825,9 @@ function Dt(r) {
         title: r.title,
         selector: r.elementSelector,
         category: r.group,
-        icon: r.iconName
+        icon: r.iconName,
+        layoutKind: r.layoutKind,
+        environment: r.environment
       };
       if (Reflect.defineMetadata("ZeroComponent", t, e.prototype), globalThis.customElements) {
         const i = `${r.elementSelector}-${r.version}`;
@@ -979,7 +981,7 @@ const Wt = (r) => new at(typeof r == "string" ? r : r + "", void 0, Ee), Yt = (r
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: Xt, defineProperty: qt, getOwnPropertyDescriptor: Zt, getOwnPropertyNames: Jt, getOwnPropertySymbols: Qt, getPrototypeOf: Kt } = Object, z = globalThis, Xe = z.trustedTypes, er = Xe ? Xe.emptyScript : "", me = z.reactiveElementPolyfillSupport, re = (r, e) => r, he = { toAttribute(r, e) {
+const { is: Xt, defineProperty: qt, getOwnPropertyDescriptor: Zt, getOwnPropertyNames: Jt, getOwnPropertySymbols: Kt, getPrototypeOf: Qt } = Object, z = globalThis, Xe = z.trustedTypes, er = Xe ? Xe.emptyScript : "", me = z.reactiveElementPolyfillSupport, re = (r, e) => r, he = { toAttribute(r, e) {
   switch (e) {
     case Boolean:
       r = r ? er : null;
@@ -1038,13 +1040,13 @@ let J = class extends HTMLElement {
   }
   static _$Ei() {
     if (this.hasOwnProperty(re("elementProperties"))) return;
-    const e = Kt(this);
+    const e = Qt(this);
     e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
     if (this.hasOwnProperty(re("finalized"))) return;
     if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(re("properties"))) {
-      const t = this.properties, i = [...Jt(t), ...Qt(t)];
+      const t = this.properties, i = [...Jt(t), ...Kt(t)];
       for (const s of i) this.createProperty(s, t[s]);
     }
     const e = this[Symbol.metadata];
@@ -1219,8 +1221,8 @@ J.elementStyles = [], J.shadowRootOptions = { mode: "open" }, J[re("elementPrope
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const ie = globalThis, Ze = (r) => r, ce = ie.trustedTypes, Je = ce ? ce.createPolicy("lit-html", { createHTML: (r) => r }) : void 0, ot = "$lit$", B = `lit$${Math.random().toFixed(9).slice(2)}$`, lt = "?" + B, tr = `<${lt}>`, F = document, se = () => F.createComment(""), ae = (r) => r === null || typeof r != "object" && typeof r != "function", Se = Array.isArray, rr = (r) => Se(r) || typeof (r == null ? void 0 : r[Symbol.iterator]) == "function", be = `[ 	
-\f\r]`, te = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Qe = /-->/g, Ke = />/g, G = RegExp(`>|${be}(?:([^\\s"'>=/]+)(${be}*=${be}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), et = /'/g, tt = /"/g, ut = /^(?:script|style|textarea|title)$/i, ir = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), Z = ir(1), Q = Symbol.for("lit-noChange"), R = Symbol.for("lit-nothing"), rt = /* @__PURE__ */ new WeakMap(), W = F.createTreeWalker(F, 129);
+\f\r]`, te = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ke = /-->/g, Qe = />/g, G = RegExp(`>|${be}(?:([^\\s"'>=/]+)(${be}*=${be}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), et = /'/g, tt = /"/g, ut = /^(?:script|style|textarea|title)$/i, ir = (r) => (e, ...t) => ({ _$litType$: r, strings: e, values: t }), Z = ir(1), K = Symbol.for("lit-noChange"), R = Symbol.for("lit-nothing"), rt = /* @__PURE__ */ new WeakMap(), W = F.createTreeWalker(F, 129);
 function dt(r, e) {
   if (!Se(r) || !r.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return Je !== void 0 ? Je.createHTML(e) : e;
@@ -1231,7 +1233,7 @@ const nr = (r, e) => {
   for (let y = 0; y < t; y++) {
     const f = r[y];
     let E, w, b = -1, S = 0;
-    for (; S < f.length && (l.lastIndex = S, w = l.exec(f), w !== null); ) S = l.lastIndex, l === te ? w[1] === "!--" ? l = Qe : w[1] !== void 0 ? l = Ke : w[2] !== void 0 ? (ut.test(w[2]) && (s = RegExp("</" + w[2], "g")), l = G) : w[3] !== void 0 && (l = G) : l === G ? w[0] === ">" ? (l = s ?? te, b = -1) : w[1] === void 0 ? b = -2 : (b = l.lastIndex - w[2].length, E = w[1], l = w[3] === void 0 ? G : w[3] === '"' ? tt : et) : l === tt || l === et ? l = G : l === Qe || l === Ke ? l = te : (l = G, s = void 0);
+    for (; S < f.length && (l.lastIndex = S, w = l.exec(f), w !== null); ) S = l.lastIndex, l === te ? w[1] === "!--" ? l = Ke : w[1] !== void 0 ? l = Qe : w[2] !== void 0 ? (ut.test(w[2]) && (s = RegExp("</" + w[2], "g")), l = G) : w[3] !== void 0 && (l = G) : l === G ? w[0] === ">" ? (l = s ?? te, b = -1) : w[1] === void 0 ? b = -2 : (b = l.lastIndex - w[2].length, E = w[1], l = w[3] === void 0 ? G : w[3] === '"' ? tt : et) : l === tt || l === et ? l = G : l === Ke || l === Qe ? l = te : (l = G, s = void 0);
     const O = l === G && r[y + 1].startsWith("/>") ? " " : "";
     u += l === te ? f + tr : b >= 0 ? (i.push(E), f.slice(0, b) + ot + f.slice(b) + B + O) : f + B + (b === -2 ? y : O);
   }
@@ -1274,12 +1276,12 @@ class oe {
     return i.innerHTML = e, i;
   }
 }
-function K(r, e, t = r, i) {
+function Q(r, e, t = r, i) {
   var l, y;
-  if (e === Q) return e;
+  if (e === K) return e;
   let s = i !== void 0 ? (l = t._$Co) == null ? void 0 : l[i] : t._$Cl;
   const u = ae(e) ? void 0 : e._$litDirective$;
-  return (s == null ? void 0 : s.constructor) !== u && ((y = s == null ? void 0 : s._$AO) == null || y.call(s, !1), u === void 0 ? s = void 0 : (s = new u(r), s._$AT(r, t, i)), i !== void 0 ? (t._$Co ?? (t._$Co = []))[i] = s : t._$Cl = s), s !== void 0 && (e = K(r, s._$AS(r, e.values), s, i)), e;
+  return (s == null ? void 0 : s.constructor) !== u && ((y = s == null ? void 0 : s._$AO) == null || y.call(s, !1), u === void 0 ? s = void 0 : (s = new u(r), s._$AT(r, t, i)), i !== void 0 ? (t._$Co ?? (t._$Co = []))[i] = s : t._$Cl = s), s !== void 0 && (e = Q(r, s._$AS(r, e.values), s, i)), e;
 }
 class sr {
   constructor(e, t) {
@@ -1329,7 +1331,7 @@ class le {
     return this._$AB;
   }
   _$AI(e, t = this) {
-    e = K(this, e, t), ae(e) ? e === R || e == null || e === "" ? (this._$AH !== R && this._$AR(), this._$AH = R) : e !== this._$AH && e !== Q && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : rr(e) ? this.k(e) : this._(e);
+    e = Q(this, e, t), ae(e) ? e === R || e == null || e === "" ? (this._$AH !== R && this._$AR(), this._$AH = R) : e !== this._$AH && e !== K && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : rr(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -1385,11 +1387,11 @@ class pe {
   _$AI(e, t = this, i, s) {
     const u = this.strings;
     let l = !1;
-    if (u === void 0) e = K(this, e, t, 0), l = !ae(e) || e !== this._$AH && e !== Q, l && (this._$AH = e);
+    if (u === void 0) e = Q(this, e, t, 0), l = !ae(e) || e !== this._$AH && e !== K, l && (this._$AH = e);
     else {
       const y = e;
       let f, E;
-      for (e = u[0], f = 0; f < u.length - 1; f++) E = K(this, y[i + f], t, f), E === Q && (E = this._$AH[f]), l || (l = !ae(E) || E !== this._$AH[f]), E === R ? e = R : e !== R && (e += (E ?? "") + u[f + 1]), this._$AH[f] = E;
+      for (e = u[0], f = 0; f < u.length - 1; f++) E = Q(this, y[i + f], t, f), E === K && (E = this._$AH[f]), l || (l = !ae(E) || E !== this._$AH[f]), E === R ? e = R : e !== R && (e += (E ?? "") + u[f + 1]), this._$AH[f] = E;
     }
     l && !s && this.j(e);
   }
@@ -1418,7 +1420,7 @@ class lr extends pe {
     super(e, t, i, s, u), this.type = 5;
   }
   _$AI(e, t = this) {
-    if ((e = K(this, e, t, 0) ?? R) === Q) return;
+    if ((e = Q(this, e, t, 0) ?? R) === K) return;
     const i = this._$AH, s = e === R && i !== R || e.capture !== i.capture || e.once !== i.once || e.passive !== i.passive, u = e !== R && (i === R || s);
     s && this.element.removeEventListener(this.name, this, i), u && this.element.addEventListener(this.name, this, e), this._$AH = e;
   }
@@ -1435,7 +1437,7 @@ class ur {
     return this._$AM._$AU;
   }
   _$AI(e) {
-    K(this, e);
+    Q(this, e);
   }
 }
 const $e = ie.litHtmlPolyfillSupport;
@@ -1477,7 +1479,7 @@ class ne extends J {
     super.disconnectedCallback(), (e = this._$Do) == null || e.setConnected(!1);
   }
   render() {
-    return Q;
+    return K;
   }
 }
 var st;

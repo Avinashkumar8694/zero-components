@@ -227,7 +227,7 @@ export class ZeroStack extends ZeroLayoutBase {
   render() {
     return html`
       ${this.renderResponsiveStyles()}
-      <div style=${this.computeBaseStyles()}>
+      <div>
         <div class="zero-internal-container" 
              style=${this.computeInternalStyles()}
              @mousemove=${this.handleMouseMove}

@@ -1,0 +1,21 @@
+{
+  "name": "zero-project-card",
+  "version": "1.0.0",
+  "description": "Able Pro style project progress card with labelled rounded progress bars",
+  "main": "zero-project-card.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "dashboard", "project", "progress", "card"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true,
+    "category": "Dashboard",
+    "components": [
+      {
+        "tag": "zero-project-card",
+        "title": "Project Card",
+        "category": "Dashboard"
+      }
+    ]
+  }
+}

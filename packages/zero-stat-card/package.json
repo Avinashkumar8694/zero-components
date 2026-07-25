@@ -1,0 +1,21 @@
+{
+  "name": "zero-stat-card",
+  "version": "1.0.0",
+  "description": "Able Pro style dashboard statistic card with inline SVG chart and change indicator",
+  "main": "zero-stat-card.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "dashboard", "stat", "kpi", "card", "chart"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true,
+    "category": "Dashboard",
+    "components": [
+      {
+        "tag": "zero-stat-card",
+        "title": "Stat Card",
+        "category": "Dashboard"
+      }
+    ]
+  }
+}

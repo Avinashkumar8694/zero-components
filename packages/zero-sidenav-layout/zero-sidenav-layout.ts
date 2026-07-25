@@ -139,7 +139,7 @@ const DEFAULT_NAV_ITEMS: NavItem[] = [
 
 const DEFAULT_HEADER_CONFIG: HeaderConfig = {
   showSearch: false,
-  searchPlaceholder: "Search…",
+  searchPlaceholder: "Search (Ctrl + K)",
   showNotificationBell: false,
   notificationCount: 0,
   showUserAvatar: false,
@@ -321,19 +321,21 @@ function studioNavRow(
   accentColor: string, collapsed: boolean
 ): string {
   if (item.separator) {
-    return `<div style="height:1px; background:rgba(255,255,255,0.1); margin:6px 12px;"></div>`;
+    return `<div style="height:1px; background:var(--snl-separator-color, #e5e9ef); margin:8px 12px;"></div>`;
   }
   if (item.section) {
     return collapsed ? "" : `
-      <div style="padding:10px 12px 4px; font-size:0.68rem; font-weight:700;
-        letter-spacing:0.08em; text-transform:uppercase;
-        color:${sidebarText}; opacity:0.45; white-space:nowrap;">
+      <div style="padding:14px 12px 6px; font-size:0.68rem; font-weight:700;
+        letter-spacing:0.06em; text-transform:uppercase;
+        color:#8996a4; white-space:nowrap;">
         ${item.section}
       </div>
     `;
   }
 
   const isActive = activeItem === index;
+  const hasChildren = !!item.children?.length;
+
   const badge = (!collapsed && item.badge) ? `
     <span style="margin-left:auto; background:${item.badgeColor || accentColor};
       color:#fff; font-size:0.65rem; font-weight:700; padding:1px 7px;
@@ -342,14 +344,19 @@ function studioNavRow(
     </span>
   ` : "";
 
-  const childIndicator = (!collapsed && item.children?.length) ? `
-    <span style="margin-left:auto; color:${sidebarText}; font-size:0.7rem;">›</span>
+  const chevron = (!collapsed && hasChildren) ? `
+    <span style="margin-left:${item.badge ? "8px" : "auto"}; color:${isActive ? sidebarActiveText : "#8996a4"}; display:flex; flex-shrink:0;">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="${isActive ? "6 9 12 15 18 9" : "9 18 15 12 9 6"}"></polyline>
+      </svg>
+    </span>
   ` : "";
 
-  return `
+  const row = `
     <div data-tab-index="${index}" style="
       display:flex; align-items:center; gap:10px;
       padding:9px 12px; border-radius:8px; margin-bottom:2px;
+      border-left:3px solid ${isActive ? accentColor : "transparent"};
       cursor:${item.disabled ? "not-allowed" : "pointer"};
       opacity:${item.disabled ? "0.4" : "1"};
       font-size:0.875rem; font-weight:${isActive ? "600" : "500"};
@@ -364,10 +371,33 @@ function studioNavRow(
         <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
           ${item.label ?? ""}
         </span>
-        ${badge}${childIndicator}
+        ${badge}${chevron}
       `}
     </div>
   `;
+
+  // Expanded children — dotted sub-items shown under the active parent.
+  let childrenHtml = "";
+  if (hasChildren && isActive && !collapsed) {
+    childrenHtml =
+      `<div style="display:flex; flex-direction:column; margin:2px 0 6px;">` +
+      item.children!.map((child, ci) => {
+        const childActive = ci === 0; // first child shown active in preview
+        const color = childActive ? accentColor : sidebarText;
+        return `
+          <div style="display:flex; align-items:center; gap:12px; padding:6px 12px 6px 30px;
+            border-radius:8px; font-size:0.83rem; font-weight:${childActive ? "600" : "500"};
+            color:${color}; cursor:pointer;">
+            <span style="width:6px; height:6px; border-radius:50%; background:${color};
+              opacity:${childActive ? "1" : "0.45"}; flex-shrink:0;"></span>
+            <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${child.label ?? ""}</span>
+          </div>
+        `;
+      }).join("") +
+      `</div>`;
+  }
+
+  return row + childrenHtml;
 }
 
 function studioHeaderExtras(cfg: HeaderConfig, accentColor: string, headerText: string) {
@@ -385,14 +415,25 @@ function studioHeaderExtras(cfg: HeaderConfig, accentColor: string, headerText: 
   if (cfg.showSearch) {
     parts.push(`
       <div style="flex:1; max-width:280px; display:flex; align-items:center; gap:8px;
-        background:rgba(0,0,0,0.04); border-radius:8px; padding:7px 12px;">
-        <span style="color:${headerText}50; font-size:0.85rem;">🔍</span>
-        <span style="color:${headerText}40; font-size:0.83rem;">${cfg.searchPlaceholder ?? "Search…"}</span>
+        background:#f0f2f5; border-radius:10px; padding:8px 14px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8996a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+          <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <span style="color:#8996a4; font-size:0.83rem;">${cfg.searchPlaceholder ?? "Search (Ctrl + K)"}</span>
       </div>
     `);
   }
 
   parts.push(`<div style="flex:1;"></div>`);
+
+  // Theme toggle (moon) — part of the default header cluster.
+  parts.push(`
+    <div style="cursor:pointer; padding:8px; border-radius:8px; color:${headerText}; display:flex; align-items:center;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </div>
+  `);
 
   if (cfg.showNotificationBell) {
     const count = cfg.notificationCount ?? 0;
@@ -433,6 +474,45 @@ function studioHeaderExtras(cfg: HeaderConfig, accentColor: string, headerText: 
   return parts.join("");
 }
 
+/**
+ * Studio-time top profile card (bordered, sits under the brand / above the nav).
+ * Mirrors the runtime `.snl-profile-card`.
+ */
+function studioProfileCard(
+  cfg: SidebarFooterConfig, collapsed: boolean, accentColor: string,
+  nameColor = "#1d2630", roleColor = "#8996a4", borderColor = "#e5e9ef"
+) {
+  if (!cfg.show) return "";
+  const ini = initials(cfg.userName);
+  const avatar = cfg.avatarUrl
+    ? `<img src="${cfg.avatarUrl}" style="width:40px; height:40px; border-radius:50%; object-fit:cover; flex-shrink:0;" />`
+    : `<div style="width:40px; height:40px; border-radius:50%; background:${accentColor};
+         color:#fff; display:flex; align-items:center; justify-content:center;
+         font-size:0.85rem; font-weight:700; flex-shrink:0;">${ini}</div>`;
+  return `
+    <div style="margin:14px 12px 6px; padding:${collapsed ? "8px" : "10px 12px"};
+      background:#ffffff; border:1px solid ${borderColor}; border-radius:10px;
+      display:flex; align-items:center; gap:12px; flex-shrink:0; cursor:pointer;
+      ${collapsed ? "justify-content:center;" : ""}">
+      ${avatar}
+      ${collapsed ? "" : `
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:0.85rem; font-weight:700; color:${nameColor};
+            overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${cfg.userName ?? ""}</div>
+          ${cfg.userRole ? `<div style="font-size:0.72rem; color:${roleColor};
+            overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${cfg.userRole}</div>` : ""}
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${roleColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+          <line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line>
+          <line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line>
+          <line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line>
+        </svg>
+      `}
+    </div>
+  `;
+}
+
 function studioSidebarFooter(
   cfg: SidebarFooterConfig, collapsed: boolean, accentColor: string,
   footerActionType = "buttons", sidebarText = "#94a3b8"
@@ -441,11 +521,11 @@ function studioSidebarFooter(
   const ini = initials(cfg.userName);
   const avatar = cfg.avatarUrl
     ? `<img src="${cfg.avatarUrl}" style="width:34px; height:34px; border-radius:50%; object-fit:cover; flex-shrink:0;" />`
-    : `<div style="width:34px; height:34px; border-radius:50%; background:rgba(255,255,255,0.15);
+    : `<div style="width:34px; height:34px; border-radius:50%; background:${accentColor};
          color:#fff; display:flex; align-items:center; justify-content:center;
          font-size:0.75rem; font-weight:700; flex-shrink:0;">${ini}</div>`;
   return `
-    <div style="padding:12px 14px; border-top:1px solid rgba(255,255,255,0.07);
+    <div style="padding:12px 14px; border-top:1px solid var(--snl-separator-color, #e5e9ef);
       display:flex; align-items:center; gap:10px; flex-shrink:0;">
       ${avatar}
       ${collapsed ? "" : `
@@ -520,38 +600,57 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     return {
       componentName: "zero-sidenav-layout",
       props: {
-        appName: "My App",
-        appSubtitle: "",
-        appLogo: "🚀",
-        accentColor: "#6366f1",
-        sidebarBg: "#1e293b",
-        sidebarText: "#94a3b8",
-        sidebarActiveBg: "#334155",
-        sidebarActiveText: "#ffffff",
+        appName: "Able Pro",
+        appSubtitle: "v9.6.1",
+        appLogo: "",
+        accentColor: "#4680ff",
+        sidebarBg: "#ffffff",
+        sidebarText: "#5b6b79",
+        sidebarActiveBg: "#e6f0ff",
+        sidebarActiveText: "#4680ff",
         headerBg: "#ffffff",
-        headerText: "#1e293b",
-        headerBorder: "#e2e8f0",
-        mainBg: "#f8fafc",
+        headerText: "#1d2630",
+        headerBorder: "#e5e9ef",
+        mainBg: "#f4f7fa",
         footerActionType: "buttons",
-        navItems: DEFAULT_NAV_ITEMS_JSON,
+        profilePosition: "top",
+        collapseBtnPosition: "header-left",
+        collapseBtnIcon: "hamburger",
+        showThemeToggle: true,
+        navItems: JSON.stringify([
+          { section: "Navigation" },
+          { icon: "🏠", label: "Dashboard", id: "dashboard", badge: "3", children: [
+            { label: "Default",   id: "default",   href: "/dashboard/default" },
+            { label: "Analytics", id: "analytics", href: "/dashboard/analytics" },
+            { label: "Finance",   id: "finance",   href: "/dashboard/finance" },
+          ]},
+          { icon: "🧩", label: "Widgets",  id: "widgets" },
+          { section: "Widget" },
+          { icon: "📈", label: "Statistics", id: "statistics" },
+          { icon: "📊", label: "Data",       id: "data" },
+          { icon: "📉", label: "Chart",      id: "chart" },
+          { section: "Admin Panel" },
+          { icon: "👥", label: "Users",    id: "users" },
+          { icon: "⚙️", label: "Settings", id: "settings" },
+        ], null, 2),
         headerConfig: JSON.stringify({
           showSearch: true,
-          searchPlaceholder: "Search…",
+          searchPlaceholder: "Search (Ctrl + K)",
           showNotificationBell: true,
-          notificationCount: 0,
+          notificationCount: 3,
           showUserAvatar: true,
-          userName: "User Name",
-          userRole: "Member",
+          userName: "Able Pro",
+          userRole: "Administrator",
           showBreadcrumb: false
         }),
         sidebarFooterConfig: JSON.stringify({
           show: true,
-          userName: "User Name",
-          userRole: "Member",
+          userName: "JWT User",
+          userRole: "Administrator",
           showSettings: true,
           showLogout: true
         }),
-        activeItem: 0,
+        activeItem: 1,
         fixedHeader: true,
         fixedFooter: true
       },
@@ -591,7 +690,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       { name: "sidebarWidth", label: "Sidebar Width (px)", control: "number", group: "Layout", defaultValue: 260 },
 
       // ── Theme ──
-      { name: "accentColor", label: "Accent Color", control: "color", group: "Theme", defaultValue: "#6366f1" }
+      { name: "accentColor", label: "Accent Color", control: "color", group: "Theme", defaultValue: "#4680ff" }
     ];
   }
 
@@ -702,7 +801,9 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         width: 100%;
         height: var(--zero-height, 100%);
         min-height: var(--zero-height, 100vh);
-        --snl-accent: var(--uiv-primary-color, #6366f1);
+        --snl-accent: var(--uiv-primary-color, #4680ff);
+        --snl-border: var(--uiv-border-color, #e5e9ef);
+        --snl-section-color: var(--uiv-text-muted, #8996a4);
         --snl-ease: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         font-family: var(--zero-theme-typography-fontFamily, var(--uiv-font-family, system-ui, -apple-system, sans-serif));
         font-size: var(--zero-theme-typography-bodySize, var(--uiv-font-size-base, 14px));
@@ -761,8 +862,8 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       .snl-header-search {
         flex: 1; max-width: 280px;
         display: flex; align-items: center; gap: 8px;
-        border-radius: 8px; padding: 7px 12px;
-        background: rgba(0,0,0,0.04);
+        border-radius: 10px; padding: 8px 14px;
+        background: var(--snl-search-bg, #f0f2f5);
       }
 
       .snl-header-search-input {
@@ -812,14 +913,18 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         display: flex; flex-direction: column;
         flex-shrink: 0; overflow: hidden;
         transition: width var(--snl-ease), transform var(--snl-ease), left var(--snl-ease);
-        border-right: 1px solid rgba(0,0,0,0.08);
+        border-right: 1px solid var(--snl-border, #e5e9ef);
       }
 
       :host([collapsed]) .snl-sidebar { width: var(--snl-collapsed-w, 64px) !important; }
       :host([collapsed]) .snl-brand-text,
+      :host([collapsed]) .snl-brand-name,
+      :host([collapsed]) .snl-brand-pill,
       :host([collapsed]) .nav-label,
       :host([collapsed]) .snl-nav-badge,
       :host([collapsed]) .snl-nav-section,
+      :host([collapsed]) .snl-profile-info,
+      :host([collapsed]) .snl-profile-caret,
       :host([collapsed]) .snl-footer-info,
       :host([collapsed]) .snl-footer-actions,
       :host([collapsed]) .snl-sidebar-extra { display: none; }
@@ -827,17 +932,79 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       .snl-sidebar-brand {
         display: flex; align-items: center; gap: 10px;
         padding: 18px 16px; flex-shrink: 0;
-        border-bottom: 1px solid rgba(255,255,255,0.07);
+        border-bottom: 1px solid var(--snl-border, #e5e9ef);
       }
 
-      .snl-brand-logo { font-size: 1.4rem; line-height: 1; flex-shrink: 0; }
+      .snl-brand-logo {
+        font-size: 1.1rem; line-height: 1; flex-shrink: 0;
+        width: 32px; height: 32px; border-radius: 8px;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: var(--snl-logo-bg, var(--snl-accent));
+      }
       .snl-brand-text {
         font-weight: 700;
         font-size: 0.9rem;
-        color: var(--snl-brand-text-color, #fff);
+        color: var(--snl-brand-text-color, #1d2630);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      /* Text wordmark brand (e.g. "Able" + superscript + version pill) */
+      .snl-brand-wordmark {
+        display: flex; align-items: center; gap: 8px; min-width: 0;
+      }
+      .snl-brand-name {
+        font-weight: 800; font-size: 1.35rem; line-height: 1;
+        color: var(--snl-accent); letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+      .snl-brand-name-sup {
+        font-size: 0.5em; font-weight: 700;
+        vertical-align: super; margin-left: 1px;
+      }
+      .snl-brand-pill {
+        font-size: 0.6rem; font-weight: 700; line-height: 1;
+        padding: 3px 7px; border-radius: 999px;
+        background: var(--snl-version-bg, #d5f5e3);
+        color: var(--snl-version-color, #17a862);
+        white-space: nowrap; flex-shrink: 0;
+      }
+
+      /* Top profile card (bordered, sits under brand / above nav) */
+      .snl-profile-card {
+        display: flex; align-items: center; gap: 12px;
+        margin: 14px 12px 6px; padding: 10px 12px;
+        background: var(--snl-profile-bg, #ffffff);
+        border: 1px solid var(--snl-border, #e5e9ef);
+        border-radius: 10px; flex-shrink: 0; cursor: pointer;
+        transition: border-color var(--snl-ease), box-shadow var(--snl-ease);
+      }
+      .snl-profile-card:hover { box-shadow: 0 2px 8px rgba(70,128,255,0.12); }
+      :host([collapsed]) .snl-profile-card { justify-content: center; padding: 8px; }
+      .snl-profile-avatar {
+        width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      }
+      .snl-profile-avatar-img { object-fit: cover; }
+      .snl-profile-avatar-init {
+        background: var(--snl-accent); color: #fff;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.85rem; font-weight: 700;
+      }
+      .snl-profile-info { flex: 1; min-width: 0; }
+      .snl-profile-name {
+        font-size: 0.85rem; font-weight: 700;
+        color: var(--snl-profile-name-color, #1d2630);
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      }
+      .snl-profile-role {
+        font-size: 0.72rem;
+        color: var(--snl-profile-role-color, #8996a4);
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      }
+      .snl-profile-caret {
+        color: var(--snl-profile-role-color, #8996a4);
+        flex-shrink: 0; display: flex;
       }
 
       /* ── Nav ── */
@@ -857,9 +1024,10 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       }
 
       .snl-nav-section {
-        padding: 10px 12px 4px; font-size: 0.68rem;
-        font-weight: 700; letter-spacing: 0.08em;
-        text-transform: uppercase; opacity: 0.4;
+        padding: 14px 12px 6px; font-size: 0.68rem;
+        font-weight: 700; letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--snl-section-color, #8996a4);
         white-space: nowrap; overflow: hidden;
       }
 
@@ -895,13 +1063,30 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
 
       .nav-child-indicator { margin-left: auto; font-size: 0.8rem; opacity: 0.5; }
 
-      /* ── Sub-menu ── */
-      .snl-sub-menu { padding-left: 28px; overflow: hidden; }
-      .snl-sub-menu.open { display: block; }
+      /* ── Sub-menu (dotted sub-items) ── */
+      .snl-sub-menu { display: flex; flex-direction: column; margin: 2px 0 6px; overflow: hidden; }
+      .snl-sub-menu.open { display: flex; }
       .snl-sub-menu:not(.open) { display: none; }
 
+      .snl-sub-item {
+        display: flex; align-items: center; gap: 12px;
+        padding: 6px 12px 6px 30px; margin-bottom: 1px;
+        border: none; background: transparent; width: 100%;
+        text-align: left; box-sizing: border-box; cursor: pointer;
+        border-radius: 8px; font-size: 0.83rem; font-weight: 500;
+        color: var(--snl-sidebar-text, #5b6b79);
+        transition: background var(--snl-ease), color var(--snl-ease);
+      }
+      .snl-sub-item:hover { background: var(--snl-hover-bg, rgba(0,0,0,0.04)); }
+      .snl-sub-item.is-active { color: var(--snl-accent); font-weight: 600; }
+      .snl-sub-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: currentColor; opacity: 0.45; flex-shrink: 0;
+      }
+      .snl-sub-item.is-active .snl-sub-dot { opacity: 1; background: var(--snl-accent); }
+
       /* ── Sidebar Extra (slot drop zone) ── */
-      .snl-sidebar-extra { padding: 8px; border-top: 1px solid rgba(255,255,255,0.07); flex-shrink: 0; }
+      .snl-sidebar-extra { padding: 8px; border-top: 1px solid var(--snl-border, #e5e9ef); flex-shrink: 0; }
 
       /* ── Sidebar Slot (full nav area as drop zone) ── */
       .snl-sidebar-slot {
@@ -913,7 +1098,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       .snl-sidebar-footer {
         display: flex; align-items: center; gap: 10px;
         padding: 12px 14px; flex-shrink: 0;
-        border-top: 1px solid rgba(255,255,255,0.07);
+        border-top: 1px solid var(--snl-border, #e5e9ef);
       }
 
       .snl-footer-avatar {
@@ -923,7 +1108,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
 
       .snl-footer-initials {
         width: 34px; height: 34px; border-radius: 50%;
-        background: rgba(255,255,255,0.15); color: #fff;
+        background: var(--snl-accent); color: #fff;
         display: flex; align-items: center; justify-content: center;
         font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
       }
@@ -931,24 +1116,24 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       .snl-footer-info { flex: 1; overflow: hidden; }
       .snl-footer-name {
         font-size: 0.82rem; font-weight: 600;
-        color: var(--snl-footer-name-color, #fff);
+        color: var(--snl-footer-name-color, #1d2630);
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       }
       .snl-footer-role {
         font-size: 0.7rem;
-        color: var(--snl-footer-role-color, #94a3b8);
+        color: var(--snl-footer-role-color, #8996a4);
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
       }
       .snl-footer-actions { display: flex; gap: 4px; }
       .snl-footer-btn {
         cursor: pointer;
-        color: var(--snl-footer-btn-color, #94a3b8);
+        color: var(--snl-footer-btn-color, #8996a4);
         font-size: 0.9rem; padding: 4px; border-radius: 4px; border: none; background: transparent;
       }
-      .snl-footer-btn:hover { background: rgba(255,255,255,0.07); }
+      .snl-footer-btn:hover { background: var(--snl-hover-bg, rgba(0,0,0,0.04)); }
 
       /* ── Sidebar Footer (slot) ── */
-      .snl-footer-slot { padding: 8px; border-top: 1px solid rgba(255,255,255,0.07); flex-shrink: 0; }
+      .snl-footer-slot { padding: 8px; border-top: 1px solid var(--snl-border, #e5e9ef); flex-shrink: 0; }
 
       /* ── Header Slot drop zone ── */
       .snl-header-slot-zone { flex: 1; padding: 4px 0; display: flex; align-items: center; }
@@ -962,7 +1147,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         font-size: 0.9rem;
         transition: background var(--snl-ease); flex-shrink: 0;
       }
-      .snl-collapse-btn:hover { background: rgba(255,255,255,0.07); }
+      .snl-collapse-btn:hover { background: var(--snl-hover-bg, rgba(0,0,0,0.04)); }
 
       /* ── Main ── */
       .snl-main {
@@ -990,7 +1175,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       /* Drop-zone hint ring (shown in slot mode) */
       .snl-drop-hint {
         flex: 1; min-height: 60px;
-        border: 2px dashed var(--snl-accent, #6366f1);
+        border: 2px dashed var(--snl-accent, #4680ff);
         border-radius: 8px; opacity: 0.5;
         display: flex; align-items: center; justify-content: center;
         font-size: 0.75rem; font-weight: 600; color: var(--snl-accent);
@@ -1477,7 +1662,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     fieldMappings: "sidebarBg",
     categoryLabel: "Appearance"
   })
-  sidebarBg = "#1e293b";
+  sidebarBg = "#ffffff";
 
   @property({ type: String, attribute: "sidebar-text" })
   @RendererAttribute({
@@ -1487,7 +1672,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     fieldMappings: "sidebarText",
     categoryLabel: "Appearance"
   })
-  sidebarText = "#94a3b8";
+  sidebarText = "#5b6b79";
 
   @property({ type: String, attribute: "sidebar-active-bg" })
   @RendererAttribute({
@@ -1497,7 +1682,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     fieldMappings: "sidebarActiveBg",
     categoryLabel: "Appearance"
   })
-  sidebarActiveBg = "#334155";
+  sidebarActiveBg = "#e6f0ff";
 
   @property({ type: String, attribute: "sidebar-active-text" })
   @RendererAttribute({
@@ -1507,7 +1692,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     fieldMappings: "sidebarActiveText",
     categoryLabel: "Appearance"
   })
-  sidebarActiveText = "#ffffff";
+  sidebarActiveText = "#4680ff";
 
   @property({ type: String, attribute: "accent-color" })
   @RendererAttribute({
@@ -1517,7 +1702,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     fieldMappings: "accentColor",
     categoryLabel: "Appearance"
   })
-  accentColor = "#6366f1";
+  accentColor = "#4680ff";
 
   @property({ type: String, attribute: "header-bg" })
   @RendererAttribute({
@@ -1537,7 +1722,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     fieldMappings: "headerText",
     categoryLabel: "Appearance"
   })
-  headerText = "#1e293b";
+  headerText = "#1d2630";
 
   @property({ type: String, attribute: "header-border" })
   @RendererAttribute({
@@ -1547,7 +1732,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     fieldMappings: "headerBorder",
     categoryLabel: "Appearance"
   })
-  headerBorder = "#e2e8f0";
+  headerBorder = "#e5e9ef";
 
   @property({ type: String, attribute: "main-bg" })
   @RendererAttribute({
@@ -1557,7 +1742,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     fieldMappings: "mainBg",
     categoryLabel: "Appearance"
   })
-  mainBg = "#f8fafc";
+  mainBg = "#f4f7fa";
 
   @property({ type: String, attribute: "main-padding" })
   @RendererAttribute({
@@ -1583,6 +1768,20 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     ]
   })
   footerActionType: "buttons" | "dropdown" | "none" = "buttons";
+
+  @property({ type: String, attribute: "profile-position", reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.DROPDOWN,
+    displayLabel: "Profile Card Position",
+    fieldMappings: "profilePosition",
+    categoryLabel: "Sidebar Footer",
+    optionItems: [
+      { label: "Top (below brand)", value: "top" },
+      { label: "Bottom (footer)",   value: "bottom" },
+    ]
+  })
+  profilePosition: "top" | "bottom" = "top";
 
   // ─── Events ────────────────────────────────────────────────────────────────
 
@@ -1786,24 +1985,25 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     const headerConfigRaw = config?.props?.headerConfig        || DEFAULT_HEADER_CONFIG_JSON;
     const footerConfigRaw = config?.props?.sidebarFooterConfig || DEFAULT_SIDEBAR_FOOTER_CONFIG_JSON;
 
-    const appName     = config?.props?.appName     || "My App";
-    const appSubtitle = config?.props?.appSubtitle || "";
-    const appLogo     = config?.props?.appLogo     || "🚀";
+    const appName     = config?.props?.appName     ?? "My App";
+    const appSubtitle = config?.props?.appSubtitle ?? "";
+    const appLogo     = config?.props?.appLogo     ?? "";
     const headerTitle = config?.props?.headerTitle || "";
     const headerLogo  = config?.props?.headerLogo  || "";
     const activeItem  = Number(config?.props?.activeItem ?? 0);
     const collapsed   = !!config?.props?.collapsed;
+    const profilePosition = (config?.props?.profilePosition || "top") as string;
 
     const sidebarWidth      = config?.props?.sidebarWidth      || "260px";
-    const sidebarBg         = config?.props?.sidebarBg         || "#1e293b";
-    const sidebarText       = config?.props?.sidebarText       || "#94a3b8";
-    const sidebarActiveBg   = config?.props?.sidebarActiveBg   || "#334155";
-    const sidebarActiveText = config?.props?.sidebarActiveText || "#ffffff";
-    const accentColor       = config?.props?.accentColor       || "#6366f1";
+    const sidebarBg         = config?.props?.sidebarBg         || "#ffffff";
+    const sidebarText       = config?.props?.sidebarText       || "#5b6b79";
+    const sidebarActiveBg   = config?.props?.sidebarActiveBg   || "#e6f0ff";
+    const sidebarActiveText = config?.props?.sidebarActiveText || "#4680ff";
+    const accentColor       = config?.props?.accentColor       || "#4680ff";
     const headerBg          = config?.props?.headerBg          || "#ffffff";
-    const headerText        = config?.props?.headerText        || "#1e293b";
-    const headerBorder      = config?.props?.headerBorder      || "#e2e8f0";
-    const mainBg            = config?.props?.mainBg            || "#f8fafc";
+    const headerText        = config?.props?.headerText        || "#1d2630";
+    const headerBorder      = config?.props?.headerBorder      || "#e5e9ef";
+    const mainBg            = config?.props?.mainBg            || "#f4f7fa";
     const mainPadding       = config?.props?.mainPadding       || "24px";
     const headerHeight      = config?.props?.headerHeight      || "60px";
     const collapsedWidth    = config?.props?.collapsedWidth    || "64px";
@@ -1827,6 +2027,15 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     const effectiveSidebarWidth = isCurrentlyCollapsed ? (sidenavType === "over" ? "0px" : collapsedWidth) : sidebarWidth;
     const brandLabel = headerTitle || appName;
     const sidebarVisible = sidenavMode !== "hidden";
+
+    // Text wordmark: first word bold + rest as superscript (e.g. "Able" + "Pro").
+    const wordmarkHtml = (name: string, color: string) => {
+      const parts = (name || "").trim().split(/\s+/).filter(Boolean);
+      const first = parts[0] || "";
+      const rest = parts.slice(1).join(" ");
+      return `<span style="font-weight:800; font-size:1.35rem; line-height:1; color:${color}; letter-spacing:-0.01em; white-space:nowrap;">${first}${rest ? `<sup style="font-size:0.5em; font-weight:700; vertical-align:super; margin-left:1px;">${rest}</sup>` : ""}</span>`;
+    };
+    const isImgLogo = (l: string) => !!l && (l.startsWith('<') || l.startsWith('http') || l.startsWith('/') || l.includes('.'));
 
     // ── Build slot list dynamically based on modes ──
     // "outlet" is the real page OUTLET — studio pages (page-root) nest here.
@@ -1877,15 +2086,17 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         width:100%;
       ">
         ${headerLeftBtn}
-        <div style="display:flex; align-items:center; gap:8px; font-weight:700; font-size:0.95rem; color:${headerText}; white-space:nowrap; flex-shrink:0;">
-          ${(() => {
-            const finalLogo = headerLogo || appLogo;
-            return finalLogo.startsWith('<') ? finalLogo : 
-              (finalLogo.startsWith('http') || finalLogo.startsWith('/') || finalLogo.includes('.')) ? `<img src="${finalLogo}" style="width: 24px; height: 24px; object-fit: contain;" />` :
-              `<span style="font-size:1.3rem;">${finalLogo}</span>`;
-          })()}
-          ${brandLabel}
-        </div>
+        ${(headerTitle || headerLogo) ? `
+          <div style="display:flex; align-items:center; gap:8px; font-weight:700; font-size:0.95rem; color:${headerText}; white-space:nowrap; flex-shrink:0;">
+            ${(() => {
+              const finalLogo = headerLogo || appLogo;
+              return finalLogo.startsWith('<') ? finalLogo :
+                (finalLogo.startsWith('http') || finalLogo.startsWith('/') || finalLogo.includes('.')) ? `<img src="${finalLogo}" style="width: 24px; height: 24px; object-fit: contain;" />` :
+                `<span style="font-size:1.3rem;">${finalLogo}</span>`;
+            })()}
+            ${brandLabel}
+          </div>
+        ` : ""}
         ${headerMode === "config"
           ? studioHeaderExtras(headerCfg, accentColor, headerText)
           : `<div style="flex:1; min-width:0;">${studioDropZone("header", "Drop Header Sections", "40px", accentColor)}</div>`
@@ -1901,18 +2112,26 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         <nav style="display:flex; flex-direction:column; flex:1; padding:10px 8px; overflow-y:auto;">
           ${navItemsHtml}
         </nav>
-        <div style="padding:8px; border-top:1px solid rgba(255,255,255,0.07); flex-shrink:0;">
+        <div style="padding:8px; border-top:1px solid #e5e9ef; flex-shrink:0;">
           ${studioDropZone("sidebar-extra", "Sidebar Extra", "40px", accentColor)}
         </div>
       `;
 
-    // ── Sidebar footer HTML ──
+    // ── Top profile card (default position) ──
+    const showProfile = footerMode === "config" && footerCfg.show;
+    const profileTopHtml = (showProfile && profilePosition === "top")
+      ? studioProfileCard(footerCfg, isCurrentlyCollapsed, accentColor, headerText, "#8996a4", headerBorder)
+      : "";
+
+    // ── Sidebar footer HTML (bottom profile only when profilePosition = bottom) ──
     const sidebarFooterHtml = footerMode === "hidden" ? "" :
       footerMode === "slot"
-        ? `<div style="padding:8px; border-top:1px solid rgba(255,255,255,0.07); flex-shrink:0;">
+        ? `<div style="padding:8px; border-top:1px solid #e5e9ef; flex-shrink:0;">
              ${studioDropZone("footer", "Drop Footer Sections", "50px", accentColor)}
            </div>`
-        : studioSidebarFooter(footerCfg, isCurrentlyCollapsed, accentColor, footerActionType, sidebarText);
+        : (profilePosition === "bottom"
+            ? studioSidebarFooter(footerCfg, isCurrentlyCollapsed, accentColor, footerActionType, sidebarText)
+            : "");
 
     // ── Sidebar Top/Bottom Toggle triggers ──
     const sidebarTopBtn = (collapseBtnPosition === "sidebar-top" && showCollapseBtn)
@@ -1936,25 +2155,25 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         width:${effectiveSidebarWidth}; background:${sidebarBg};
         display:flex; flex-direction:column; flex-shrink:0;
         overflow:hidden; transition:width 0.25s, transform 0.25s;
-        border-right:${effectiveSidebarWidth === "0px" ? "none" : `1px solid rgba(0,0,0,0.08)`};
+        border-right:${effectiveSidebarWidth === "0px" ? "none" : `1px solid ${headerBorder}`};
         ${sidenavType === "over" ? `position:absolute; left:0; top:0; bottom:0; z-index:30; height:100%; box-shadow:4px 0 12px rgba(0,0,0,0.15); transform:${opened ? "none" : "translateX(-100%)"};` : ""}
         ${sidebarStyles}
       ">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 18px 16px; border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 18px 16px; border-bottom: 1px solid ${headerBorder}; flex-shrink: 0;">
           <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
-            ${appLogo.startsWith('<') ? appLogo : 
-              (appLogo.startsWith('http') || appLogo.startsWith('/') || appLogo.includes('.')) ? `<img src="${appLogo}" style="width: 24px; height: 24px; object-fit: contain;" />` :
-              `<span style="font-size:1.4rem; flex-shrink:0; color:var(--snl-brand-text-color, #fff);">${appLogo}</span>`
-            }
+            ${isImgLogo(appLogo)
+              ? (appLogo.startsWith('<') ? appLogo : `<img src="${appLogo}" style="width: 28px; height: 28px; object-fit: contain; border-radius:8px;" />`)
+              : ""}
             ${isCurrentlyCollapsed ? "" : `
-              <div style="display: flex; flex-direction: column; min-width: 0;">
-                <span style="font-weight:700; font-size:0.9rem; color:var(--snl-brand-text-color, #fff); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${appName}</span>
-                ${appSubtitle ? `<span style="font-size: 0.7rem; color:var(--snl-footer-role-color, #94a3b8); opacity: 0.8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${appSubtitle}</span>` : ""}
+              <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                ${wordmarkHtml(appName, accentColor)}
+                ${appSubtitle ? `<span style="font-size:0.6rem; font-weight:700; line-height:1; padding:3px 7px; border-radius:999px; background:#d5f5e3; color:#17a862; white-space:nowrap; flex-shrink:0;">${appSubtitle}</span>` : ""}
               </div>
             `}
           </div>
           ${sidebarTopBtn}
         </div>
+        ${profileTopHtml}
         <div style="display:flex; flex-direction:column; flex:1; overflow:hidden; ${navStyles}">
           ${sidebarNavAreaHtml}
         </div>
@@ -1986,12 +2205,16 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         --snl-accent: ${accentColor};
         --snl-sidebar-width: ${sidebarWidth};
         --snl-collapsed-w: ${collapsedWidth};
-        --snl-brand-text-color: ${sidebarActiveText || 'currentColor'};
-        --snl-separator-color: ${sidebarText ? `${sidebarText}15` : 'rgba(255,255,255,0.08)'};
-        --snl-footer-name-color: ${sidebarActiveText || 'currentColor'};
-        --snl-footer-role-color: ${sidebarText || '#94a3b8'};
-        --snl-footer-btn-color: ${sidebarText || '#94a3b8'};
-        --snl-hover-bg: ${sidebarText === '#94a3b8' ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.04)'};
+        --snl-border: ${headerBorder};
+        --snl-section-color: #8996a4;
+        --snl-brand-text-color: ${headerText};
+        --snl-separator-color: ${headerBorder};
+        --snl-footer-name-color: ${headerText};
+        --snl-footer-role-color: #8996a4;
+        --snl-footer-btn-color: #8996a4;
+        --snl-profile-name-color: ${headerText};
+        --snl-profile-role-color: #8996a4;
+        --snl-hover-bg: rgba(0,0,0,0.04);
       ">
         ${headerElAtShell}
         <div style="display:flex; flex:1; overflow:hidden; position:relative;">
@@ -2033,6 +2256,67 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     const footerCfg = parseSidebarFooterConfig(this.sidebarFooterConfig);
 
     const sidebarVisible = this.sidenavMode !== "hidden";
+    const showHeaderBrand = !!(this.headerTitle || this.headerLogo);
+    const isImgLogo = (l: string) => !!l && (l.startsWith('<') || l.startsWith('http') || l.startsWith('/') || l.includes('.'));
+
+    // Text wordmark: first word bold + rest as superscript (e.g. "Able" + "Pro").
+    const brandWordmark = () => {
+      const parts = (this.appName || "").trim().split(/\s+/).filter(Boolean);
+      const first = parts[0] || "";
+      const rest = parts.slice(1).join(" ");
+      return html`<span class="snl-brand-name">${first}${rest ? html`<sup class="snl-brand-name-sup">${rest}</sup>` : nothing}</span>`;
+    };
+
+    // Theme toggle button — shared between config & slot header layouts so it
+    // sits in the right-hand cluster (before the bell) in the default look.
+    const themeToggleEl = this.showThemeToggle ? html`
+      <button class="snl-header-btn snl-theme-toggle"
+        style="color:${this.headerText}; margin-right:0;"
+        @click=${(e: Event) => { e.stopPropagation(); this.toggleTheme(); }}
+        title=${this.themeMode === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+        aria-label="Toggle theme">
+        ${this.themeMode === "dark" ? html`
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        ` : html`
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        `}
+      </button>
+    ` : nothing;
+
+    // Profile card (top-of-sidebar by default). Bordered, rounded, avatar + name/role.
+    const showProfile = this.footerMode === "config" && footerCfg.show;
+    const profileCardEl = html`
+      <div class="snl-profile-card"
+        @click=${() => this.dispatchEvent(new CustomEvent("profileClick", { bubbles: true, composed: true }))}>
+        ${footerCfg.avatarUrl
+          ? html`<img class="snl-profile-avatar snl-profile-avatar-img" src=${footerCfg.avatarUrl} />`
+          : html`<div class="snl-profile-avatar snl-profile-avatar-init">${initials(footerCfg.userName)}</div>`}
+        <div class="snl-profile-info">
+          <div class="snl-profile-name">${footerCfg.userName ?? ""}</div>
+          ${footerCfg.userRole ? html`<div class="snl-profile-role">${footerCfg.userRole}</div>` : nothing}
+        </div>
+        <span class="snl-profile-caret">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line>
+            <line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line>
+            <line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line>
+          </svg>
+        </span>
+      </div>
+    `;
 
     // ─ Header bar ─
     const headerEl = this.headerMode === "hidden" ? nothing : html`
@@ -2051,15 +2335,17 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
 
         ${this.collapseBtnPosition === "header-left" && this.showCollapseBtn ? this.renderToggleButton("header-left") : nothing}
 
-        <div class="snl-header-brand" style="color:${this.headerText};">
-          ${(() => {
-            const finalLogo = this.headerLogo || this.appLogo;
-            return finalLogo && finalLogo.startsWith('<') ? html`${unsafeHTML(finalLogo)}` : 
-              finalLogo && (finalLogo.startsWith('http') || finalLogo.startsWith('/') || finalLogo.includes('.')) ? html`<img src="${finalLogo}" style="width: 24px; height: 24px; object-fit: contain;" />` :
-              html`<span class="snl-brand-logo">${finalLogo}</span>`;
-          })()}
-          <span>${this.headerTitle || this.appName}</span>
-        </div>
+        ${showHeaderBrand ? html`
+          <div class="snl-header-brand" style="color:${this.headerText};">
+            ${(() => {
+              const finalLogo = this.headerLogo || this.appLogo;
+              return finalLogo && finalLogo.startsWith('<') ? html`${unsafeHTML(finalLogo)}` :
+                finalLogo && (finalLogo.startsWith('http') || finalLogo.startsWith('/') || finalLogo.includes('.')) ? html`<img src="${finalLogo}" style="width: 24px; height: 24px; object-fit: contain;" />` :
+                finalLogo ? html`<span class="snl-brand-logo">${finalLogo}</span>` : nothing;
+            })()}
+            <span>${this.headerTitle || this.appName}</span>
+          </div>
+        ` : nothing}
 
         ${this.headerMode === "config" ? html`
 
@@ -2073,12 +2359,14 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
           ` : nothing}
 
           ${headerCfg.showSearch ? html`
-            <div class="snl-header-search" style="background:rgba(0,0,0,0.04);">
-              <span style="opacity:0.4; font-size:0.85rem;">🔍</span>
+            <div class="snl-header-search">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8996a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
               <input
                 class="snl-header-search-input"
                 type="search"
-                placeholder=${headerCfg.searchPlaceholder ?? "Search…"}
+                placeholder=${headerCfg.searchPlaceholder ?? "Search (Ctrl + K)"}
                 @input=${(e: Event) => this.dispatchEvent(new CustomEvent("search", {
                   detail: { query: (e.target as HTMLInputElement).value },
                   bubbles: true, composed: true
@@ -2096,6 +2384,8 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
           ` : nothing}
 
           <div class="snl-header-spacer"></div>
+
+          ${themeToggleEl}
 
           ${headerCfg.showNotificationBell ? html`
             <div class="snl-header-bell">
@@ -2129,33 +2419,8 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
           <div class="snl-header-slot-zone">
             <slot name="header"></slot>
           </div>
+          ${themeToggleEl}
         `}
-
-        ${this.showThemeToggle ? html`
-          <button class="snl-header-btn snl-theme-toggle"
-            style="color:${this.headerText}; margin-right:0;"
-            @click=${(e: Event) => { e.stopPropagation(); this.toggleTheme(); }}
-            title=${this.themeMode === "dark" ? "Switch to light theme" : "Switch to dark theme"}
-            aria-label="Toggle theme">
-            ${this.themeMode === "dark" ? html`
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-            ` : html`
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-              </svg>
-            `}
-          </button>
-        ` : nothing}
 
         ${this.collapseBtnPosition === "header-right" && this.showCollapseBtn ? this.renderToggleButton("header-right") : nothing}
       </header>
@@ -2178,23 +2443,21 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
 
         <div class="snl-sidebar-brand" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
           <slot name="brand">
-            <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
-              ${this.appLogo && this.appLogo.startsWith('<') ? html`${unsafeHTML(this.appLogo)}` : 
-                this.appLogo && (this.appLogo.startsWith('http') || this.appLogo.startsWith('/') || this.appLogo.includes('.')) ? html`<img src="${this.appLogo}" style="width: 24px; height: 24px; object-fit: contain;" />` :
-                html`<span class="snl-brand-logo">${this.appLogo}</span>`
-              }
-              <div style="display: flex; flex-direction: column; min-width: 0;">
-                <span class="snl-brand-text">${this.appName}</span>
-                ${this.appSubtitle ? html`
-                  <span class="snl-brand-subtitle" style="font-size: 0.7rem; color: var(--snl-footer-role-color, #94a3b8); opacity: 0.8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                    ${this.appSubtitle}
-                  </span>
-                ` : nothing}
-              </div>
+            <div class="snl-brand-wordmark" style="flex: 1;">
+              ${isImgLogo(this.appLogo)
+                ? (this.appLogo.startsWith('<')
+                    ? html`${unsafeHTML(this.appLogo)}`
+                    : html`<img src="${this.appLogo}" style="width: 28px; height: 28px; object-fit: contain; border-radius:8px;" />`)
+                : nothing}
+              ${brandWordmark()}
+              ${this.appSubtitle ? html`<span class="snl-brand-pill">${this.appSubtitle}</span>` : nothing}
             </div>
           </slot>
           ${this.collapseBtnPosition === "sidebar-top" && this.showCollapseBtn ? this.renderToggleButton("sidebar-top") : nothing}
         </div>
+
+        <!-- Profile card at TOP (default) -->
+        ${showProfile && this.profilePosition === "top" ? profileCardEl : nothing}
 
         <!-- Nav area: config mode or slot mode -->
         ${this.sidenavMode === "slot" ? html`
@@ -2208,12 +2471,24 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
               return navList.map((item, index) => {
                 if (item.separator) return html`<div class="nav-separator"></div>`;
                 if (item.section) return html`
-                  <div class="snl-nav-section" style="color:${this.sidebarText};">${item.section}</div>
+                  <div class="snl-nav-section">${item.section}</div>
                 `;
                 const isActive = this.activeItem === index;
                 const hasChildren = !!item.children?.length;
-                const isExpanded = this._expandedItems.has(index);
-                
+                // Active parent auto-expands (matches the reference look).
+                const isExpanded = hasChildren && (this._expandedItems.has(index) || isActive);
+
+                // Which child is active: match by path/href, else first child of active parent.
+                const activeChildIndex = hasChildren
+                  ? (() => {
+                      const byPath = item.children!.findIndex(c =>
+                        (c.path && c.path === this.activePath) ||
+                        (c.href && c.href === this.activePath));
+                      if (byPath !== -1) return byPath;
+                      return isActive ? 0 : -1;
+                    })()
+                  : -1;
+
                 const isBottomItem = item.bottom === true;
                 const showSpacer = isBottomItem && !hasAddedBottomSpacer;
                 if (showSpacer) {
@@ -2237,17 +2512,20 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
                         ${item.badge}
                       </span>` : nothing}
                     ${hasChildren ? html`
-                      <span class="nav-child-indicator">${isExpanded ? "∨" : "›"}</span>` : nothing}
+                      <span class="nav-child-indicator" style="display:flex; margin-left:${item.badge ? "8px" : "auto"};">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <polyline points="${isExpanded ? "6 9 12 15 18 9" : "9 18 15 12 9 6"}"></polyline>
+                        </svg>
+                      </span>` : nothing}
                   </button>
                   ${hasChildren && isExpanded ? html`
                     <div class="snl-sub-menu open">
                       ${item.children!.map((child, ci) => html`
                         <button
-                          class="nav-item ${item.disabled ? "is-disabled" : ""}"
-                          style="color:${this.sidebarText}; background:transparent;"
-                          @click=${() => this.handleNavClick(ci, child)}
+                          class="snl-sub-item ${ci === activeChildIndex ? "is-active" : ""} ${child.disabled ? "is-disabled" : ""}"
+                          @click=${() => this.handleNavClick(index, child)}
                         >
-                          <span class="nav-icon">${child.icon ?? "•"}</span>
+                          <span class="snl-sub-dot"></span>
                           <span class="nav-label">${child.label ?? ""}</span>
                         </button>
                       `)}
@@ -2269,7 +2547,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
             <div class="snl-footer-slot">
               <slot name="footer"></slot>
             </div>
-          ` : footerCfg.show ? html`
+          ` : (footerCfg.show && this.profilePosition === "bottom") ? html`
             <div class="snl-sidebar-footer">
               ${footerCfg.avatarUrl ? html`
                 <img class="snl-footer-avatar" src=${footerCfg.avatarUrl} />
@@ -2321,11 +2599,16 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
           --snl-accent: var(--uiv-primary-color, ${this.accentColor});
           --snl-sidebar-width: ${this.sidebarWidth};
           --snl-collapsed-w: ${this.collapsedWidth};
-          --snl-brand-text-color: var(--uiv-text-color, ${this.sidebarActiveText || 'currentColor'});
-          --snl-separator-color: ${this.sidebarText ? `${this.sidebarText}15` : 'rgba(255,255,255,0.08)'};
-          --snl-footer-name-color: var(--uiv-text-color, ${this.sidebarActiveText || 'currentColor'});
-          --snl-footer-role-color: var(--uiv-text-muted, ${this.sidebarText || '#94a3b8'});
-          --snl-footer-btn-color: var(--uiv-text-muted, ${this.sidebarText || '#94a3b8'});
+          --snl-sidebar-text: ${this.sidebarText};
+          --snl-border: var(--uiv-border-color, ${this.headerBorder});
+          --snl-section-color: var(--uiv-text-muted, #8996a4);
+          --snl-brand-text-color: var(--uiv-text-color, ${this.headerText});
+          --snl-separator-color: var(--uiv-border-color, ${this.headerBorder});
+          --snl-profile-name-color: var(--uiv-text-color, ${this.headerText});
+          --snl-profile-role-color: var(--uiv-text-muted, #8996a4);
+          --snl-footer-name-color: var(--uiv-text-color, ${this.headerText});
+          --snl-footer-role-color: var(--uiv-text-muted, #8996a4);
+          --snl-footer-btn-color: var(--uiv-text-muted, #8996a4);
           --snl-hover-bg: var(--uiv-hover-bg, ${this.sidebarText === '#94a3b8' ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.04)'});
           ${this.computeInternalStyles()}
         ">

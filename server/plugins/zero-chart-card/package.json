@@ -1,0 +1,21 @@
+{
+  "name": "zero-chart-card",
+  "version": "1.0.0",
+  "description": "Able Pro style dashboard chart card with inline SVG line, area or bar chart and grid",
+  "main": "zero-chart-card.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "dashboard", "chart", "graph", "card"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true,
+    "category": "Dashboard",
+    "components": [
+      {
+        "tag": "zero-chart-card",
+        "title": "Chart Card",
+        "category": "Dashboard"
+      }
+    ]
+  }
+}

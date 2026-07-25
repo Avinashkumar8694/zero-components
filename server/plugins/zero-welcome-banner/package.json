@@ -1,0 +1,21 @@
+{
+  "name": "zero-welcome-banner",
+  "version": "1.0.0",
+  "description": "Able Pro style gradient welcome banner with title, subtitle, button and optional illustration",
+  "main": "zero-welcome-banner.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "dashboard", "banner", "welcome", "gradient"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true,
+    "category": "Dashboard",
+    "components": [
+      {
+        "tag": "zero-welcome-banner",
+        "title": "Welcome Banner",
+        "category": "Dashboard"
+      }
+    ]
+  }
+}

@@ -49,3 +49,9 @@ export * from './packages/zero-block-team/zero-block-team';
 export * from './packages/zero-block-testimonial/zero-block-testimonial';
 export * from './packages/zero-block-contact/zero-block-contact';
 export * from './packages/zero-block-footer/zero-block-footer';
+
+// Dashboard Components (Able Pro)
+export * from './packages/zero-stat-card/zero-stat-card';
+export * from './packages/zero-welcome-banner/zero-welcome-banner';
+export * from './packages/zero-chart-card/zero-chart-card';
+export * from './packages/zero-project-card/zero-project-card';

@@ -55,3 +55,6 @@ export * from './packages/zero-stat-card/zero-stat-card';
 export * from './packages/zero-welcome-banner/zero-welcome-banner';
 export * from './packages/zero-chart-card/zero-chart-card';
 export * from './packages/zero-project-card/zero-project-card';
+
+// Data Display
+export * from './packages/zero-data-grid/zero-data-grid';

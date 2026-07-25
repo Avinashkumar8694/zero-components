@@ -1,0 +1,21 @@
+{
+  "name": "zero-data-grid",
+  "version": "1.0.0",
+  "description": "Professional enterprise data grid with search, filter chips, sorting, pagination, row selection, row actions and empty state",
+  "main": "zero-data-grid.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "data-grid", "data-table", "list", "table", "pagination"],
+  "author": "Zero Components",
+  "license": "MIT",
+  "zero": {
+    "component": true,
+    "category": "Data Display",
+    "components": [
+      {
+        "tag": "zero-data-grid",
+        "title": "Data Grid",
+        "category": "Data Display"
+      }
+    ]
+  }
+}

@@ -496,7 +496,7 @@ function studioSidebarFooter(
  */
 @RendererComponent({
   name: "zero-sidenav-layout",
-  version: "1.0.0",
+  version: "1.1.0",
   title: "Sidebar Layout",
   elementSelector: "zero-sidenav-layout",
   group: "Layout",
@@ -510,185 +510,89 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
 
   protected get overridePrefix() { return "zero-sidenav-layout"; }
 
+  /**
+   * Neutral, studio-ready default applied when the shell is first dropped onto a
+   * page. Produces a professional, brand-agnostic app-shell (generic dashboard
+   * chrome) with an EMPTY content area so studio pages can be nested inside the
+   * `outlet` / `main` region. No domain-specific demo content is injected.
+   */
   static getTransformOnDrop() {
     return {
       componentName: "zero-sidenav-layout",
       props: {
-        appName: "Zendenta",
-        appSubtitle: "Cabut gigi tanpa sakit",
-        appLogo: "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 16H11V14H13V16ZM13 12H11V7H13V12Z' fill='#0EA5E9'/></svg>",
-        headerLogo: "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='#0ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'></path><circle cx='12' cy='7' r='4'></circle></svg>",
-        headerTitle: "Diane Cooper",
-        sidebarBg: "#ffffff",
-        sidebarText: "#64748b",
-        sidebarActiveBg: "#f1f5f9",
-        sidebarActiveText: "#0ea5e9",
-        accentColor: "#0ea5e9",
+        appName: "My App",
+        appSubtitle: "",
+        appLogo: "🚀",
+        accentColor: "#6366f1",
+        sidebarBg: "#1e293b",
+        sidebarText: "#94a3b8",
+        sidebarActiveBg: "#334155",
+        sidebarActiveText: "#ffffff",
         headerBg: "#ffffff",
-        headerText: "#0f172a",
+        headerText: "#1e293b",
         headerBorder: "#e2e8f0",
         mainBg: "#f8fafc",
-        footerActionType: "dropdown",
-        sidebarFooterConfig: JSON.stringify({
-          show: true,
-          userName: "Drg. Adam H.",
-          userRole: "Dentist",
-          avatarUrl: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=120"
-        }),
+        footerActionType: "buttons",
+        navItems: DEFAULT_NAV_ITEMS_JSON,
         headerConfig: JSON.stringify({
           showSearch: true,
-          searchPlaceholder: "Search",
+          searchPlaceholder: "Search…",
           showNotificationBell: true,
-          notificationCount: 4,
-          showUserAvatar: false,
+          notificationCount: 0,
+          showUserAvatar: true,
+          userName: "User Name",
+          userRole: "Member",
           showBreadcrumb: false
         }),
-        navItems: JSON.stringify([
-          { label: "Overview", icon: "⏱️" },
-          { label: "Calendar", icon: "📅" },
-          { label: "Patient List", icon: "👤" },
-          { label: "Messages", icon: "💬" },
-          { label: "Payment Information", icon: "💳" },
-          { label: "Settings", icon: "⚙️" },
-          { label: "Help ?", icon: "❓", bottom: true }
-        ]),
-        activeItem: 2,
-        fixedHeader: false,
+        sidebarFooterConfig: JSON.stringify({
+          show: true,
+          userName: "User Name",
+          userRole: "Member",
+          showSettings: true,
+          showLogout: true
+        }),
+        activeItem: 0,
+        fixedHeader: true,
         fixedFooter: true
       },
-      children: [
-        // 1. Breadcrumbs Header Section (2 Columns for breadcrumbs and actions)
-        {
-          componentName: "zero-section",
-          slot: "main",
-          props: {
-            gap: "16px",
-            padding: "0px 0px 16px 0px",
-            justify: "space-between",
-            align: "center"
-          },
-          children: [
-            {
-              componentName: "zero-column",
-              props: { width: "60%", padding: "0px", direction: "row", align: "center", gap: "8px" },
-              children: [
-                {
-                  componentName: "zero-text",
-                  props: { text: "Patient List  >  Diane Cooper", size: 14, weight: 600, color: "#64748b" }
-                }
-              ]
-            },
-            {
-              componentName: "zero-column",
-              props: { width: "40%", padding: "0px", direction: "row", justify: "flex-end", align: "center", gap: "10px" },
-              children: [
-                {
-                  componentName: "zero-button",
-                  props: { label: "🖨️", variant: "secondary", size: "small" }
-                },
-                {
-                  componentName: "zero-button",
-                  props: { label: "✏️ Edit Patient", variant: "secondary", size: "small" }
-                }
-              ]
-            }
-          ]
-        },
-        // 2. Main content 3-column layout grid
-        {
-          componentName: "zero-section",
-          slot: "main",
-          props: {
-            gap: "24px"
-          },
-          children: [
-            // Column 1: Patient Profile Card (25%)
-            {
-              componentName: "zero-column",
-              props: { width: "25%", padding: "0px" },
-              children: [
-                {
-                  componentName: "zero-profile-card",
-                  props: {
-                    name: "Diane Cooper",
-                    subtitle: "diane.cooper@example.com",
-                    avatarUrl: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150",
-                    stat1Value: 15,
-                    stat1Label: "Past",
-                    stat2Value: 2,
-                    stat2Label: "Upcoming",
-                    buttonText: "Send Message"
-                  }
-                }
-              ]
-            },
-            // Column 2: Information & Timeline Cards (50%)
-            {
-              componentName: "zero-column",
-              props: { width: "50%", padding: "0px", gap: "24px" },
-              children: [
-                {
-                  componentName: "zero-metadata-card",
-                  props: {
-                    item1Label: "Gender",
-                    item1Value: "Female",
-                    item2Label: "Birthday",
-                    item2Value: "Feb 24th, 1997",
-                    item3Label: "Phone Number",
-                    item3Value: "(239) 555-0108",
-                    item4Label: "Street Address",
-                    item4Value: "Jl. Diponegoro No. 21",
-                    item5Label: "City",
-                    item5Value: "Cilacap",
-                    item6Label: "ZIP Code",
-                    item6Value: "655849",
-                    item7Label: "Member Status",
-                    item7Value: "Active Member",
-                    item8Label: "Registered Date",
-                    item8Value: "Feb 24th, 1997"
-                  }
-                },
-                {
-                  componentName: "zero-timeline-card",
-                  props: { activeTab: 0 }
-                }
-              ]
-            },
-            // Column 3: Notes & Files Cards (25%)
-            {
-              componentName: "zero-column",
-              props: { width: "25%", padding: "0px", gap: "24px" },
-              children: [
-                {
-                  componentName: "zero-notes-card",
-                  props: {
-                    title: "Notes",
-                    notesJson: JSON.stringify([
-                      {
-                        text: "- This patient is lorem ipsum dolor sit amet\n- Lorem ipsum dolor sit amet\n- has allergic history with Cataflam",
-                        author: "Drg. Mega Nanade",
-                        date: "20 Nov '19",
-                        active: true
-                      },
-                      {
-                        text: "Lorem ipsum dolor sit amet",
-                        author: "Drg. Mega Nanade",
-                        date: "20 Nov '19",
-                        active: false
-                      }
-                    ])
-                  }
-                },
-                {
-                  componentName: "zero-files-card",
-                  props: { title: "Files / Documents" }
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      // Empty by design — the shell is a container. Studio pages drop into the
+      // "outlet" / "main" region rather than a pre-baked domain demo.
+      children: []
     };
+  }
+
+  /**
+   * Plain settings schema the studio can render as a template-config form.
+   * Returns only plain objects (no external imports). Each `name` maps to the
+   * matching @RendererAttribute prop on this component.
+   *
+   * control ∈ "text" | "number" | "boolean" | "select" | "color" | "json"
+   */
+  static getSettingsSchema() {
+    return [
+      // ── Brand ──
+      { name: "appName", label: "App / Brand Name", control: "text", group: "Brand", defaultValue: "My App" },
+      { name: "appLogo", label: "Logo (emoji, image URL, or inline SVG)", control: "text", group: "Brand", defaultValue: "🚀" },
+
+      // ── Navigation ──
+      { name: "navItems", label: "Nav Items (JSON)", control: "json", group: "Navigation", defaultValue: DEFAULT_NAV_ITEMS_JSON },
+
+      // ── Layout ──
+      { name: "collapsed", label: "Sidebar Collapsed", control: "boolean", group: "Layout", defaultValue: false },
+      { name: "fixedHeader", label: "Fixed Header", control: "boolean", group: "Layout", defaultValue: true },
+      {
+        name: "sidenavType", label: "Sidenav Layout Mode", control: "select", group: "Layout",
+        options: [
+          { label: "Side (Standard)", value: "side" },
+          { label: "Over (Overlay/Drawer)", value: "over" }
+        ],
+        defaultValue: "side"
+      },
+      { name: "sidebarWidth", label: "Sidebar Width (px)", control: "number", group: "Layout", defaultValue: 260 },
+
+      // ── Theme ──
+      { name: "accentColor", label: "Accent Color", control: "color", group: "Theme", defaultValue: "#6366f1" }
+    ];
   }
 
   // Always dynamic — getStudioTemplate builds slots from current mode config
@@ -810,6 +714,19 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         display: block; /* override base class flex — snl-shell handles its own layout */
       }
 
+      /* Dark mode — flips the shared --uiv-* tokens the shell reads from.
+         Toggled via the header theme button (see showThemeToggle). */
+      :host([data-theme="dark"]) {
+        --uiv-surface-color: #1e293b;
+        --uiv-bg-color: #0f172a;
+        --uiv-text-color: #f1f5f9;
+        --uiv-text-muted: #94a3b8;
+        --uiv-border-color: #334155;
+        --uiv-hover-bg: rgba(255, 255, 255, 0.07);
+      }
+
+      .snl-theme-toggle svg { display: block; }
+
       /* ── Shell ── */
       .snl-shell {
         display: flex;
@@ -847,6 +764,15 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         border-radius: 8px; padding: 7px 12px;
         background: rgba(0,0,0,0.04);
       }
+
+      .snl-header-search-input {
+        flex: 1; min-width: 0;
+        border: none; outline: none; background: transparent;
+        color: inherit; font: inherit; font-size: 0.83rem;
+        padding: 0; margin: 0;
+      }
+      .snl-header-search-input::placeholder { opacity: 0.5; }
+      .snl-header-search-input::-webkit-search-cancel-button { cursor: pointer; }
 
       .snl-header-spacer { flex: 1; }
 
@@ -1526,6 +1452,21 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
   })
   showCollapseBtn = true;
 
+  @property({ type: Boolean, attribute: "show-theme-toggle", reflect: true })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.CHECKBOX,
+    displayLabel: "Show Theme Toggle (Dark/Light)",
+    fieldMappings: "showThemeToggle",
+    categoryLabel: "Header"
+  })
+  showThemeToggle = false;
+
+  /** Current header theme mode. Reflected to `data-theme` on the host so the
+   *  dark-mode token overrides in `static styles` take effect. */
+  @property({ type: String, attribute: "data-theme", reflect: true })
+  themeMode: "light" | "dark" = "light";
+
   // ─── Appearance ────────────────────────────────────────────────────────────
 
   @property({ type: String, attribute: "sidebar-bg" })
@@ -1663,6 +1604,12 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
   @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Settings Click", eventTrigger: "settingsClick", categoryLabel: "Triggers" })
   get onSettingsClick() { return "settingsClick"; }
 
+  @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Search", eventTrigger: "search", categoryLabel: "Triggers" })
+  get onSearch() { return "search"; }
+
+  @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Theme Change", eventTrigger: "themechange", categoryLabel: "Triggers" })
+  get onThemeChange() { return "themechange"; }
+
   // ─── Actions ───────────────────────────────────────────────────────────────
 
   @RendererAttribute({ attributeType: AttributeType.ACTION, displayLabel: "Open Sidenav", categoryLabel: "Actions" })
@@ -1700,6 +1647,14 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     const item = parseNavItems(this.navItems)[index];
     this.activeItem = index;
     this.dispatchEvent(new CustomEvent("navchange", { detail: { activeItem: index, item }, bubbles: true, composed: true }));
+  }
+
+  @RendererAttribute({ attributeType: AttributeType.ACTION, displayLabel: "Toggle Theme (Dark/Light)", categoryLabel: "Actions" })
+  public toggleTheme() {
+    this.themeMode = this.themeMode === "dark" ? "light" : "dark";
+    // themeMode reflects to the `data-theme` attribute, which drives the
+    // --uiv-* dark-mode token overrides in `static styles`.
+    this.dispatchEvent(new CustomEvent("themechange", { detail: { theme: this.themeMode }, bubbles: true, composed: true }));
   }
 
   // ─── Internal handlers ──────────────────────────────────────────────────────
@@ -1874,7 +1829,10 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     const sidebarVisible = sidenavMode !== "hidden";
 
     // ── Build slot list dynamically based on modes ──
+    // "outlet" is the real page OUTLET — studio pages (page-root) nest here.
+    // "main" is kept for back-compat with existing pages that target it.
     const slots: ZeroSlotDefinition[] = [
+      { id: "outlet", label: "Page Content", dropzone: true, accepts: ["page-root", "zero-section"] },
       { id: "main", label: "Main Content", dropzone: true, accepts: ["zero-section"] },
     ];
     if (headerMode === "slot") {
@@ -2044,10 +2002,12 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
             ${headerElInMain}
             ${!fixedHeader ? `
               <div style="flex:1; padding:${mainPadding}; box-sizing:border-box;">
+                <zero-studio-slot name="outlet"></zero-studio-slot>
                 <zero-studio-slot name="main"></zero-studio-slot>
               </div>
             ` : `
               <div style="flex:1; ${mainPaddingStyle} box-sizing:border-box;">
+                <zero-studio-slot name="outlet"></zero-studio-slot>
                 <zero-studio-slot name="main"></zero-studio-slot>
               </div>
             `}
@@ -2115,7 +2075,23 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
           ${headerCfg.showSearch ? html`
             <div class="snl-header-search" style="background:rgba(0,0,0,0.04);">
               <span style="opacity:0.4; font-size:0.85rem;">🔍</span>
-              <span style="opacity:0.4; font-size:0.83rem;">${headerCfg.searchPlaceholder ?? "Search…"}</span>
+              <input
+                class="snl-header-search-input"
+                type="search"
+                placeholder=${headerCfg.searchPlaceholder ?? "Search…"}
+                @input=${(e: Event) => this.dispatchEvent(new CustomEvent("search", {
+                  detail: { query: (e.target as HTMLInputElement).value },
+                  bubbles: true, composed: true
+                }))}
+                @keydown=${(e: KeyboardEvent) => {
+                  if (e.key === "Enter") {
+                    this.dispatchEvent(new CustomEvent("search", {
+                      detail: { query: (e.target as HTMLInputElement).value, submit: true },
+                      bubbles: true, composed: true
+                    }));
+                  }
+                }}
+              />
             </div>
           ` : nothing}
 
@@ -2154,6 +2130,32 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
             <slot name="header"></slot>
           </div>
         `}
+
+        ${this.showThemeToggle ? html`
+          <button class="snl-header-btn snl-theme-toggle"
+            style="color:${this.headerText}; margin-right:0;"
+            @click=${(e: Event) => { e.stopPropagation(); this.toggleTheme(); }}
+            title=${this.themeMode === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+            aria-label="Toggle theme">
+            ${this.themeMode === "dark" ? html`
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+            ` : html`
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            `}
+          </button>
+        ` : nothing}
 
         ${this.collapseBtnPosition === "header-right" && this.showCollapseBtn ? this.renderToggleButton("header-right") : nothing}
       </header>
@@ -2338,10 +2340,12 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
               ${headerElInMain}
               ${!this.fixedHeader ? html`
                 <div style="flex: 1; padding:${this.mainPadding}; box-sizing: border-box;">
+                  <slot name="outlet"></slot>
                   <slot name="main"></slot>
                   <slot></slot>
                 </div>
               ` : html`
+                <slot name="outlet"></slot>
                 <slot name="main"></slot>
                 <slot></slot>
               `}

@@ -1,0 +1,10 @@
+{
+  "name": "zero-router-outlet",
+  "version": "1.0.0",
+  "description": "SPA Routing Outlet Component",
+  "main": "zero-router-outlet.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "router-outlet", "layout"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

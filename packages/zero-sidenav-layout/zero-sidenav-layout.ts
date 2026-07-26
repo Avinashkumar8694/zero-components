@@ -10,7 +10,7 @@ import { ZeroLayoutBase } from "../zero-panel-layout/zero-layout-base";
 import type { ZeroSlotDefinition } from "../zero-panel-layout/zero-layout-base";
 import { html, css, nothing, PropertyValues } from "lit";
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -703,20 +703,70 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
   @property({ type: String, attribute: "active-path" })
   activePath = "";
 
+  /** True when the viewport is at/under the mobile breakpoint (max-width:768px).
+   *  Driven reactively by a matchMedia listener (see _setupResponsive) so the
+   *  drawer/overlay + backdrop switch without a re-render-time innerWidth read. */
+  @state()
+  private _isMobile = false;
+
+  private _mql: MediaQueryList | null = null;
+
   override connectedCallback() {
     super.connectedCallback();
+    // Route-sync listeners. The runtime navigates by dispatching a window
+    // "route-change" event AND by setting location.hash (which fires
+    // "hashchange"); classic pushState navigations fire "popstate". We listen to
+    // all three so the active highlight follows programmatic/deep-link nav.
+    // NOTE: every one of these only SYNCS the highlight — none of them navigate.
     window.addEventListener("popstate", this._handleUrlChange);
+    window.addEventListener("hashchange", this._handleUrlChange);
+    window.addEventListener("route-change", this._handleUrlChange as EventListener);
+    this._setupResponsive();
     this._matchActiveItemWithUrl();
   }
 
   override disconnectedCallback() {
     window.removeEventListener("popstate", this._handleUrlChange);
+    window.removeEventListener("hashchange", this._handleUrlChange);
+    window.removeEventListener("route-change", this._handleUrlChange as EventListener);
+    this._teardownResponsive();
     super.disconnectedCallback();
   }
 
+  /** Sync-ONLY handler. Re-matches the active highlight to the current route.
+   *  It must NEVER dispatch route-change / navchange — otherwise syncing the
+   *  highlight after a deep-link would bounce the URL back to the item's path. */
   private _handleUrlChange = () => {
     this._matchActiveItemWithUrl();
   };
+
+  // ─── Responsive (matchMedia) ────────────────────────────────────────────────
+
+  private _handleMediaChange = (e: MediaQueryListEvent | MediaQueryList) => {
+    this._isMobile = e.matches;
+  };
+
+  private _setupResponsive() {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
+    this._mql = window.matchMedia("(max-width: 768px)");
+    this._isMobile = this._mql.matches;
+    if (this._mql.addEventListener) {
+      this._mql.addEventListener("change", this._handleMediaChange);
+    } else {
+      // Safari < 14 fallback
+      this._mql.addListener(this._handleMediaChange as (e: MediaQueryListEvent) => void);
+    }
+  }
+
+  private _teardownResponsive() {
+    if (!this._mql) return;
+    if (this._mql.removeEventListener) {
+      this._mql.removeEventListener("change", this._handleMediaChange);
+    } else {
+      this._mql.removeListener(this._handleMediaChange as (e: MediaQueryListEvent) => void);
+    }
+    this._mql = null;
+  }
 
   override willUpdate(changedProperties: PropertyValues) {
     super.willUpdate(changedProperties);
@@ -728,24 +778,41 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     this.style.setProperty("--zero-height", this.height);
   }
 
+  /**
+   * Resolve the host runtime-app / renderer by walking UP through shadow
+   * boundaries. `closest()` cannot cross shadow roots, and the sidenav is
+   * rendered inside the runtime app's shadow root, so a plain closest() misses
+   * it and we'd fall back to a stale path source.
+   */
+  private _resolveCurrentPath(): string {
+    let node: Node | null = this;
+    // Guard against cycles / very deep trees.
+    for (let i = 0; node && i < 20; i++) {
+      const root = node.getRootNode() as ShadowRoot | Document;
+      const host = (root as ShadowRoot).host as any;
+      if (!host) break;
+      const tag = host.tagName ? host.tagName.toLowerCase() : "";
+      if (tag.startsWith("zero-runtime-app")) {
+        return host.pathName || host.currentPath || "";
+      }
+      if (tag.startsWith("zero-renderer")) {
+        return host.path || host.pathName || "";
+      }
+      node = host;
+    }
+    return "";
+  }
+
   private _matchActiveItemWithUrl() {
     if (typeof window === "undefined") return;
 
-    // 1. Resolve current active path from parent runtime or renderer context
-    let activePath = "";
-    const runtimeApp = this.closest("zero-runtime-app") as any;
-    if (runtimeApp) {
-      activePath = runtimeApp.pathName || runtimeApp.currentPath || "";
-    } else {
-      const renderer = this.closest("zero-renderer") as any;
-      if (renderer) {
-        activePath = renderer.path || "";
-      }
-    }
-
-    // Fallback to window path
+    // 1. Resolve current active path from the parent runtime / renderer (its
+    //    reactive path is authoritative). Falls back to the URL — hash FIRST,
+    //    because the runtime routes via `location.hash` (so `pathname` is stale
+    //    after an in-app navigation), then pathname for a hard deep-link land.
+    let activePath = this._resolveCurrentPath();
     if (!activePath) {
-      activePath = window.location.pathname;
+      activePath = window.location.hash.replace(/^#/, "") || window.location.pathname || "/";
     }
 
     // 2. Clean project ID prefix if present (e.g. /project-1781525772761/dashboard -> /dashboard)
@@ -760,34 +827,55 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     // Expose activePath property so other components or styling binds can use it
     this.activePath = cleanPath;
 
-    // 3. Match item in navItems (only in config mode)
-    if (this.sidenavMode === "config") {
+    // 3. Match the active nav item against the current route.
+    //    - Keyed on BOTH item.path and item.href (runtime nav uses `path`).
+    //    - Runs in every mode (the old `sidenavMode === "config"` gate is
+    //      relaxed) so the highlight follows programmatic nav in normal runtime.
+    //    - Supports section prefixes: /tokens/:id highlights the /tokens item.
+    //    - This is SYNC ONLY — it sets `activeItem` (highlight) and never
+    //      dispatches route-change/navchange, so it cannot navigate/bounce.
+    if (this.sidenavMode !== "slot") {
       const navList = parseNavItems(this.navItems);
-      const index = navList.findIndex((item) => {
-        if (!item.href) return false;
 
-        let itemPath = item.href;
+      const normalize = (p: string): string => {
+        let out = p;
         try {
-          itemPath = new URL(item.href, window.location.origin).pathname;
-        } catch (e) {}
-
-        if (itemPath.startsWith("/")) {
-          const parts = itemPath.split("/").filter(Boolean);
+          out = new URL(p, window.location.origin).pathname;
+        } catch { /* p is already a bare path */ }
+        if (out.startsWith("/")) {
+          const parts = out.split("/").filter(Boolean);
           if (parts.length > 1 && parts[0].startsWith("project-")) {
-            itemPath = "/" + parts.slice(1).join("/");
+            out = "/" + parts.slice(1).join("/");
           }
         }
+        out = out.replace(/\/+$/, "");
+        return out === "" ? "/" : out;
+      };
 
-        const cleanItemPath = itemPath.replace(/\/$/, "");
-        const cleanCurrentPath = cleanPath.replace(/\/$/, "");
+      const current = normalize(cleanPath);
+      let bestIndex = -1;
+      let bestLen = -1;
 
-        return cleanItemPath === cleanCurrentPath ||
-               cleanItemPath === "/" + cleanCurrentPath ||
-               "/" + cleanItemPath === cleanCurrentPath;
+      navList.forEach((item, i) => {
+        const raw = item.path ?? item.href;
+        if (!raw) return;
+        const itemPath = normalize(raw);
+
+        // Exact match always wins; a non-root item also matches when it is a
+        // path-segment prefix of the current route (detail routes). Root "/"
+        // only matches the exact root so it never swallows other routes.
+        const isMatch =
+          itemPath === current ||
+          (itemPath !== "/" && current.startsWith(itemPath + "/"));
+
+        if (isMatch && itemPath.length > bestLen) {
+          bestLen = itemPath.length;
+          bestIndex = i;
+        }
       });
 
-      if (index !== -1 && index !== this.activeItem) {
-        this.activeItem = index;
+      if (bestIndex !== -1 && bestIndex !== this.activeItem) {
+        this.activeItem = bestIndex; // highlight only — NO navigation
       }
     }
   }
@@ -1809,6 +1897,9 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
   @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Theme Change", eventTrigger: "themechange", categoryLabel: "Triggers" })
   get onThemeChange() { return "themechange"; }
 
+  @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Notification Click", eventTrigger: "notificationClick", categoryLabel: "Triggers" })
+  get onNotificationClick() { return "notificationClick"; }
+
   // ─── Actions ───────────────────────────────────────────────────────────────
 
   @RendererAttribute({ attributeType: AttributeType.ACTION, displayLabel: "Open Sidenav", categoryLabel: "Actions" })
@@ -1877,6 +1968,16 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       this._expandedItems.add(index);
     }
     this.requestUpdate();
+  }
+
+  /** Notification bell click → dispatch a wireable `notificationClick` event
+   *  (bubbles + composed) so it can drive a shell-node trigger. */
+  private handleBellClick(count: number) {
+    this.dispatchEvent(new CustomEvent("notificationClick", {
+      detail: { count },
+      bubbles: true,
+      composed: true,
+    }));
   }
 
   // ─── Toggle Button Helper ──────────────────────────────────────────────────
@@ -2388,7 +2489,15 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
           ${themeToggleEl}
 
           ${headerCfg.showNotificationBell ? html`
-            <div class="snl-header-bell">
+            <div class="snl-header-bell" role="button" tabindex="0" title="Notifications"
+              aria-label="Notifications"
+              @click=${(e: Event) => { e.stopPropagation(); this.handleBellClick(headerCfg.notificationCount ?? 0); }}
+              @keydown=${(e: KeyboardEvent) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  this.handleBellClick(headerCfg.notificationCount ?? 0);
+                }
+              }}>
               <span>🔔</span>
               ${(headerCfg.notificationCount ?? 0) > 0 ? html`
                 <span class="snl-bell-count" style="background:${this.accentColor};">
@@ -2614,7 +2723,7 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
         ">
           ${headerElAtShell}
           <div class="snl-body">
-            ${this.opened && (this.sidenavType === "over" || (typeof window !== 'undefined' && window.innerWidth <= 768)) && this.hasBackdrop ? html`
+            ${this.opened && (this.sidenavType === "over" || this._isMobile) && this.hasBackdrop ? html`
               <div class="snl-backdrop" @click=${this.close}></div>
             ` : nothing}
             ${sidebarEl}

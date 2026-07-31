@@ -3,6 +3,7 @@ import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotat
 import { RendererAttribute, RendererComponent, applyGlobalStyles, AttributeType, UserInterfaceType } from "zero-annotation";
 import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
+import { styleMap } from "lit/directives/style-map.js";
 
 export const studioTemplate: ZeroStudioTemplate = {
   kind: "generic",
@@ -209,6 +210,25 @@ export class ZeroRadio extends LitElement {
   get accentColorConfig() { return this.accentColor; }
   set accentColorConfig(val: string) { this.accentColor = val; }
 
+  // Radio group coordination: when one radio in a group is checked, all other
+  // radios sharing the same `name` uncheck themselves (native radio behaviour).
+  private _onGroupChange = (e: Event) => {
+    const detail = (e as CustomEvent).detail;
+    if (detail && detail.name === this.name && detail.source !== this && this.checked) {
+      this.checked = false;
+    }
+  };
+
+  connectedCallback() {
+    super.connectedCallback();
+    document.addEventListener("zero-radio-group-change", this._onGroupChange);
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener("zero-radio-group-change", this._onGroupChange);
+    super.disconnectedCallback();
+  }
+
   @RendererAttribute({
     attributeType: AttributeType.EVENT,
     displayLabel: "On Change",
@@ -217,9 +237,15 @@ export class ZeroRadio extends LitElement {
   handleToggle() {
     if (this.disabled) return;
     this.checked = true;
+    // Notify siblings in the same group so only one stays selected.
+    document.dispatchEvent(
+      new CustomEvent("zero-radio-group-change", {
+        detail: { name: this.name, source: this }
+      })
+    );
     this.dispatchEvent(
       new CustomEvent("change", {
-        detail: { checked: this.checked, value: this.value },
+        detail: { checked: this.checked, value: this.value, name: this.name },
         bubbles: true,
         composed: true
       })
@@ -233,10 +259,12 @@ export class ZeroRadio extends LitElement {
       `variant-${this.variant}`
     ].join(" ");
 
-    const inlineStyle = this.accentColor ? `style="--rad-p: ${this.accentColor}; --glow: 0 0 10px ${this.accentColor};"` : "";
+    const accentStyles = this.accentColor
+      ? { "--rad-p": this.accentColor, "--glow": `0 0 10px ${this.accentColor}` }
+      : {};
 
     return html`
-      <div class="radio-wrapper ${wrapClass}" @click=${this.handleToggle} ${html`${inlineStyle}`}>
+      <div class="radio-wrapper ${wrapClass}" @click=${this.handleToggle} style=${styleMap(accentStyles)}>
         <div class="radio-circle"></div>
         <span class="radio-label">${this.label}</span>
       </div>

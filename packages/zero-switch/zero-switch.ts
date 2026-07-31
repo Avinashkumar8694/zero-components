@@ -3,6 +3,7 @@ import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotat
 import { RendererAttribute, RendererComponent, applyGlobalStyles, AttributeType, UserInterfaceType } from "zero-annotation";
 import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
+import { styleMap } from "lit/directives/style-map.js";
 
 export const studioTemplate: ZeroStudioTemplate = {
   kind: "generic",
@@ -154,6 +155,7 @@ export class ZeroSwitch extends LitElement {
   @property({ type: String }) value = "";
   @property({ type: String, attribute: "error-message" }) errorMessage = "";
   @property({ type: Boolean, attribute: "show-error" }) showError = false;
+  @property({ type: String, attribute: "accent-color" }) accentColor = "";
 
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
@@ -232,7 +234,21 @@ export class ZeroSwitch extends LitElement {
   get showErrorConfig() { return this.showError; }
   set showErrorConfig(val: boolean) { this.showError = Boolean(val); }
 
-  private handleToggle() {
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.COLOR_PICKER,
+    displayLabel: "Custom Accent Color",
+    fieldMappings: "accentColor"
+  })
+  get accentColorConfig() { return this.accentColor; }
+  set accentColorConfig(val: string) { this.accentColor = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.EVENT,
+    displayLabel: "On Change",
+    eventTrigger: "change"
+  })
+  handleToggle() {
     if (this.disabled) return;
     this.checked = !this.checked;
     this.dispatchEvent(
@@ -252,8 +268,10 @@ export class ZeroSwitch extends LitElement {
       `variant-${this.variant}`
     ].join(" ");
 
+    const accentStyles = this.accentColor ? { "--sw-p": this.accentColor } : {};
+
     return html`
-      <div class="switch-wrapper ${wrapClass}" @click=${this.handleToggle}>
+      <div class="switch-wrapper ${wrapClass}" @click=${this.handleToggle} style=${styleMap(accentStyles)}>
         <div class="track">
           <div class="thumb"></div>
         </div>

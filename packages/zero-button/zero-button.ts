@@ -3,6 +3,7 @@ import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotat
 import { RendererAttribute, RendererComponent, applyGlobalStyles, AttributeType, UserInterfaceType } from "zero-annotation";
 import { LitElement, css, html } from "lit";
 import { property } from "lit/decorators.js";
+import { styleMap } from "lit/directives/style-map.js";
 
 export const studioTemplate: ZeroStudioTemplate = {
   kind: "button",
@@ -420,14 +421,16 @@ export class ZeroButton extends LitElement {
       `size-${this.size}`
     ].join(" ");
 
-    const inlineStyle = this.accentColor ? `style="--btn-p: ${this.accentColor}; --btn-glow: 0 0 15px ${this.accentColor};"` : "";
+    const accentStyles = this.accentColor
+      ? { "--btn-p": this.accentColor, "--btn-glow": `0 0 15px ${this.accentColor}` }
+      : {};
 
     return html`
       <button
         class=${classList}
         ?disabled=${this.disabled || this.loading}
         @click=${this.handleClick}
-        ${html`${inlineStyle}`}
+        style=${styleMap(accentStyles)}
       >
         ${this.loading ? html`<span class="spinner"></span>` : ""}
         <span>${this.label}</span>

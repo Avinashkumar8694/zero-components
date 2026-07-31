@@ -182,6 +182,12 @@ export class ZeroColorPicker extends LitElement {
     uiComponentType: UserInterfaceType.DROPDOWN,
     displayLabel: 'Output Format',
     fieldMappings: 'format',
+    optionItems: [
+      { label: 'HEX', value: 'hex' },
+      { label: 'RGB', value: 'rgb' },
+      { label: 'HSL', value: 'hsl' },
+      { label: 'HSV', value: 'hsv' }
+    ],
   })
   format: 'hex' | 'rgb' | 'hsl' | 'hsv' = 'hex';
 
@@ -195,15 +201,43 @@ export class ZeroColorPicker extends LitElement {
   presetColors: string = '#f44336,#e91e63,#9c27b0,#673ab7,#3f51b5,#2196f3,#03a9f4,#00bcd4,#009688,#4caf50,#8bc34a,#cddc39,#ffeb3b,#ffc107,#ff9800,#ff5722';
 
   @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: 'Width',
+    placeholderText: 'e.g. 100%, 240px',
+    fieldMappings: 'width',
+  })
   width: string = '100%';
 
   @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: 'Input Height',
+    placeholderText: 'e.g. 36px',
+    fieldMappings: 'height',
+  })
   height: string = '36px';
 
   @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: 'Picker Width',
+    placeholderText: 'e.g. 280px',
+    fieldMappings: 'pickerWidth',
+  })
   pickerWidth: string = '280px';
 
   @property({ type: String })
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: 'Picker Height',
+    placeholderText: 'e.g. 200px',
+    fieldMappings: 'pickerHeight',
+  })
   pickerHeight: string = '200px';
 
   @state()
@@ -534,6 +568,7 @@ export class ZeroColorPicker extends LitElement {
           style="
             --picker-width: ${this.pickerWidth};
             --picker-height: ${this.pickerHeight};
+            --input-height: ${this.height};
             --hue: ${this.currentColor.hsl.h};
             --current-color: ${this.currentColor.hex};
           "

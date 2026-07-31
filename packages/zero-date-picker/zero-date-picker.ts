@@ -3,6 +3,7 @@ import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotat
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
 
@@ -267,7 +268,7 @@ export class ZeroDatePicker extends LitElement {
     placeholderText: 'Enter border radius',
     fieldMappings: 'borderRadius',
   })
-  borderRadius: string = '4px';
+  borderRadius: string = '8px';
 
   @property({ type: String })
   @RendererAttribute({
@@ -323,6 +324,9 @@ export class ZeroDatePicker extends LitElement {
 
   @state()
   private inputValue: string = '';
+
+  @state()
+  private selectedTime: string = '00:00';
 
   private readonly monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -612,12 +616,25 @@ export class ZeroDatePicker extends LitElement {
 
   protected render(): TemplateResult {
     const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
+    const fieldStyles: Record<string, string> = { width: this.width };
+    if (this.primaryColor) {
+      fieldStyles['--primary-color'] = this.primaryColor;
+      fieldStyles['--uiv-primary'] = this.primaryColor;
+    }
+    if (this.errorColor) {
+      fieldStyles['--error-color'] = this.errorColor;
+      fieldStyles['--uiv-error-color'] = this.errorColor;
+    }
+    if (this.backgroundColor) {
+      fieldStyles['--uiv-surface'] = this.backgroundColor;
+      fieldStyles['--uiv-bg'] = this.backgroundColor;
+    }
     return html`
       <style>
         ${themeModule ? themeModule.getGlobalStyles() : ''}
         ${themeModule ? themeModule.getComponentStyles('date-picker') : ''}
       </style>
-      <div class="form-field uiv-${themeModule?.id}-theme" style="width: ${this.width}">
+      <div class="form-field uiv-${themeModule?.id}-theme" style=${styleMap(fieldStyles)}>
         ${this.label ? html`
           <label class="form-field-label uiv-${themeModule?.id}-text ${this.required ? 'required' : ''}">
             ${this.label}
@@ -632,7 +649,7 @@ export class ZeroDatePicker extends LitElement {
             placeholder=${this.placeholder}
             ?disabled=${this.disabled}
             ?readonly=${this.readonly}
-            style="height: ${this.height}"
+            style=${styleMap({ height: this.height, 'border-radius': this.borderRadius })}
             @click=${this.handleInputClick}
             @keydown=${this.handleKeyDown}
             @blur=${this.handleInputBlur}
@@ -682,6 +699,19 @@ export class ZeroDatePicker extends LitElement {
               
               ${this.renderCalendarDays()}
             </div>
+
+            ${this.includeTime ? html`
+              <div class="time-row" style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid #e0e0e0;">
+                <span class="uiv-${themeModule?.id}-text" style="font-size:13px;font-weight:500;">Time</span>
+                <input
+                  type="time"
+                  class="uiv-${themeModule?.id}-card"
+                  .value=${this.selectedTime}
+                  @input=${this.handleTimeChange}
+                  style="flex:1;padding:6px 8px;border:1px solid var(--uiv-border, #e0e0e0);border-radius:6px;background:var(--uiv-surface, #fff);color:var(--uiv-text-main, inherit);"
+                />
+              </div>
+            ` : ''}
 
             ${(this.showTodayButton || this.showClearButton) ? html`
               <div class="calendar-footer">
@@ -886,10 +916,22 @@ export class ZeroDatePicker extends LitElement {
     return date > start && date < end;
   }
 
+  private handleTimeChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.selectedTime = input.value || '00:00';
+    if (this.rangeSelection) {
+      this.updateRangeValue();
+    } else {
+      this.updateSingleValue();
+    }
+    this.dispatchChangeEvent();
+  }
+
   private updateSingleValue(): void {
     if (this.selectedDate) {
-      this.value = this.formatDate(this.selectedDate, this.dateFormat);
-      this.inputValue = this.formatDate(this.selectedDate, this.displayFormat);
+      const timeSuffix = this.includeTime ? ` ${this.selectedTime}` : '';
+      this.value = this.formatDate(this.selectedDate, this.dateFormat) + timeSuffix;
+      this.inputValue = this.formatDate(this.selectedDate, this.displayFormat) + timeSuffix;
     }
   }
 

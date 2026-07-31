@@ -3,6 +3,7 @@ import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotat
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType } from 'zero-annotation';
 import { LitElement, html, css, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
 
@@ -219,10 +220,10 @@ export class ZeroFileInput extends LitElement {
     attributeType: AttributeType.PROPERTY,
     uiComponentType: UserInterfaceType.TEXT_INPUT,
     displayLabel: 'Border Radius',
-    placeholderText: 'Enter border radius (e.g., 4px)',
+    placeholderText: 'Enter border radius (e.g., 12px)',
     fieldMappings: 'borderRadius',
   })
-  borderRadius: string = '4px';
+  borderRadius: string = '12px';
 
   @property({ type: String })
   @RendererAttribute({
@@ -372,19 +373,35 @@ export class ZeroFileInput extends LitElement {
 
   protected render(): TemplateResult {
     const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
+    const fieldStyles: Record<string, string> = { width: this.width };
+    if (this.primaryColor) {
+      fieldStyles['--uiv-primary'] = this.primaryColor;
+      fieldStyles['--uiv-primary-color'] = this.primaryColor;
+    }
+    if (this.errorColor) {
+      fieldStyles['--uiv-error-color'] = this.errorColor;
+    }
+    if (this.successColor) {
+      fieldStyles['--uiv-success-color'] = this.successColor;
+    }
+    const containerStyles: Record<string, string> = { 'border-radius': this.borderRadius };
+    if (this.height && this.height !== 'auto') {
+      containerStyles['height'] = this.height;
+    }
     return html`
       <style>
         ${themeModule ? themeModule.getGlobalStyles() : ''}
         ${themeModule ? themeModule.getComponentStyles('file-input') : ''}
       </style>
-      <div class="form-field uiv-${themeModule?.id}-theme" style="width: ${this.width}">
+      <div class="form-field uiv-${themeModule?.id}-theme" style=${styleMap(fieldStyles)}>
         ${this.label ? html`
           <label class="form-field-label uiv-${themeModule?.id}-text ${this.required ? 'required' : ''}">
             ${this.label}
           </label>
         ` : ''}
-        <div 
+        <div
           class="file-input-container uiv-${themeModule?.id}-scan ${this.isDragOver ? 'drag-over' : ''} ${this.disabled ? 'disabled' : ''} ${this.hasError ? 'error' : ''}"
+          style=${styleMap(containerStyles)}
           @dragover=${this.handleDragOver}
           @dragleave=${this.handleDragLeave}
           @drop=${this.handleDrop}
@@ -400,7 +417,7 @@ export class ZeroFileInput extends LitElement {
             @click=${this.handleInputStopPropagation}
           />
           
-          <div class="drop-zone">
+          <div class="drop-zone" style=${styleMap({ 'min-height': this.dropZoneHeight })}>
             <svg class="upload-icon" viewBox="0 0 24 24" fill="currentColor">
               <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
             </svg>
@@ -433,7 +450,7 @@ export class ZeroFileInput extends LitElement {
                   <div class="file-size uiv-${themeModule?.id}-text" style="opacity: 0.7">${this.formatFileSize(fileItem.file.size)}</div>
                   ${this.showProgress && fileItem.progress !== undefined ? html`
                     <div class="file-progress" style="background: rgba(var(--uiv-primary-rgb, 25, 118, 210), 0.1)">
-                      <div class="file-progress-bar uiv-${themeModule?.id}-card" style="width: ${fileItem.progress}%; background: var(--uiv-primary-color)"></div>
+                      <div class="file-progress-bar uiv-${themeModule?.id}-card" style=${styleMap({ width: `${fileItem.progress}%`, background: (fileItem.progress ?? 0) >= 100 ? this.successColor : this.primaryColor })}></div>
                     </div>
                   ` : ''}
                   ${fileItem.error ? html`

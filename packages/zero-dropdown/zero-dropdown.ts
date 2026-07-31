@@ -3,6 +3,7 @@ import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotat
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem } from 'zero-annotation';
 import { LitElement, html, css } from 'lit';
 import { property } from 'lit/decorators.js';
+import { styleMap } from 'lit/directives/style-map.js';
 
 const getThemeManager = () => (window as any).zeroThemeManager;
 
@@ -326,6 +327,15 @@ export class ZeroDropdown extends LitElement {
     })
     showError = false;
 
+    @property({ type: String, attribute: 'accent-color' })
+    @RendererAttribute({
+        attributeType: AttributeType.PROPERTY,
+        uiComponentType: UserInterfaceType.COLOR_PICKER,
+        displayLabel: 'Custom Accent Color',
+        fieldMappings: 'accentColor',
+    })
+    accentColor = '';
+
     @property({ type: Boolean })
     private isOpen = false;
 
@@ -416,17 +426,24 @@ export class ZeroDropdown extends LitElement {
         getThemeManager()?.addEventListener('theme-changed', () => this.requestUpdate());
     }
 
+    private getAccentStyles() {
+        return this.accentColor
+            ? { '--uiv-primary': this.accentColor, '--uiv-primary-color': this.accentColor }
+            : {};
+    }
+
     render() {
         const themeModule = getThemeManager()?.getActiveTheme('zero-standard-themes');
+        const accentStyles = this.getAccentStyles();
         if (this.customStyle || this.searchable) {
             const filteredOptions = this.getFilteredOptions();
-            
+
             return html`
                 <style>
                     ${themeModule ? themeModule.getGlobalStyles() : ''}
                     ${themeModule ? themeModule.getComponentStyles('dropdown') : ''}
                 </style>
-                <div class="form-field uiv-${themeModule?.id}-theme">
+                <div class="form-field uiv-${themeModule?.id}-theme" style=${styleMap(accentStyles)}>
                     <label for="dropdown" class="uiv-${themeModule?.id}-text">${this.label}</label>
                     <div class="custom-dropdown">
                         <button 
@@ -495,7 +512,7 @@ export class ZeroDropdown extends LitElement {
                 ${themeModule ? themeModule.getGlobalStyles() : ''}
                 ${themeModule ? themeModule.getComponentStyles('dropdown') : ''}
             </style>
-            <div class="form-field uiv-${themeModule?.id}-theme">
+            <div class="form-field uiv-${themeModule?.id}-theme" style=${styleMap(accentStyles)}>
                 <label for="select-input" class="uiv-${themeModule?.id}-text">${this.label}</label>
                 <select 
                     id="select-input"

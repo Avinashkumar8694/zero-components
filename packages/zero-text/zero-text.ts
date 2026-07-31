@@ -114,6 +114,19 @@ export class ZeroText extends LitElement {
     this.color = value || "#4b5563";
   }
 
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.NUMBER_INPUT,
+    displayLabel: "Max Width (px, 0 = none)",
+    fieldMappings: "maxWidth"
+  })
+  get maxWidthConfig() {
+    return this.maxWidth;
+  }
+  set maxWidthConfig(value: number) {
+    this.maxWidth = Math.max(0, Number(value) || 0);
+  }
+
   render() {
     const styleValue = [
       `--zero-text-color:${this.color || "#4b5563"}`,

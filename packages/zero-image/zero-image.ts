@@ -120,6 +120,32 @@ export class ZeroImage extends LitElement {
     this.fit = value || "cover";
   }
 
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Aspect Ratio (e.g. 16 / 9)",
+    fieldMappings: "aspectRatio"
+  })
+  get aspectRatioConfig() {
+    return this.aspectRatio;
+  }
+  set aspectRatioConfig(value: string) {
+    this.aspectRatio = value || "16 / 9";
+  }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.NUMBER_INPUT,
+    displayLabel: "Corner Radius (px)",
+    fieldMappings: "radius"
+  })
+  get radiusConfig() {
+    return this.radius;
+  }
+  set radiusConfig(value: number) {
+    this.radius = Math.max(0, Number(value) || 0);
+  }
+
   render() {
     const styleValue = [
       `--zero-image-fit:${this.fit || "cover"}`,

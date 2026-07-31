@@ -1980,7 +1980,7 @@ R = M([
     name: "zero-input-widgets",
     version: "1.0.0",
     title: "Zero input widgets",
-    elementSelector: "zero-zero-input-widgets",
+    elementSelector: "zero-input-widgets",
     group: "Forms",
     iconName: "profile-icon.png"
     // Replace with your icon path

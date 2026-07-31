@@ -181,6 +181,104 @@ export class ZeroProfileCard extends LitElement {
   @property({ type: String, attribute: "stat2-label" }) stat2Label = "Upcoming";
   @property({ type: String, attribute: "button-text" }) buttonText = "Send Message";
 
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Name",
+    fieldMappings: "name",
+    categoryLabel: "Profile",
+    initialValue: "Diane Cooper"
+  })
+  get nameConfig() { return this.name; }
+  set nameConfig(val: string) { this.name = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Subtitle / Email",
+    fieldMappings: "subtitle",
+    categoryLabel: "Profile",
+    initialValue: "diane.cooper@example.com"
+  })
+  get subtitleConfig() { return this.subtitle; }
+  set subtitleConfig(val: string) { this.subtitle = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Avatar Image URL",
+    fieldMappings: "avatarUrl",
+    categoryLabel: "Profile",
+    initialValue: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150"
+  })
+  get avatarUrlConfig() { return this.avatarUrl; }
+  set avatarUrlConfig(val: string) { this.avatarUrl = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.NUMBER_INPUT,
+    displayLabel: "Stat 1 Value",
+    fieldMappings: "stat1Value",
+    categoryLabel: "Stats",
+    initialValue: 15
+  })
+  get stat1ValueConfig() { return this.stat1Value; }
+  set stat1ValueConfig(val: number) { this.stat1Value = Number(val); }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Stat 1 Label",
+    fieldMappings: "stat1Label",
+    categoryLabel: "Stats",
+    initialValue: "Past"
+  })
+  get stat1LabelConfig() { return this.stat1Label; }
+  set stat1LabelConfig(val: string) { this.stat1Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.NUMBER_INPUT,
+    displayLabel: "Stat 2 Value",
+    fieldMappings: "stat2Value",
+    categoryLabel: "Stats",
+    initialValue: 2
+  })
+  get stat2ValueConfig() { return this.stat2Value; }
+  set stat2ValueConfig(val: number) { this.stat2Value = Number(val); }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Stat 2 Label",
+    fieldMappings: "stat2Label",
+    categoryLabel: "Stats",
+    initialValue: "Upcoming"
+  })
+  get stat2LabelConfig() { return this.stat2Label; }
+  set stat2LabelConfig(val: string) { this.stat2Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Button Text",
+    fieldMappings: "buttonText",
+    categoryLabel: "Action",
+    initialValue: "Send Message"
+  })
+  get buttonTextConfig() { return this.buttonText; }
+  set buttonTextConfig(val: string) { this.buttonText = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.EVENT,
+    displayLabel: "On Send Message",
+    categoryLabel: "Action",
+    eventTrigger: "messageClick"
+  })
+  handleMessageClick() {
+    this.dispatchEvent(new CustomEvent("messageClick", { bubbles: true, composed: true }));
+  }
+
   render() {
     return html`
       <div class="card">
@@ -198,7 +296,7 @@ export class ZeroProfileCard extends LitElement {
             <div class="stat-lbl">${this.stat2Label}</div>
           </div>
         </div>
-        <button class="btn">${this.buttonText}</button>
+        <button class="btn" @click=${this.handleMessageClick}>${this.buttonText}</button>
       </div>
     `;
   }

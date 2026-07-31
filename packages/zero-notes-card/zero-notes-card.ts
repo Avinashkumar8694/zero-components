@@ -226,6 +226,28 @@ export class ZeroNotesCard extends LitElement {
   @property({ type: String }) title = "Notes";
   @property({ type: String, attribute: "notes-json" }) notesJson = DEFAULT_NOTES_JSON;
 
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Title",
+    fieldMappings: "title",
+    categoryLabel: "Content",
+    initialValue: "Notes"
+  })
+  get titleConfig() { return this.title; }
+  set titleConfig(val: string) { this.title = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXTAREA,
+    displayLabel: "Notes (JSON array of { text, author, date, active })",
+    fieldMappings: "notesJson",
+    categoryLabel: "Content",
+    initialValue: DEFAULT_NOTES_JSON
+  })
+  get notesJsonConfig() { return this.notesJson; }
+  set notesJsonConfig(val: string) { this.notesJson = val; }
+
   render() {
     let notes: NoteItem[] = [];
     try {

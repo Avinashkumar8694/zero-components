@@ -46,6 +46,8 @@
             "zero-uiv-themes": ["packages/zero-uiv-themes/src/index.ts"],
             "@zero/schema": ["../studio-platform/packages/schema/src/index.ts"],
             "@zero/auth-config": ["../studio-platform/packages/auth-config/src/index.ts"],
+            "@zero/flow-nodes": ["../studio-platform/packages/flow-node-factory/src/index.ts"],
+            "@zero/flow-engine": ["../studio-platform/packages/flow-engine/src/index.ts"],
             "@zero/renderer-core": ["packages/renderer-core/src/index.ts"]
         }
     },

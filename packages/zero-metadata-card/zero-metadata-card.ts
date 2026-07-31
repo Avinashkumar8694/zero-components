@@ -161,6 +161,182 @@ export class ZeroMetadataCard extends LitElement {
   @property({ type: String, attribute: "item8-label" }) item8Label = "Registered Date";
   @property({ type: String, attribute: "item8-value" }) item8Value = "Feb 24th, 1997";
 
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 1 Label",
+    fieldMappings: "item1Label",
+    categoryLabel: "Item 1",
+    initialValue: "Gender"
+  })
+  get item1LabelConfig() { return this.item1Label; }
+  set item1LabelConfig(val: string) { this.item1Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 1 Value",
+    fieldMappings: "item1Value",
+    categoryLabel: "Item 1",
+    initialValue: "Female"
+  })
+  get item1ValueConfig() { return this.item1Value; }
+  set item1ValueConfig(val: string) { this.item1Value = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 2 Label",
+    fieldMappings: "item2Label",
+    categoryLabel: "Item 2",
+    initialValue: "Birthday"
+  })
+  get item2LabelConfig() { return this.item2Label; }
+  set item2LabelConfig(val: string) { this.item2Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 2 Value",
+    fieldMappings: "item2Value",
+    categoryLabel: "Item 2",
+    initialValue: "Feb 24th, 1997"
+  })
+  get item2ValueConfig() { return this.item2Value; }
+  set item2ValueConfig(val: string) { this.item2Value = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 3 Label",
+    fieldMappings: "item3Label",
+    categoryLabel: "Item 3",
+    initialValue: "Phone Number"
+  })
+  get item3LabelConfig() { return this.item3Label; }
+  set item3LabelConfig(val: string) { this.item3Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 3 Value",
+    fieldMappings: "item3Value",
+    categoryLabel: "Item 3",
+    initialValue: "(239) 555-0108"
+  })
+  get item3ValueConfig() { return this.item3Value; }
+  set item3ValueConfig(val: string) { this.item3Value = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 4 Label",
+    fieldMappings: "item4Label",
+    categoryLabel: "Item 4",
+    initialValue: "Street Address"
+  })
+  get item4LabelConfig() { return this.item4Label; }
+  set item4LabelConfig(val: string) { this.item4Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 4 Value",
+    fieldMappings: "item4Value",
+    categoryLabel: "Item 4",
+    initialValue: "Jl. Diponegoro No. 21"
+  })
+  get item4ValueConfig() { return this.item4Value; }
+  set item4ValueConfig(val: string) { this.item4Value = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 5 Label",
+    fieldMappings: "item5Label",
+    categoryLabel: "Item 5",
+    initialValue: "City"
+  })
+  get item5LabelConfig() { return this.item5Label; }
+  set item5LabelConfig(val: string) { this.item5Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 5 Value",
+    fieldMappings: "item5Value",
+    categoryLabel: "Item 5",
+    initialValue: "Cilacap"
+  })
+  get item5ValueConfig() { return this.item5Value; }
+  set item5ValueConfig(val: string) { this.item5Value = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 6 Label",
+    fieldMappings: "item6Label",
+    categoryLabel: "Item 6",
+    initialValue: "ZIP Code"
+  })
+  get item6LabelConfig() { return this.item6Label; }
+  set item6LabelConfig(val: string) { this.item6Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 6 Value",
+    fieldMappings: "item6Value",
+    categoryLabel: "Item 6",
+    initialValue: "655849"
+  })
+  get item6ValueConfig() { return this.item6Value; }
+  set item6ValueConfig(val: string) { this.item6Value = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 7 Label",
+    fieldMappings: "item7Label",
+    categoryLabel: "Item 7",
+    initialValue: "Member Status"
+  })
+  get item7LabelConfig() { return this.item7Label; }
+  set item7LabelConfig(val: string) { this.item7Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 7 Value",
+    fieldMappings: "item7Value",
+    categoryLabel: "Item 7",
+    initialValue: "Active Member"
+  })
+  get item7ValueConfig() { return this.item7Value; }
+  set item7ValueConfig(val: string) { this.item7Value = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 8 Label",
+    fieldMappings: "item8Label",
+    categoryLabel: "Item 8",
+    initialValue: "Registered Date"
+  })
+  get item8LabelConfig() { return this.item8Label; }
+  set item8LabelConfig(val: string) { this.item8Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Item 8 Value",
+    fieldMappings: "item8Value",
+    categoryLabel: "Item 8",
+    initialValue: "Feb 24th, 1997"
+  })
+  get item8ValueConfig() { return this.item8Value; }
+  set item8ValueConfig(val: string) { this.item8Value = val; }
+
   render() {
     const items = [
       { label: this.item1Label, value: this.item1Value },

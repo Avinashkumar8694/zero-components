@@ -389,6 +389,61 @@ export class ZeroTimelineCard extends LitElement {
   @property({ type: Number, attribute: "active-tab" }) activeTab = 0;
   @property({ type: String, attribute: "timeline-json" }) timelineJson = DEFAULT_TIMELINE_JSON;
 
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Tab 1 Label",
+    fieldMappings: "tab1Label",
+    categoryLabel: "Tabs",
+    initialValue: "Upcoming Appointments"
+  })
+  get tab1LabelConfig() { return this.tab1Label; }
+  set tab1LabelConfig(val: string) { this.tab1Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Tab 2 Label",
+    fieldMappings: "tab2Label",
+    categoryLabel: "Tabs",
+    initialValue: "Past Appointments"
+  })
+  get tab2LabelConfig() { return this.tab2Label; }
+  set tab2LabelConfig(val: string) { this.tab2Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Tab 3 Label",
+    fieldMappings: "tab3Label",
+    categoryLabel: "Tabs",
+    initialValue: "Medical Records"
+  })
+  get tab3LabelConfig() { return this.tab3Label; }
+  set tab3LabelConfig(val: string) { this.tab3Label = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.NUMBER_INPUT,
+    displayLabel: "Active Tab (0-2)",
+    fieldMappings: "activeTab",
+    categoryLabel: "Tabs",
+    initialValue: 0
+  })
+  get activeTabConfig() { return this.activeTab; }
+  set activeTabConfig(val: number) { this.activeTab = Number(val); }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXTAREA,
+    displayLabel: "Timeline (JSON array of tabs with events)",
+    fieldMappings: "timelineJson",
+    categoryLabel: "Data",
+    initialValue: DEFAULT_TIMELINE_JSON
+  })
+  get timelineJsonConfig() { return this.timelineJson; }
+  set timelineJsonConfig(val: string) { this.timelineJson = val; }
+
   render() {
     let items: TimelineTab[] = [];
     try {

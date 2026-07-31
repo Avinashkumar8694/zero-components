@@ -194,6 +194,28 @@ export class ZeroFilesCard extends LitElement {
   @property({ type: String }) title = "Files / Documents";
   @property({ type: String, attribute: "files-json" }) filesJson = DEFAULT_FILES_JSON;
 
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    displayLabel: "Title",
+    fieldMappings: "title",
+    categoryLabel: "Content",
+    initialValue: "Files / Documents"
+  })
+  get titleConfig() { return this.title; }
+  set titleConfig(val: string) { this.title = val; }
+
+  @RendererAttribute({
+    attributeType: AttributeType.PROPERTY,
+    uiComponentType: UserInterfaceType.TEXTAREA,
+    displayLabel: "Files (JSON array of { name, size })",
+    fieldMappings: "filesJson",
+    categoryLabel: "Content",
+    initialValue: DEFAULT_FILES_JSON
+  })
+  get filesJsonConfig() { return this.filesJson; }
+  set filesJsonConfig(val: string) { this.filesJson = val; }
+
   render() {
     let files: FileItem[] = [];
     try {

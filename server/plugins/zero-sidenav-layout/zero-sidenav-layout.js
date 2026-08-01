@@ -21,9 +21,9 @@ var er;
   (function(e) {
     var r = typeof globalThis == "object" ? globalThis : typeof Qt == "object" ? Qt : typeof self == "object" ? self : typeof this == "object" ? this : c(), i = o(t);
     typeof r.Reflect < "u" && (i = o(r.Reflect, i)), e(i, r), typeof r.Reflect > "u" && (r.Reflect = t);
-    function o(p, C) {
-      return function(k, P) {
-        Object.defineProperty(p, k, { configurable: !0, writable: !0, value: P }), C && C(k, P);
+    function o(p, _) {
+      return function(S, A) {
+        Object.defineProperty(p, S, { configurable: !0, writable: !0, value: A }), _ && _(S, A);
       };
     }
     function s() {
@@ -42,7 +42,7 @@ var er;
       return s() || l();
     }
   })(function(e, r) {
-    var i = Object.prototype.hasOwnProperty, o = typeof Symbol == "function", s = o && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", l = o && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", c = typeof Object.create == "function", p = { __proto__: [] } instanceof Array, C = !c && !p, k = {
+    var i = Object.prototype.hasOwnProperty, o = typeof Symbol == "function", s = o && typeof Symbol.toPrimitive < "u" ? Symbol.toPrimitive : "@@toPrimitive", l = o && typeof Symbol.iterator < "u" ? Symbol.iterator : "@@iterator", c = typeof Object.create == "function", p = { __proto__: [] } instanceof Array, _ = !c && !p, S = {
       // create an object in dictionary mode (a.k.a. "slow" mode in v8)
       create: c ? function() {
         return Je(/* @__PURE__ */ Object.create(null));
@@ -51,118 +51,118 @@ var er;
       } : function() {
         return Je({});
       },
-      has: C ? function(n, a) {
-        return i.call(n, a);
-      } : function(n, a) {
-        return a in n;
+      has: _ ? function(a, n) {
+        return i.call(a, n);
+      } : function(a, n) {
+        return n in a;
       },
-      get: C ? function(n, a) {
-        return i.call(n, a) ? n[a] : void 0;
-      } : function(n, a) {
-        return n[a];
+      get: _ ? function(a, n) {
+        return i.call(a, n) ? a[n] : void 0;
+      } : function(a, n) {
+        return a[n];
       }
-    }, P = Object.getPrototypeOf(Function), N = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : mt(), B = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : xt(), Y = typeof WeakMap == "function" ? WeakMap : wt(), K = o ? Symbol.for("@reflect-metadata:registry") : void 0, ee = gt(), Z = vt(ee);
-    function ie(n, a, d, h) {
-      if (S(d)) {
-        if (!Se(n))
+    }, A = Object.getPrototypeOf(Function), N = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : mt(), B = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : xt(), Y = typeof WeakMap == "function" ? WeakMap : wt(), K = o ? Symbol.for("@reflect-metadata:registry") : void 0, ee = yt(), Z = gt(ee);
+    function ie(a, n, d, h) {
+      if (P(d)) {
+        if (!Se(a))
           throw new TypeError();
-        if (!Fe(a))
+        if (!Fe(n))
           throw new TypeError();
-        return te(n, a);
+        return te(a, n);
       } else {
-        if (!Se(n))
+        if (!Se(a))
           throw new TypeError();
-        if (!H(a))
+        if (!H(n))
           throw new TypeError();
-        if (!H(h) && !S(h) && !re(h))
+        if (!H(h) && !P(h) && !re(h))
           throw new TypeError();
-        return re(h) && (h = void 0), d = q(d), W(n, a, d, h);
+        return re(h) && (h = void 0), d = q(d), W(a, n, d, h);
       }
     }
     e("decorate", ie);
-    function A(n, a) {
-      function d(h, _) {
+    function m(a, n) {
+      function d(h, k) {
         if (!H(h))
           throw new TypeError();
-        if (!S(_) && !ut(_))
+        if (!P(k) && !ut(k))
           throw new TypeError();
-        De(n, a, h, _);
+        De(a, n, h, k);
       }
       return d;
     }
-    e("metadata", A);
-    function L(n, a, d, h) {
+    e("metadata", m);
+    function L(a, n, d, h) {
       if (!H(d))
         throw new TypeError();
-      return S(h) || (h = q(h)), De(n, a, d, h);
+      return P(h) || (h = q(h)), De(a, n, d, h);
     }
     e("defineMetadata", L);
-    function Q(n, a, d) {
-      if (!H(a))
+    function Q(a, n, d) {
+      if (!H(n))
         throw new TypeError();
-      return S(d) || (d = q(d)), V(n, a, d);
+      return P(d) || (d = q(d)), V(a, n, d);
     }
     e("hasMetadata", Q);
-    function X(n, a, d) {
-      if (!H(a))
+    function X(a, n, d) {
+      if (!H(n))
         throw new TypeError();
-      return S(d) || (d = q(d)), Ee(n, a, d);
+      return P(d) || (d = q(d)), ke(a, n, d);
     }
     e("hasOwnMetadata", X);
-    function G(n, a, d) {
-      if (!H(a))
+    function G(a, n, d) {
+      if (!H(n))
         throw new TypeError();
-      return S(d) || (d = q(d)), ne(n, a, d);
+      return P(d) || (d = q(d)), ae(a, n, d);
     }
     e("getMetadata", G);
-    function me(n, a, d) {
-      if (!H(a))
+    function me(a, n, d) {
+      if (!H(n))
         throw new TypeError();
-      return S(d) || (d = q(d)), ae(n, a, d);
+      return P(d) || (d = q(d)), ne(a, n, d);
     }
     e("getOwnMetadata", me);
-    function xe(n, a) {
-      if (!H(n))
-        throw new TypeError();
-      return S(a) || (a = q(a)), pe(n, a);
-    }
-    e("getMetadataKeys", xe);
-    function Ue(n, a) {
-      if (!H(n))
-        throw new TypeError();
-      return S(a) || (a = q(a)), ke(n, a);
-    }
-    e("getOwnMetadataKeys", Ue);
-    function de(n, a, d) {
+    function xe(a, n) {
       if (!H(a))
         throw new TypeError();
-      if (S(d) || (d = q(d)), !H(a))
+      return P(n) || (n = q(n)), pe(a, n);
+    }
+    e("getMetadataKeys", xe);
+    function Ue(a, n) {
+      if (!H(a))
         throw new TypeError();
-      S(d) || (d = q(d));
+      return P(n) || (n = q(n)), Ee(a, n);
+    }
+    e("getOwnMetadataKeys", Ue);
+    function de(a, n, d) {
+      if (!H(n))
+        throw new TypeError();
+      if (P(d) || (d = q(d)), !H(n))
+        throw new TypeError();
+      P(d) || (d = q(d));
       var h = ce(
-        a,
+        n,
         d,
         /*Create*/
         !1
       );
-      return S(h) ? !1 : h.OrdinaryDeleteMetadata(n, a, d);
+      return P(h) ? !1 : h.OrdinaryDeleteMetadata(a, n, d);
     }
     e("deleteMetadata", de);
-    function te(n, a) {
-      for (var d = n.length - 1; d >= 0; --d) {
-        var h = n[d], _ = h(a);
-        if (!S(_) && !re(_)) {
-          if (!Fe(_))
+    function te(a, n) {
+      for (var d = a.length - 1; d >= 0; --d) {
+        var h = a[d], k = h(n);
+        if (!P(k) && !re(k)) {
+          if (!Fe(k))
             throw new TypeError();
-          a = _;
+          n = k;
         }
       }
-      return a;
+      return n;
     }
-    function W(n, a, d, h) {
-      for (var _ = n.length - 1; _ >= 0; --_) {
-        var U = n[_], j = U(a, d, h);
-        if (!S(j) && !re(j)) {
+    function W(a, n, d, h) {
+      for (var k = a.length - 1; k >= 0; --k) {
+        var U = a[k], j = U(n, d, h);
+        if (!P(j) && !re(j)) {
           if (!H(j))
             throw new TypeError();
           h = j;
@@ -170,81 +170,81 @@ var er;
       }
       return h;
     }
-    function V(n, a, d) {
-      var h = Ee(n, a, d);
+    function V(a, n, d) {
+      var h = ke(a, n, d);
       if (h)
         return !0;
-      var _ = Pe(a);
-      return re(_) ? !1 : V(n, _, d);
+      var k = Pe(n);
+      return re(k) ? !1 : V(a, k, d);
     }
-    function Ee(n, a, d) {
+    function ke(a, n, d) {
       var h = ce(
-        a,
+        n,
         d,
         /*Create*/
         !1
       );
-      return S(h) ? !1 : Ve(h.OrdinaryHasOwnMetadata(n, a, d));
+      return P(h) ? !1 : Ve(h.OrdinaryHasOwnMetadata(a, n, d));
     }
-    function ne(n, a, d) {
-      var h = Ee(n, a, d);
+    function ae(a, n, d) {
+      var h = ke(a, n, d);
       if (h)
-        return ae(n, a, d);
-      var _ = Pe(a);
-      if (!re(_))
-        return ne(n, _, d);
+        return ne(a, n, d);
+      var k = Pe(n);
+      if (!re(k))
+        return ae(a, k, d);
     }
-    function ae(n, a, d) {
+    function ne(a, n, d) {
       var h = ce(
-        a,
+        n,
         d,
         /*Create*/
         !1
       );
-      if (!S(h))
-        return h.OrdinaryGetOwnMetadata(n, a, d);
+      if (!P(h))
+        return h.OrdinaryGetOwnMetadata(a, n, d);
     }
-    function De(n, a, d, h) {
-      var _ = ce(
+    function De(a, n, d, h) {
+      var k = ce(
         d,
         h,
         /*Create*/
         !0
       );
-      _.OrdinaryDefineOwnMetadata(n, a, d, h);
+      k.OrdinaryDefineOwnMetadata(a, n, d, h);
     }
-    function pe(n, a) {
-      var d = ke(n, a), h = Pe(n);
+    function pe(a, n) {
+      var d = Ee(a, n), h = Pe(a);
       if (h === null)
         return d;
-      var _ = pe(h, a);
-      if (_.length <= 0)
+      var k = pe(h, n);
+      if (k.length <= 0)
         return d;
       if (d.length <= 0)
-        return _;
+        return k;
       for (var U = new B(), j = [], O = 0, u = d; O < u.length; O++) {
-        var b = u[O], y = U.has(b);
-        y || (U.add(b), j.push(b));
+        var b = u[O], v = U.has(b);
+        v || (U.add(b), j.push(b));
       }
-      for (var m = 0, R = _; m < R.length; m++) {
-        var b = R[m], y = U.has(b);
-        y || (U.add(b), j.push(b));
+      for (var x = 0, R = k; x < R.length; x++) {
+        var b = R[x], v = U.has(b);
+        v || (U.add(b), j.push(b));
       }
       return j;
     }
-    function ke(n, a) {
+    function Ee(a, n) {
       var d = ce(
-        n,
         a,
+        n,
         /*create*/
         !1
       );
-      return d ? d.OrdinaryOwnMetadataKeys(n, a) : [];
+      return d ? d.OrdinaryOwnMetadataKeys(a, n) : [];
     }
-    function We(n) {
-      if (n === null)
+    function We(a) {
+      if (a === null)
         return 1;
-      switch (typeof n) {
+      switch (typeof a) {
         case "undefined":
           return 0;
         case "boolean":
@@ -256,86 +256,86 @@ var er;
         case "number":
           return 5;
         case "object":
-          return n === null ? 1 : 6;
+          return a === null ? 1 : 6;
         default:
           return 6;
       }
     }
-    function S(n) {
-      return n === void 0;
+    function P(a) {
+      return a === void 0;
     }
-    function re(n) {
-      return n === null;
+    function re(a) {
+      return a === null;
     }
-    function he(n) {
-      return typeof n == "symbol";
+    function he(a) {
+      return typeof a == "symbol";
     }
-    function H(n) {
-      return typeof n == "object" ? n !== null : typeof n == "function";
+    function H(a) {
+      return typeof a == "object" ? a !== null : typeof a == "function";
     }
-    function pt(n, a) {
-      switch (We(n)) {
+    function pt(a, n) {
+      switch (We(a)) {
         case 0:
-          return n;
+          return a;
         case 1:
-          return n;
+          return a;
         case 2:
-          return n;
+          return a;
         case 3:
-          return n;
+          return a;
         case 4:
-          return n;
+          return a;
         case 5:
-          return n;
+          return a;
       }
-      var d = "string", h = Ye(n, s);
+      var d = "string", h = Ye(a, s);
       if (h !== void 0) {
-        var _ = h.call(n, d);
-        if (H(_))
+        var k = h.call(a, d);
+        if (H(k))
           throw new TypeError();
-        return _;
+        return k;
       }
-      return ht(n);
+      return ht(a);
     }
-    function ht(n, a) {
+    function ht(a, n) {
       var d, h;
       {
-        var _ = n.toString;
-        if (we(_)) {
-          var h = _.call(n);
+        var k = a.toString;
+        if (we(k)) {
+          var h = k.call(a);
           if (!H(h))
             return h;
         }
-        var d = n.valueOf;
+        var d = a.valueOf;
         if (we(d)) {
-          var h = d.call(n);
+          var h = d.call(a);
           if (!H(h))
             return h;
         }
       }
       throw new TypeError();
     }
-    function Ve(n) {
-      return !!n;
+    function Ve(a) {
+      return !!a;
     }
-    function ct(n) {
-      return "" + n;
+    function ct(a) {
+      return "" + a;
     }
-    function q(n) {
-      var a = pt(n);
-      return he(a) ? a : ct(a);
+    function q(a) {
+      var n = pt(a);
+      return he(n) ? n : ct(n);
     }
-    function Se(n) {
-      return Array.isArray ? Array.isArray(n) : n instanceof Object ? n instanceof Array : Object.prototype.toString.call(n) === "[object Array]";
+    function Se(a) {
+      return Array.isArray ? Array.isArray(a) : a instanceof Object ? a instanceof Array : Object.prototype.toString.call(a) === "[object Array]";
     }
-    function we(n) {
-      return typeof n == "function";
+    function we(a) {
+      return typeof a == "function";
     }
-    function Fe(n) {
-      return typeof n == "function";
+    function Fe(a) {
+      return typeof a == "function";
     }
-    function ut(n) {
-      switch (We(n)) {
+    function ut(a) {
+      switch (We(a)) {
         case 3:
           return !0;
         case 4:
@@ -344,202 +344,202 @@ var er;
           return !1;
       }
     }
-    function $e(n, a) {
-      return n === a || n !== n && a !== a;
+    function $e(a, n) {
+      return a === n || a !== a && n !== n;
     }
-    function Ye(n, a) {
-      var d = n[a];
+    function Ye(a, n) {
+      var d = a[n];
       if (d != null) {
         if (!we(d))
           throw new TypeError();
         return d;
       }
     }
-    function ft(n) {
-      var a = Ye(n, l);
-      if (!we(a))
+    function ft(a) {
+      var n = Ye(a, l);
+      if (!we(n))
         throw new TypeError();
-      var d = a.call(n);
+      var d = n.call(a);
       if (!H(d))
         throw new TypeError();
       return d;
     }
-    function Xe(n) {
-      return n.value;
+    function Xe(a) {
+      return a.value;
     }
-    function qe(n) {
-      var a = n.next();
-      return a.done ? !1 : a;
+    function qe(a) {
+      var n = a.next();
+      return n.done ? !1 : n;
     }
-    function Ge(n) {
-      var a = n.return;
-      a && a.call(n);
+    function Ge(a) {
+      var n = a.return;
+      n && n.call(a);
     }
-    function Pe(n) {
-      var a = Object.getPrototypeOf(n);
-      if (typeof n != "function" || n === P || a !== P)
-        return a;
-      var d = n.prototype, h = d && Object.getPrototypeOf(d);
+    function Pe(a) {
+      var n = Object.getPrototypeOf(a);
+      if (typeof a != "function" || a === A || n !== A)
+        return n;
+      var d = a.prototype, h = d && Object.getPrototypeOf(d);
       if (h == null || h === Object.prototype)
-        return a;
-      var _ = h.constructor;
-      return typeof _ != "function" || _ === n ? a : _;
+        return n;
+      var k = h.constructor;
+      return typeof k != "function" || k === a ? n : k;
     }
     function bt() {
-      var n;
-      !S(K) && typeof r.Reflect < "u" && !(K in r.Reflect) && typeof r.Reflect.defineMetadata == "function" && (n = yt(r.Reflect));
-      var a, d, h, _ = new Y(), U = {
+      var a;
+      !P(K) && typeof r.Reflect < "u" && !(K in r.Reflect) && typeof r.Reflect.defineMetadata == "function" && (a = vt(r.Reflect));
+      var n, d, h, k = new Y(), U = {
         registerProvider: j,
         getProvider: u,
-        setProvider: y
+        setProvider: v
       };
       return U;
-      function j(m) {
+      function j(x) {
         if (!Object.isExtensible(U))
           throw new Error("Cannot add provider to a frozen registry.");
         switch (!0) {
-          case n === m:
+          case a === x:
             break;
-          case S(a):
-            a = m;
+          case P(n):
+            n = x;
             break;
-          case a === m:
+          case n === x:
             break;
-          case S(d):
-            d = m;
+          case P(d):
+            d = x;
             break;
-          case d === m:
+          case d === x:
             break;
           default:
-            h === void 0 && (h = new B()), h.add(m);
+            h === void 0 && (h = new B()), h.add(x);
             break;
         }
       }
-      function O(m, R) {
-        if (!S(a)) {
-          if (a.isProviderFor(m, R))
-            return a;
-          if (!S(d)) {
-            if (d.isProviderFor(m, R))
-              return a;
-            if (!S(h))
+      function O(x, R) {
+        if (!P(n)) {
+          if (n.isProviderFor(x, R))
+            return n;
+          if (!P(d)) {
+            if (d.isProviderFor(x, R))
+              return n;
+            if (!P(h))
               for (var M = ft(h); ; ) {
                 var I = qe(M);
                 if (!I)
                   return;
                 var J = Xe(I);
-                if (J.isProviderFor(m, R))
+                if (J.isProviderFor(x, R))
                   return Ge(M), J;
               }
           }
         }
-        if (!S(n) && n.isProviderFor(m, R))
-          return n;
+        if (!P(a) && a.isProviderFor(x, R))
+          return a;
       }
-      function u(m, R) {
-        var M = _.get(m), I;
-        return S(M) || (I = M.get(R)), S(I) && (I = O(m, R), S(I) || (S(M) && (M = new N(), _.set(m, M)), M.set(R, I))), I;
+      function u(x, R) {
+        var M = k.get(x), I;
+        return P(M) || (I = M.get(R)), P(I) && (I = O(x, R), P(I) || (P(M) && (M = new N(), k.set(x, M)), M.set(R, I))), I;
       }
-      function b(m) {
-        if (S(m))
+      function b(x) {
+        if (P(x))
           throw new TypeError();
-        return a === m || d === m || !S(h) && h.has(m);
+        return n === x || d === x || !P(h) && h.has(x);
       }
-      function y(m, R, M) {
+      function v(x, R, M) {
         if (!b(M))
           throw new Error("Metadata provider not registered.");
-        var I = u(m, R);
+        var I = u(x, R);
         if (I !== M) {
-          if (!S(I))
+          if (!P(I))
             return !1;
-          var J = _.get(m);
-          S(J) && (J = new N(), _.set(m, J)), J.set(R, M);
+          var J = k.get(x);
+          P(J) && (J = new N(), k.set(x, J)), J.set(R, M);
         }
         return !0;
       }
     }
-    function gt() {
-      var n;
-      return !S(K) && H(r.Reflect) && Object.isExtensible(r.Reflect) && (n = r.Reflect[K]), S(n) && (n = bt()), !S(K) && H(r.Reflect) && Object.isExtensible(r.Reflect) && Object.defineProperty(r.Reflect, K, {
+    function yt() {
+      var a;
+      return !P(K) && H(r.Reflect) && Object.isExtensible(r.Reflect) && (a = r.Reflect[K]), P(a) && (a = bt()), !P(K) && H(r.Reflect) && Object.isExtensible(r.Reflect) && Object.defineProperty(r.Reflect, K, {
         enumerable: !1,
         configurable: !1,
         writable: !1,
-        value: n
-      }), n;
+        value: a
+      }), a;
     }
-    function vt(n) {
-      var a = new Y(), d = {
-        isProviderFor: function(b, y) {
-          var m = a.get(b);
-          return S(m) ? !1 : m.has(y);
+    function gt(a) {
+      var n = new Y(), d = {
+        isProviderFor: function(b, v) {
+          var x = n.get(b);
+          return P(x) ? !1 : x.has(v);
         },
         OrdinaryDefineOwnMetadata: j,
-        OrdinaryHasOwnMetadata: _,
+        OrdinaryHasOwnMetadata: k,
         OrdinaryGetOwnMetadata: U,
         OrdinaryOwnMetadataKeys: O,
         OrdinaryDeleteMetadata: u
       };
       return ee.registerProvider(d), d;
-      function h(b, y, m) {
-        var R = a.get(b), M = !1;
-        if (S(R)) {
-          if (!m)
+      function h(b, v, x) {
+        var R = n.get(b), M = !1;
+        if (P(R)) {
+          if (!x)
             return;
-          R = new N(), a.set(b, R), M = !0;
+          R = new N(), n.set(b, R), M = !0;
         }
-        var I = R.get(y);
-        if (S(I)) {
-          if (!m)
+        var I = R.get(v);
+        if (P(I)) {
+          if (!x)
             return;
-          if (I = new N(), R.set(y, I), !n.setProvider(b, y, d))
-            throw R.delete(y), M && a.delete(b), new Error("Wrong provider for target.");
+          if (I = new N(), R.set(v, I), !a.setProvider(b, v, d))
+            throw R.delete(v), M && n.delete(b), new Error("Wrong provider for target.");
         }
         return I;
       }
-      function _(b, y, m) {
+      function k(b, v, x) {
         var R = h(
-          y,
-          m,
+          v,
+          x,
           /*Create*/
           !1
         );
-        return S(R) ? !1 : Ve(R.has(b));
+        return P(R) ? !1 : Ve(R.has(b));
       }
-      function U(b, y, m) {
+      function U(b, v, x) {
         var R = h(
-          y,
-          m,
+          v,
+          x,
           /*Create*/
           !1
         );
-        if (!S(R))
+        if (!P(R))
           return R.get(b);
       }
-      function j(b, y, m, R) {
+      function j(b, v, x, R) {
         var M = h(
-          m,
+          x,
           R,
           /*Create*/
           !0
         );
-        M.set(b, y);
+        M.set(b, v);
       }
-      function O(b, y) {
-        var m = [], R = h(
+      function O(b, v) {
+        var x = [], R = h(
           b,
-          y,
+          v,
           /*Create*/
           !1
         );
-        if (S(R))
-          return m;
+        if (P(R))
+          return x;
         for (var M = R.keys(), I = ft(M), J = 0; ; ) {
           var Ae = qe(I);
           if (!Ae)
-            return m.length = J, m;
+            return x.length = J, x;
           var Ke = Xe(Ae);
           try {
-            m[J] = Ke;
+            x[J] = Ke;
           } catch (Ze) {
             try {
               Ge(I);
@@ -550,52 +550,52 @@ var er;
           J++;
         }
       }
-      function u(b, y, m) {
+      function u(b, v, x) {
         var R = h(
-          y,
-          m,
+          v,
+          x,
           /*Create*/
           !1
         );
-        if (S(R) || !R.delete(b))
+        if (P(R) || !R.delete(b))
           return !1;
         if (R.size === 0) {
-          var M = a.get(y);
-          S(M) || (M.delete(m), M.size === 0 && a.delete(M));
+          var M = n.get(v);
+          P(M) || (M.delete(x), M.size === 0 && n.delete(M));
         }
         return !0;
       }
     }
-    function yt(n) {
-      var a = n.defineMetadata, d = n.hasOwnMetadata, h = n.getOwnMetadata, _ = n.getOwnMetadataKeys, U = n.deleteMetadata, j = new Y(), O = {
+    function vt(a) {
+      var n = a.defineMetadata, d = a.hasOwnMetadata, h = a.getOwnMetadata, k = a.getOwnMetadataKeys, U = a.deleteMetadata, j = new Y(), O = {
         isProviderFor: function(u, b) {
-          var y = j.get(u);
-          return !S(y) && y.has(b) ? !0 : _(u, b).length ? (S(y) && (y = new B(), j.set(u, y)), y.add(b), !0) : !1;
+          var v = j.get(u);
+          return !P(v) && v.has(b) ? !0 : k(u, b).length ? (P(v) && (v = new B(), j.set(u, v)), v.add(b), !0) : !1;
         },
-        OrdinaryDefineOwnMetadata: a,
+        OrdinaryDefineOwnMetadata: n,
         OrdinaryHasOwnMetadata: d,
         OrdinaryGetOwnMetadata: h,
-        OrdinaryOwnMetadataKeys: _,
+        OrdinaryOwnMetadataKeys: k,
         OrdinaryDeleteMetadata: U
       };
       return O;
     }
-    function ce(n, a, d) {
-      var h = ee.getProvider(n, a);
-      if (!S(h))
+    function ce(a, n, d) {
+      var h = ee.getProvider(a, n);
+      if (!P(h))
         return h;
       if (d) {
-        if (ee.setProvider(n, a, Z))
+        if (ee.setProvider(a, n, Z))
           return Z;
         throw new Error("Illegal state.");
       }
     }
     function mt() {
-      var n = {}, a = [], d = (
+      var a = {}, n = [], d = (
         /** @class */
         function() {
-          function O(u, b, y) {
-            this._index = 0, this._keys = u, this._values = b, this._selector = y;
+          function O(u, b, v) {
+            this._index = 0, this._keys = u, this._values = b, this._selector = v;
           }
           return O.prototype["@@iterator"] = function() {
             return this;
@@ -605,20 +605,20 @@ var er;
             var u = this._index;
             if (u >= 0 && u < this._keys.length) {
               var b = this._selector(this._keys[u], this._values[u]);
-              return u + 1 >= this._keys.length ? (this._index = -1, this._keys = a, this._values = a) : this._index++, { value: b, done: !1 };
+              return u + 1 >= this._keys.length ? (this._index = -1, this._keys = n, this._values = n) : this._index++, { value: b, done: !1 };
             }
             return { value: void 0, done: !0 };
           }, O.prototype.throw = function(u) {
-            throw this._index >= 0 && (this._index = -1, this._keys = a, this._values = a), u;
+            throw this._index >= 0 && (this._index = -1, this._keys = n, this._values = n), u;
           }, O.prototype.return = function(u) {
-            return this._index >= 0 && (this._index = -1, this._keys = a, this._values = a), { value: u, done: !0 };
+            return this._index >= 0 && (this._index = -1, this._keys = n, this._values = n), { value: u, done: !0 };
           }, O;
         }()
       ), h = (
         /** @class */
         function() {
           function O() {
-            this._keys = [], this._values = [], this._cacheKey = n, this._cacheIndex = -2;
+            this._keys = [], this._values = [], this._cacheKey = a, this._cacheIndex = -2;
           }
           return Object.defineProperty(O.prototype, "size", {
             get: function() {
@@ -640,12 +640,12 @@ var er;
             );
             return b >= 0 ? this._values[b] : void 0;
           }, O.prototype.set = function(u, b) {
-            var y = this._find(
+            var v = this._find(
               u,
               /*insert*/
               !0
             );
-            return this._values[y] = b, this;
+            return this._values[v] = b, this;
           }, O.prototype.delete = function(u) {
             var b = this._find(
               u,
@@ -653,15 +653,15 @@ var er;
               !1
             );
             if (b >= 0) {
-              for (var y = this._keys.length, m = b + 1; m < y; m++)
-                this._keys[m - 1] = this._keys[m], this._values[m - 1] = this._values[m];
-              return this._keys.length--, this._values.length--, $e(u, this._cacheKey) && (this._cacheKey = n, this._cacheIndex = -2), !0;
+              for (var v = this._keys.length, x = b + 1; x < v; x++)
+                this._keys[x - 1] = this._keys[x], this._values[x - 1] = this._values[x];
+              return this._keys.length--, this._values.length--, $e(u, this._cacheKey) && (this._cacheKey = a, this._cacheIndex = -2), !0;
             }
             return !1;
           }, O.prototype.clear = function() {
-            this._keys.length = 0, this._values.length = 0, this._cacheKey = n, this._cacheIndex = -2;
+            this._keys.length = 0, this._values.length = 0, this._cacheKey = a, this._cacheIndex = -2;
           }, O.prototype.keys = function() {
-            return new d(this._keys, this._values, _);
+            return new d(this._keys, this._values, k);
           }, O.prototype.values = function() {
             return new d(this._keys, this._values, U);
           }, O.prototype.entries = function() {
@@ -673,9 +673,9 @@ var er;
           }, O.prototype._find = function(u, b) {
             if (!$e(this._cacheKey, u)) {
               this._cacheIndex = -1;
-              for (var y = 0; y < this._keys.length; y++)
-                if ($e(this._keys[y], u)) {
-                  this._cacheIndex = y;
+              for (var v = 0; v < this._keys.length; v++)
+                if ($e(this._keys[v], u)) {
+                  this._cacheIndex = v;
                   break;
                 }
             }
@@ -684,7 +684,7 @@ var er;
         }()
       );
       return h;
-      function _(O, u) {
+      function k(O, u) {
         return O;
       }
       function U(O, u) {
@@ -695,43 +695,43 @@ var er;
       }
     }
     function xt() {
-      var n = (
+      var a = (
         /** @class */
         function() {
-          function a() {
+          function n() {
             this._map = new N();
           }
-          return Object.defineProperty(a.prototype, "size", {
+          return Object.defineProperty(n.prototype, "size", {
             get: function() {
               return this._map.size;
             },
             enumerable: !0,
             configurable: !0
-          }), a.prototype.has = function(d) {
+          }), n.prototype.has = function(d) {
             return this._map.has(d);
-          }, a.prototype.add = function(d) {
+          }, n.prototype.add = function(d) {
             return this._map.set(d, d), this;
-          }, a.prototype.delete = function(d) {
+          }, n.prototype.delete = function(d) {
             return this._map.delete(d);
-          }, a.prototype.clear = function() {
+          }, n.prototype.clear = function() {
             this._map.clear();
-          }, a.prototype.keys = function() {
+          }, n.prototype.keys = function() {
             return this._map.keys();
-          }, a.prototype.values = function() {
+          }, n.prototype.values = function() {
             return this._map.keys();
-          }, a.prototype.entries = function() {
+          }, n.prototype.entries = function() {
             return this._map.entries();
-          }, a.prototype["@@iterator"] = function() {
+          }, n.prototype["@@iterator"] = function() {
             return this.keys();
-          }, a.prototype[l] = function() {
+          }, n.prototype[l] = function() {
             return this.keys();
-          }, a;
+          }, n;
         }()
       );
-      return n;
+      return a;
     }
     function wt() {
-      var n = 16, a = k.create(), d = h();
+      var a = 16, n = S.create(), d = h();
       return (
         /** @class */
         function() {
@@ -739,33 +739,33 @@ var er;
             this._key = h();
           }
           return u.prototype.has = function(b) {
-            var y = _(
+            var v = k(
               b,
               /*create*/
               !1
             );
-            return y !== void 0 ? k.has(y, this._key) : !1;
+            return v !== void 0 ? S.has(v, this._key) : !1;
           }, u.prototype.get = function(b) {
-            var y = _(
+            var v = k(
               b,
               /*create*/
               !1
             );
-            return y !== void 0 ? k.get(y, this._key) : void 0;
-          }, u.prototype.set = function(b, y) {
-            var m = _(
+            return v !== void 0 ? S.get(v, this._key) : void 0;
+          }, u.prototype.set = function(b, v) {
+            var x = k(
               b,
               /*create*/
               !0
             );
-            return m[this._key] = y, this;
+            return x[this._key] = v, this;
           }, u.prototype.delete = function(b) {
-            var y = _(
+            var v = k(
               b,
               /*create*/
               !1
             );
-            return y !== void 0 ? delete y[this._key] : !1;
+            return v !== void 0 ? delete v[this._key] : !1;
           }, u.prototype.clear = function() {
             this._key = h();
           }, u;
@@ -775,20 +775,20 @@ var er;
         var u;
         do
           u = "@@WeakMap@@" + O();
-        while (k.has(a, u));
-        return a[u] = !0, u;
+        while (S.has(n, u));
+        return n[u] = !0, u;
       }
-      function _(u, b) {
+      function k(u, b) {
         if (!i.call(u, d)) {
           if (!b)
             return;
-          Object.defineProperty(u, d, { value: k.create() });
+          Object.defineProperty(u, d, { value: S.create() });
         }
         return u[d];
       }
       function U(u, b) {
-        for (var y = 0; y < b; ++y)
-          u[y] = Math.random() * 255 | 0;
+        for (var v = 0; v < b; ++v)
+          u[v] = Math.random() * 255 | 0;
         return u;
       }
       function j(u) {
@@ -799,17 +799,17 @@ var er;
         return U(new Array(u), u);
       }
       function O() {
-        var u = j(n);
+        var u = j(a);
         u[6] = u[6] & 79 | 64, u[8] = u[8] & 191 | 128;
-        for (var b = "", y = 0; y < n; ++y) {
-          var m = u[y];
-          (y === 4 || y === 6 || y === 8) && (b += "-"), m < 16 && (b += "0"), b += m.toString(16).toLowerCase();
+        for (var b = "", v = 0; v < a; ++v) {
+          var x = u[v];
+          (v === 4 || v === 6 || v === 8) && (b += "-"), x < 16 && (b += "0"), b += x.toString(16).toLowerCase();
         }
         return b;
       }
     }
-    function Je(n) {
-      return n.__ = void 0, delete n.__, n;
+    function Je(a) {
+      return a.__ = void 0, delete a.__, a;
     }
   });
 })(er || (er = {}));
@@ -853,10 +853,10 @@ function _r(t) {
       throw new Error("Invalid configuration provided to RendererComponent decorator");
   };
 }
-function Er(t) {
+function kr(t) {
   return _r(t);
 }
-function kr(t) {
+function Er(t) {
   return function(e) {
     class r extends e {
       constructor() {
@@ -875,22 +875,22 @@ function kr(t) {
         }
       }
       _injectGlobalStyles() {
-        var C;
+        var _;
         const s = document.querySelector('style.global-style[type="text/css"]'), l = document.querySelectorAll('link[rel="stylesheet"].global-style[type="text/css"]'), c = "adoptedStyleSheets" in Document.prototype, p = this.shadowRoot;
         if (!p) {
           console.error("ShadowRoot is not available.");
           return;
         }
         if (s && c) {
-          const k = new CSSStyleSheet(), P = (C = s.sheet) == null ? void 0 : C.cssRules;
-          P && (Array.from(P).forEach((N) => k.insertRule(N.cssText)), p.adoptedStyleSheets = [...p.adoptedStyleSheets, k]);
+          const S = new CSSStyleSheet(), A = (_ = s.sheet) == null ? void 0 : _.cssRules;
+          A && (Array.from(A).forEach((N) => S.insertRule(N.cssText)), p.adoptedStyleSheets = [...p.adoptedStyleSheets, S]);
         } else if (s) {
-          const k = s.cloneNode(!0);
-          p.appendChild(k);
+          const S = s.cloneNode(!0);
+          p.appendChild(S);
         }
-        l.forEach((k) => {
-          const P = k.cloneNode(!0);
-          p.appendChild(P);
+        l.forEach((S) => {
+          const A = S.cloneNode(!0);
+          p.appendChild(A);
         });
       }
     }
@@ -923,7 +923,7 @@ function Pr(t) {
     }
   };
 }
-function v(t) {
+function y(t) {
   return Pr(t);
 }
 var E;
@@ -940,7 +940,7 @@ var f;
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const rt = globalThis, Pt = rt.ShadowRoot && (rt.ShadyCSS === void 0 || rt.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, At = Symbol(), tr = /* @__PURE__ */ new WeakMap();
-let gr = class {
+let yr = class {
   constructor(e, r, i) {
     if (this._$cssResult$ = !0, i !== At) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = e, this.t = r;
@@ -958,13 +958,13 @@ let gr = class {
     return this.cssText;
   }
 };
-const Ar = (t) => new gr(typeof t == "string" ? t : t + "", void 0, At), vr = (t, ...e) => {
+const Ar = (t) => new yr(typeof t == "string" ? t : t + "", void 0, At), gr = (t, ...e) => {
   const r = t.length === 1 ? t[0] : e.reduce((i, o, s) => i + ((l) => {
     if (l._$cssResult$ === !0) return l.cssText;
     if (typeof l == "number") return l;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + l + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(o) + t[s + 1], t[0]);
-  return new gr(r, t, At);
+  return new yr(r, t, At);
 }, Or = (t, e) => {
   if (Pt) t.adoptedStyleSheets = e.map((r) => r instanceof CSSStyleSheet ? r : r.styleSheet);
   else for (const r of e) {
@@ -1130,8 +1130,8 @@ let Te = class extends HTMLElement {
     if (o !== void 0 && this._$Em !== o) {
       const c = i.getPropertyOptions(o), p = typeof c.converter == "function" ? { fromAttribute: c.converter } : ((s = c.converter) == null ? void 0 : s.fromAttribute) !== void 0 ? c.converter : it;
       this._$Em = o;
-      const C = p.fromAttribute(r, c.type);
-      this[o] = C ?? ((l = this._$Ej) == null ? void 0 : l.get(o)) ?? C, this._$Em = null;
+      const _ = p.fromAttribute(r, c.type);
+      this[o] = _ ?? ((l = this._$Ej) == null ? void 0 : l.get(o)) ?? _, this._$Em = null;
     }
   }
   requestUpdate(e, r, i, o = !1, s) {
@@ -1220,22 +1220,22 @@ Te.elementStyles = [], Te.shadowRootOptions = { mode: "open" }, Te[Me("elementPr
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ze = globalThis, nr = (t) => t, ot = ze.trustedTypes, ar = ot ? ot.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, yr = "$lit$", se = `lit$${Math.random().toFixed(9).slice(2)}$`, mr = "?" + se, Hr = `<${mr}>`, ve = document, Be = () => ve.createComment(""), Ie = (t) => t === null || typeof t != "object" && typeof t != "function", Rt = Array.isArray, jr = (t) => Rt(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", _t = `[ 	
+const ze = globalThis, ar = (t) => t, ot = ze.trustedTypes, nr = ot ? ot.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, vr = "$lit$", se = `lit$${Math.random().toFixed(9).slice(2)}$`, mr = "?" + se, Hr = `<${mr}>`, ge = document, Be = () => ge.createComment(""), Ie = (t) => t === null || typeof t != "object" && typeof t != "function", Rt = Array.isArray, jr = (t) => Rt(t) || typeof (t == null ? void 0 : t[Symbol.iterator]) == "function", _t = `[ 	
 \f\r]`, Re = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, sr = /-->/g, lr = />/g, ue = RegExp(`>|${_t}(?:([^\\s"'>=/]+)(${_t}*=${_t}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), dr = /'/g, pr = /"/g, xr = /^(?:script|style|textarea|title)$/i, Ur = (t) => (e, ...r) => ({ _$litType$: t, strings: e, values: r }), g = Ur(1), ye = Symbol.for("lit-noChange"), T = Symbol.for("lit-nothing"), hr = /* @__PURE__ */ new WeakMap(), fe = ve.createTreeWalker(ve, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), dr = /'/g, pr = /"/g, xr = /^(?:script|style|textarea|title)$/i, Ur = (t) => (e, ...r) => ({ _$litType$: t, strings: e, values: r }), g = Ur(1), ve = Symbol.for("lit-noChange"), C = Symbol.for("lit-nothing"), hr = /* @__PURE__ */ new WeakMap(), fe = ge.createTreeWalker(ge, 129);
 function wr(t, e) {
   if (!Rt(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return ar !== void 0 ? ar.createHTML(e) : e;
+  return nr !== void 0 ? nr.createHTML(e) : e;
 }
 const Dr = (t, e) => {
   const r = t.length - 1, i = [];
   let o, s = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", l = Re;
   for (let c = 0; c < r; c++) {
     const p = t[c];
-    let C, k, P = -1, N = 0;
-    for (; N < p.length && (l.lastIndex = N, k = l.exec(p), k !== null); ) N = l.lastIndex, l === Re ? k[1] === "!--" ? l = sr : k[1] !== void 0 ? l = lr : k[2] !== void 0 ? (xr.test(k[2]) && (o = RegExp("</" + k[2], "g")), l = ue) : k[3] !== void 0 && (l = ue) : l === ue ? k[0] === ">" ? (l = o ?? Re, P = -1) : k[1] === void 0 ? P = -2 : (P = l.lastIndex - k[2].length, C = k[1], l = k[3] === void 0 ? ue : k[3] === '"' ? pr : dr) : l === pr || l === dr ? l = ue : l === sr || l === lr ? l = Re : (l = ue, o = void 0);
+    let _, S, A = -1, N = 0;
+    for (; N < p.length && (l.lastIndex = N, S = l.exec(p), S !== null); ) N = l.lastIndex, l === Re ? S[1] === "!--" ? l = sr : S[1] !== void 0 ? l = lr : S[2] !== void 0 ? (xr.test(S[2]) && (o = RegExp("</" + S[2], "g")), l = ue) : S[3] !== void 0 && (l = ue) : l === ue ? S[0] === ">" ? (l = o ?? Re, A = -1) : S[1] === void 0 ? A = -2 : (A = l.lastIndex - S[2].length, _ = S[1], l = S[3] === void 0 ? ue : S[3] === '"' ? pr : dr) : l === pr || l === dr ? l = ue : l === sr || l === lr ? l = Re : (l = ue, o = void 0);
     const B = l === ue && t[c + 1].startsWith("/>") ? " " : "";
-    s += l === Re ? p + Hr : P >= 0 ? (i.push(C), p.slice(0, P) + yr + p.slice(P) + se + B) : p + se + (P === -2 ? c : B);
+    s += l === Re ? p + Hr : A >= 0 ? (i.push(_), p.slice(0, A) + vr + p.slice(A) + se + B) : p + se + (A === -2 ? c : B);
   }
   return [wr(t, s + (t[r] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), i];
 };
@@ -1244,41 +1244,41 @@ class He {
     let o;
     this.parts = [];
     let s = 0, l = 0;
-    const c = e.length - 1, p = this.parts, [C, k] = Dr(e, r);
-    if (this.el = He.createElement(C, i), fe.currentNode = this.el.content, r === 2 || r === 3) {
-      const P = this.el.content.firstChild;
-      P.replaceWith(...P.childNodes);
+    const c = e.length - 1, p = this.parts, [_, S] = Dr(e, r);
+    if (this.el = He.createElement(_, i), fe.currentNode = this.el.content, r === 2 || r === 3) {
+      const A = this.el.content.firstChild;
+      A.replaceWith(...A.childNodes);
     }
     for (; (o = fe.nextNode()) !== null && p.length < c; ) {
       if (o.nodeType === 1) {
-        if (o.hasAttributes()) for (const P of o.getAttributeNames()) if (P.endsWith(yr)) {
-          const N = k[l++], B = o.getAttribute(P).split(se), Y = /([.?@])?(.*)/.exec(N);
-          p.push({ type: 1, index: s, name: Y[2], strings: B, ctor: Y[1] === "." ? Vr : Y[1] === "?" ? Fr : Y[1] === "@" ? Yr : dt }), o.removeAttribute(P);
-        } else P.startsWith(se) && (p.push({ type: 6, index: s }), o.removeAttribute(P));
+        if (o.hasAttributes()) for (const A of o.getAttributeNames()) if (A.endsWith(vr)) {
+          const N = S[l++], B = o.getAttribute(A).split(se), Y = /([.?@])?(.*)/.exec(N);
+          p.push({ type: 1, index: s, name: Y[2], strings: B, ctor: Y[1] === "." ? Vr : Y[1] === "?" ? Fr : Y[1] === "@" ? Yr : dt }), o.removeAttribute(A);
+        } else A.startsWith(se) && (p.push({ type: 6, index: s }), o.removeAttribute(A));
         if (xr.test(o.tagName)) {
-          const P = o.textContent.split(se), N = P.length - 1;
+          const A = o.textContent.split(se), N = A.length - 1;
           if (N > 0) {
             o.textContent = ot ? ot.emptyScript : "";
-            for (let B = 0; B < N; B++) o.append(P[B], Be()), fe.nextNode(), p.push({ type: 2, index: ++s });
-            o.append(P[N], Be());
+            for (let B = 0; B < N; B++) o.append(A[B], Be()), fe.nextNode(), p.push({ type: 2, index: ++s });
+            o.append(A[N], Be());
           }
         }
       } else if (o.nodeType === 8) if (o.data === mr) p.push({ type: 2, index: s });
       else {
-        let P = -1;
-        for (; (P = o.data.indexOf(se, P + 1)) !== -1; ) p.push({ type: 7, index: s }), P += se.length - 1;
+        let A = -1;
+        for (; (A = o.data.indexOf(se, A + 1)) !== -1; ) p.push({ type: 7, index: s }), A += se.length - 1;
       }
       s++;
     }
   }
   static createElement(e, r) {
-    const i = ve.createElement("template");
+    const i = ge.createElement("template");
     return i.innerHTML = e, i;
   }
 }
 function _e(t, e, r = t, i) {
   var l, c;
-  if (e === ye) return e;
+  if (e === ve) return e;
   let o = i !== void 0 ? (l = r._$Co) == null ? void 0 : l[i] : r._$Cl;
   const s = Ie(e) ? void 0 : e._$litDirective$;
   return (o == null ? void 0 : o.constructor) !== s && ((c = o == null ? void 0 : o._$AO) == null || c.call(o, !1), s === void 0 ? o = void 0 : (o = new s(t), o._$AT(t, r, i)), i !== void 0 ? (r._$Co ?? (r._$Co = []))[i] = o : r._$Cl = o), o !== void 0 && (e = _e(t, o._$AS(t, e.values), o, i)), e;
@@ -1294,17 +1294,17 @@ class Wr {
     return this._$AM._$AU;
   }
   u(e) {
-    const { el: { content: r }, parts: i } = this._$AD, o = ((e == null ? void 0 : e.creationScope) ?? ve).importNode(r, !0);
+    const { el: { content: r }, parts: i } = this._$AD, o = ((e == null ? void 0 : e.creationScope) ?? ge).importNode(r, !0);
     fe.currentNode = o;
     let s = fe.nextNode(), l = 0, c = 0, p = i[0];
     for (; p !== void 0; ) {
       if (l === p.index) {
-        let C;
-        p.type === 2 ? C = new je(s, s.nextSibling, this, e) : p.type === 1 ? C = new p.ctor(s, p.name, p.strings, this, e) : p.type === 6 && (C = new Xr(s, this, e)), this._$AV.push(C), p = i[++c];
+        let _;
+        p.type === 2 ? _ = new je(s, s.nextSibling, this, e) : p.type === 1 ? _ = new p.ctor(s, p.name, p.strings, this, e) : p.type === 6 && (_ = new Xr(s, this, e)), this._$AV.push(_), p = i[++c];
       }
       l !== (p == null ? void 0 : p.index) && (s = fe.nextNode(), l++);
     }
-    return fe.currentNode = ve, o;
+    return fe.currentNode = ge, o;
   }
   p(e) {
     let r = 0;
@@ -1317,7 +1317,7 @@ class je {
     return ((e = this._$AM) == null ? void 0 : e._$AU) ?? this._$Cv;
   }
   constructor(e, r, i, o) {
-    this.type = 2, this._$AH = T, this._$AN = void 0, this._$AA = e, this._$AB = r, this._$AM = i, this.options = o, this._$Cv = (o == null ? void 0 : o.isConnected) ?? !0;
+    this.type = 2, this._$AH = C, this._$AN = void 0, this._$AA = e, this._$AB = r, this._$AM = i, this.options = o, this._$Cv = (o == null ? void 0 : o.isConnected) ?? !0;
   }
   get parentNode() {
     let e = this._$AA.parentNode;
@@ -1331,7 +1331,7 @@ class je {
     return this._$AB;
   }
   _$AI(e, r = this) {
-    e = _e(this, e, r), Ie(e) ? e === T || e == null || e === "" ? (this._$AH !== T && this._$AR(), this._$AH = T) : e !== this._$AH && e !== ye && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : jr(e) ? this.k(e) : this._(e);
+    e = _e(this, e, r), Ie(e) ? e === C || e == null || e === "" ? (this._$AH !== C && this._$AR(), this._$AH = C) : e !== this._$AH && e !== ve && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : jr(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -1340,7 +1340,7 @@ class je {
     this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
   }
   _(e) {
-    this._$AH !== T && Ie(this._$AH) ? this._$AA.nextSibling.data = e : this.T(ve.createTextNode(e)), this._$AH = e;
+    this._$AH !== C && Ie(this._$AH) ? this._$AA.nextSibling.data = e : this.T(ge.createTextNode(e)), this._$AH = e;
   }
   $(e) {
     var s;
@@ -1365,8 +1365,8 @@ class je {
   _$AR(e = this._$AA.nextSibling, r) {
     var i;
     for ((i = this._$AP) == null ? void 0 : i.call(this, !1, !0, r); e !== this._$AB; ) {
-      const o = nr(e).nextSibling;
-      nr(e).remove(), e = o;
+      const o = ar(e).nextSibling;
+      ar(e).remove(), e = o;
     }
   }
   setConnected(e) {
@@ -1382,21 +1382,21 @@ class dt {
     return this._$AM._$AU;
   }
   constructor(e, r, i, o, s) {
-    this.type = 1, this._$AH = T, this._$AN = void 0, this.element = e, this.name = r, this._$AM = o, this.options = s, i.length > 2 || i[0] !== "" || i[1] !== "" ? (this._$AH = Array(i.length - 1).fill(new String()), this.strings = i) : this._$AH = T;
+    this.type = 1, this._$AH = C, this._$AN = void 0, this.element = e, this.name = r, this._$AM = o, this.options = s, i.length > 2 || i[0] !== "" || i[1] !== "" ? (this._$AH = Array(i.length - 1).fill(new String()), this.strings = i) : this._$AH = C;
   }
   _$AI(e, r = this, i, o) {
     const s = this.strings;
     let l = !1;
-    if (s === void 0) e = _e(this, e, r, 0), l = !Ie(e) || e !== this._$AH && e !== ye, l && (this._$AH = e);
+    if (s === void 0) e = _e(this, e, r, 0), l = !Ie(e) || e !== this._$AH && e !== ve, l && (this._$AH = e);
     else {
       const c = e;
-      let p, C;
-      for (e = s[0], p = 0; p < s.length - 1; p++) C = _e(this, c[i + p], r, p), C === ye && (C = this._$AH[p]), l || (l = !Ie(C) || C !== this._$AH[p]), C === T ? e = T : e !== T && (e += (C ?? "") + s[p + 1]), this._$AH[p] = C;
+      let p, _;
+      for (e = s[0], p = 0; p < s.length - 1; p++) _ = _e(this, c[i + p], r, p), _ === ve && (_ = this._$AH[p]), l || (l = !Ie(_) || _ !== this._$AH[p]), _ === C ? e = C : e !== C && (e += (_ ?? "") + s[p + 1]), this._$AH[p] = _;
     }
     l && !o && this.j(e);
   }
   j(e) {
-    e === T ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
+    e === C ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
   }
 }
 class Vr extends dt {
@@ -1404,7 +1404,7 @@ class Vr extends dt {
     super(...arguments), this.type = 3;
   }
   j(e) {
-    this.element[this.name] = e === T ? void 0 : e;
+    this.element[this.name] = e === C ? void 0 : e;
   }
 }
 class Fr extends dt {
@@ -1412,7 +1412,7 @@ class Fr extends dt {
     super(...arguments), this.type = 4;
   }
   j(e) {
-    this.element.toggleAttribute(this.name, !!e && e !== T);
+    this.element.toggleAttribute(this.name, !!e && e !== C);
   }
 }
 class Yr extends dt {
@@ -1420,8 +1420,8 @@ class Yr extends dt {
     super(e, r, i, o, s), this.type = 5;
   }
   _$AI(e, r = this) {
-    if ((e = _e(this, e, r, 0) ?? T) === ye) return;
-    const i = this._$AH, o = e === T && i !== T || e.capture !== i.capture || e.once !== i.once || e.passive !== i.passive, s = e !== T && (i === T || o);
+    if ((e = _e(this, e, r, 0) ?? C) === ve) return;
+    const i = this._$AH, o = e === C && i !== C || e.capture !== i.capture || e.once !== i.once || e.passive !== i.passive, s = e !== C && (i === C || o);
     o && this.element.removeEventListener(this.name, this, i), s && this.element.addEventListener(this.name, this, e), this._$AH = e;
   }
   handleEvent(e) {
@@ -1440,8 +1440,8 @@ class Xr {
     _e(this, e);
   }
 }
-const Et = ze.litHtmlPolyfillSupport;
-Et == null || Et(He, je), (ze.litHtmlVersions ?? (ze.litHtmlVersions = [])).push("3.3.3");
+const kt = ze.litHtmlPolyfillSupport;
+kt == null || kt(He, je), (ze.litHtmlVersions ?? (ze.litHtmlVersions = [])).push("3.3.3");
 const qr = (t, e, r) => {
   const i = (r == null ? void 0 : r.renderBefore) ?? e;
   let o = i._$litPart$;
@@ -1456,7 +1456,7 @@ const qr = (t, e, r) => {
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ge = globalThis;
+const ye = globalThis;
 let Ne = class extends Te {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
@@ -1479,14 +1479,14 @@ let Ne = class extends Te {
     super.disconnectedCallback(), (e = this._$Do) == null || e.setConnected(!1);
   }
   render() {
-    return ye;
+    return ve;
   }
 };
 var br;
-Ne._$litElement$ = !0, Ne.finalized = !0, (br = ge.litElementHydrateSupport) == null || br.call(ge, { LitElement: Ne });
-const kt = ge.litElementPolyfillSupport;
-kt == null || kt({ LitElement: Ne });
-(ge.litElementVersions ?? (ge.litElementVersions = [])).push("4.2.2");
+Ne._$litElement$ = !0, Ne.finalized = !0, (br = ye.litElementHydrateSupport) == null || br.call(ye, { LitElement: Ne });
+const Et = ye.litElementPolyfillSupport;
+Et == null || Et({ LitElement: Ne });
+(ye.litElementVersions ?? (ye.litElementVersions = [])).push("4.2.2");
 /**
  * @license
  * Copyright 2017 Google LLC
@@ -1523,7 +1523,7 @@ const Jr = { attribute: !0, type: String, converter: it, reflect: !1, hasChanged
   }
   throw Error("Unsupported decorator location: " + i);
 };
-function w(t) {
+function T(t) {
   return (e, r) => typeof r == "object" ? Kr(t, e, r) : ((i, o, s) => {
     const l = o.hasOwnProperty(s);
     return o.constructor.createProperty(s, i), l ? Object.getOwnPropertyDescriptor(o, s) : void 0;
@@ -1535,7 +1535,7 @@ function w(t) {
  * SPDX-License-Identifier: BSD-3-Clause
  */
 function Zr(t) {
-  return w({ ...t, state: !0, attribute: !1 });
+  return T({ ...t, state: !0, attribute: !1 });
 }
 var Qr = Object.defineProperty, ei = Object.getOwnPropertyDescriptor, D = (t, e, r, i) => {
   for (var o = i > 1 ? void 0 : i ? ei(e, r) : e, s = t.length - 1, l; s >= 0; s--)
@@ -1591,9 +1591,9 @@ const lt = class lt extends Ne {
       const c = this.responsiveProps[s];
       if (!c) return;
       let p = "";
-      Object.entries(c).forEach(([C, k]) => {
-        const P = i[C];
-        P && (p += `--${e}-${P}-override: ${k};
+      Object.entries(c).forEach(([_, S]) => {
+        const A = i[_];
+        A && (p += `--${e}-${A}-override: ${S};
 `);
       }), p && (o += `${l} {
   :host {
@@ -1680,7 +1680,7 @@ const lt = class lt extends Ne {
     }
   }
 };
-lt.slots = [], lt.styles = vr`
+lt.slots = [], lt.styles = gr`
     :host {
       display: block;
       box-sizing: border-box;
@@ -1789,14 +1789,14 @@ lt.slots = [], lt.styles = vr`
   `;
 let z = lt;
 D([
-  w({ type: Object, attribute: "responsive-props" })
+  T({ type: Object, attribute: "responsive-props" })
 ], z.prototype, "responsiveProps", 2);
 D([
-  w({ type: String })
+  T({ type: String })
 ], z.prototype, "activeEdge", 2);
 D([
-  w({ type: Boolean, reflect: !0 }),
-  v({
+  T({ type: Boolean, reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.CHECKBOX,
     displayLabel: "Visible",
@@ -1805,8 +1805,8 @@ D([
   })
 ], z.prototype, "visible", 2);
 D([
-  w({ type: Number, reflect: !0, attribute: "z-index" }),
-  v({
+  T({ type: Number, reflect: !0, attribute: "z-index" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.NUMBER_INPUT,
     displayLabel: "Z-Index",
@@ -1815,8 +1815,8 @@ D([
   })
 ], z.prototype, "zIndex", 2);
 D([
-  w({ type: Number, reflect: !0 }),
-  v({
+  T({ type: Number, reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.RANGE_SLIDER,
     displayLabel: "Opacity",
@@ -1825,8 +1825,8 @@ D([
   })
 ], z.prototype, "opacity", 2);
 D([
-  w({ type: String, attribute: "custom-class" }),
-  v({
+  T({ type: String, attribute: "custom-class" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "Custom CSS Class",
@@ -1835,8 +1835,8 @@ D([
   })
 ], z.prototype, "customClass", 2);
 D([
-  w({ type: String, reflect: !0 }),
-  v({
+  T({ type: String, reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.RESPONSIVE_OVERRIDE,
     displayLabel: "Width",
@@ -1845,8 +1845,8 @@ D([
   })
 ], z.prototype, "width", 2);
 D([
-  w({ type: String, reflect: !0 }),
-  v({
+  T({ type: String, reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.RESPONSIVE_OVERRIDE,
     displayLabel: "Height",
@@ -1855,8 +1855,8 @@ D([
   })
 ], z.prototype, "height", 2);
 D([
-  w({ type: String, reflect: !0 }),
-  v({
+  T({ type: String, reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.RESPONSIVE_OVERRIDE,
     displayLabel: "Margin",
@@ -1865,8 +1865,8 @@ D([
   })
 ], z.prototype, "margin", 2);
 D([
-  w({ type: String, reflect: !0 }),
-  v({
+  T({ type: String, reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.RESPONSIVE_OVERRIDE,
     displayLabel: "Padding",
@@ -1875,7 +1875,7 @@ D([
   })
 ], z.prototype, "padding", 2);
 D([
-  v({
+  y({
     attributeType: f.EVENT,
     displayLabel: "On Click",
     eventTrigger: "click",
@@ -1883,23 +1883,23 @@ D([
   })
 ], z.prototype, "onClick", 1);
 D([
-  w({ type: String, reflect: !0 })
+  T({ type: String, reflect: !0 })
 ], z.prototype, "direction", 2);
 D([
-  w({ type: String, reflect: !0 })
+  T({ type: String, reflect: !0 })
 ], z.prototype, "justify", 2);
 D([
-  w({ type: String, reflect: !0 })
+  T({ type: String, reflect: !0 })
 ], z.prototype, "align", 2);
 D([
-  w({ type: String, reflect: !0 })
+  T({ type: String, reflect: !0 })
 ], z.prototype, "gap", 2);
 D([
-  w({ type: Number, reflect: !0, attribute: "items-per-row" })
+  T({ type: Number, reflect: !0, attribute: "items-per-row" })
 ], z.prototype, "itemsPerRow", 2);
 D([
-  w({ type: String, attribute: "background-color", reflect: !0 }),
-  v({
+  T({ type: String, attribute: "background-color", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Background Color",
@@ -1908,8 +1908,8 @@ D([
   })
 ], z.prototype, "backgroundColor", 2);
 D([
-  w({ type: String, attribute: "border-radius", reflect: !0 }),
-  v({
+  T({ type: String, attribute: "border-radius", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "Corner Radius",
@@ -1918,8 +1918,8 @@ D([
   })
 ], z.prototype, "borderRadius", 2);
 D([
-  w({ type: String, reflect: !0, attribute: "elevation" }),
-  v({
+  T({ type: String, reflect: !0, attribute: "elevation" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.DROPDOWN,
     displayLabel: "Elevation (Shadow)",
@@ -1934,14 +1934,14 @@ D([
   })
 ], z.prototype, "elevation", 2);
 D([
-  v({
+  y({
     attributeType: f.ACTION,
     displayLabel: "Show Component",
     categoryLabel: "Actions"
   })
 ], z.prototype, "show", 1);
 D([
-  v({
+  y({
     attributeType: f.ACTION,
     displayLabel: "Hide Component",
     categoryLabel: "Actions"
@@ -1976,11 +1976,11 @@ class ii {
  */
 class St extends ii {
   constructor(e) {
-    if (super(e), this.it = T, e.type !== ti.CHILD) throw Error(this.constructor.directiveName + "() can only be used in child bindings");
+    if (super(e), this.it = C, e.type !== ti.CHILD) throw Error(this.constructor.directiveName + "() can only be used in child bindings");
   }
   render(e) {
-    if (e === T || e == null) return this._t = void 0, this.it = e;
-    if (e === ye) return e;
+    if (e === C || e == null) return this._t = void 0, this.it = e;
+    if (e === ve) return e;
     if (typeof e != "string") throw Error(this.constructor.directiveName + "() called with a non-string value");
     if (e === this.it) return this._t;
     this.it = e;
@@ -1990,8 +1990,8 @@ class St extends ii {
 }
 St.directiveName = "unsafeHTML", St.resultType = 1;
 const cr = ri(St);
-var oi = Object.defineProperty, ni = Object.getOwnPropertyDescriptor, $ = (t, e, r, i) => {
-  for (var o = i > 1 ? void 0 : i ? ni(e, r) : e, s = t.length - 1, l; s >= 0; s--)
+var oi = Object.defineProperty, ai = Object.getOwnPropertyDescriptor, $ = (t, e, r, i) => {
+  for (var o = i > 1 ? void 0 : i ? ai(e, r) : e, s = t.length - 1, l; s >= 0; s--)
     (l = t[s]) && (o = (i ? l(e, r, o) : l(o)) || o);
   return i && o && oi(e, r, o), o;
 };
@@ -2021,7 +2021,7 @@ const Lt = [
   userRole: "Member",
   showLogout: !1,
   showSettings: !1
-}, nt = JSON.stringify(Lt, null, 2), at = JSON.stringify(oe, null, 2), st = JSON.stringify(be, null, 2), ai = Lt.filter((t) => !!t.label && !t.separator && !t.section).map((t) => ({ label: t.label ?? "", href: t.href ?? "", icon: t.icon ?? "" }));
+}, at = JSON.stringify(Lt, null, 2), nt = JSON.stringify(oe, null, 2), st = JSON.stringify(be, null, 2), ni = Lt.filter((t) => !!t.label && !t.separator && !t.section).map((t) => ({ label: t.label ?? "", href: t.href ?? "", icon: t.icon ?? "" }));
 function et(t) {
   try {
     const e = JSON.parse(t);
@@ -2138,13 +2138,13 @@ function si(t, e, r, i, o, s, l, c) {
         ${t.section}
       </div>
     `;
-  const p = r === e, C = !!((Y = t.children) != null && Y.length), k = !c && t.badge ? `
+  const p = r === e, _ = !!((Y = t.children) != null && Y.length), S = !c && t.badge ? `
     <span style="margin-left:auto; background:${t.badgeColor || l};
       color:#fff; font-size:0.65rem; font-weight:700; padding:1px 7px;
       border-radius:999px; flex-shrink:0;">
       ${t.badge}
     </span>
-  ` : "", P = !c && C ? `
+  ` : "", A = !c && _ ? `
     <span style="margin-left:${t.badge ? "8px" : "auto"}; color:${p ? s : "#8996a4"}; display:flex; flex-shrink:0;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="${p ? "6 9 12 15 18 9" : "9 18 15 12 9 6"}"></polyline>
@@ -2169,12 +2169,12 @@ function si(t, e, r, i, o, s, l, c) {
         <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1;">
           ${t.label ?? ""}
         </span>
-        ${k}${P}
+        ${S}${A}
       `}
     </div>
   `;
   let B = "";
-  return C && p && !c && (B = '<div style="display:flex; flex-direction:column; margin:2px 0 6px;">' + t.children.map((K, ee) => {
+  return _ && p && !c && (B = '<div style="display:flex; flex-direction:column; margin:2px 0 6px;">' + t.children.map((K, ee) => {
     const Z = ee === 0, ie = Z ? l : i;
     return `
           <div style="display:flex; align-items:center; gap:12px; padding:6px 12px 6px 30px;
@@ -2301,13 +2301,13 @@ function pi(t, e, r, i = "buttons", o = "#94a3b8") {
     </div>
   `;
 }
-let x = class extends z {
+let w = class extends z {
   constructor() {
     super(...arguments), this.height = "100vh", this.activePath = "", this._isMobile = !1, this._mql = null, this._handleUrlChange = () => {
       this._matchActiveItemWithUrl();
     }, this._handleMediaChange = (t) => {
       this._isMobile = t.matches;
-    }, this.headerMode = "config", this.sidenavMode = "config", this.footerMode = "config", this.fixedHeader = !0, this.fixedFooter = !0, this.sidenavType = "side", this.opened = !0, this.hasBackdrop = !0, this.collapseBtnPosition = "sidebar-bottom", this.collapseBtnIcon = "chevron", this.navItems = nt, this.activeItem = 0, this.headerConfig = at, this.sidebarFooterConfig = st, this.appName = "My App", this.appSubtitle = "", this.appLogo = "🚀", this.headerTitle = "", this.headerLogo = "", this.collapsed = !1, this.sidebarWidth = "260px", this.headerHeight = "60px", this.collapsedWidth = "64px", this.showCollapseBtn = !0, this.showThemeToggle = !1, this.themeMode = "light", this.sidebarBg = "#ffffff", this.sidebarText = "#5b6b79", this.sidebarActiveBg = "#e6f0ff", this.sidebarActiveText = "#4680ff", this.accentColor = "#4680ff", this.headerBg = "#ffffff", this.headerText = "#1d2630", this.headerBorder = "#e5e9ef", this.mainBg = "#f4f7fa", this.mainPadding = "24px", this.footerActionType = "buttons", this.profilePosition = "top", this._expandedItems = /* @__PURE__ */ new Set();
+    }, this.headerMode = "config", this.sidenavMode = "config", this.footerMode = "config", this.fixedHeader = !0, this.fixedFooter = !0, this.sidenavType = "side", this.opened = !0, this.hasBackdrop = !0, this.collapseBtnPosition = "sidebar-bottom", this.collapseBtnIcon = "chevron", this.navItems = at, this.activeItem = 0, this.headerConfig = nt, this.sidebarFooterConfig = st, this.appName = "My App", this.appSubtitle = "", this.appLogo = "🚀", this.headerTitle = "", this.headerLogo = "", this.collapsed = !1, this.sidebarWidth = "260px", this.headerHeight = "60px", this.collapsedWidth = "64px", this.showCollapseBtn = !0, this.showThemeToggle = !1, this.themeMode = "light", this.sidebarBg = "#ffffff", this.sidebarText = "#5b6b79", this.sidebarActiveBg = "#e6f0ff", this.sidebarActiveText = "#4680ff", this.accentColor = "#4680ff", this.headerBg = "#ffffff", this.headerText = "#1d2630", this.headerBorder = "#e5e9ef", this.mainBg = "#f4f7fa", this.mainPadding = "24px", this.footerActionType = "buttons", this.profilePosition = "top", this._expandedItems = /* @__PURE__ */ new Set();
   }
   get overridePrefix() {
     return "zero-sidenav-layout";
@@ -2406,7 +2406,7 @@ let x = class extends z {
         label: "Nav Items",
         control: "list",
         group: "Navigation",
-        defaultValue: ai,
+        defaultValue: ni,
         itemShape: [
           { name: "label", label: "Label", control: "text", defaultValue: "" },
           { name: "href", label: "Link (href)", control: "text", defaultValue: "" },
@@ -2500,17 +2500,17 @@ let x = class extends z {
         } catch {
         }
         if (p.startsWith("/")) {
-          const C = p.split("/").filter(Boolean);
-          C.length > 1 && C[0].startsWith("project-") && (p = "/" + C.slice(1).join("/"));
+          const _ = p.split("/").filter(Boolean);
+          _.length > 1 && _[0].startsWith("project-") && (p = "/" + _.slice(1).join("/"));
         }
         return p = p.replace(/\/+$/, ""), p === "" ? "/" : p;
       }, o = i(e);
       let s = -1, l = -1;
       r.forEach((c, p) => {
-        const C = c.path ?? c.href;
-        if (!C) return;
-        const k = i(C);
-        (k === o || k !== "/" && o.startsWith(k + "/")) && k.length > l && (l = k.length, s = p);
+        const _ = c.path ?? c.href;
+        if (!_) return;
+        const S = i(_);
+        (S === o || S !== "/" && o.startsWith(S + "/")) && S.length > l && (l = S.length, s = p);
       }), s !== -1 && s !== this.activeItem && (this.activeItem = s);
     }
   }
@@ -2526,9 +2526,6 @@ let x = class extends z {
   get onLogout() {
     return "logout";
   }
-  get onProfileClick() {
-    return "profileClick";
-  }
   get onSettingsClick() {
     return "settingsClick";
   }
@@ -2537,9 +2534,6 @@ let x = class extends z {
   }
   get onThemeChange() {
     return "themechange";
-  }
-  get onNotificationClick() {
-    return "notificationClick";
   }
   open() {
     this.opened = !0, this.dispatchEvent(new CustomEvent("openedchange", { detail: { opened: !0 }, bubbles: !0, composed: !0 }));
@@ -2573,11 +2567,23 @@ let x = class extends z {
   handleChildToggle(t) {
     this._expandedItems.has(t) ? this._expandedItems.delete(t) : this._expandedItems.add(t), this.requestUpdate();
   }
-  /** Notification bell click → dispatch a wireable `notificationClick` event
-   *  (bubbles + composed) so it can drive a shell-node trigger. */
   handleBellClick(t) {
-    this.dispatchEvent(new CustomEvent("notificationClick", {
+    this.dispatchEvent(new CustomEvent("notification-click", {
       detail: { count: t },
+      bubbles: !0,
+      composed: !0
+    }));
+  }
+  handleProfileClick(t = "header", e = {}) {
+    this.dispatchEvent(new CustomEvent("profile-click", {
+      detail: { origin: t, ...e },
+      bubbles: !0,
+      composed: !0
+    }));
+  }
+  handleHeaderAction(t = "search") {
+    this.dispatchEvent(new CustomEvent("header-action", {
+      detail: { action: t },
       bubbles: !0,
       composed: !0
     }));
@@ -2616,8 +2622,8 @@ let x = class extends z {
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
         `);
-    const p = (C) => {
-      C.stopPropagation(), this.sidenavType === "over" ? this.toggle() : this.toggleSidebar();
+    const p = (_) => {
+      _.stopPropagation(), this.sidenavType === "over" ? this.toggle() : this.toggleSidebar();
     };
     return e ? g`
         <button class="snl-floating-toggle" @click=${p} title="Toggle sidebar">
@@ -2635,8 +2641,8 @@ let x = class extends z {
   }
   // ─── getStudioTemplate ─────────────────────────────────────────────────────
   static getStudioTemplate(t) {
-    var a, d, h, _, U, j, O, u, b, y, m, R, M, I, J, Ae, Ke, Ze, Mt, zt, Nt, Bt, It, Ht, jt, Ut, Dt, Wt, Vt, Ft, Yt, Xt, qt, Gt, Jt, Kt;
-    const e = ((a = t == null ? void 0 : t.props) == null ? void 0 : a.headerMode) || "config", r = ((d = t == null ? void 0 : t.props) == null ? void 0 : d.sidenavMode) || "config", i = ((h = t == null ? void 0 : t.props) == null ? void 0 : h.footerMode) || "config", o = ((_ = t == null ? void 0 : t.props) == null ? void 0 : _.navItems) || nt, s = ((U = t == null ? void 0 : t.props) == null ? void 0 : U.headerConfig) || at, l = ((j = t == null ? void 0 : t.props) == null ? void 0 : j.sidebarFooterConfig) || st, c = ((O = t == null ? void 0 : t.props) == null ? void 0 : O.appName) ?? "My App", p = ((u = t == null ? void 0 : t.props) == null ? void 0 : u.appSubtitle) ?? "", C = ((b = t == null ? void 0 : t.props) == null ? void 0 : b.appLogo) ?? "", k = ((y = t == null ? void 0 : t.props) == null ? void 0 : y.headerTitle) || "", P = ((m = t == null ? void 0 : t.props) == null ? void 0 : m.headerLogo) || "", N = Number(((R = t == null ? void 0 : t.props) == null ? void 0 : R.activeItem) ?? 0), B = !!((M = t == null ? void 0 : t.props) != null && M.collapsed), Y = ((I = t == null ? void 0 : t.props) == null ? void 0 : I.profilePosition) || "top", K = ((J = t == null ? void 0 : t.props) == null ? void 0 : J.sidebarWidth) || "260px", ee = ((Ae = t == null ? void 0 : t.props) == null ? void 0 : Ae.sidebarBg) || "#ffffff", Z = ((Ke = t == null ? void 0 : t.props) == null ? void 0 : Ke.sidebarText) || "#5b6b79", ie = ((Ze = t == null ? void 0 : t.props) == null ? void 0 : Ze.sidebarActiveBg) || "#e6f0ff", A = ((Mt = t == null ? void 0 : t.props) == null ? void 0 : Mt.sidebarActiveText) || "#4680ff", L = ((zt = t == null ? void 0 : t.props) == null ? void 0 : zt.accentColor) || "#4680ff", Q = ((Nt = t == null ? void 0 : t.props) == null ? void 0 : Nt.headerBg) || "#ffffff", X = ((Bt = t == null ? void 0 : t.props) == null ? void 0 : Bt.headerText) || "#1d2630", G = ((It = t == null ? void 0 : t.props) == null ? void 0 : It.headerBorder) || "#e5e9ef", me = ((Ht = t == null ? void 0 : t.props) == null ? void 0 : Ht.mainBg) || "#f4f7fa", xe = ((jt = t == null ? void 0 : t.props) == null ? void 0 : jt.mainPadding) || "24px", Ue = ((Ut = t == null ? void 0 : t.props) == null ? void 0 : Ut.headerHeight) || "60px", de = ((Dt = t == null ? void 0 : t.props) == null ? void 0 : Dt.collapsedWidth) || "64px", te = ((Wt = t == null ? void 0 : t.props) == null ? void 0 : Wt.showCollapseBtn) !== !1, W = ((Vt = t == null ? void 0 : t.props) == null ? void 0 : Vt.sidenavType) || "side", V = ((Ft = t == null ? void 0 : t.props) == null ? void 0 : Ft.opened) !== !1, Ee = ((Yt = t == null ? void 0 : t.props) == null ? void 0 : Yt.hasBackdrop) !== !1, ne = ((Xt = t == null ? void 0 : t.props) == null ? void 0 : Xt.collapseBtnPosition) || "sidebar-bottom", ae = ((qt = t == null ? void 0 : t.props) == null ? void 0 : qt.collapseBtnIcon) || "chevron", De = ((Gt = t == null ? void 0 : t.props) == null ? void 0 : Gt.footerActionType) || "buttons", pe = ((Jt = t == null ? void 0 : t.props) == null ? void 0 : Jt.fixedHeader) !== !1, ke = ((Kt = t == null ? void 0 : t.props) == null ? void 0 : Kt.fixedFooter) !== !1, We = et(o), S = ur(s), re = fr(l), he = W === "over" ? !V : B, H = he ? W === "over" ? "0px" : de : K, pt = k || c, ht = r !== "hidden", Ve = (F, $t) => {
+    var n, d, h, k, U, j, O, u, b, v, x, R, M, I, J, Ae, Ke, Ze, Mt, zt, Nt, Bt, It, Ht, jt, Ut, Dt, Wt, Vt, Ft, Yt, Xt, qt, Gt, Jt, Kt;
+    const e = ((n = t == null ? void 0 : t.props) == null ? void 0 : n.headerMode) || "config", r = ((d = t == null ? void 0 : t.props) == null ? void 0 : d.sidenavMode) || "config", i = ((h = t == null ? void 0 : t.props) == null ? void 0 : h.footerMode) || "config", o = ((k = t == null ? void 0 : t.props) == null ? void 0 : k.navItems) || at, s = ((U = t == null ? void 0 : t.props) == null ? void 0 : U.headerConfig) || nt, l = ((j = t == null ? void 0 : t.props) == null ? void 0 : j.sidebarFooterConfig) || st, c = ((O = t == null ? void 0 : t.props) == null ? void 0 : O.appName) ?? "My App", p = ((u = t == null ? void 0 : t.props) == null ? void 0 : u.appSubtitle) ?? "", _ = ((b = t == null ? void 0 : t.props) == null ? void 0 : b.appLogo) ?? "", S = ((v = t == null ? void 0 : t.props) == null ? void 0 : v.headerTitle) || "", A = ((x = t == null ? void 0 : t.props) == null ? void 0 : x.headerLogo) || "", N = Number(((R = t == null ? void 0 : t.props) == null ? void 0 : R.activeItem) ?? 0), B = !!((M = t == null ? void 0 : t.props) != null && M.collapsed), Y = ((I = t == null ? void 0 : t.props) == null ? void 0 : I.profilePosition) || "top", K = ((J = t == null ? void 0 : t.props) == null ? void 0 : J.sidebarWidth) || "260px", ee = ((Ae = t == null ? void 0 : t.props) == null ? void 0 : Ae.sidebarBg) || "#ffffff", Z = ((Ke = t == null ? void 0 : t.props) == null ? void 0 : Ke.sidebarText) || "#5b6b79", ie = ((Ze = t == null ? void 0 : t.props) == null ? void 0 : Ze.sidebarActiveBg) || "#e6f0ff", m = ((Mt = t == null ? void 0 : t.props) == null ? void 0 : Mt.sidebarActiveText) || "#4680ff", L = ((zt = t == null ? void 0 : t.props) == null ? void 0 : zt.accentColor) || "#4680ff", Q = ((Nt = t == null ? void 0 : t.props) == null ? void 0 : Nt.headerBg) || "#ffffff", X = ((Bt = t == null ? void 0 : t.props) == null ? void 0 : Bt.headerText) || "#1d2630", G = ((It = t == null ? void 0 : t.props) == null ? void 0 : It.headerBorder) || "#e5e9ef", me = ((Ht = t == null ? void 0 : t.props) == null ? void 0 : Ht.mainBg) || "#f4f7fa", xe = ((jt = t == null ? void 0 : t.props) == null ? void 0 : jt.mainPadding) || "24px", Ue = ((Ut = t == null ? void 0 : t.props) == null ? void 0 : Ut.headerHeight) || "60px", de = ((Dt = t == null ? void 0 : t.props) == null ? void 0 : Dt.collapsedWidth) || "64px", te = ((Wt = t == null ? void 0 : t.props) == null ? void 0 : Wt.showCollapseBtn) !== !1, W = ((Vt = t == null ? void 0 : t.props) == null ? void 0 : Vt.sidenavType) || "side", V = ((Ft = t == null ? void 0 : t.props) == null ? void 0 : Ft.opened) !== !1, ke = ((Yt = t == null ? void 0 : t.props) == null ? void 0 : Yt.hasBackdrop) !== !1, ae = ((Xt = t == null ? void 0 : t.props) == null ? void 0 : Xt.collapseBtnPosition) || "sidebar-bottom", ne = ((qt = t == null ? void 0 : t.props) == null ? void 0 : qt.collapseBtnIcon) || "chevron", De = ((Gt = t == null ? void 0 : t.props) == null ? void 0 : Gt.footerActionType) || "buttons", pe = ((Jt = t == null ? void 0 : t.props) == null ? void 0 : Jt.fixedHeader) !== !1, Ee = ((Kt = t == null ? void 0 : t.props) == null ? void 0 : Kt.fixedFooter) !== !1, We = et(o), P = ur(s), re = fr(l), he = W === "over" ? !V : B, H = he ? W === "over" ? "0px" : de : K, pt = S || c, ht = r !== "hidden", Ve = (F, $t) => {
       const Tt = (F || "").trim().split(/\s+/).filter(Boolean), Qe = Tt[0] || "", Oe = Tt.slice(1).join(" ");
       return `<span style="font-weight:800; font-size:1.35rem; line-height:1; color:${$t}; letter-spacing:-0.01em; white-space:nowrap;">${Qe}${Oe ? `<sup style="font-size:0.5em; font-weight:700; vertical-align:super; margin-left:1px;">${Oe}</sup>` : ""}</span>`;
     }, ct = (F) => !!F && (F.startsWith("<") || F.startsWith("http") || F.startsWith("/") || F.includes(".")), q = [
@@ -2648,9 +2654,9 @@ let x = class extends z {
     const we = We.map((F, $t) => {
       const Qe = F.bottom === !0 && !Se;
       Qe && (Se = !0);
-      const Oe = si(F, $t, N, Z, ie, A, L, he);
+      const Oe = si(F, $t, N, Z, ie, m, L, he);
       return Qe ? `<div style="flex: 1; min-height: 20px;"></div>${Oe}` : Oe;
-    }).join(""), Fe = ne === "header-left" && te ? Le("header-left", ae, B, W, V, X) : "", ut = ne === "header-right" && te ? Le("header-right", ae, B, W, V, X) : "", $e = e === "hidden" ? "" : `
+    }).join(""), Fe = ae === "header-left" && te ? Le("header-left", ne, B, W, V, X) : "", ut = ae === "header-right" && te ? Le("header-right", ne, B, W, V, X) : "", $e = e === "hidden" ? "" : `
       <div style="
         display:flex; align-items:center; gap:12px;
         height:${Ue}; padding:0 20px;
@@ -2659,16 +2665,16 @@ let x = class extends z {
         width:100%;
       ">
         ${Fe}
-        ${k || P ? `
+        ${S || A ? `
           <div style="display:flex; align-items:center; gap:8px; font-weight:700; font-size:0.95rem; color:${X}; white-space:nowrap; flex-shrink:0;">
             ${(() => {
-      const F = P || C;
+      const F = A || _;
       return F.startsWith("<") ? F : F.startsWith("http") || F.startsWith("/") || F.includes(".") ? `<img src="${F}" style="width: 24px; height: 24px; object-fit: contain;" />` : `<span style="font-size:1.3rem;">${F}</span>`;
     })()}
             ${pt}
           </div>
         ` : ""}
-        ${e === "config" ? li(S, L, X) : `<div style="flex:1; min-width:0;">${tt("header", "Drop Header Sections", "40px", L)}</div>`}
+        ${e === "config" ? li(P, L, X) : `<div style="flex:1; min-width:0;">${tt("header", "Drop Header Sections", "40px", L)}</div>`}
         ${ut}
       </div>
     `, Ye = r === "slot" ? tt("sidebar", "Drop Sidebar Sections", "200px", L) : `
@@ -2680,7 +2686,7 @@ let x = class extends z {
         </div>
       `, Xe = i === "config" && re.show && Y === "top" ? di(re, he, L, X, "#8996a4", G) : "", qe = i === "hidden" ? "" : i === "slot" ? `<div style="padding:8px; border-top:1px solid #e5e9ef; flex-shrink:0;">
              ${tt("footer", "Drop Footer Sections", "50px", L)}
-           </div>` : Y === "bottom" ? pi(re, he, L, De, Z) : "", Ge = ne === "sidebar-top" && te ? Le("sidebar-top", ae, B, W, V, "#fff") : "", Pe = ne === "sidebar-bottom" && te ? Le("sidebar-bottom", ae, B, W, V, Z) : "", bt = ke ? "" : "overflow-y: auto; scrollbar-width: thin;", gt = ke ? "" : "flex: none; overflow-y: visible;", vt = ht ? `
+           </div>` : Y === "bottom" ? pi(re, he, L, De, Z) : "", Ge = ae === "sidebar-top" && te ? Le("sidebar-top", ne, B, W, V, "#fff") : "", Pe = ae === "sidebar-bottom" && te ? Le("sidebar-bottom", ne, B, W, V, Z) : "", bt = Ee ? "" : "overflow-y: auto; scrollbar-width: thin;", yt = Ee ? "" : "flex: none; overflow-y: visible;", gt = ht ? `
       <div style="
         width:${H}; background:${ee};
         display:flex; flex-direction:column; flex-shrink:0;
@@ -2691,7 +2697,7 @@ let x = class extends z {
       ">
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 18px 16px; border-bottom: 1px solid ${G}; flex-shrink: 0;">
           <div style="display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1;">
-            ${ct(C) ? C.startsWith("<") ? C : `<img src="${C}" style="width: 28px; height: 28px; object-fit: contain; border-radius:8px;" />` : ""}
+            ${ct(_) ? _.startsWith("<") ? _ : `<img src="${_}" style="width: 28px; height: 28px; object-fit: contain; border-radius:8px;" />` : ""}
             ${he ? "" : `
               <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
                 ${Ve(c, L)}
@@ -2702,15 +2708,15 @@ let x = class extends z {
           ${Ge}
         </div>
         ${Xe}
-        <div style="display:flex; flex-direction:column; flex:1; overflow:hidden; ${gt}">
+        <div style="display:flex; flex-direction:column; flex:1; overflow:hidden; ${yt}">
           ${Ye}
         </div>
         ${qe}
         ${Pe}
       </div>
-    ` : "", yt = W === "over" && V && Ee ? `
+    ` : "", vt = W === "over" && V && ke ? `
       <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); backdrop-filter:blur(2px); z-index:25; pointer-events:none;"></div>
-    ` : "", ce = ne === "floating" && te ? Le("floating", ae, B, W, V, Z) : "", mt = pe ? $e : "", xt = pe ? "" : $e, wt = pe ? `padding: ${xe};` : "", n = `
+    ` : "", ce = ae === "floating" && te ? Le("floating", ne, B, W, V, Z) : "", mt = pe ? $e : "", xt = pe ? "" : $e, wt = pe ? `padding: ${xe};` : "", a = `
       <div style="
         display:flex; flex-direction:column; width:100%; height:600px;
         overflow:hidden; border:1px solid ${G}; border-radius:12px;
@@ -2731,8 +2737,8 @@ let x = class extends z {
       ">
         ${mt}
         <div style="display:flex; flex:1; overflow:hidden; position:relative;">
-          ${yt}
           ${vt}
+          ${gt}
           ${ce}
           <div style="flex:1; overflow-y: auto; background:${me}; display:flex; flex-direction:column; min-width:0;">
             ${xt}
@@ -2754,7 +2760,7 @@ let x = class extends z {
     return {
       kind: "panel",
       slots: q,
-      templateHtml: n,
+      templateHtml: a,
       badges: ["Sidebar Layout"],
       emptyText: "Drop sections into main, or switch a region to 'slot' mode"
     };
@@ -2762,14 +2768,14 @@ let x = class extends z {
   // ─── Runtime Render ────────────────────────────────────────────────────────
   render() {
     var ie;
-    const t = et(this.navItems), e = ur(this.headerConfig), r = fr(this.sidebarFooterConfig), i = this.sidenavMode !== "hidden", o = !!(this.headerTitle || this.headerLogo), s = (A) => !!A && (A.startsWith("<") || A.startsWith("http") || A.startsWith("/") || A.includes(".")), l = () => {
-      const A = (this.appName || "").trim().split(/\s+/).filter(Boolean), L = A[0] || "", Q = A.slice(1).join(" ");
-      return g`<span class="snl-brand-name">${L}${Q ? g`<sup class="snl-brand-name-sup">${Q}</sup>` : T}</span>`;
+    const t = et(this.navItems), e = ur(this.headerConfig), r = fr(this.sidebarFooterConfig), i = this.sidenavMode !== "hidden", o = !!(this.headerTitle || this.headerLogo), s = (m) => !!m && (m.startsWith("<") || m.startsWith("http") || m.startsWith("/") || m.includes(".")), l = () => {
+      const m = (this.appName || "").trim().split(/\s+/).filter(Boolean), L = m[0] || "", Q = m.slice(1).join(" ");
+      return g`<span class="snl-brand-name">${L}${Q ? g`<sup class="snl-brand-name-sup">${Q}</sup>` : C}</span>`;
     }, c = this.showThemeToggle ? g`
       <button class="snl-header-btn snl-theme-toggle"
         style="color:${this.headerText}; margin-right:0;"
-        @click=${(A) => {
-      A.stopPropagation(), this.toggleTheme();
+        @click=${(m) => {
+      m.stopPropagation(), this.toggleTheme();
     }}
         title=${this.themeMode === "dark" ? "Switch to light theme" : "Switch to dark theme"}
         aria-label="Toggle theme">
@@ -2791,13 +2797,16 @@ let x = class extends z {
           </svg>
         `}
       </button>
-    ` : T, p = this.footerMode === "config" && r.show, C = g`
-      <div class="snl-profile-card"
-        @click=${() => this.dispatchEvent(new CustomEvent("profileClick", { bubbles: !0, composed: !0 }))}>
+    ` : C, p = this.footerMode === "config" && r.show, _ = g`
+      <div class="snl-profile-card" role="button" tabindex="0"
+        @click=${() => this.handleProfileClick("sidebar", { userName: r.userName, userRole: r.userRole })}
+        @keydown=${(m) => {
+      (m.key === "Enter" || m.key === " ") && (m.preventDefault(), this.handleProfileClick("sidebar", { userName: r.userName, userRole: r.userRole }));
+    }}>
         ${r.avatarUrl ? g`<img class="snl-profile-avatar snl-profile-avatar-img" src=${r.avatarUrl} />` : g`<div class="snl-profile-avatar snl-profile-avatar-init">${Ce(r.userName)}</div>`}
         <div class="snl-profile-info">
           <div class="snl-profile-name">${r.userName ?? ""}</div>
-          ${r.userRole ? g`<div class="snl-profile-role">${r.userRole}</div>` : T}
+          ${r.userRole ? g`<div class="snl-profile-role">${r.userRole}</div>` : C}
         </div>
         <span class="snl-profile-caret">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2808,7 +2817,7 @@ let x = class extends z {
           </svg>
         </span>
       </div>
-    `, k = this.headerMode === "hidden" ? T : g`
+    `, S = this.headerMode === "hidden" ? C : g`
       <header class="snl-header"
         style="
           height:${this.headerHeight}; background:var(--uiv-surface-color, ${this.headerBg});
@@ -2816,61 +2825,71 @@ let x = class extends z {
           border-bottom:1px solid var(--uiv-border-color, ${this.headerBorder});
         ">
 
-        <button class="snl-header-toggle-mobile" @click=${(A) => {
-      A.stopPropagation(), this.toggle();
+        <button class="snl-header-toggle-mobile" @click=${(m) => {
+      m.stopPropagation(), this.toggle();
     }} title="Toggle sidebar">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
           </svg>
         </button>
 
-        ${this.collapseBtnPosition === "header-left" && this.showCollapseBtn ? this.renderToggleButton("header-left") : T}
+        ${this.collapseBtnPosition === "header-left" && this.showCollapseBtn ? this.renderToggleButton("header-left") : C}
 
         ${o ? g`
           <div class="snl-header-brand" style="color:${this.headerText};">
             ${(() => {
-      const A = this.headerLogo || this.appLogo;
-      return A && A.startsWith("<") ? g`${cr(A)}` : A && (A.startsWith("http") || A.startsWith("/") || A.includes(".")) ? g`<img src="${A}" style="width: 24px; height: 24px; object-fit: contain;" />` : A ? g`<span class="snl-brand-logo">${A}</span>` : T;
+      const m = this.headerLogo || this.appLogo;
+      return m && m.startsWith("<") ? g`${cr(m)}` : m && (m.startsWith("http") || m.startsWith("/") || m.includes(".")) ? g`<img src="${m}" style="width: 24px; height: 24px; object-fit: contain;" />` : m ? g`<span class="snl-brand-logo">${m}</span>` : C;
     })()}
             <span>${this.headerTitle || this.appName}</span>
           </div>
-        ` : T}
+        ` : C}
 
         ${this.headerMode === "config" ? g`
 
           ${e.showBreadcrumb && ((ie = e.breadcrumbs) != null && ie.length) ? g`
             <nav class="snl-header-breadcrumb">
-              ${e.breadcrumbs.map((A, L) => g`
-                ${L > 0 ? g`<span style="opacity:0.3; margin:0 4px;">›</span>` : T}
-                <span style="${L === e.breadcrumbs.length - 1 ? "font-weight:600;" : "opacity:0.6;"}">${A}</span>
+              ${e.breadcrumbs.map((m, L) => g`
+                ${L > 0 ? g`<span style="opacity:0.3; margin:0 4px;">›</span>` : C}
+                <span style="${L === e.breadcrumbs.length - 1 ? "font-weight:600;" : "opacity:0.6;"}">${m}</span>
               `)}
             </nav>
-          ` : T}
+          ` : C}
 
           ${e.showSearch ? g`
             <div class="snl-header-search">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8996a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
-                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
+              <span class="snl-header-search-icon" role="button" tabindex="0" title="Search"
+                aria-label="Search"
+                style="display:flex; align-items:center; cursor:pointer; flex-shrink:0;"
+                @click=${(m) => {
+      m.stopPropagation(), this.handleHeaderAction("search");
+    }}
+                @keydown=${(m) => {
+      (m.key === "Enter" || m.key === " ") && (m.preventDefault(), this.handleHeaderAction("search"));
+    }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8996a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                  <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </span>
               <input
                 class="snl-header-search-input"
                 type="search"
                 placeholder=${e.searchPlaceholder ?? "Search (Ctrl + K)"}
-                @input=${(A) => this.dispatchEvent(new CustomEvent("search", {
-      detail: { query: A.target.value },
+                @input=${(m) => this.dispatchEvent(new CustomEvent("search", {
+      detail: { query: m.target.value },
       bubbles: !0,
       composed: !0
     }))}
-                @keydown=${(A) => {
-      A.key === "Enter" && this.dispatchEvent(new CustomEvent("search", {
-        detail: { query: A.target.value, submit: !0 },
+                @keydown=${(m) => {
+      m.key === "Enter" && this.dispatchEvent(new CustomEvent("search", {
+        detail: { query: m.target.value, submit: !0 },
         bubbles: !0,
         composed: !0
       }));
     }}
               />
             </div>
-          ` : T}
+          ` : C}
 
           <div class="snl-header-spacer"></div>
 
@@ -2879,23 +2898,30 @@ let x = class extends z {
           ${e.showNotificationBell ? g`
             <div class="snl-header-bell" role="button" tabindex="0" title="Notifications"
               aria-label="Notifications"
-              @click=${(A) => {
-      A.stopPropagation(), this.handleBellClick(e.notificationCount ?? 0);
+              @click=${(m) => {
+      m.stopPropagation(), this.handleBellClick(e.notificationCount ?? 0);
     }}
-              @keydown=${(A) => {
-      (A.key === "Enter" || A.key === " ") && (A.preventDefault(), this.handleBellClick(e.notificationCount ?? 0));
+              @keydown=${(m) => {
+      (m.key === "Enter" || m.key === " ") && (m.preventDefault(), this.handleBellClick(e.notificationCount ?? 0));
     }}>
               <span>🔔</span>
               ${(e.notificationCount ?? 0) > 0 ? g`
                 <span class="snl-bell-count" style="background:${this.accentColor};">
                   ${e.notificationCount}
                 </span>
-              ` : T}
+              ` : C}
             </div>
-          ` : T}
+          ` : C}
 
           ${e.showUserAvatar ? g`
-            <div class="snl-header-user">
+            <div class="snl-header-user" role="button" tabindex="0"
+              title=${e.userName ?? "Profile"}
+              @click=${(m) => {
+      m.stopPropagation(), this.handleProfileClick("header", { userName: e.userName, userRole: e.userRole });
+    }}
+              @keydown=${(m) => {
+      (m.key === "Enter" || m.key === " ") && (m.preventDefault(), this.handleProfileClick("header", { userName: e.userName, userRole: e.userRole }));
+    }}>
               ${e.userAvatarUrl ? g`
                 <img class="snl-avatar snl-avatar-img" src=${e.userAvatarUrl} />
               ` : g`
@@ -2905,11 +2931,11 @@ let x = class extends z {
               `}
               <div class="snl-user-info" style="display:flex; flex-direction:column; line-height:1.25;">
                 <span style="font-size:0.8rem; font-weight:600; color:${this.headerText};">${e.userName ?? ""}</span>
-                ${e.userRole ? g`<span style="font-size:0.7rem; opacity:0.5;">${e.userRole}</span>` : T}
+                ${e.userRole ? g`<span style="font-size:0.7rem; opacity:0.5;">${e.userRole}</span>` : C}
               </div>
               <span style="opacity:0.3; font-size:0.75rem;">▾</span>
             </div>
-          ` : T}
+          ` : C}
 
         ` : g`
           <div class="snl-header-slot-zone">
@@ -2918,27 +2944,27 @@ let x = class extends z {
           ${c}
         `}
 
-        ${this.collapseBtnPosition === "header-right" && this.showCollapseBtn ? this.renderToggleButton("header-right") : T}
+        ${this.collapseBtnPosition === "header-right" && this.showCollapseBtn ? this.renderToggleButton("header-right") : C}
       </header>
-    `, P = this.fixedFooter ? "" : "overflow-y: auto; scrollbar-width: thin;", N = this.fixedFooter ? "" : "flex: none; overflow-y: visible;", B = i ? g`
+    `, A = this.fixedFooter ? "" : "overflow-y: auto; scrollbar-width: thin;", N = this.fixedFooter ? "" : "flex: none; overflow-y: visible;", B = i ? g`
       <aside class="snl-sidebar"
         style="width:${this.sidebarWidth}; background:var(--uiv-surface-color, ${this.sidebarBg});
           --snl-collapsed-w:${this.collapsedWidth};
-          ${P}">
+          ${A}">
 
         <div class="snl-sidebar-brand" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
           <slot name="brand">
             <div class="snl-brand-wordmark" style="flex: 1;">
-              ${s(this.appLogo) ? this.appLogo.startsWith("<") ? g`${cr(this.appLogo)}` : g`<img src="${this.appLogo}" style="width: 28px; height: 28px; object-fit: contain; border-radius:8px;" />` : T}
+              ${s(this.appLogo) ? this.appLogo.startsWith("<") ? g`${cr(this.appLogo)}` : g`<img src="${this.appLogo}" style="width: 28px; height: 28px; object-fit: contain; border-radius:8px;" />` : C}
               ${l()}
-              ${this.appSubtitle ? g`<span class="snl-brand-pill">${this.appSubtitle}</span>` : T}
+              ${this.appSubtitle ? g`<span class="snl-brand-pill">${this.appSubtitle}</span>` : C}
             </div>
           </slot>
-          ${this.collapseBtnPosition === "sidebar-top" && this.showCollapseBtn ? this.renderToggleButton("sidebar-top") : T}
+          ${this.collapseBtnPosition === "sidebar-top" && this.showCollapseBtn ? this.renderToggleButton("sidebar-top") : C}
         </div>
 
         <!-- Profile card at TOP (default) -->
-        ${p && this.profilePosition === "top" ? C : T}
+        ${p && this.profilePosition === "top" ? _ : C}
 
         <!-- Nav area: config mode or slot mode -->
         ${this.sidenavMode === "slot" ? g`
@@ -2948,7 +2974,7 @@ let x = class extends z {
         ` : g`
           <nav class="snl-nav" style="${N}">
             ${(() => {
-      let A = !1;
+      let m = !1;
       return t.map((L, Q) => {
         var te;
         if (L.separator) return g`<div class="nav-separator"></div>`;
@@ -2958,9 +2984,9 @@ let x = class extends z {
         const X = this.activeItem === Q, G = !!((te = L.children) != null && te.length), me = G && (this._expandedItems.has(Q) || X), xe = G ? (() => {
           const W = L.children.findIndex((V) => V.path && V.path === this.activePath || V.href && V.href === this.activePath);
           return W !== -1 ? W : X ? 0 : -1;
-        })() : -1, de = L.bottom === !0 && !A;
-        return de && (A = !0), g`
-                  ${de ? g`<div style="flex: 1; min-height: 20px;"></div>` : T}
+        })() : -1, de = L.bottom === !0 && !m;
+        return de && (m = !0), g`
+                  ${de ? g`<div style="flex: 1; min-height: 20px;"></div>` : C}
                   <button
                     class="nav-item ${X ? "is-active" : ""} ${L.disabled ? "is-disabled" : ""}"
                     style="
@@ -2974,13 +3000,13 @@ let x = class extends z {
                     ${L.badge ? g`
                       <span class="snl-nav-badge" style="background:${L.badgeColor || this.accentColor};">
                         ${L.badge}
-                      </span>` : T}
+                      </span>` : C}
                     ${G ? g`
                       <span class="nav-child-indicator" style="display:flex; margin-left:${L.badge ? "8px" : "auto"};">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                           <polyline points="${me ? "6 9 12 15 18 9" : "9 18 15 12 9 6"}"></polyline>
                         </svg>
-                      </span>` : T}
+                      </span>` : C}
                   </button>
                   ${G && me ? g`
                     <div class="snl-sub-menu open">
@@ -2994,7 +3020,7 @@ let x = class extends z {
                         </button>
                       `)}
                     </div>
-                  ` : T}
+                  ` : C}
                 `;
       });
     })()}
@@ -3006,12 +3032,13 @@ let x = class extends z {
         `}
 
         <!-- Footer area: config / slot / hidden -->
-        ${this.footerMode === "hidden" ? T : this.footerMode === "slot" ? g`
+        ${this.footerMode === "hidden" ? C : this.footerMode === "slot" ? g`
             <div class="snl-footer-slot">
               <slot name="footer"></slot>
             </div>
           ` : r.show && this.profilePosition === "bottom" ? g`
-            <div class="snl-sidebar-footer">
+            <div class="snl-sidebar-footer" style="cursor:pointer;"
+              @click=${() => this.handleProfileClick("footer", { userName: r.userName, userRole: r.userRole })}>
               ${r.avatarUrl ? g`
                 <img class="snl-footer-avatar" src=${r.avatarUrl} />
               ` : g`
@@ -3019,35 +3046,41 @@ let x = class extends z {
               `}
               <div class="snl-footer-info">
                 <div class="snl-footer-name">${r.userName ?? ""}</div>
-                ${r.userRole ? g`<div class="snl-footer-role">${r.userRole}</div>` : T}
+                ${r.userRole ? g`<div class="snl-footer-role">${r.userRole}</div>` : C}
               </div>
               <div class="snl-footer-actions">
                 ${this.footerActionType === "buttons" && r.showSettings ? g`
                   <button class="snl-footer-btn"
-                    @click=${() => this.dispatchEvent(new CustomEvent("settingsClick", { bubbles: !0, composed: !0 }))}
+                    @click=${(m) => {
+      m.stopPropagation(), this.dispatchEvent(new CustomEvent("settingsClick", { bubbles: !0, composed: !0 }));
+    }}
                     title="Settings">⚙️</button>
-                ` : T}
+                ` : C}
                 ${this.footerActionType === "buttons" && r.showLogout ? g`
                   <button class="snl-footer-btn"
-                    @click=${() => this.dispatchEvent(new CustomEvent("logout", { bubbles: !0, composed: !0 }))}
+                    @click=${(m) => {
+      m.stopPropagation(), this.dispatchEvent(new CustomEvent("logout", { bubbles: !0, composed: !0 }));
+    }}
                     title="Logout">↪</button>
-                ` : T}
+                ` : C}
                 ${this.footerActionType === "dropdown" ? g`
                   <button class="snl-footer-btn"
-                    @click=${() => this.dispatchEvent(new CustomEvent("profileClick", { bubbles: !0, composed: !0 }))}
+                    @click=${(m) => {
+      m.stopPropagation(), this.handleProfileClick("footer", { userName: r.userName, userRole: r.userRole });
+    }}
                     title="Profile Actions">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                   </button>
-                ` : T}
+                ` : C}
               </div>
             </div>
-          ` : T}
+          ` : C}
 
-        ${this.collapseBtnPosition === "sidebar-bottom" && this.showCollapseBtn ? this.renderToggleButton("sidebar-bottom") : T}
+        ${this.collapseBtnPosition === "sidebar-bottom" && this.showCollapseBtn ? this.renderToggleButton("sidebar-bottom") : C}
       </aside>
-    ` : T, Y = this.fixedHeader ? k : T, K = this.fixedHeader ? T : k, ee = this.fixedHeader ? `padding: ${this.mainPadding};` : "";
+    ` : C, Y = this.fixedHeader ? S : C, K = this.fixedHeader ? C : S, ee = this.fixedHeader ? `padding: ${this.mainPadding};` : "";
     return g`
       ${this.renderResponsiveStyles()}
       <div>
@@ -3072,9 +3105,9 @@ let x = class extends z {
           <div class="snl-body">
             ${this.opened && (this.sidenavType === "over" || this._isMobile) && this.hasBackdrop ? g`
               <div class="snl-backdrop" @click=${this.close}></div>
-            ` : T}
+            ` : C}
             ${B}
-            ${this.collapseBtnPosition === "floating" && this.showCollapseBtn ? this.renderToggleButton("floating") : T}
+            ${this.collapseBtnPosition === "floating" && this.showCollapseBtn ? this.renderToggleButton("floating") : C}
             <main class="snl-main" style="background:var(--uiv-bg-color, ${this.mainBg}); ${"overflow-y: auto;"} ${ee} display: flex; flex-direction: column;">
               ${K}
               ${this.fixedHeader ? g`
@@ -3096,10 +3129,10 @@ let x = class extends z {
     `;
   }
 };
-x.slots = [];
-x.styles = [
+w.slots = [];
+w.styles = [
   z.styles,
-  vr`
+  gr`
       :host {
         display: block;
         width: 100%;
@@ -3630,17 +3663,17 @@ x.styles = [
     `
 ];
 $([
-  w({ type: String, reflect: !0 })
-], x.prototype, "height", 2);
+  T({ type: String, reflect: !0 })
+], w.prototype, "height", 2);
 $([
-  w({ type: String, attribute: "active-path" })
-], x.prototype, "activePath", 2);
+  T({ type: String, attribute: "active-path" })
+], w.prototype, "activePath", 2);
 $([
   Zr()
-], x.prototype, "_isMobile", 2);
+], w.prototype, "_isMobile", 2);
 $([
-  w({ type: String, attribute: "header-mode", reflect: !0 }),
-  v({
+  T({ type: String, attribute: "header-mode", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.DROPDOWN,
     displayLabel: "Header Mode",
@@ -3652,10 +3685,10 @@ $([
       { label: "Hidden", value: "hidden" }
     ]
   })
-], x.prototype, "headerMode", 2);
+], w.prototype, "headerMode", 2);
 $([
-  w({ type: String, attribute: "sidenav-mode", reflect: !0 }),
-  v({
+  T({ type: String, attribute: "sidenav-mode", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.DROPDOWN,
     displayLabel: "Sidebar Nav Mode",
@@ -3667,10 +3700,10 @@ $([
       { label: "Hidden", value: "hidden" }
     ]
   })
-], x.prototype, "sidenavMode", 2);
+], w.prototype, "sidenavMode", 2);
 $([
-  w({ type: String, attribute: "footer-mode", reflect: !0 }),
-  v({
+  T({ type: String, attribute: "footer-mode", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.DROPDOWN,
     displayLabel: "Sidebar Footer Mode",
@@ -3682,10 +3715,10 @@ $([
       { label: "Hidden", value: "hidden" }
     ]
   })
-], x.prototype, "footerMode", 2);
+], w.prototype, "footerMode", 2);
 $([
-  w({ type: Boolean, attribute: "fixed-header" }),
-  v({
+  T({ type: Boolean, attribute: "fixed-header" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.CHECKBOX,
     displayLabel: "Fixed Header",
@@ -3693,10 +3726,10 @@ $([
     categoryLabel: "Layout",
     initialValue: !0
   })
-], x.prototype, "fixedHeader", 2);
+], w.prototype, "fixedHeader", 2);
 $([
-  w({ type: Boolean, attribute: "fixed-footer" }),
-  v({
+  T({ type: Boolean, attribute: "fixed-footer" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.CHECKBOX,
     displayLabel: "Fixed Sidebar Footer",
@@ -3704,10 +3737,10 @@ $([
     categoryLabel: "Layout",
     initialValue: !0
   })
-], x.prototype, "fixedFooter", 2);
+], w.prototype, "fixedFooter", 2);
 $([
-  w({ type: String, attribute: "sidenav-type", reflect: !0 }),
-  v({
+  T({ type: String, attribute: "sidenav-type", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.DROPDOWN,
     displayLabel: "Sidenav Layout Mode",
@@ -3718,10 +3751,10 @@ $([
       { label: "Over (Overlay/Drawer)", value: "over" }
     ]
   })
-], x.prototype, "sidenavType", 2);
+], w.prototype, "sidenavType", 2);
 $([
-  w({ type: Boolean, reflect: !0 }),
-  v({
+  T({ type: Boolean, reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.CHECKBOX,
     displayLabel: "Sidenav Opened",
@@ -3729,10 +3762,10 @@ $([
     categoryLabel: "Layout",
     initialValue: !0
   })
-], x.prototype, "opened", 2);
+], w.prototype, "opened", 2);
 $([
-  w({ type: Boolean, attribute: "has-backdrop", reflect: !0 }),
-  v({
+  T({ type: Boolean, attribute: "has-backdrop", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.CHECKBOX,
     displayLabel: "Has Backdrop (Over mode)",
@@ -3740,10 +3773,10 @@ $([
     categoryLabel: "Layout",
     initialValue: !0
   })
-], x.prototype, "hasBackdrop", 2);
+], w.prototype, "hasBackdrop", 2);
 $([
-  w({ type: String, attribute: "collapse-btn-position", reflect: !0 }),
-  v({
+  T({ type: String, attribute: "collapse-btn-position", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.DROPDOWN,
     displayLabel: "Collapse Button Position",
@@ -3758,10 +3791,10 @@ $([
       { label: "Hidden", value: "hidden" }
     ]
   })
-], x.prototype, "collapseBtnPosition", 2);
+], w.prototype, "collapseBtnPosition", 2);
 $([
-  w({ type: String, attribute: "collapse-btn-icon", reflect: !0 }),
-  v({
+  T({ type: String, attribute: "collapse-btn-icon", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.DROPDOWN,
     displayLabel: "Collapse Button Icon",
@@ -3774,22 +3807,22 @@ $([
       { label: "Menu Dots (⋮)", value: "dots" }
     ]
   })
-], x.prototype, "collapseBtnIcon", 2);
+], w.prototype, "collapseBtnIcon", 2);
 $([
-  w({ type: String, attribute: "nav-items" }),
-  v({
+  T({ type: String, attribute: "nav-items" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXTAREA,
     displayLabel: "Nav Items (JSON)",
     fieldMappings: "navItems",
     categoryLabel: "Navigation",
-    placeholderText: nt,
-    initialValue: nt
+    placeholderText: at,
+    initialValue: at
   })
-], x.prototype, "navItems", 2);
+], w.prototype, "navItems", 2);
 $([
-  w({ type: Number, reflect: !0, attribute: "active-item" }),
-  v({
+  T({ type: Number, reflect: !0, attribute: "active-item" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.NUMBER_INPUT,
     displayLabel: "Active Item Index",
@@ -3797,22 +3830,22 @@ $([
     categoryLabel: "Navigation",
     initialValue: 0
   })
-], x.prototype, "activeItem", 2);
+], w.prototype, "activeItem", 2);
 $([
-  w({ type: String, attribute: "header-config" }),
-  v({
+  T({ type: String, attribute: "header-config" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXTAREA,
     displayLabel: "Header Config (JSON)",
     fieldMappings: "headerConfig",
     categoryLabel: "Header",
-    placeholderText: at,
-    initialValue: at
+    placeholderText: nt,
+    initialValue: nt
   })
-], x.prototype, "headerConfig", 2);
+], w.prototype, "headerConfig", 2);
 $([
-  w({ type: String, attribute: "sidebar-footer-config" }),
-  v({
+  T({ type: String, attribute: "sidebar-footer-config" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXTAREA,
     displayLabel: "Sidebar Footer Config (JSON)",
@@ -3821,223 +3854,223 @@ $([
     placeholderText: st,
     initialValue: st
   })
-], x.prototype, "sidebarFooterConfig", 2);
+], w.prototype, "sidebarFooterConfig", 2);
 $([
-  w({ type: String, attribute: "app-name" }),
-  v({
+  T({ type: String, attribute: "app-name" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "App / Brand Name",
     fieldMappings: "appName",
     categoryLabel: "Branding"
   })
-], x.prototype, "appName", 2);
+], w.prototype, "appName", 2);
 $([
-  w({ type: String, attribute: "app-subtitle" }),
-  v({
+  T({ type: String, attribute: "app-subtitle" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "App Subtitle",
     fieldMappings: "appSubtitle",
     categoryLabel: "Branding"
   })
-], x.prototype, "appSubtitle", 2);
+], w.prototype, "appSubtitle", 2);
 $([
-  w({ type: String, attribute: "app-logo" }),
-  v({
+  T({ type: String, attribute: "app-logo" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "Logo Emoji / Character",
     fieldMappings: "appLogo",
     categoryLabel: "Branding"
   })
-], x.prototype, "appLogo", 2);
+], w.prototype, "appLogo", 2);
 $([
-  w({ type: String, attribute: "header-title" }),
-  v({
+  T({ type: String, attribute: "header-title" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "Header Title (overrides brand name in header bar)",
     fieldMappings: "headerTitle",
     categoryLabel: "Branding"
   })
-], x.prototype, "headerTitle", 2);
+], w.prototype, "headerTitle", 2);
 $([
-  w({ type: String, attribute: "header-logo" }),
-  v({
+  T({ type: String, attribute: "header-logo" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "Header Logo (overrides app logo in header bar)",
     fieldMappings: "headerLogo",
     categoryLabel: "Branding"
   })
-], x.prototype, "headerLogo", 2);
+], w.prototype, "headerLogo", 2);
 $([
-  w({ type: Boolean, reflect: !0 }),
-  v({
+  T({ type: Boolean, reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.CHECKBOX,
     displayLabel: "Sidebar Collapsed",
     fieldMappings: "collapsed",
     categoryLabel: "Layout"
   })
-], x.prototype, "collapsed", 2);
+], w.prototype, "collapsed", 2);
 $([
-  w({ type: String, attribute: "sidebar-width" }),
-  v({
+  T({ type: String, attribute: "sidebar-width" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "Sidebar Width (e.g. 260px)",
     fieldMappings: "sidebarWidth",
     categoryLabel: "Layout"
   })
-], x.prototype, "sidebarWidth", 2);
+], w.prototype, "sidebarWidth", 2);
 $([
-  w({ type: String, attribute: "header-height" }),
-  v({
+  T({ type: String, attribute: "header-height" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "Header Height (e.g. 60px)",
     fieldMappings: "headerHeight",
     categoryLabel: "Layout"
   })
-], x.prototype, "headerHeight", 2);
+], w.prototype, "headerHeight", 2);
 $([
-  w({ type: String, attribute: "collapsed-width" }),
-  v({
+  T({ type: String, attribute: "collapsed-width" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "Collapsed Sidebar Width (e.g. 64px)",
     fieldMappings: "collapsedWidth",
     categoryLabel: "Layout"
   })
-], x.prototype, "collapsedWidth", 2);
+], w.prototype, "collapsedWidth", 2);
 $([
-  w({ type: Boolean, attribute: "show-collapse-btn", reflect: !0 }),
-  v({
+  T({ type: Boolean, attribute: "show-collapse-btn", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.CHECKBOX,
     displayLabel: "Show Collapse Button",
     fieldMappings: "showCollapseBtn",
     categoryLabel: "Layout"
   })
-], x.prototype, "showCollapseBtn", 2);
+], w.prototype, "showCollapseBtn", 2);
 $([
-  w({ type: Boolean, attribute: "show-theme-toggle", reflect: !0 }),
-  v({
+  T({ type: Boolean, attribute: "show-theme-toggle", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.CHECKBOX,
     displayLabel: "Show Theme Toggle (Dark/Light)",
     fieldMappings: "showThemeToggle",
     categoryLabel: "Header"
   })
-], x.prototype, "showThemeToggle", 2);
+], w.prototype, "showThemeToggle", 2);
 $([
-  w({ type: String, attribute: "data-theme", reflect: !0 })
-], x.prototype, "themeMode", 2);
+  T({ type: String, attribute: "data-theme", reflect: !0 })
+], w.prototype, "themeMode", 2);
 $([
-  w({ type: String, attribute: "sidebar-bg" }),
-  v({
+  T({ type: String, attribute: "sidebar-bg" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Sidebar Background",
     fieldMappings: "sidebarBg",
     categoryLabel: "Appearance"
   })
-], x.prototype, "sidebarBg", 2);
+], w.prototype, "sidebarBg", 2);
 $([
-  w({ type: String, attribute: "sidebar-text" }),
-  v({
+  T({ type: String, attribute: "sidebar-text" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Sidebar Text Color",
     fieldMappings: "sidebarText",
     categoryLabel: "Appearance"
   })
-], x.prototype, "sidebarText", 2);
+], w.prototype, "sidebarText", 2);
 $([
-  w({ type: String, attribute: "sidebar-active-bg" }),
-  v({
+  T({ type: String, attribute: "sidebar-active-bg" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Active Item Background",
     fieldMappings: "sidebarActiveBg",
     categoryLabel: "Appearance"
   })
-], x.prototype, "sidebarActiveBg", 2);
+], w.prototype, "sidebarActiveBg", 2);
 $([
-  w({ type: String, attribute: "sidebar-active-text" }),
-  v({
+  T({ type: String, attribute: "sidebar-active-text" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Active Item Text Color",
     fieldMappings: "sidebarActiveText",
     categoryLabel: "Appearance"
   })
-], x.prototype, "sidebarActiveText", 2);
+], w.prototype, "sidebarActiveText", 2);
 $([
-  w({ type: String, attribute: "accent-color" }),
-  v({
+  T({ type: String, attribute: "accent-color" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Accent Color (badges, avatar bg, drop-zone ring)",
     fieldMappings: "accentColor",
     categoryLabel: "Appearance"
   })
-], x.prototype, "accentColor", 2);
+], w.prototype, "accentColor", 2);
 $([
-  w({ type: String, attribute: "header-bg" }),
-  v({
+  T({ type: String, attribute: "header-bg" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Header Background",
     fieldMappings: "headerBg",
     categoryLabel: "Appearance"
   })
-], x.prototype, "headerBg", 2);
+], w.prototype, "headerBg", 2);
 $([
-  w({ type: String, attribute: "header-text" }),
-  v({
+  T({ type: String, attribute: "header-text" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Header Text Color",
     fieldMappings: "headerText",
     categoryLabel: "Appearance"
   })
-], x.prototype, "headerText", 2);
+], w.prototype, "headerText", 2);
 $([
-  w({ type: String, attribute: "header-border" }),
-  v({
+  T({ type: String, attribute: "header-border" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Header Border Color",
     fieldMappings: "headerBorder",
     categoryLabel: "Appearance"
   })
-], x.prototype, "headerBorder", 2);
+], w.prototype, "headerBorder", 2);
 $([
-  w({ type: String, attribute: "main-bg" }),
-  v({
+  T({ type: String, attribute: "main-bg" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.COLOR_PICKER,
     displayLabel: "Main Area Background",
     fieldMappings: "mainBg",
     categoryLabel: "Appearance"
   })
-], x.prototype, "mainBg", 2);
+], w.prototype, "mainBg", 2);
 $([
-  w({ type: String, attribute: "main-padding" }),
-  v({
+  T({ type: String, attribute: "main-padding" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.TEXT_INPUT,
     displayLabel: "Main Area Padding (e.g. 24px)",
     fieldMappings: "mainPadding",
     categoryLabel: "Appearance"
   })
-], x.prototype, "mainPadding", 2);
+], w.prototype, "mainPadding", 2);
 $([
-  w({ type: String, attribute: "footer-action-type" }),
-  v({
+  T({ type: String, attribute: "footer-action-type" }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.DROPDOWN,
     displayLabel: "Footer Action Type",
@@ -4049,10 +4082,10 @@ $([
       { label: "None", value: "none" }
     ]
   })
-], x.prototype, "footerActionType", 2);
+], w.prototype, "footerActionType", 2);
 $([
-  w({ type: String, attribute: "profile-position", reflect: !0 }),
-  v({
+  T({ type: String, attribute: "profile-position", reflect: !0 }),
+  y({
     attributeType: f.PROPERTY,
     uiComponentType: E.DROPDOWN,
     displayLabel: "Profile Card Position",
@@ -4063,62 +4096,65 @@ $([
       { label: "Bottom (footer)", value: "bottom" }
     ]
   })
-], x.prototype, "profilePosition", 2);
+], w.prototype, "profilePosition", 2);
 $([
-  v({ attributeType: f.EVENT, displayLabel: "On Opened Change", eventTrigger: "openedchange", categoryLabel: "Triggers" })
-], x.prototype, "onOpenedChange", 1);
+  y({ attributeType: f.EVENT, displayLabel: "On Opened Change", eventTrigger: "openedchange", categoryLabel: "Triggers" })
+], w.prototype, "onOpenedChange", 1);
 $([
-  v({ attributeType: f.EVENT, displayLabel: "On Nav Item Click", eventTrigger: "navchange", categoryLabel: "Triggers" })
-], x.prototype, "onNavChange", 1);
+  y({ attributeType: f.EVENT, displayLabel: "On Nav Item Click", eventTrigger: "navchange", categoryLabel: "Triggers" })
+], w.prototype, "onNavChange", 1);
 $([
-  v({ attributeType: f.EVENT, displayLabel: "On Sidebar Toggle", eventTrigger: "sidebarToggle", categoryLabel: "Triggers" })
-], x.prototype, "onSidebarToggle", 1);
+  y({ attributeType: f.EVENT, displayLabel: "On Sidebar Toggle", eventTrigger: "sidebarToggle", categoryLabel: "Triggers" })
+], w.prototype, "onSidebarToggle", 1);
 $([
-  v({ attributeType: f.EVENT, displayLabel: "On Logout Click", eventTrigger: "logout", categoryLabel: "Triggers" })
-], x.prototype, "onLogout", 1);
+  y({ attributeType: f.EVENT, displayLabel: "On Logout Click", eventTrigger: "logout", categoryLabel: "Triggers" })
+], w.prototype, "onLogout", 1);
 $([
-  v({ attributeType: f.EVENT, displayLabel: "On Profile Click", eventTrigger: "profileClick", categoryLabel: "Triggers" })
-], x.prototype, "onProfileClick", 1);
+  y({ attributeType: f.EVENT, displayLabel: "On Settings Click", eventTrigger: "settingsClick", categoryLabel: "Triggers" })
+], w.prototype, "onSettingsClick", 1);
 $([
-  v({ attributeType: f.EVENT, displayLabel: "On Settings Click", eventTrigger: "settingsClick", categoryLabel: "Triggers" })
-], x.prototype, "onSettingsClick", 1);
+  y({ attributeType: f.EVENT, displayLabel: "On Search", eventTrigger: "search", categoryLabel: "Triggers" })
+], w.prototype, "onSearch", 1);
 $([
-  v({ attributeType: f.EVENT, displayLabel: "On Search", eventTrigger: "search", categoryLabel: "Triggers" })
-], x.prototype, "onSearch", 1);
+  y({ attributeType: f.EVENT, displayLabel: "On Theme Change", eventTrigger: "themechange", categoryLabel: "Triggers" })
+], w.prototype, "onThemeChange", 1);
 $([
-  v({ attributeType: f.EVENT, displayLabel: "On Theme Change", eventTrigger: "themechange", categoryLabel: "Triggers" })
-], x.prototype, "onThemeChange", 1);
+  y({ attributeType: f.ACTION, displayLabel: "Open Sidenav", categoryLabel: "Actions" })
+], w.prototype, "open", 1);
 $([
-  v({ attributeType: f.EVENT, displayLabel: "On Notification Click", eventTrigger: "notificationClick", categoryLabel: "Triggers" })
-], x.prototype, "onNotificationClick", 1);
+  y({ attributeType: f.ACTION, displayLabel: "Close Sidenav", categoryLabel: "Actions" })
+], w.prototype, "close", 1);
 $([
-  v({ attributeType: f.ACTION, displayLabel: "Open Sidenav", categoryLabel: "Actions" })
-], x.prototype, "open", 1);
+  y({ attributeType: f.ACTION, displayLabel: "Toggle Sidenav Opened", categoryLabel: "Actions" })
+], w.prototype, "toggle", 1);
 $([
-  v({ attributeType: f.ACTION, displayLabel: "Close Sidenav", categoryLabel: "Actions" })
-], x.prototype, "close", 1);
+  y({ attributeType: f.ACTION, displayLabel: "Toggle Sidebar Collapse", categoryLabel: "Actions" })
+], w.prototype, "toggleSidebar", 1);
 $([
-  v({ attributeType: f.ACTION, displayLabel: "Toggle Sidenav Opened", categoryLabel: "Actions" })
-], x.prototype, "toggle", 1);
+  y({ attributeType: f.ACTION, displayLabel: "Expand Sidebar", categoryLabel: "Actions" })
+], w.prototype, "expandSidebar", 1);
 $([
-  v({ attributeType: f.ACTION, displayLabel: "Toggle Sidebar Collapse", categoryLabel: "Actions" })
-], x.prototype, "toggleSidebar", 1);
+  y({ attributeType: f.ACTION, displayLabel: "Collapse Sidebar", categoryLabel: "Actions" })
+], w.prototype, "collapseSidebar", 1);
 $([
-  v({ attributeType: f.ACTION, displayLabel: "Expand Sidebar", categoryLabel: "Actions" })
-], x.prototype, "expandSidebar", 1);
+  y({ attributeType: f.ACTION, displayLabel: "Navigate To Item (by index)", categoryLabel: "Actions" })
+], w.prototype, "navigateTo", 1);
 $([
-  v({ attributeType: f.ACTION, displayLabel: "Collapse Sidebar", categoryLabel: "Actions" })
-], x.prototype, "collapseSidebar", 1);
+  y({ attributeType: f.ACTION, displayLabel: "Toggle Theme (Dark/Light)", categoryLabel: "Actions" })
+], w.prototype, "toggleTheme", 1);
 $([
-  v({ attributeType: f.ACTION, displayLabel: "Navigate To Item (by index)", categoryLabel: "Actions" })
-], x.prototype, "navigateTo", 1);
+  y({ attributeType: f.EVENT, displayLabel: "On Notification Click", eventTrigger: "notification-click", categoryLabel: "Triggers" })
+], w.prototype, "handleBellClick", 1);
 $([
-  v({ attributeType: f.ACTION, displayLabel: "Toggle Theme (Dark/Light)", categoryLabel: "Actions" })
-], x.prototype, "toggleTheme", 1);
-x = $([
-  Er({
+  y({ attributeType: f.EVENT, displayLabel: "On Profile Click", eventTrigger: "profile-click", categoryLabel: "Triggers" })
+], w.prototype, "handleProfileClick", 1);
+$([
+  y({ attributeType: f.EVENT, displayLabel: "On Header Action", eventTrigger: "header-action", categoryLabel: "Triggers" })
+], w.prototype, "handleHeaderAction", 1);
+w = $([
+  kr({
     name: "zero-sidenav-layout",
-    version: "1.1.0",
+    version: "1.2.0",
     title: "Sidebar Layout",
     elementSelector: "zero-sidenav-layout",
     group: "Layout",
@@ -4127,12 +4163,12 @@ x = $([
     environment: ["page"]
   }),
   Gr("zero-sidenav-layout"),
-  kr()
-], x);
+  Er()
+], w);
 export {
-  at as DEFAULT_HEADER_CONFIG_JSON,
-  nt as DEFAULT_NAV_ITEMS_JSON,
-  ai as DEFAULT_NAV_ITEMS_LIST,
+  nt as DEFAULT_HEADER_CONFIG_JSON,
+  at as DEFAULT_NAV_ITEMS_JSON,
+  ni as DEFAULT_NAV_ITEMS_LIST,
   st as DEFAULT_SIDEBAR_FOOTER_CONFIG_JSON,
-  x as ZeroSidenavLayout
+  w as ZeroSidenavLayout
 };

@@ -587,7 +587,7 @@ function studioSidebarFooter(
  */
 @RendererComponent({
   name: "zero-sidenav-layout",
-  version: "1.1.0",
+  version: "1.2.0",
   title: "Sidebar Layout",
   elementSelector: "zero-sidenav-layout",
   group: "Layout",
@@ -1926,9 +1926,6 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
   @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Logout Click", eventTrigger: "logout", categoryLabel: "Triggers" })
   get onLogout() { return "logout"; }
 
-  @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Profile Click", eventTrigger: "profileClick", categoryLabel: "Triggers" })
-  get onProfileClick() { return "profileClick"; }
-
   @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Settings Click", eventTrigger: "settingsClick", categoryLabel: "Triggers" })
   get onSettingsClick() { return "settingsClick"; }
 
@@ -1937,9 +1934,6 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
 
   @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Theme Change", eventTrigger: "themechange", categoryLabel: "Triggers" })
   get onThemeChange() { return "themechange"; }
-
-  @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Notification Click", eventTrigger: "notificationClick", categoryLabel: "Triggers" })
-  get onNotificationClick() { return "notificationClick"; }
 
   // ─── Actions ───────────────────────────────────────────────────────────────
 
@@ -2011,11 +2005,39 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     this.requestUpdate();
   }
 
-  /** Notification bell click → dispatch a wireable `notificationClick` event
-   *  (bubbles + composed) so it can drive a shell-node trigger. */
-  private handleBellClick(count: number) {
-    this.dispatchEvent(new CustomEvent("notificationClick", {
+  /** Notification bell click → dispatch a wireable `notification-click` event
+   *  (bubbles + composed) so it can drive a shell-node trigger via the studio's
+   *  Triggers panel. Detail carries the current unread `count`.
+   *  Declared as a first-class studio EVENT (mirrors zero-button's handleClick). */
+  @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Notification Click", eventTrigger: "notification-click", categoryLabel: "Triggers" })
+  handleBellClick(count: number) {
+    this.dispatchEvent(new CustomEvent("notification-click", {
       detail: { count },
+      bubbles: true,
+      composed: true,
+    }));
+  }
+
+  /** Any user-profile element (header user cluster, top sidebar profile card, or
+   *  sidebar-footer profile row) → dispatch a single wireable `profile-click`
+   *  event. `origin` distinguishes which element fired it ("header" | "sidebar"
+   *  | "footer"); `info` echoes the shown user name / role for the handler. */
+  @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Profile Click", eventTrigger: "profile-click", categoryLabel: "Triggers" })
+  handleProfileClick(origin: "header" | "sidebar" | "footer" = "header", info: { userName?: string; userRole?: string } = {}) {
+    this.dispatchEvent(new CustomEvent("profile-click", {
+      detail: { origin, ...info },
+      bubbles: true,
+      composed: true,
+    }));
+  }
+
+  /** Generic header action control (e.g. the search icon button) → dispatch a
+   *  wireable `header-action` event. Detail carries which `action` was invoked
+   *  (defaults to "search") so a single trigger can fan out per action. */
+  @RendererAttribute({ attributeType: AttributeType.EVENT, displayLabel: "On Header Action", eventTrigger: "header-action", categoryLabel: "Triggers" })
+  handleHeaderAction(action: string = "search") {
+    this.dispatchEvent(new CustomEvent("header-action", {
+      detail: { action },
       bubbles: true,
       composed: true,
     }));
@@ -2440,8 +2462,14 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
     // Profile card (top-of-sidebar by default). Bordered, rounded, avatar + name/role.
     const showProfile = this.footerMode === "config" && footerCfg.show;
     const profileCardEl = html`
-      <div class="snl-profile-card"
-        @click=${() => this.dispatchEvent(new CustomEvent("profileClick", { bubbles: true, composed: true }))}>
+      <div class="snl-profile-card" role="button" tabindex="0"
+        @click=${() => this.handleProfileClick("sidebar", { userName: footerCfg.userName, userRole: footerCfg.userRole })}
+        @keydown=${(e: KeyboardEvent) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            this.handleProfileClick("sidebar", { userName: footerCfg.userName, userRole: footerCfg.userRole });
+          }
+        }}>
         ${footerCfg.avatarUrl
           ? html`<img class="snl-profile-avatar snl-profile-avatar-img" src=${footerCfg.avatarUrl} />`
           : html`<div class="snl-profile-avatar snl-profile-avatar-init">${initials(footerCfg.userName)}</div>`}
@@ -2502,9 +2530,20 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
 
           ${headerCfg.showSearch ? html`
             <div class="snl-header-search">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8996a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
-                <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
+              <span class="snl-header-search-icon" role="button" tabindex="0" title="Search"
+                aria-label="Search"
+                style="display:flex; align-items:center; cursor:pointer; flex-shrink:0;"
+                @click=${(e: Event) => { e.stopPropagation(); this.handleHeaderAction("search"); }}
+                @keydown=${(e: KeyboardEvent) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    this.handleHeaderAction("search");
+                  }
+                }}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8996a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                  <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </span>
               <input
                 class="snl-header-search-input"
                 type="search"
@@ -2549,7 +2588,15 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
           ` : nothing}
 
           ${headerCfg.showUserAvatar ? html`
-            <div class="snl-header-user">
+            <div class="snl-header-user" role="button" tabindex="0"
+              title=${headerCfg.userName ?? "Profile"}
+              @click=${(e: Event) => { e.stopPropagation(); this.handleProfileClick("header", { userName: headerCfg.userName, userRole: headerCfg.userRole }); }}
+              @keydown=${(e: KeyboardEvent) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  this.handleProfileClick("header", { userName: headerCfg.userName, userRole: headerCfg.userRole });
+                }
+              }}>
               ${headerCfg.userAvatarUrl ? html`
                 <img class="snl-avatar snl-avatar-img" src=${headerCfg.userAvatarUrl} />
               ` : html`
@@ -2698,7 +2745,8 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
               <slot name="footer"></slot>
             </div>
           ` : (footerCfg.show && this.profilePosition === "bottom") ? html`
-            <div class="snl-sidebar-footer">
+            <div class="snl-sidebar-footer" style="cursor:pointer;"
+              @click=${() => this.handleProfileClick("footer", { userName: footerCfg.userName, userRole: footerCfg.userRole })}>
               ${footerCfg.avatarUrl ? html`
                 <img class="snl-footer-avatar" src=${footerCfg.avatarUrl} />
               ` : html`
@@ -2711,17 +2759,17 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
               <div class="snl-footer-actions">
                 ${this.footerActionType === "buttons" && footerCfg.showSettings ? html`
                   <button class="snl-footer-btn"
-                    @click=${() => this.dispatchEvent(new CustomEvent("settingsClick", { bubbles: true, composed: true }))}
+                    @click=${(e: Event) => { e.stopPropagation(); this.dispatchEvent(new CustomEvent("settingsClick", { bubbles: true, composed: true })); }}
                     title="Settings">⚙️</button>
                 ` : nothing}
                 ${this.footerActionType === "buttons" && footerCfg.showLogout ? html`
                   <button class="snl-footer-btn"
-                    @click=${() => this.dispatchEvent(new CustomEvent("logout", { bubbles: true, composed: true }))}
+                    @click=${(e: Event) => { e.stopPropagation(); this.dispatchEvent(new CustomEvent("logout", { bubbles: true, composed: true })); }}
                     title="Logout">↪</button>
                 ` : nothing}
                 ${this.footerActionType === "dropdown" ? html`
                   <button class="snl-footer-btn"
-                    @click=${() => this.dispatchEvent(new CustomEvent("profileClick", { bubbles: true, composed: true }))}
+                    @click=${(e: Event) => { e.stopPropagation(); this.handleProfileClick("footer", { userName: footerCfg.userName, userRole: footerCfg.userRole }); }}
                     title="Profile Actions">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <polyline points="6 9 12 15 18 9"></polyline>

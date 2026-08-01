@@ -163,6 +163,17 @@ export const DEFAULT_NAV_ITEMS_JSON = JSON.stringify(DEFAULT_NAV_ITEMS, null, 2)
 export const DEFAULT_HEADER_CONFIG_JSON = JSON.stringify(DEFAULT_HEADER_CONFIG, null, 2);
 export const DEFAULT_SIDEBAR_FOOTER_CONFIG_JSON = JSON.stringify(DEFAULT_SIDEBAR_FOOTER_CONFIG, null, 2);
 
+/**
+ * Flat row-list default for the studio `list` control (label/href/icon rows).
+ * Derived from DEFAULT_NAV_ITEMS by dropping section/separator rows and
+ * projecting only the fields the list editor exposes, so the structured form
+ * ships with sensible starter items instead of an empty list.
+ */
+export const DEFAULT_NAV_ITEMS_LIST: Array<{ label: string; href: string; icon: string }> =
+  DEFAULT_NAV_ITEMS
+    .filter((item) => !!item.label && !item.separator && !item.section)
+    .map((item) => ({ label: item.label ?? "", href: item.href ?? "", icon: item.icon ?? "" }));
+
 // ─── Parse helpers ────────────────────────────────────────────────────────────
 
 function parseNavItems(raw: string): NavItem[] {
@@ -662,10 +673,17 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
 
   /**
    * Plain settings schema the studio can render as a template-config form.
-   * Returns only plain objects (no external imports). Each `name` maps to the
-   * matching @RendererAttribute prop on this component.
+   * Returns only plain objects (no external imports). Each `name` maps to a flat
+   * key on the studio-side settings object; `deriveShellProps` (studio) composes
+   * these discrete fields back into the navItems / headerConfig / sidebarFooterConfig
+   * props this element still consumes at runtime. Every field carries a default.
    *
-   * control ∈ "text" | "number" | "boolean" | "select" | "color" | "json"
+   * control ∈ "text" | "number" | "boolean" | "select" | "color" | "list"
+   * (`list` edits an array of objects via typed `itemShape` sub-fields — no JSON).
+   *
+   * NOTE: header and footer both expose a user name / role / avatar. Because the
+   * settings object is flat, those keys are disambiguated (`headerUserName` vs
+   * `profileName`, etc.); the human labels stay "User Name"/"User Role"/"Avatar URL".
    */
   static getSettingsSchema() {
     return [
@@ -674,7 +692,30 @@ export class ZeroSidenavLayout extends ZeroLayoutBase {
       { name: "appLogo", label: "Logo (emoji, image URL, or inline SVG)", control: "text", group: "Brand", defaultValue: "🚀" },
 
       // ── Navigation ──
-      { name: "navItems", label: "Nav Items (JSON)", control: "json", group: "Navigation", defaultValue: DEFAULT_NAV_ITEMS_JSON },
+      {
+        name: "navItems", label: "Nav Items", control: "list", group: "Navigation",
+        defaultValue: DEFAULT_NAV_ITEMS_LIST,
+        itemShape: [
+          { name: "label", label: "Label", control: "text", defaultValue: "" },
+          { name: "href", label: "Link (href)", control: "text", defaultValue: "" },
+          { name: "icon", label: "Icon (emoji)", control: "text", defaultValue: "" }
+        ]
+      },
+
+      // ── Header ──
+      { name: "showSearch", label: "Show Search", control: "boolean", group: "Header", defaultValue: DEFAULT_HEADER_CONFIG.showSearch ?? false },
+      { name: "showNotifications", label: "Show Notifications", control: "boolean", group: "Header", defaultValue: DEFAULT_HEADER_CONFIG.showNotificationBell ?? false },
+      { name: "notificationCount", label: "Notification Count", control: "number", group: "Header", defaultValue: DEFAULT_HEADER_CONFIG.notificationCount ?? 0 },
+      { name: "showThemeToggle", label: "Show Theme Toggle", control: "boolean", group: "Header", defaultValue: true },
+      { name: "headerUserName", label: "User Name", control: "text", group: "Header", defaultValue: DEFAULT_HEADER_CONFIG.userName ?? "" },
+      { name: "headerUserRole", label: "User Role", control: "text", group: "Header", defaultValue: DEFAULT_HEADER_CONFIG.userRole ?? "" },
+      { name: "headerAvatarUrl", label: "Avatar URL", control: "text", group: "Header", defaultValue: DEFAULT_HEADER_CONFIG.userAvatarUrl ?? "" },
+
+      // ── Sidebar ──
+      { name: "showProfile", label: "Show Profile Footer", control: "boolean", group: "Sidebar", defaultValue: DEFAULT_SIDEBAR_FOOTER_CONFIG.show ?? false },
+      { name: "profileName", label: "User Name", control: "text", group: "Sidebar", defaultValue: DEFAULT_SIDEBAR_FOOTER_CONFIG.userName ?? "" },
+      { name: "profileRole", label: "User Role", control: "text", group: "Sidebar", defaultValue: DEFAULT_SIDEBAR_FOOTER_CONFIG.userRole ?? "" },
+      { name: "profileAvatarUrl", label: "Avatar URL", control: "text", group: "Sidebar", defaultValue: DEFAULT_SIDEBAR_FOOTER_CONFIG.avatarUrl ?? "" },
 
       // ── Layout ──
       { name: "collapsed", label: "Sidebar Collapsed", control: "boolean", group: "Layout", defaultValue: false },

@@ -1,0 +1,10 @@
+{
+  "name": "zero-html",
+  "version": "1.0.0",
+  "description": "Raw HTML node with {{ }} variable bindings, loops, and flow/service actions",
+  "main": "zero-html.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "html", "raw-html", "advanced"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

@@ -68,7 +68,7 @@ var Ze;
           throw new TypeError();
         if (!Le(s))
           throw new TypeError();
-        return bt(i, s);
+        return $t(i, s);
       } else {
         if (!He(i))
           throw new TypeError();
@@ -76,7 +76,7 @@ var Ze;
           throw new TypeError();
         if (!M(d) && !_(d) && !F(d))
           throw new TypeError();
-        return F(d) && (d = void 0), o = j(o), $t(i, s, o, d);
+        return F(d) && (d = void 0), o = j(o), bt(i, s, o, d);
       }
     }
     e("decorate", he);
@@ -148,7 +148,7 @@ var Ze;
       return _(d) ? !1 : d.OrdinaryDeleteMetadata(i, s, o);
     }
     e("deleteMetadata", gt);
-    function bt(i, s) {
+    function $t(i, s) {
       for (var o = i.length - 1; o >= 0; --o) {
         var d = i[o], v = d(s);
         if (!_(v) && !F(v)) {
@@ -159,7 +159,7 @@ var Ze;
       }
       return s;
     }
-    function $t(i, s, o, d) {
+    function bt(i, s, o, d) {
       for (var v = i.length - 1; v >= 0; --v) {
         var C = i[v], O = C(s, o, d);
         if (!_(O) && !F(O)) {
@@ -174,7 +174,7 @@ var Ze;
       var d = ge(i, s, o);
       if (d)
         return !0;
-      var v = $e(s);
+      var v = be(s);
       return F(v) ? !1 : Te(i, v, o);
     }
     function ge(i, s, o) {
@@ -190,7 +190,7 @@ var Ze;
       var d = ge(i, s, o);
       if (d)
         return Re(i, s, o);
-      var v = $e(s);
+      var v = be(s);
       if (!F(v))
         return ke(i, v, o);
     }
@@ -214,7 +214,7 @@ var Ze;
       v.OrdinaryDefineOwnMetadata(i, s, o, d);
     }
     function De(i, s) {
-      var o = je(i, s), d = $e(i);
+      var o = je(i, s), d = be(i);
       if (d === null)
         return o;
       var v = De(d, s);
@@ -222,12 +222,12 @@ var Ze;
         return o;
       if (o.length <= 0)
         return v;
-      for (var C = new T(), O = [], b = 0, h = o; b < h.length; b++) {
-        var c = h[b], f = C.has(c);
+      for (var C = new T(), O = [], $ = 0, h = o; $ < h.length; $++) {
+        var c = h[$], f = C.has(c);
         f || (C.add(c), O.push(c));
       }
-      for (var y = 0, $ = v; y < $.length; y++) {
-        var c = $[y], f = C.has(c);
+      for (var y = 0, b = v; y < b.length; y++) {
+        var c = b[y], f = C.has(c);
         f || (C.add(c), O.push(c));
       }
       return O;
@@ -344,7 +344,7 @@ var Ze;
           return !1;
       }
     }
-    function be(i, s) {
+    function $e(i, s) {
       return i === s || i !== i && s !== s;
     }
     function ze(i, s) {
@@ -375,7 +375,7 @@ var Ze;
       var s = i.return;
       s && s.call(i);
     }
-    function $e(i) {
+    function be(i) {
       var s = Object.getPrototypeOf(i);
       if (typeof i != "function" || i === g || s !== g)
         return s;
@@ -415,12 +415,12 @@ var Ze;
             break;
         }
       }
-      function b(y, $) {
+      function $(y, b) {
         if (!_(s)) {
-          if (s.isProviderFor(y, $))
+          if (s.isProviderFor(y, b))
             return s;
           if (!_(o)) {
-            if (o.isProviderFor(y, $))
+            if (o.isProviderFor(y, b))
               return s;
             if (!_(d))
               for (var E = Be(d); ; ) {
@@ -428,32 +428,32 @@ var Ze;
                 if (!S)
                   return;
                 var N = Ge(S);
-                if (N.isProviderFor(y, $))
+                if (N.isProviderFor(y, b))
                   return Je(E), N;
               }
           }
         }
-        if (!_(i) && i.isProviderFor(y, $))
+        if (!_(i) && i.isProviderFor(y, b))
           return i;
       }
-      function h(y, $) {
+      function h(y, b) {
         var E = v.get(y), S;
-        return _(E) || (S = E.get($)), _(S) && (S = b(y, $), _(S) || (_(E) && (E = new x(), v.set(y, E)), E.set($, S))), S;
+        return _(E) || (S = E.get(b)), _(S) && (S = $(y, b), _(S) || (_(E) && (E = new x(), v.set(y, E)), E.set(b, S))), S;
       }
       function c(y) {
         if (_(y))
           throw new TypeError();
         return s === y || o === y || !_(d) && d.has(y);
       }
-      function f(y, $, E) {
+      function f(y, b, E) {
         if (!c(E))
           throw new Error("Metadata provider not registered.");
-        var S = h(y, $);
+        var S = h(y, b);
         if (S !== E) {
           if (!_(S))
             return !1;
           var N = v.get(y);
-          _(N) && (N = new x(), v.set(y, N)), N.set($, E);
+          _(N) && (N = new x(), v.set(y, N)), N.set(b, E);
         }
         return !0;
       }
@@ -476,64 +476,64 @@ var Ze;
         OrdinaryDefineOwnMetadata: O,
         OrdinaryHasOwnMetadata: v,
         OrdinaryGetOwnMetadata: C,
-        OrdinaryOwnMetadataKeys: b,
+        OrdinaryOwnMetadataKeys: $,
         OrdinaryDeleteMetadata: h
       };
       return L.registerProvider(o), o;
       function d(c, f, y) {
-        var $ = s.get(c), E = !1;
-        if (_($)) {
+        var b = s.get(c), E = !1;
+        if (_(b)) {
           if (!y)
             return;
-          $ = new x(), s.set(c, $), E = !0;
+          b = new x(), s.set(c, b), E = !0;
         }
-        var S = $.get(f);
+        var S = b.get(f);
         if (_(S)) {
           if (!y)
             return;
-          if (S = new x(), $.set(f, S), !i.setProvider(c, f, o))
-            throw $.delete(f), E && s.delete(c), new Error("Wrong provider for target.");
+          if (S = new x(), b.set(f, S), !i.setProvider(c, f, o))
+            throw b.delete(f), E && s.delete(c), new Error("Wrong provider for target.");
         }
         return S;
       }
       function v(c, f, y) {
-        var $ = d(
+        var b = d(
           f,
           y,
           /*Create*/
           !1
         );
-        return _($) ? !1 : Ue($.has(c));
+        return _(b) ? !1 : Ue(b.has(c));
       }
       function C(c, f, y) {
-        var $ = d(
+        var b = d(
           f,
           y,
           /*Create*/
           !1
         );
-        if (!_($))
-          return $.get(c);
+        if (!_(b))
+          return b.get(c);
       }
-      function O(c, f, y, $) {
+      function O(c, f, y, b) {
         var E = d(
           y,
-          $,
+          b,
           /*Create*/
           !0
         );
         E.set(c, f);
       }
-      function b(c, f) {
-        var y = [], $ = d(
+      function $(c, f) {
+        var y = [], b = d(
           c,
           f,
           /*Create*/
           !1
         );
-        if (_($))
+        if (_(b))
           return y;
-        for (var E = $.keys(), S = Be(E), N = 0; ; ) {
+        for (var E = b.keys(), S = Be(E), N = 0; ; ) {
           var Ve = We(S);
           if (!Ve)
             return y.length = N, y;
@@ -551,15 +551,15 @@ var Ze;
         }
       }
       function h(c, f, y) {
-        var $ = d(
+        var b = d(
           f,
           y,
           /*Create*/
           !1
         );
-        if (_($) || !$.delete(c))
+        if (_(b) || !b.delete(c))
           return !1;
-        if ($.size === 0) {
+        if (b.size === 0) {
           var E = s.get(f);
           _(E) || (E.delete(y), E.size === 0 && s.delete(E));
         }
@@ -567,7 +567,7 @@ var Ze;
       }
     }
     function Pt(i) {
-      var s = i.defineMetadata, o = i.hasOwnMetadata, d = i.getOwnMetadata, v = i.getOwnMetadataKeys, C = i.deleteMetadata, O = new R(), b = {
+      var s = i.defineMetadata, o = i.hasOwnMetadata, d = i.getOwnMetadata, v = i.getOwnMetadataKeys, C = i.deleteMetadata, O = new R(), $ = {
         isProviderFor: function(h, c) {
           var f = O.get(h);
           return !_(f) && f.has(c) ? !0 : v(h, c).length ? (_(f) && (f = new T(), O.set(h, f)), f.add(c), !0) : !1;
@@ -578,7 +578,7 @@ var Ze;
         OrdinaryOwnMetadataKeys: v,
         OrdinaryDeleteMetadata: C
       };
-      return b;
+      return $;
     }
     function Q(i, s, o) {
       var d = L.getProvider(i, s);
@@ -594,59 +594,59 @@ var Ze;
       var i = {}, s = [], o = (
         /** @class */
         function() {
-          function b(h, c, f) {
+          function $(h, c, f) {
             this._index = 0, this._keys = h, this._values = c, this._selector = f;
           }
-          return b.prototype["@@iterator"] = function() {
+          return $.prototype["@@iterator"] = function() {
             return this;
-          }, b.prototype[u] = function() {
+          }, $.prototype[u] = function() {
             return this;
-          }, b.prototype.next = function() {
+          }, $.prototype.next = function() {
             var h = this._index;
             if (h >= 0 && h < this._keys.length) {
               var c = this._selector(this._keys[h], this._values[h]);
               return h + 1 >= this._keys.length ? (this._index = -1, this._keys = s, this._values = s) : this._index++, { value: c, done: !1 };
             }
             return { value: void 0, done: !0 };
-          }, b.prototype.throw = function(h) {
+          }, $.prototype.throw = function(h) {
             throw this._index >= 0 && (this._index = -1, this._keys = s, this._values = s), h;
-          }, b.prototype.return = function(h) {
+          }, $.prototype.return = function(h) {
             return this._index >= 0 && (this._index = -1, this._keys = s, this._values = s), { value: h, done: !0 };
-          }, b;
+          }, $;
         }()
       ), d = (
         /** @class */
         function() {
-          function b() {
+          function $() {
             this._keys = [], this._values = [], this._cacheKey = i, this._cacheIndex = -2;
           }
-          return Object.defineProperty(b.prototype, "size", {
+          return Object.defineProperty($.prototype, "size", {
             get: function() {
               return this._keys.length;
             },
             enumerable: !0,
             configurable: !0
-          }), b.prototype.has = function(h) {
+          }), $.prototype.has = function(h) {
             return this._find(
               h,
               /*insert*/
               !1
             ) >= 0;
-          }, b.prototype.get = function(h) {
+          }, $.prototype.get = function(h) {
             var c = this._find(
               h,
               /*insert*/
               !1
             );
             return c >= 0 ? this._values[c] : void 0;
-          }, b.prototype.set = function(h, c) {
+          }, $.prototype.set = function(h, c) {
             var f = this._find(
               h,
               /*insert*/
               !0
             );
             return this._values[f] = c, this;
-          }, b.prototype.delete = function(h) {
+          }, $.prototype.delete = function(h) {
             var c = this._find(
               h,
               /*insert*/
@@ -655,43 +655,43 @@ var Ze;
             if (c >= 0) {
               for (var f = this._keys.length, y = c + 1; y < f; y++)
                 this._keys[y - 1] = this._keys[y], this._values[y - 1] = this._values[y];
-              return this._keys.length--, this._values.length--, be(h, this._cacheKey) && (this._cacheKey = i, this._cacheIndex = -2), !0;
+              return this._keys.length--, this._values.length--, $e(h, this._cacheKey) && (this._cacheKey = i, this._cacheIndex = -2), !0;
             }
             return !1;
-          }, b.prototype.clear = function() {
+          }, $.prototype.clear = function() {
             this._keys.length = 0, this._values.length = 0, this._cacheKey = i, this._cacheIndex = -2;
-          }, b.prototype.keys = function() {
+          }, $.prototype.keys = function() {
             return new o(this._keys, this._values, v);
-          }, b.prototype.values = function() {
+          }, $.prototype.values = function() {
             return new o(this._keys, this._values, C);
-          }, b.prototype.entries = function() {
+          }, $.prototype.entries = function() {
             return new o(this._keys, this._values, O);
-          }, b.prototype["@@iterator"] = function() {
+          }, $.prototype["@@iterator"] = function() {
             return this.entries();
-          }, b.prototype[u] = function() {
+          }, $.prototype[u] = function() {
             return this.entries();
-          }, b.prototype._find = function(h, c) {
-            if (!be(this._cacheKey, h)) {
+          }, $.prototype._find = function(h, c) {
+            if (!$e(this._cacheKey, h)) {
               this._cacheIndex = -1;
               for (var f = 0; f < this._keys.length; f++)
-                if (be(this._keys[f], h)) {
+                if ($e(this._keys[f], h)) {
                   this._cacheIndex = f;
                   break;
                 }
             }
             return this._cacheIndex < 0 && c && (this._cacheIndex = this._keys.length, this._keys.push(h), this._values.push(void 0)), this._cacheIndex;
-          }, b;
+          }, $;
         }()
       );
       return d;
-      function v(b, h) {
-        return b;
+      function v($, h) {
+        return $;
       }
-      function C(b, h) {
+      function C($, h) {
         return h;
       }
-      function O(b, h) {
-        return [b, h];
+      function O($, h) {
+        return [$, h];
       }
     }
     function kt() {
@@ -774,7 +774,7 @@ var Ze;
       function d() {
         var h;
         do
-          h = "@@WeakMap@@" + b();
+          h = "@@WeakMap@@" + $();
         while (w.has(s, h));
         return s[h] = !0, h;
       }
@@ -798,7 +798,7 @@ var Ze;
         }
         return C(new Array(h), h);
       }
-      function b() {
+      function $() {
         var h = O(i);
         h[6] = h[6] & 79 | 64, h[8] = h[8] & 191 | 128;
         for (var c = "", f = 0; f < i; ++f) {
@@ -1556,14 +1556,14 @@ let k = class extends ie {
         kind: "generic",
         templateHtml: "<zero-block-team-1.0.0></zero-block-team-1.0.0>"
       };
-    const e = te(((u = r == null ? void 0 : r.props) == null ? void 0 : u.title) ?? ((p = (m = r == null ? void 0 : r.studio) == null ? void 0 : m.props) == null ? void 0 : p.title) ?? "Meet the Team"), t = te(((A = r == null ? void 0 : r.props) == null ? void 0 : A.lead) ?? ((g = (w = r == null ? void 0 : r.studio) == null ? void 0 : w.props) == null ? void 0 : g.lead) ?? ""), n = te(((x = r == null ? void 0 : r.props) == null ? void 0 : x.membersJson) ?? ((R = (T = r == null ? void 0 : r.studio) == null ? void 0 : T.props) == null ? void 0 : R.membersJson) ?? "[]"), a = te(((I = r == null ? void 0 : r.props) == null ? void 0 : I.layout) ?? ((X = (L = r == null ? void 0 : r.studio) == null ? void 0 : L.props) == null ? void 0 : X.layout) ?? "layout-1"), l = te(((he = r == null ? void 0 : r.props) == null ? void 0 : he.themeStyle) ?? ((fe = (ce = r == null ? void 0 : r.studio) == null ? void 0 : ce.props) == null ? void 0 : fe.themeStyle) ?? "light");
+    const e = te(((u = r == null ? void 0 : r.props) == null ? void 0 : u.title) ?? ((p = (m = r == null ? void 0 : r.studio) == null ? void 0 : m.props) == null ? void 0 : p.title) ?? "Meet the Team"), t = te(((A = r == null ? void 0 : r.props) == null ? void 0 : A.lead) ?? ((g = (w = r == null ? void 0 : r.studio) == null ? void 0 : w.props) == null ? void 0 : g.lead) ?? ""), n = te(((x = r == null ? void 0 : r.props) == null ? void 0 : x.teamJson) ?? ((R = (T = r == null ? void 0 : r.studio) == null ? void 0 : T.props) == null ? void 0 : R.teamJson) ?? "[]"), a = te(((I = r == null ? void 0 : r.props) == null ? void 0 : I.layout) ?? ((X = (L = r == null ? void 0 : r.studio) == null ? void 0 : L.props) == null ? void 0 : X.layout) ?? "layout-1"), l = te(((he = r == null ? void 0 : r.props) == null ? void 0 : he.themeStyle) ?? ((fe = (ce = r == null ? void 0 : r.studio) == null ? void 0 : ce.props) == null ? void 0 : fe.themeStyle) ?? "light");
     return {
       kind: "generic",
       templateHtml: `
         <zero-block-team-1.0.0
           title="${e}"
           lead="${t}"
-          members-json="${n}"
+          team-json="${n}"
           layout="${a}"
           theme-style="${l}"
         ></zero-block-team-1.0.0>
@@ -1837,7 +1837,7 @@ D([
 D([
   le({
     attributeType: J.PROPERTY,
-    uiComponentType: W.TEXT_INPUT,
+    uiComponentType: W.TEXTAREA,
     displayLabel: "Team Members JSON",
     fieldMappings: "teamJson"
   })

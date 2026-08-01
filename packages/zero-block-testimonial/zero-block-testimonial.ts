@@ -251,7 +251,7 @@ export class ZeroBlockTestimonial extends LitElement {
 
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    uiComponentType: UserInterfaceType.TEXTAREA,
     displayLabel: "Reviews JSON List",
     fieldMappings: "testimonialsJson"
   })

@@ -245,7 +245,7 @@ export class ZeroBlockFooter extends LitElement {
 
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    uiComponentType: UserInterfaceType.TEXTAREA,
     displayLabel: "Footer Directory JSON",
     fieldMappings: "columnsJson"
   })

@@ -260,7 +260,7 @@ export class ZeroBlockFeature extends LitElement {
 
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    uiComponentType: UserInterfaceType.TEXTAREA,
     displayLabel: "Features JSON",
     fieldMappings: "featuresJson"
   })

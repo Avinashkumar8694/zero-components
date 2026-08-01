@@ -61,7 +61,7 @@ var Ze;
       } : function(i, s) {
         return i[s];
       }
-    }, g = Object.getPrototypeOf(Function), O = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : kt(), k = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Tt(), R = typeof WeakMap == "function" ? WeakMap : Rt(), j = o ? Symbol.for("@reflect-metadata:registry") : void 0, L = Pt(), X = Ct(L);
+    }, g = Object.getPrototypeOf(Function), O = typeof Map == "function" && typeof Map.prototype.entries == "function" ? Map : kt(), k = typeof Set == "function" && typeof Set.prototype.entries == "function" ? Set : Tt(), R = typeof WeakMap == "function" ? WeakMap : Rt(), j = o ? Symbol.for("@reflect-metadata:registry") : void 0, L = Ct(), X = Pt(L);
     function he(i, s, a, c) {
       if (_(a)) {
         if (!He(i))
@@ -161,11 +161,11 @@ var Ze;
     }
     function $t(i, s, a, c) {
       for (var v = i.length - 1; v >= 0; --v) {
-        var C = i[v], P = C(s, a, c);
-        if (!_(P) && !J(P)) {
-          if (!M(P))
+        var P = i[v], C = P(s, a, c);
+        if (!_(C) && !J(C)) {
+          if (!M(C))
             throw new TypeError();
-          c = P;
+          c = C;
         }
       }
       return c;
@@ -222,15 +222,15 @@ var Ze;
         return a;
       if (a.length <= 0)
         return v;
-      for (var C = new k(), P = [], b = 0, h = a; b < h.length; b++) {
-        var d = h[b], f = C.has(d);
-        f || (C.add(d), P.push(d));
+      for (var P = new k(), C = [], b = 0, h = a; b < h.length; b++) {
+        var d = h[b], f = P.has(d);
+        f || (P.add(d), C.push(d));
       }
       for (var y = 0, $ = v; y < $.length; y++) {
-        var d = $[y], f = C.has(d);
-        f || (C.add(d), P.push(d));
+        var d = $[y], f = P.has(d);
+        f || (P.add(d), C.push(d));
       }
-      return P;
+      return C;
     }
     function Ie(i, s) {
       var a = Q(
@@ -388,14 +388,14 @@ var Ze;
     function Mt() {
       var i;
       !_(j) && typeof t.Reflect < "u" && !(j in t.Reflect) && typeof t.Reflect.defineMetadata == "function" && (i = xt(t.Reflect));
-      var s, a, c, v = new R(), C = {
-        registerProvider: P,
+      var s, a, c, v = new R(), P = {
+        registerProvider: C,
         getProvider: h,
         setProvider: f
       };
-      return C;
-      function P(y) {
-        if (!Object.isExtensible(C))
+      return P;
+      function C(y) {
+        if (!Object.isExtensible(P))
           throw new Error("Cannot add provider to a frozen registry.");
         switch (!0) {
           case i === y:
@@ -458,7 +458,7 @@ var Ze;
         return !0;
       }
     }
-    function Pt() {
+    function Ct() {
       var i;
       return !_(j) && M(t.Reflect) && Object.isExtensible(t.Reflect) && (i = t.Reflect[j]), _(i) && (i = Mt()), !_(j) && M(t.Reflect) && Object.isExtensible(t.Reflect) && Object.defineProperty(t.Reflect, j, {
         enumerable: !1,
@@ -467,15 +467,15 @@ var Ze;
         value: i
       }), i;
     }
-    function Ct(i) {
+    function Pt(i) {
       var s = new R(), a = {
         isProviderFor: function(d, f) {
           var y = s.get(d);
           return _(y) ? !1 : y.has(f);
         },
-        OrdinaryDefineOwnMetadata: P,
+        OrdinaryDefineOwnMetadata: C,
         OrdinaryHasOwnMetadata: v,
-        OrdinaryGetOwnMetadata: C,
+        OrdinaryGetOwnMetadata: P,
         OrdinaryOwnMetadataKeys: b,
         OrdinaryDeleteMetadata: h
       };
@@ -505,7 +505,7 @@ var Ze;
         );
         return _($) ? !1 : Ue($.has(d));
       }
-      function C(d, f, y) {
+      function P(d, f, y) {
         var $ = c(
           f,
           y,
@@ -515,7 +515,7 @@ var Ze;
         if (!_($))
           return $.get(d);
       }
-      function P(d, f, y, $) {
+      function C(d, f, y, $) {
         var E = c(
           y,
           $,
@@ -567,16 +567,16 @@ var Ze;
       }
     }
     function xt(i) {
-      var s = i.defineMetadata, a = i.hasOwnMetadata, c = i.getOwnMetadata, v = i.getOwnMetadataKeys, C = i.deleteMetadata, P = new R(), b = {
+      var s = i.defineMetadata, a = i.hasOwnMetadata, c = i.getOwnMetadata, v = i.getOwnMetadataKeys, P = i.deleteMetadata, C = new R(), b = {
         isProviderFor: function(h, d) {
-          var f = P.get(h);
-          return !_(f) && f.has(d) ? !0 : v(h, d).length ? (_(f) && (f = new k(), P.set(h, f)), f.add(d), !0) : !1;
+          var f = C.get(h);
+          return !_(f) && f.has(d) ? !0 : v(h, d).length ? (_(f) && (f = new k(), C.set(h, f)), f.add(d), !0) : !1;
         },
         OrdinaryDefineOwnMetadata: s,
         OrdinaryHasOwnMetadata: a,
         OrdinaryGetOwnMetadata: c,
         OrdinaryOwnMetadataKeys: v,
-        OrdinaryDeleteMetadata: C
+        OrdinaryDeleteMetadata: P
       };
       return b;
     }
@@ -663,9 +663,9 @@ var Ze;
           }, b.prototype.keys = function() {
             return new a(this._keys, this._values, v);
           }, b.prototype.values = function() {
-            return new a(this._keys, this._values, C);
-          }, b.prototype.entries = function() {
             return new a(this._keys, this._values, P);
+          }, b.prototype.entries = function() {
+            return new a(this._keys, this._values, C);
           }, b.prototype["@@iterator"] = function() {
             return this.entries();
           }, b.prototype[u] = function() {
@@ -687,10 +687,10 @@ var Ze;
       function v(b, h) {
         return b;
       }
-      function C(b, h) {
+      function P(b, h) {
         return h;
       }
-      function P(b, h) {
+      function C(b, h) {
         return [b, h];
       }
     }
@@ -786,20 +786,20 @@ var Ze;
         }
         return h[a];
       }
-      function C(h, d) {
+      function P(h, d) {
         for (var f = 0; f < d; ++f)
           h[f] = Math.random() * 255 | 0;
         return h;
       }
-      function P(h) {
+      function C(h) {
         if (typeof Uint8Array == "function") {
           var d = new Uint8Array(h);
-          return typeof crypto < "u" ? crypto.getRandomValues(d) : typeof msCrypto < "u" ? msCrypto.getRandomValues(d) : C(d, h), d;
+          return typeof crypto < "u" ? crypto.getRandomValues(d) : typeof msCrypto < "u" ? msCrypto.getRandomValues(d) : P(d, h), d;
         }
-        return C(new Array(h), h);
+        return P(new Array(h), h);
       }
       function b() {
-        var h = P(i);
+        var h = C(i);
         h[6] = h[6] & 79 | 64, h[8] = h[8] & 191 | 128;
         for (var d = "", f = 0; f < i; ++f) {
           var y = h[f];
@@ -939,10 +939,10 @@ var F;
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const ye = globalThis, Me = ye.ShadowRoot && (ye.ShadyCSS === void 0 || ye.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Pe = Symbol(), Ye = /* @__PURE__ */ new WeakMap();
+const ye = globalThis, Me = ye.ShadowRoot && (ye.ShadyCSS === void 0 || ye.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Ce = Symbol(), Ye = /* @__PURE__ */ new WeakMap();
 let lt = class {
   constructor(e, t, n) {
-    if (this._$cssResult$ = !0, n !== Pe) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+    if (this._$cssResult$ = !0, n !== Ce) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = e, this.t = t;
   }
   get styleSheet() {
@@ -958,13 +958,13 @@ let lt = class {
     return this.cssText;
   }
 };
-const Wt = (r) => new lt(typeof r == "string" ? r : r + "", void 0, Pe), Ft = (r, ...e) => {
+const Wt = (r) => new lt(typeof r == "string" ? r : r + "", void 0, Ce), Ft = (r, ...e) => {
   const t = r.length === 1 ? r[0] : e.reduce((n, o, l) => n + ((u) => {
     if (u._$cssResult$ === !0) return u.cssText;
     if (typeof u == "number") return u;
     throw Error("Value passed to 'css' function must be a 'css' function result: " + u + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
   })(o) + r[l + 1], r[0]);
-  return new lt(t, r, Pe);
+  return new lt(t, r, Ce);
 }, Vt = (r, e) => {
   if (Me) r.adoptedStyleSheets = e.map((t) => t instanceof CSSStyleSheet ? t : t.styleSheet);
   else for (const t of e) {
@@ -1009,7 +1009,7 @@ const { is: Jt, defineProperty: qt, getOwnPropertyDescriptor: Zt, getOwnProperty
       }
   }
   return t;
-} }, Ce = (r, e) => !Jt(r, e), Ke = { attribute: !0, type: String, converter: ve, reflect: !1, useDefault: !1, hasChanged: Ce };
+} }, Pe = (r, e) => !Jt(r, e), Ke = { attribute: !0, type: String, converter: ve, reflect: !1, useDefault: !1, hasChanged: Pe };
 Symbol.metadata ?? (Symbol.metadata = Symbol("metadata")), H.litPropertyMetadata ?? (H.litPropertyMetadata = /* @__PURE__ */ new WeakMap());
 let q = class extends HTMLElement {
   static addInitializer(e) {
@@ -1138,7 +1138,7 @@ let q = class extends HTMLElement {
     var u;
     if (e !== void 0) {
       const m = this.constructor;
-      if (o === !1 && (l = this[e]), n ?? (n = m.getPropertyOptions(e)), !((n.hasChanged ?? Ce)(l, t) || n.useDefault && n.reflect && l === ((u = this._$Ej) == null ? void 0 : u.get(e)) && !this.hasAttribute(m._$Eu(e, n)))) return;
+      if (o === !1 && (l = this[e]), n ?? (n = m.getPropertyOptions(e)), !((n.hasChanged ?? Pe)(l, t) || n.useDefault && n.reflect && l === ((u = this._$Ej) == null ? void 0 : u.get(e)) && !this.hasAttribute(m._$Eu(e, n)))) return;
       this.C(e, t, n);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
@@ -1492,7 +1492,7 @@ Oe == null || Oe({ LitElement: ie });
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const cr = { attribute: !0, type: String, converter: ve, reflect: !1, hasChanged: Ce }, hr = (r = cr, e, t) => {
+const cr = { attribute: !0, type: String, converter: ve, reflect: !1, hasChanged: Pe }, hr = (r = cr, e, t) => {
   const { kind: n, metadata: o } = t;
   let l = globalThis.litPropertyMetadata.get(o);
   if (l === void 0 && globalThis.litPropertyMetadata.set(o, l = /* @__PURE__ */ new Map()), n === "setter" && ((r = Object.create(r)).wrapped = !0), l.set(t.name, r), n === "accessor") {
@@ -1826,7 +1826,7 @@ D([
 D([
   le({
     attributeType: F.PROPERTY,
-    uiComponentType: W.TEXT_INPUT,
+    uiComponentType: W.TEXTAREA,
     displayLabel: "Footer Directory JSON",
     fieldMappings: "columnsJson"
   })

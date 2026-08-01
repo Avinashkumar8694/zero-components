@@ -176,7 +176,7 @@ export class ZeroBlockContent extends LitElement {
 
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    uiComponentType: UserInterfaceType.TEXTAREA,
     displayLabel: "Primary Paragraph Copy",
     fieldMappings: "content"
   })
@@ -185,7 +185,7 @@ export class ZeroBlockContent extends LitElement {
 
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    uiComponentType: UserInterfaceType.TEXTAREA,
     displayLabel: "Secondary Copy",
     fieldMappings: "sideContent"
   })

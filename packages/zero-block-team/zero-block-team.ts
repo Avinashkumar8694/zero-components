@@ -59,7 +59,7 @@ export class ZeroBlockTeam extends LitElement {
     }
     const title = escapeStudio(config?.props?.title ?? config?.studio?.props?.title ?? "Meet the Team");
     const lead = escapeStudio(config?.props?.lead ?? config?.studio?.props?.lead ?? "");
-    const membersJson = escapeStudio(config?.props?.membersJson ?? config?.studio?.props?.membersJson ?? "[]");
+    const teamJson = escapeStudio(config?.props?.teamJson ?? config?.studio?.props?.teamJson ?? "[]");
     const layout = escapeStudio(config?.props?.layout ?? config?.studio?.props?.layout ?? "layout-1");
     const themeStyle = escapeStudio(config?.props?.themeStyle ?? config?.studio?.props?.themeStyle ?? "light");
 
@@ -69,7 +69,7 @@ export class ZeroBlockTeam extends LitElement {
         <zero-block-team-1.0.0
           title="${title}"
           lead="${lead}"
-          members-json="${membersJson}"
+          team-json="${teamJson}"
           layout="${layout}"
           theme-style="${themeStyle}"
         ></zero-block-team-1.0.0>
@@ -256,7 +256,7 @@ export class ZeroBlockTeam extends LitElement {
 
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    uiComponentType: UserInterfaceType.TEXTAREA,
     displayLabel: "Team Members JSON",
     fieldMappings: "teamJson"
   })

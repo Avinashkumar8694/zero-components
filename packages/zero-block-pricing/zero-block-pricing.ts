@@ -63,7 +63,7 @@ export class ZeroBlockPricing extends LitElement {
     }
     const title = escapeStudio(config?.props?.title ?? config?.studio?.props?.title ?? "Flexible Subscriptions");
     const lead = escapeStudio(config?.props?.lead ?? config?.studio?.props?.lead ?? "");
-    const plansJson = escapeStudio(config?.props?.plansJson ?? config?.studio?.props?.plansJson ?? "[]");
+    const pricingJson = escapeStudio(config?.props?.pricingJson ?? config?.studio?.props?.pricingJson ?? "[]");
     const layout = escapeStudio(config?.props?.layout ?? config?.studio?.props?.layout ?? "layout-1");
     const themeStyle = escapeStudio(config?.props?.themeStyle ?? config?.studio?.props?.themeStyle ?? "light");
 
@@ -73,7 +73,7 @@ export class ZeroBlockPricing extends LitElement {
         <zero-block-pricing-1.0.0
           title="${title}"
           lead="${lead}"
-          plans-json="${plansJson}"
+          pricing-json="${pricingJson}"
           layout="${layout}"
           theme-style="${themeStyle}"
         ></zero-block-pricing-1.0.0>
@@ -250,7 +250,7 @@ export class ZeroBlockPricing extends LitElement {
 
   @property({ type: String }) title = "Flexible Subscriptions";
   @property({ type: String }) lead = "Choose the ideal plan to scale your digital workflow.";
-  @property({ type: String, attribute: "pricing-json" }) pricingJson = '[{"title":"Basic","price":"$9","period":"mo","features":["1 User Workspace","Standard Operations","Community Support"],"ctaText":"Choose Basic","ctaUrl":"#"},{"title":"Professional","price":"$29","period":"mo","features":["10 User Workspaces","Priority Operations","24/7 Support"],"ctaText":"Choose Pro","ctaUrl":"#","featured":true},{"title":"Enterprise","price":"$99","period":"mo","features":["Unlimited Workspaces","Dedicated Dedicated Clusters","SLA Gurantee"],"ctaText":"Choose Enterprise","ctaUrl":"#"}]';
+  @property({ type: String, attribute: "pricing-json" }) pricingJson = '[{"title":"Basic","price":"$9","period":"mo","features":["1 User Workspace","Standard Operations","Community Support"],"ctaText":"Choose Basic","ctaUrl":"#"},{"title":"Professional","price":"$29","period":"mo","features":["10 User Workspaces","Priority Operations","24/7 Support"],"ctaText":"Choose Pro","ctaUrl":"#","featured":true},{"title":"Enterprise","price":"$99","period":"mo","features":["Unlimited Workspaces","Dedicated Clusters","SLA Guarantee"],"ctaText":"Choose Enterprise","ctaUrl":"#"}]';
   @property({ type: String }) layout = "layout-1";
   @property({ type: String, attribute: "theme-style" }) themeStyle = "light";
 
@@ -274,7 +274,7 @@ export class ZeroBlockPricing extends LitElement {
 
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
-    uiComponentType: UserInterfaceType.TEXT_INPUT,
+    uiComponentType: UserInterfaceType.TEXTAREA,
     displayLabel: "Pricing Cards JSON",
     fieldMappings: "pricingJson"
   })

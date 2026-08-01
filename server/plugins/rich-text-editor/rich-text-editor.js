@@ -1876,8 +1876,8 @@ nt([
   mt({
     attributeType: Q.PROPERTY,
     uiComponentType: at.TEXTAREA,
-    displayLabel: "",
-    placeholderText: "",
+    displayLabel: "HTML Content",
+    placeholderText: "Enter rich text / HTML content",
     fieldMappings: "htmldata"
   })
 ], L.prototype, "htmldata", 1);
@@ -1889,7 +1889,7 @@ nt([
   mt({
     attributeType: Q.PROPERTY,
     uiComponentType: at.CHECKBOX,
-    displayLabel: "",
+    displayLabel: "Editor Mode",
     placeholderText: "",
     initialValue: !0,
     fieldMappings: "editorMode"

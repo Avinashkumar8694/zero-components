@@ -57,8 +57,8 @@ export class RichTextEditor extends LitElement {
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
     uiComponentType: UserInterfaceType.TEXTAREA,
-    displayLabel: '',
-    placeholderText: '',
+    displayLabel: 'HTML Content',
+    placeholderText: 'Enter rich text / HTML content',
     fieldMappings: 'htmldata',
   })
   set htmldata(data:any){
@@ -70,7 +70,7 @@ export class RichTextEditor extends LitElement {
   @RendererAttribute({
     attributeType: AttributeType.PROPERTY,
     uiComponentType: UserInterfaceType.CHECKBOX,
-    displayLabel: '',
+    displayLabel: 'Editor Mode',
     placeholderText: '',
     initialValue: true,
     fieldMappings: 'editorMode',

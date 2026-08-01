@@ -24,9 +24,19 @@ const getThemeManager = () => (window as any).zeroThemeManager;
 })
 @applyGlobalStyles()
 export class PopupDropdown extends LitElement {
-    options: DropdownOptionItem[] = [];
+    @property({ type: Array }) options: DropdownOptionItem[] = [];
 
-    @property({ type: Array }) 
+    @property({ type: String })
+    @RendererAttribute({
+        attributeType: AttributeType.PROPERTY,
+        uiComponentType: UserInterfaceType.TEXT_INPUT,
+        displayLabel: 'Label',
+        placeholderText: 'Optional field label',
+        fieldMappings: 'label',
+    })
+    label: string = '';
+
+    @property({ type: Array })
     @RendererAttribute({
         attributeType: AttributeType.PROPERTY,
         uiComponentType: UserInterfaceType.TEXTAREA,
@@ -207,7 +217,9 @@ export class PopupDropdown extends LitElement {
                 ${themeModule ? themeModule.getComponentStyles('dropdown') : ''}
             </style>
             <div class="dropdown-message-box uiv-${themeModule?.id}-theme">
-                <label class="label uiv-${themeModule?.id}-text">Appearance</label>
+                ${this.label
+                  ? html`<label class="label uiv-${themeModule?.id}-text">${this.label}</label>`
+                  : ''}
                 <div class="dropdown-container uiv-${themeModule?.id}-card uiv-${themeModule?.id}-scan" @click=${this.toggleDropdown}>
                     <div class="dropdown-header">
                         <span id="selected-option" class="uiv-${themeModule?.id}-text">${this.selectedOption || 'Select an option'}</span>

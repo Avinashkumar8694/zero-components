@@ -1939,7 +1939,7 @@ let G = class extends z {
     super(), this.headerBg = "#f8fafc", this.headerColor = "#1e293b", this.borderColor = "#e2e8f0", this.enableHeader = !0, this.label = "Panel Header", this.icon = "📄", this.expandable = !0, this.expanded = !0, this.label = "Expansion Panel", this.icon = "⚡", this.expanded = !0, this.expandable = !0, this.backgroundColor = "#ffffff", this.borderRadius = "12px", this.padding = "16px", this.direction = "column";
   }
   get overridePrefix() {
-    return "zero-expansion-panel";
+    return "zero-expansion-layout";
   }
   get onExpand() {
     return "expand";
@@ -1998,7 +1998,7 @@ let G = class extends z {
             border-radius: ${this.borderRadius};
             overflow: hidden;
             background: ${this.backgroundColor};
-            box-shadow: var(--zero-expansion-panel-elevation-override, ${this.elevation});
+            box-shadow: var(--zero-expansion-layout-elevation-override, ${this.elevation});
             ${this.computeInternalStyles()}
           "
         >
@@ -2151,10 +2151,10 @@ R([
 ], G.prototype, "toggleExpanded", 1);
 G = R([
   Re({
-    name: "zero-expansion-panel",
+    name: "zero-expansion-layout",
     version: "1.0.0",
-    title: "Expansion Panel",
-    elementSelector: "zero-expansion-panel",
+    title: "Expansion Layout",
+    elementSelector: "zero-expansion-layout",
     group: "Layout",
     iconName: "expansion-panel-icon.png"
   })
@@ -2869,6 +2869,7 @@ I.styles = $t`
     .column > slot {
       display: block;
       min-height: 120px;
+    }
   `;
 H([
   m({ type: Object, attribute: "responsive-props" }),

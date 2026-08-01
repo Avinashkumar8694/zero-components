@@ -27,7 +27,7 @@ export class ZeroStatCard extends LitElement {
         "</div>",
         "<span style='color:#8996a4;font-weight:700;'>&#8942;</span>",
         "</div>",
-        "<div style='font-size:24px;font-weight:700;color:var(--uiv-text-color,#1d2630);margin:10px 0 8px;'>$3,020</div>",
+        "<div style='font-size:24px;font-weight:700;color:var(--uiv-text-primary,var(--uiv-text-color,#1d2630));margin:10px 0 8px;'>$3,020</div>",
         "<svg viewBox='0 0 120 40' width='100%' height='40' preserveAspectRatio='none'>",
         "<rect x='2' y='20' width='12' height='18' rx='1.5' fill='#4680ff'/>",
         "<rect x='19' y='8' width='12' height='30' rx='1.5' fill='#4680ff'/>",
@@ -50,7 +50,7 @@ export class ZeroStatCard extends LitElement {
     :host {
       display: block;
       --sc-bg: var(--uiv-surface-color, #ffffff);
-      --sc-text: var(--uiv-text-color, #1d2630);
+      --sc-text: var(--uiv-text-primary, var(--uiv-text-color, #1d2630));
       --sc-muted: var(--uiv-text-color-secondary, #8996a4);
       --sc-border: var(--uiv-border-color, #e5e9ef);
       --sc-primary: var(--uiv-primary-color, #4680ff);
@@ -95,7 +95,9 @@ export class ZeroStatCard extends LitElement {
     .value {
       font-size: 24px;
       font-weight: 700;
-      color: var(--sc-text);
+      /* Explicit dark fallback so the primary value never fades to an
+         inherited low-contrast color when the theme token chain is empty. */
+      color: var(--sc-text, #1d2630);
       margin: 10px 0 8px;
     }
     .chart {

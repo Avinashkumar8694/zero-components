@@ -3,6 +3,7 @@ import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from 'zero-annotat
 import { RendererComponent, RendererAttribute, applyGlobalStyles, UserInterfaceType, AttributeType, DropdownOptionItem, RangeSliderConfig, FileInputConfig, DatePickerConfig, NumberInputConfig, TextAreaConfig } from 'zero-annotation';
 
 import { LitElement, html, css, CSSResult } from 'lit';
+import { html as staticHtml, unsafeStatic } from 'lit/static-html.js';
 import { property } from 'lit/decorators.js';
 import { styleMap } from 'lit/directives/style-map.js';
 
@@ -57,9 +58,32 @@ export class PopupDialog extends LitElement {
         };
     }
 
-    @property({ type: Boolean }) open = false;
-    @property({ type: Boolean }) hasBackdrop = true;
-    @property({ type: Object }) config = {
+    @property({ type: Boolean })
+    @RendererAttribute({
+      attributeType: AttributeType.PROPERTY,
+      uiComponentType: UserInterfaceType.CHECKBOX,
+      displayLabel: 'Open',
+      fieldMappings: 'open',
+    })
+    open = false;
+
+    @property({ type: Boolean })
+    @RendererAttribute({
+      attributeType: AttributeType.PROPERTY,
+      uiComponentType: UserInterfaceType.CHECKBOX,
+      displayLabel: 'Show Backdrop',
+      fieldMappings: 'hasBackdrop',
+    })
+    hasBackdrop = true;
+
+    @property({ type: Object })
+    @RendererAttribute({
+      attributeType: AttributeType.PROPERTY,
+      uiComponentType: UserInterfaceType.TEXTAREA,
+      displayLabel: 'Config (JSON)',
+      fieldMappings: 'config',
+    })
+    config = {
       webComponentSelector: '',
       inputs: {},
       outputs: {},
@@ -186,7 +210,7 @@ export class PopupDialog extends LitElement {
             </div>
             <div class="popup-content uiv-${themeModule?.id}-text">
               ${this.open && webComponentSelector
-                ? html`<${webComponentSelector} .inputs=${inputs} .outputs=${outputs}></${webComponentSelector}>`
+                ? this._renderDynamicComponent(webComponentSelector, inputs, outputs)
                 : html`<p>No component provided.</p>`}
             </div>
             <div class="popup-arrow"></div>
@@ -195,6 +219,15 @@ export class PopupDialog extends LitElement {
       `;
     }
   
+    // Renders a runtime-provided custom element. Lit's `html` cannot
+    // interpolate a tag name into the tag position, so we use the static-html
+    // `unsafeStatic` helper (the same pattern used by renderer-core) to build a
+    // template whose tag is resolved at runtime.
+    _renderDynamicComponent(selector: string, inputs: unknown, outputs: unknown) {
+      const tag = unsafeStatic(selector);
+      return staticHtml`<${tag} .inputs=${inputs} .outputs=${outputs}></${tag}>`;
+    }
+
     _getPositionStyle(position) {
       switch (position) {
         case 'center':

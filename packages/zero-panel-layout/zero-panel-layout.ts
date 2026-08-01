@@ -271,6 +271,7 @@ export class ZeroPanelLayout extends LitElement {
     .column > slot {
       display: block;
       min-height: 120px;
+    }
   `;
 
   @property({ type: Object, attribute: 'responsive-props' })

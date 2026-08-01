@@ -7,16 +7,19 @@ import type { ZeroStudioTemplate, ZeroStudioTemplateContext } from "zero-annotat
 
 // ─── Expansion Panel Component ─────────────────────────────────────────
 
+// NOTE: elementSelector intentionally differs from the standalone
+// `packages/zero-expansion-panel` component to avoid a duplicate
+// custom-element / catalog registration collision on `zero-expansion-panel`.
 @RendererComponent({
-  name: "zero-expansion-panel",
+  name: "zero-expansion-layout",
   version: "1.0.0",
-  title: "Expansion Panel",
-  elementSelector: "zero-expansion-panel",
+  title: "Expansion Layout",
+  elementSelector: "zero-expansion-layout",
   group: "Layout",
   iconName: "expansion-panel-icon.png",
 })
-export class ZeroExpansionPanel extends ZeroLayoutBase {
-  protected get overridePrefix() { return "zero-expansion-panel"; }
+export class ZeroExpansionLayout extends ZeroLayoutBase {
+  protected get overridePrefix() { return "zero-expansion-layout"; }
 
   static slots: ZeroSlotDefinition[] = [
     { id: "default", label: "Panel Content", dropzone: true, anchor: "content", accepts: ["zero-section"] },
@@ -218,7 +221,7 @@ export class ZeroExpansionPanel extends ZeroLayoutBase {
             border-radius: ${this.borderRadius};
             overflow: hidden;
             background: ${this.backgroundColor};
-            box-shadow: var(--zero-expansion-panel-elevation-override, ${this.elevation});
+            box-shadow: var(--zero-expansion-layout-elevation-override, ${this.elevation});
             ${this.computeInternalStyles()}
           "
         >

@@ -1,0 +1,10 @@
+{
+  "name": "zero-chip",
+  "version": "1.0.0",
+  "description": "Tag / filter chip with variants, semantic colors, optional icon and removable x",
+  "main": "zero-chip.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "chip", "tag", "filter", "data-display"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "zero-progress",
+  "version": "1.0.0",
+  "description": "Linear or circular progress indicator with label, stripes and semantic colors",
+  "main": "zero-progress.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "progress", "loader", "feedback"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

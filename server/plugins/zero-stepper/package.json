@@ -1,0 +1,10 @@
+{
+  "name": "zero-stepper",
+  "version": "1.0.0",
+  "description": "Multi-step progress indicator with completed/active/upcoming states and connectors",
+  "main": "zero-stepper.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "stepper", "steps", "wizard", "navigation"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

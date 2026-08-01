@@ -1,0 +1,10 @@
+{
+  "name": "zero-pagination",
+  "version": "1.0.0",
+  "description": "Page navigation with prev/next, numbered pages, ellipsis truncation and variants",
+  "main": "zero-pagination.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "pagination", "navigation", "pager"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

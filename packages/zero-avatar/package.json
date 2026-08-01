@@ -1,0 +1,10 @@
+{
+  "name": "zero-avatar",
+  "version": "1.0.0",
+  "description": "User identity avatar with image or initials, sizes, shapes and status dot",
+  "main": "zero-avatar.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "avatar", "identity", "user", "data-display"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

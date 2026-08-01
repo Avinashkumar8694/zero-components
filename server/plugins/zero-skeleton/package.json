@@ -1,0 +1,10 @@
+{
+  "name": "zero-skeleton",
+  "version": "1.0.0",
+  "description": "Loading placeholder with text / circle / rect / card variants and shimmer animations",
+  "main": "zero-skeleton.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "skeleton", "placeholder", "loading", "shimmer", "feedback"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

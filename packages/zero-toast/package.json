@@ -1,0 +1,10 @@
+{
+  "name": "zero-toast",
+  "version": "1.0.0",
+  "description": "Transient toast notification with semantic types, positions and auto-dismiss",
+  "main": "zero-toast.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "toast", "notification", "snackbar", "feedback"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

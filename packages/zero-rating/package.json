@@ -1,0 +1,10 @@
+{
+  "name": "zero-rating",
+  "version": "1.0.0",
+  "description": "Interactive star / heart / emoji rating with half values and custom color",
+  "main": "zero-rating.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "rating", "stars", "review", "data-display"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

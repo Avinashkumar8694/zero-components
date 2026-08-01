@@ -1,0 +1,10 @@
+{
+  "name": "zero-divider",
+  "version": "1.0.0",
+  "description": "Horizontal / vertical separator with optional centered label and line styles",
+  "main": "zero-divider.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "divider", "separator", "rule", "layout"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "zero-list",
+  "version": "1.0.0",
+  "description": "Styled data list with icons, subtitles, meta and interactive rows",
+  "main": "zero-list.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "list", "menu", "items", "data-display"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "zero-alert",
+  "version": "1.0.0",
+  "description": "Inline notification / feedback alert themed by type with variants",
+  "main": "zero-alert.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "alert", "notification", "feedback"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

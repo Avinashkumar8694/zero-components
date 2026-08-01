@@ -1,0 +1,10 @@
+{
+  "name": "zero-badge",
+  "version": "1.0.0",
+  "description": "Status / label badge with semantic types, variants and sizes",
+  "main": "zero-badge.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "badge", "status", "label", "feedback"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

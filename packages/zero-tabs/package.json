@@ -1,0 +1,10 @@
+{
+  "name": "zero-tabs",
+  "version": "1.0.0",
+  "description": "Tabbed content switcher with underline, pills and enclosed variants",
+  "main": "zero-tabs.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "tabs", "navigation", "switcher"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "zero-navbar",
+  "version": "1.0.0",
+  "description": "Responsive top navigation bar with brand, links and CTA",
+  "main": "zero-navbar.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "navbar", "navigation", "header"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

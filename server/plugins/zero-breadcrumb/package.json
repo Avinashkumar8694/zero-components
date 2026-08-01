@@ -1,0 +1,10 @@
+{
+  "name": "zero-breadcrumb",
+  "version": "1.0.0",
+  "description": "Breadcrumb trail navigation with configurable separator and variants",
+  "main": "zero-breadcrumb.ts",
+  "type": "module",
+  "keywords": ["lit", "web-component", "breadcrumb", "navigation", "trail"],
+  "author": "Zero Components",
+  "license": "MIT"
+}

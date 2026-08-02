@@ -1,0 +1,14 @@
+{
+  "name": "zero-flow-node-uppercase",
+  "version": "1.0.0",
+  "description": "Uppercases input.text",
+  "main": "zero-flow-node-uppercase.js",
+  "type": "module",
+  "keywords": [
+    "flow-node",
+    "flow-node-type:zero-flow-node-uppercase",
+    "common"
+  ],
+  "author": "Zero Studio (published)",
+  "license": "MIT"
+}
